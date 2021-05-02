@@ -10,3 +10,6 @@ bin-int
 *.sln
 *.vcxproj
 *.vcxproj.user
+premake5
+
+Makefile
