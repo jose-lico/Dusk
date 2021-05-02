@@ -1,6 +1,7 @@
-workspace "DuskEngine"
+workspace "Dusk"
 	architecture "x64"
 	outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+	dependenciesDir = "%{wks.location}/Dependencies"
 
 	configurations
 	{
@@ -11,20 +12,21 @@ workspace "DuskEngine"
 
 	startproject "DuskEditor"
 
+include "Dependencies/glfw"
+
 group "" -- group seems to be bugged for gmake2, so for now, no virtual folders
 	include "DuskEngine"
 	include "DuskEditor"
 
 newaction
 {
-
 	trigger = "clean",
 	description = "Cleans the generated projected files, binaries and intermediates",
 	execute = function()
 		print("Removing binaries...")
-		os.rmdir("./bin")
+		os.rmdir("**bin")
 		print("Removing intermediate files...")
-		os.rmdir("./bin-int")
+		os.rmdir("**bin-int")
 		print("Removing project files...")
 		os.remove("**.sln")
 		os.remove("**.vcxproj")

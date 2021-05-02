@@ -1,0 +1,3 @@
+[submodule "Dependencies/glfw"]
+	path = Dependencies/glfw
+	url = https://github.com/qolisipo/glfw

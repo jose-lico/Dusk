@@ -19,6 +19,7 @@ project "DuskEditor"
 	includedirs
 	{
 		"%{wks.location}/DuskEngine/src",
+		dependenciesDir .. "/glfw/include"
 	}
 
 	filter "system:windows"

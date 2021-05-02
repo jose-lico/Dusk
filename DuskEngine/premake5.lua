@@ -11,6 +11,16 @@ project "DuskEngine"
 		"src/**.cpp",
 	}
 
+	includedirs
+	{
+		dependenciesDir .. "/glfw/include"
+	}
+
+	links
+	{
+		"glfw3"
+	}
+
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "off"
@@ -20,11 +30,16 @@ project "DuskEngine"
 			"DUSK_WINDOWS",
 			"DUSK_DLL"
 		}
+		links
+		{
+			"opengl32"
+		}
 
 	filter "system:linux"
 		cppdialect "gnu++17"
 		systemversion "latest"
 		defines "DUSK_LINUX"
+		links "GL"
 
 	filter "configurations:Debug"
 		runtime "Debug"
