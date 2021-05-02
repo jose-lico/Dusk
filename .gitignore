@@ -1,0 +1,12 @@
+# ignore premake
+premake5.exe
+
+# build and intermediate
+bin
+bin-int
+
+# vs stuff
+.vs
+*.sln
+*.vcxproj
+*.vcxproj.user
