@@ -1,3 +1,4 @@
 [submodule "Dependencies/glfw"]
+	ignore = dirty
 	path = Dependencies/glfw
 	url = https://github.com/qolisipo/glfw
