@@ -12,6 +12,7 @@ workspace "Dusk"
 
 	startproject "DuskEditor"
 
+include "Dependencies/glew"
 include "Dependencies/glfw"
 
 group "" -- group seems to be bugged for gmake2, so for now, no virtual folders

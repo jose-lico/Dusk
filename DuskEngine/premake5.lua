@@ -13,12 +13,19 @@ project "DuskEngine"
 
 	includedirs
 	{
-		dependenciesDir .. "/glfw/include"
+		dependenciesDir .. "/glfw/include",
+		dependenciesDir .. "/glew/include"
 	}
 
 	links
 	{
-		"glfw3"
+		"glfw3",
+		"glew"
+	}
+
+	defines
+	{
+		"GLFW_INCLUDE_NONE"
 	}
 
 	filter "system:windows"

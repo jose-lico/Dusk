@@ -1,6 +1,7 @@
 #include "DuskEngine.h"
 
 #include <iostream>
+#include "GL/glew.h"
 
 namespace DuskEngine
 {
