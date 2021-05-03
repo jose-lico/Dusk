@@ -3,5 +3,6 @@
 	path = Dependencies/glfw
 	url = https://github.com/qolisipo/glfw
 [submodule "Dependencies/glew"]
+	ignore = dirty
 	path = Dependencies/glew
 	url = https://github.com/qolisipo/glew
