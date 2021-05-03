@@ -39,7 +39,11 @@ project "DuskEngine"
 		cppdialect "gnu++17"
 		systemversion "latest"
 		defines "DUSK_LINUX"
-		links "GL"
+		links 
+		{
+			"GL",
+			"pthread"
+		}
 
 	filter "configurations:Debug"
 		runtime "Debug"
