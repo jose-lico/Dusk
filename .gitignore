@@ -10,6 +10,7 @@ bin-int
 *.sln
 *.vcxproj
 *.vcxproj.user
+*.vcxproj.filters
 premake5
 
 Makefile
