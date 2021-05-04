@@ -13,6 +13,7 @@ project "DuskEngine"
 
 	includedirs
 	{
+		"src",
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include"
 	}
@@ -25,7 +26,8 @@ project "DuskEngine"
 
 	defines
 	{
-		"GLFW_INCLUDE_NONE"
+		"GLFW_INCLUDE_NONE",
+		"GLEW_STATIC"
 	}
 
 	filter "system:windows"
@@ -40,6 +42,11 @@ project "DuskEngine"
 		links
 		{
 			"opengl32"
+		}
+
+		postbuildcommands
+		{
+			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
 		}
 
 	filter "system:linux"
