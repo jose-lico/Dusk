@@ -4,6 +4,8 @@
 #include "GLFW/glfw3.h"
 #include "GL/glew.h"
 
+#include "Platform/OpenGL/VertexArray.h"
+
 namespace DuskEngine
 {
 	class WindowsWindow : public Window 
@@ -26,5 +28,11 @@ namespace DuskEngine
 
 		GLFWwindow* m_Window;
 		WindowData m_Data;
+
+		// TEMP
+
+		VertexArray* m_VA;
+		VertexBuffer* m_VB;
+		IndexBuffer* m_IB;
 	};
 }
