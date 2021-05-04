@@ -9,13 +9,16 @@ project "DuskEngine"
 	{
 		"src/**.h",
 		"src/**.cpp",
+		dependenciesDir .. "/glm/glm/**.hpp",
+		dependenciesDir .. "/glm/glm/**.inl",
 	}
 
 	includedirs
 	{
 		"src",
 		dependenciesDir .. "/glfw/include",
-		dependenciesDir .. "/glew/include"
+		dependenciesDir .. "/glew/include",
+		dependenciesDir .. "/glm/glm"
 	}
 
 	links
@@ -44,10 +47,10 @@ project "DuskEngine"
 			"opengl32"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
-		}
+		-- postbuildcommands
+		-- {
+		-- 	("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
+		-- }
 
 	filter "system:linux"
 		cppdialect "gnu++17"
