@@ -26,43 +26,17 @@ namespace DuskEngine
 
 	class VertexBufferLayout
 	{
-	private:
-		std::vector<VertexBufferElement> m_Elements;
-		int m_Stride;
 	public:
 		VertexBufferLayout()
 			: m_Stride(0) {}
 
-		template<typename T>
-		void Push(unsigned int count)
-		{
-			static_assert(false);
-		}
+		template<typename T> 
+		void Push(unsigned int count);
 
-		template<>
-		void Push<float>(unsigned int count)
-		{
-			m_Elements.push_back({ GL_FLOAT, count, false });
-			m_Stride += VertexBufferElement::GetSizeOfType(GL_FLOAT) * count;
-		}
-
-		template<>
-		void Push<unsigned int>(unsigned int count)
-		{
-			m_Elements.push_back({ GL_UNSIGNED_INT, count, false });
-			m_Stride += VertexBufferElement::GetSizeOfType(GL_UNSIGNED_INT) * count;
-		}
-
-		template<>
-		void Push<unsigned char>(unsigned int count)
-		{
-			m_Elements.push_back({ GL_UNSIGNED_BYTE, count, false });
-			m_Stride += VertexBufferElement::GetSizeOfType(GL_UNSIGNED_BYTE) * count;
-		}
-
-		const std::vector<VertexBufferElement> GetElements() const { return m_Elements; }
+		const std::vector<DuskEngine::VertexBufferElement> GetElements() const { return m_Elements; }
 		unsigned int GetStride() const { return m_Stride; }
+	private:
+		std::vector<DuskEngine::VertexBufferElement> m_Elements;
+		int m_Stride;
 	};
 }
-
-
