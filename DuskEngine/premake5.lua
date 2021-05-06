@@ -11,6 +11,8 @@ project "DuskEngine"
 		"src/**.cpp",
 		dependenciesDir .. "/glm/glm/**.hpp",
 		dependenciesDir .. "/glm/glm/**.inl",
+		dependenciesDir .. "/stb_image/**.h",
+		dependenciesDir .. "/stb_image/**.cpp"
 	}
 
 	includedirs
@@ -18,7 +20,8 @@ project "DuskEngine"
 		"src",
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
-		dependenciesDir .. "/glm/glm"
+		dependenciesDir .. "/glm/glm",
+		dependenciesDir .. "/stb_image"
 	}
 
 	links
@@ -49,7 +52,7 @@ project "DuskEngine"
 
 		-- postbuildcommands
 		-- {
-		-- 	("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
+		-- 	("{COPY} %{cfg.buildtarget.relpath} \" ../bin/" .. outputDir .. "/DuskEditor/\"")
 		-- }
 
 	filter "system:linux"
