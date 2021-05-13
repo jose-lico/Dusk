@@ -76,8 +76,8 @@ namespace DuskEngine
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+		//static bool show = true;
+		//ImGui::ShowDemoWindow(&show);
 
 		ImGuiIO& io = ImGui::GetIO();
 		int width;

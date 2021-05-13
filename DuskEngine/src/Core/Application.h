@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "Platform/OpenGL/VertexArray.h"
 #include "Platform/OpenGL/Shader.h"
+#include "Platform/OpenGL/Texture.h"
  
 namespace DuskEngine
 {
@@ -23,5 +24,6 @@ namespace DuskEngine
 		VertexBuffer* m_VB;
 		IndexBuffer* m_IB;
 		Shader* m_Shader;
+		Texture* m_Texture;
 	};
 }
