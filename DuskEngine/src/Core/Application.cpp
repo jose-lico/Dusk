@@ -29,7 +29,7 @@ namespace DuskEngine
 			1, 2, 3    // second triangle
 		};
 
-		m_Shader = new Shader("C:/Documents/Dusk/DuskEngine/res/shaders/simple.glsl");
+		m_Shader = new Shader("res/shaders/simple.glsl");
 		m_VA = new VertexArray;
 		m_VB = new VertexBuffer(sizeof(vertices), vertices);
 		m_IB = new IndexBuffer(6, indices);

@@ -11,8 +11,8 @@ project "DuskEngine"
 		"src/**.cpp",
 		dependenciesDir .. "/glm/glm/**.hpp",
 		dependenciesDir .. "/glm/glm/**.inl",
-		dependenciesDir .. "/stb_image/**.h",
-		dependenciesDir .. "/stb_image/**.cpp"
+		dependenciesDir .. "/stb/stb_image.h",
+		dependenciesDir .. "/stb/stb_image.cpp"
 	}
 
 	includedirs
@@ -21,19 +21,22 @@ project "DuskEngine"
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
 		dependenciesDir .. "/glm/glm",
-		dependenciesDir .. "/stb_image"
+		dependenciesDir .. "/stb",
+		dependenciesDir .. "/imgui"
 	}
 
 	links
 	{
 		"glfw3",
-		"glew"
+		"glew",
+		"ImGui"
 	}
 
 	defines
 	{
 		"GLFW_INCLUDE_NONE",
-		"GLEW_STATIC"
+		"GLEW_STATIC",
+		"IMGUI_IMPL_OPENGL_LOADER_GLEW"
 	}
 
 	filter "system:windows"
@@ -56,7 +59,7 @@ project "DuskEngine"
 		-- }
 
 	filter "system:linux"
-		cppdialect "gnu++17"
+		cppdialect "C++17"
 		systemversion "latest"
 		defines "DUSK_LINUX"
 		links 

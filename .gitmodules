@@ -14,3 +14,7 @@
 	ignore = dirty
 	path = Dependencies/imgui
 	url = https://github.com/qolisipo/imgui
+[submodule "Dependencies/stb"]
+	ignore = dirty
+	path = Dependencies/stb
+	url = https://github.com/qolisipo/stb

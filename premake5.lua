@@ -12,10 +12,16 @@ workspace "Dusk"
 
 	startproject "DuskEditor"
 
-include "Dependencies/glew"
-include "Dependencies/glfw"
+if _ACTION ~= "gmake2" then
+	group "Dependencies"
+end
+	include "Dependencies/glew"
+	include "Dependencies/glfw"
+	include "Dependencies/imgui"
 
-group "" -- group seems to be bugged for gmake2, so for now, no virtual folders
+if _ACTION ~= "gmake2" then
+	group "Engine"
+end
 	include "DuskEngine"
 	include "DuskEditor"
 
