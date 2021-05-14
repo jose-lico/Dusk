@@ -2,10 +2,9 @@
 
 #include "defines.h"
 #include "Window.h"
-#include "Platform/OpenGL/VertexArray.h"
-#include "Platform/OpenGL/Shader.h"
+#include "Platform/OpenGL/Renderer.h" 
 #include "Platform/OpenGL/Texture.h"
- 
+
 namespace DuskEngine
 {
 	class DUSK_API Application
@@ -20,6 +19,8 @@ namespace DuskEngine
 		Window* m_Window;
 
 		// TEMP
+		Renderer& m_Renderer = Renderer::Get();
+
 		VertexArray* m_VA;
 		VertexBuffer* m_VB;
 		IndexBuffer* m_IB;

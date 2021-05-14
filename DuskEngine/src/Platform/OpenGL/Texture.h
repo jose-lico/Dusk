@@ -11,10 +11,10 @@ namespace DuskEngine
 		~Texture();
 		void Bind(unsigned int slot) const;
 		void Unbind() const;
-	private:
 		unsigned int m_ID;
 		int m_Width;
 		int m_Height;
+	private:
 		int m_Channels;
 	};
 }

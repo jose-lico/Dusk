@@ -72,30 +72,6 @@ namespace DuskEngine
 
 	void WindowsWindow::OnUpdate()
 	{
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-
-		//static bool show = true;
-		//ImGui::ShowDemoWindow(&show);
-
-		ImGuiIO& io = ImGui::GetIO();
-		int width;
-		int height;
-		glfwGetWindowSize(m_Window, &width, &height);
-		io.DisplaySize = ImVec2((float)width, (float)height);
-
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			GLFWwindow* backup_current_context = glfwGetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context);
-		}
-
 		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
 	}

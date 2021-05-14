@@ -1,7 +1,9 @@
 #include "Application.h"
 #include "Platform/Windows/WindowsWindow.h"
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 
-#include <iostream>
 
 namespace DuskEngine
 {
@@ -10,10 +12,8 @@ namespace DuskEngine
 		WindowData data;
 		m_Window = new WindowsWindow(data);
 
-		if (glewInit() != GLEW_OK)
-			std::cout << "Error" << std::endl;
+		m_Renderer.Init();
 
-				 
 		float vertices[] = 
 		{
 			// positions        // texture coords
@@ -52,6 +52,7 @@ namespace DuskEngine
 		delete m_VB;
 		delete m_IB;
 		delete m_VA;
+		delete m_Texture;
 
 		glfwTerminate();
 	}
@@ -60,11 +61,39 @@ namespace DuskEngine
 	{
 		while(m_Running)
 		{
-			glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			m_Renderer.ClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+			m_Renderer.Clear();
 
 			// TEMP
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			m_Renderer.DrawElements(*m_VA, *m_Shader);
+
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
+
+			//static bool show = true;
+			//ImGui::ShowDemoWindow(&show);
+
+			ImGui::Begin("OpenGL Texture Text");
+			ImGui::Image((void*)(intptr_t)m_Texture->m_ID, ImVec2((float)m_Texture->m_Width, (float)m_Texture->m_Height));
+			ImGui::End();
+
+			ImGuiIO& io = ImGui::GetIO();
+			int width;
+			int height;
+			glfwGetWindowSize((GLFWwindow*)m_Window->GetNativeHandle(), &width, &height);
+			io.DisplaySize = ImVec2((float)width, (float)height);
+
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+			{
+				GLFWwindow* backup_current_context = glfwGetCurrentContext();
+				ImGui::UpdatePlatformWindows();
+				ImGui::RenderPlatformWindowsDefault();
+				glfwMakeContextCurrent(backup_current_context);
+			}
 
 			m_Window->OnUpdate();
 		}

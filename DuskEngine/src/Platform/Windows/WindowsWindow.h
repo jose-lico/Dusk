@@ -2,7 +2,6 @@
 
 #include "Core/Window.h"
 #include "GLFW/glfw3.h"
-#include "GL/glew.h"
 
 namespace DuskEngine
 {
