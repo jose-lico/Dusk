@@ -4,6 +4,7 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
+#include <iostream>
 
 namespace DuskEngine
 {
@@ -43,8 +44,43 @@ namespace DuskEngine
 		m_VA->AddBuffer(*m_VB);
 		m_VA->AddIndices(*m_IB);
 		m_VA->AddLayout(vbl);
-		m_Texture->Bind(0);
-		m_Shader->Bind();
+
+		float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+			// positions   // texCoords
+			-1.0f,  1.0f,  0.0f, 1.0f,
+			-1.0f, -1.0f,  0.0f, 0.0f,
+			 1.0f, -1.0f,  1.0f, 0.0f,
+
+			-1.0f,  1.0f,  0.0f, 1.0f,
+			 1.0f, -1.0f,  1.0f, 0.0f,
+			 1.0f,  1.0f,  1.0f, 1.0f
+		};
+
+		m_VAFramebuffer = new VertexArray;
+		m_VBFramebuffer = new VertexBuffer(sizeof(quadVertices), quadVertices);
+
+		VertexBufferLayout vbl2;
+		vbl2.Push<float>(2);
+		vbl2.Push<float>(2);
+
+		m_VAFramebuffer->Bind();
+		m_VAFramebuffer->AddBuffer(*m_VBFramebuffer);
+		m_VAFramebuffer->AddLayout(vbl2);
+
+		m_Framebuffer = new Framebuffer;
+		//m_Framebuffer->Bind();
+		m_Framebuffer->CreateTexture(1280, 720);
+
+		unsigned int rbo;
+		glGenRenderbuffers(1, &rbo);
+		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1280, 720); // use a single renderbuffer object for both a depth AND stencil buffer.
+
+		m_Framebuffer->Bind();
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			std::cout << "error in the framebuffer" << std::endl;
 	}
 
 	Application::~Application()
@@ -53,6 +89,7 @@ namespace DuskEngine
 		delete m_IB;
 		delete m_VA;
 		delete m_Texture;
+		delete m_Framebuffer;
 
 		glfwTerminate();
 	}
@@ -61,21 +98,28 @@ namespace DuskEngine
 	{
 		while(m_Running)
 		{
-			m_Renderer.ClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+			m_Framebuffer->Bind();
+			glEnable(GL_DEPTH_TEST);
+
+			m_Renderer.ClearColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
 			m_Renderer.Clear();
 
 			// TEMP
+			m_Texture->Bind(0);
 			m_Renderer.DrawElements(*m_VA, *m_Shader);
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glDisable(GL_DEPTH_TEST);
+
+			m_Renderer.ClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+			m_Renderer.Clear();
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 
-			//static bool show = true;
-			//ImGui::ShowDemoWindow(&show);
-
-			ImGui::Begin("OpenGL Texture Text");
-			ImGui::Image((void*)(intptr_t)m_Texture->m_ID, ImVec2((float)m_Texture->m_Width, (float)m_Texture->m_Height));
+			ImGui::Begin("Framebuffer");
+			ImGui::Image((void*)(intptr_t)m_Framebuffer->texture, ImVec2(1280, 720));
 			ImGui::End();
 
 			ImGuiIO& io = ImGui::GetIO();

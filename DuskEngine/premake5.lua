@@ -55,7 +55,7 @@ project "DuskEngine"
 
 		-- postbuildcommands
 		-- {
-		-- 	("{COPY} %{cfg.buildtarget.relpath} \" ../bin/" .. outputDir .. "/DuskEditor/\"")
+		-- 	("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
 		-- }
 
 	filter "system:linux"
