@@ -67,20 +67,7 @@ namespace DuskEngine
 		m_VAFramebuffer->AddBuffer(*m_VBFramebuffer);
 		m_VAFramebuffer->AddLayout(vbl2);
 
-		m_Framebuffer = new Framebuffer;
-		//m_Framebuffer->Bind();
-		m_Framebuffer->CreateTexture(1280, 720);
-
-		unsigned int rbo;
-		glGenRenderbuffers(1, &rbo);
-		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1280, 720); // use a single renderbuffer object for both a depth AND stencil buffer.
-
-		m_Framebuffer->Bind();
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "error in the framebuffer" << std::endl;
+		m_Framebuffer = new Framebuffer(1280, 720);
 	}
 
 	Application::~Application()
@@ -119,7 +106,7 @@ namespace DuskEngine
 			ImGui::NewFrame();
 
 			ImGui::Begin("Framebuffer");
-			ImGui::Image((void*)(intptr_t)m_Framebuffer->texture, ImVec2(1280, 720));
+			ImGui::Image((void*)(intptr_t)m_Framebuffer->GetTexture(), ImVec2(1280, 720));
 			ImGui::End();
 
 			ImGuiIO& io = ImGui::GetIO();
