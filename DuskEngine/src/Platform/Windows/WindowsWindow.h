@@ -18,6 +18,9 @@ namespace DuskEngine
 
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
+
+		bool ShouldClose() const override;
+
 		void* GetNativeHandle() const override;
 	private:
 		void Init(const WindowData& data);

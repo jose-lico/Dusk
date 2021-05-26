@@ -57,10 +57,10 @@ project "DuskEngine"
 			"opengl32"
 		}
 
-		-- postbuildcommands
-		-- {
-		-- 	("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
-		-- }
+		postbuildcommands
+		{
+			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
+		}
 
 	filter "system:linux"
 		cppdialect "C++17"

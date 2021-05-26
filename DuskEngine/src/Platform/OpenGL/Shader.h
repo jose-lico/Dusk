@@ -13,7 +13,6 @@ namespace DuskEngine
 		std::string FragmentSource;
 	};
 
-
 	class Shader
 	{
 	public:

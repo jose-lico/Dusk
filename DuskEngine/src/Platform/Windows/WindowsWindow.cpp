@@ -8,8 +8,6 @@
 
 namespace DuskEngine
 {
-	static bool HasSentDataToGPU = false;
-
 	WindowsWindow::WindowsWindow(const WindowData& data)
 	{
 		Init(data);
@@ -89,6 +87,12 @@ namespace DuskEngine
 	{
 		return m_Data.VSync;
 	}
+
+	bool WindowsWindow::ShouldClose() const
+	{
+		return glfwWindowShouldClose(m_Window);
+	}
+
 	void* WindowsWindow::GetNativeHandle() const
 	{
 		return m_Window;

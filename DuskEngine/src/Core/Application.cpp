@@ -83,7 +83,7 @@ namespace DuskEngine
 
 	void Application::Run()
 	{
-		while(m_Running)
+		while(!m_Window->ShouldClose())
 		{
 			m_Framebuffer->Bind();
 			glEnable(GL_DEPTH_TEST);

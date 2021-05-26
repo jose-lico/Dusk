@@ -16,7 +16,7 @@ namespace DuskEngine
 
 		void Run();
 	private:
-		bool m_Running = true;
+		//bool m_Running = true; using window close for now
 		Window* m_Window;
 
 		// TEMP
