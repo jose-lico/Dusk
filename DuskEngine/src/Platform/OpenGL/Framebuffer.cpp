@@ -1,7 +1,8 @@
+#include "pch.h"
+
 #include "Framebuffer.h"
 
 #include "GLCommon.h"
-#include <iostream>
 
 namespace DuskEngine
 {

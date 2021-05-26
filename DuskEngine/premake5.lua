@@ -5,6 +5,9 @@ project "DuskEngine"
 	targetdir ("%{wks.location}/bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputDir .. "/%{prj.name}")
 
+	pchheader "pch.h"
+	pchsource "src/pch.cpp"
+
 	files
 	{
 		"src/**.h",
@@ -36,7 +39,8 @@ project "DuskEngine"
 	{
 		"GLFW_INCLUDE_NONE",
 		"GLEW_STATIC",
-		"IMGUI_IMPL_OPENGL_LOADER_GLEW"
+		"IMGUI_IMPL_OPENGL_LOADER_GLEW",
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	filter "system:windows"

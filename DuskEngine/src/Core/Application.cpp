@@ -1,10 +1,10 @@
+#include "pch.h"
+
 #include "Application.h"
 #include "Platform/Windows/WindowsWindow.h"
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-
-#include <iostream>
 
 namespace DuskEngine
 {

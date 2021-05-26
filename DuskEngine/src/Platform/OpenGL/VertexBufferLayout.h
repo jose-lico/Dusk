@@ -1,7 +1,7 @@
 #pragma once
-#include "GLCommon.h"
 
-#include <vector>
+#include "pch.h"
+#include "GLCommon.h"
 
 namespace DuskEngine 
 {

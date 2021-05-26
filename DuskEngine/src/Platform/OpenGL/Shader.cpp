@@ -1,9 +1,7 @@
+#include "pch.h"
+
 #include "Shader.h"
 #include "GLCommon.h"
-
-#include <sstream>
-#include <fstream>
-#include <iostream>
 
 namespace DuskEngine
 {

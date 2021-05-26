@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "VertexBuffer.h"
 #include "GLCommon.h"
 
