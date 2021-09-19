@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace DuskEngine
 {
@@ -23,15 +24,19 @@ namespace DuskEngine
 		m_Data = data;
 
 		glfwInit();
-		m_Window = glfwCreateWindow(data.Width, data.Height, "My Window", NULL, NULL);
+		m_Window = glfwCreateWindow(data.Width, data.Height, "Dusk Editor", NULL, NULL);
 
 		if (!m_Window)
 		{
 			glfwTerminate();
 		}
 
-		glfwMakeContextCurrent(m_Window);
-		glfwSwapInterval(data.VSync);
+#ifdef DUSK_OPENGL
+		m_Context = new OpenGLContext(m_Window);
+#endif
+
+		m_Context->Init();
+		m_Context->SetVSync(m_Data.VSync);
 
 		// ImGui temp code
 
@@ -72,15 +77,13 @@ namespace DuskEngine
 
 	void WindowsWindow::OnUpdate()
 	{
-		glfwSwapBuffers(m_Window);
-		glfwPollEvents();
+		m_Context->SwapBuffers();
 	}
 
-	void WindowsWindow::SetVSync(bool enabled)
+	void WindowsWindow::SetVSync(bool vsync)
 	{
-		glfwSwapInterval(enabled);
-
-		m_Data.VSync = enabled;
+		m_Context->SetVSync(vsync);
+		m_Data.VSync = vsync;
 	}
 
 	bool WindowsWindow::IsVSync() const
