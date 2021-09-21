@@ -34,7 +34,7 @@ namespace DuskEngine
 		m_Texture = new Texture("res/textures/rocks.png", GL_RGBA);
 		m_VA = new VertexArray;
 		m_VB = VertexBuffer::Create(vertices, sizeof(vertices));
-		m_IB = new IndexBuffer(6, indices);
+		m_IB = IndexBuffer::Create(indices, sizeof(indices));
 
 		VertexBufferLayout vbl;
 		vbl.Push<float>(3);

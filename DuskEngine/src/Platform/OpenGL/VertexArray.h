@@ -2,7 +2,7 @@
 
 #include "OpenGLVertexBuffer.h"
 #include "VertexBufferLayout.h"
-#include "IndexBuffer.h"
+#include "OpenGLIndexBuffer.h"
 
 namespace DuskEngine
 {

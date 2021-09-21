@@ -6,12 +6,12 @@
 
 namespace DuskEngine
 {
-	VertexBuffer* VertexBuffer::Create(float* vertices, int size)
+	VertexBuffer* VertexBuffer::Create(const void* data, int size)
 	{
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::None:    return nullptr;
-			case RendererAPI::OpenGL:  return new OpenGLVertexBuffer(vertices, size);
+			case RendererAPI::OpenGL:  return new OpenGLVertexBuffer(data, size);
 		}
 
 		return nullptr;
