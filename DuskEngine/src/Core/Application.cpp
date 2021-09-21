@@ -33,7 +33,7 @@ namespace DuskEngine
 		m_Shader = new Shader("res/shaders/simpleTexture.glsl");
 		m_Texture = new Texture("res/textures/rocks.png", GL_RGBA);
 		m_VA = new VertexArray;
-		m_VB = new VertexBuffer(sizeof(vertices), vertices);
+		m_VB = VertexBuffer::Create(vertices, sizeof(vertices));
 		m_IB = new IndexBuffer(6, indices);
 
 		VertexBufferLayout vbl;
@@ -57,7 +57,7 @@ namespace DuskEngine
 		};
 
 		m_VAFramebuffer = new VertexArray;
-		m_VBFramebuffer = new VertexBuffer(sizeof(quadVertices), quadVertices);
+		m_VBFramebuffer = VertexBuffer::Create(quadVertices, sizeof(quadVertices));
 
 		VertexBufferLayout vbl2;
 		vbl2.Push<float>(2);

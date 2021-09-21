@@ -2,7 +2,7 @@
 
 #include "defines.h"
 #include "Window.h"
-#include "Platform/OpenGL/Renderer.h" 
+#include "Platform/OpenGL/OpenGLRenderer.h" 
 #include "Platform/OpenGL/Texture.h"
 #include "Platform/OpenGL/Framebuffer.h"
 
@@ -20,7 +20,7 @@ namespace DuskEngine
 		Window* m_Window;
 
 		// TEMP
-		Renderer& m_Renderer = Renderer::Get();
+		OpenGLRenderer& m_Renderer = OpenGLRenderer::Get();
 
 		VertexArray* m_VA;
 		VertexBuffer* m_VB;

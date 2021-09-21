@@ -6,12 +6,12 @@
 
 namespace DuskEngine 
 {
-	class Renderer
+	class OpenGLRenderer
 	{
 	public:
-		static Renderer& Get()
+		static OpenGLRenderer& Get()
 		{
-			static Renderer instance;
+			static OpenGLRenderer instance;
 			return instance;
 		}
 
