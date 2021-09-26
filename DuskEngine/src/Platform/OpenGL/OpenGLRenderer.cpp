@@ -1,6 +1,7 @@
 #include "pch.h"
-
 #include "OpenGLRenderer.h"
+
+#include "GLCommon.h"
 
 namespace DuskEngine
 {
@@ -22,19 +23,19 @@ namespace DuskEngine
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
-	void OpenGLRenderer::DrawElements(const VertexArray& va, const Shader& shader)
+	void OpenGLRenderer::DrawElements(const std::shared_ptr<VertexArray>& va, const std::shared_ptr<Shader>& shader)
 	{
-		shader.Bind();
-		va.Bind();
-		glDrawElements(GL_TRIANGLES, va.Indices, GL_UNSIGNED_INT, nullptr);
+		shader->Bind();
+		va->Bind();
+		glDrawElements(GL_TRIANGLES, va->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 		stats.DrawCalls++;
 	}
 
-	void OpenGLRenderer::DrawArrays(const VertexArray& va, const Shader& shader, unsigned int start, unsigned int count)
+	void OpenGLRenderer::DrawArrays(const std::shared_ptr<VertexArray>& va, const std::shared_ptr<Shader>& shader, unsigned int start, unsigned int count)
 	{
-		shader.Bind();
-		va.Bind();
+		shader->Bind();
+		va->Bind();
 		glDrawArrays(GL_TRIANGLES, start, count);
 
 		stats.DrawCalls++;

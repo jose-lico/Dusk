@@ -22,14 +22,11 @@ namespace DuskEngine
 		// TEMP
 		OpenGLRenderer& m_Renderer = OpenGLRenderer::Get();
 
-		VertexArray* m_VA;
-		VertexBuffer* m_VB;
-		IndexBuffer* m_IB;
-		Shader* m_Shader;
-		Texture* m_Texture;
+		std::shared_ptr<VertexArray> m_VA;
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<Texture> m_Texture;
 
 		Framebuffer* m_Framebuffer;
-		VertexArray* m_VAFramebuffer;
-		VertexBuffer* m_VBFramebuffer;
+		std::shared_ptr<VertexArray> m_VAFramebuffer;
 	};
 }

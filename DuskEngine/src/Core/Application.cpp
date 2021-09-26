@@ -30,20 +30,26 @@ namespace DuskEngine
 			1, 2, 3    // second triangle
 		};
 
-		m_Shader = new Shader("res/shaders/simpleTexture.glsl");
-		m_Texture = new Texture("res/textures/rocks.png", GL_RGBA);
-		m_VA = new VertexArray;
-		m_VB = VertexBuffer::Create(vertices, sizeof(vertices));
-		m_IB = IndexBuffer::Create(indices, sizeof(indices));
+		m_Shader = std::make_shared<Shader>("res/shaders/simpleTexture.glsl");
+
+		m_Texture = std::make_shared<Texture>("res/textures/rocks.png", GL_RGBA);
+		
+		m_VA.reset(VertexArray::Create());
+		
+		std::shared_ptr<VertexBuffer> vertexBuffer;
+		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		
+		std::shared_ptr<IndexBuffer> indexBuffer;
+		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(unsigned int)));
 
 		VertexBufferLayout vbl;
-		vbl.Push<float>(3);
-		vbl.Push<float>(2);
-
+		vbl.Push(ShaderDataType::Float, 3, true);
+		vbl.Push(ShaderDataType::Float, 2, true);
+		vertexBuffer->SetLayout(vbl);
+		
 		m_VA->Bind();
-		m_VA->AddBuffer(*m_VB);
-		m_VA->AddIndices(*m_IB);
-		m_VA->AddLayout(vbl);
+		m_VA->AddBuffer(vertexBuffer);
+		m_VA->AddIndices(indexBuffer);
 
 		float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
 			// positions   // texCoords
@@ -56,28 +62,24 @@ namespace DuskEngine
 			 1.0f,  1.0f,  1.0f, 1.0f
 		};
 
-		m_VAFramebuffer = new VertexArray;
-		m_VBFramebuffer = VertexBuffer::Create(quadVertices, sizeof(quadVertices));
+		m_VAFramebuffer.reset(VertexArray::Create());
+		
+		std::shared_ptr<VertexBuffer> vertexBufferFramebuffer;
+		vertexBufferFramebuffer.reset(VertexBuffer::Create(quadVertices, sizeof(quadVertices)));
 
-		VertexBufferLayout vbl2;
-		vbl2.Push<float>(2);
-		vbl2.Push<float>(2);
+		VertexBufferLayout vblFramebuffer;
+		vblFramebuffer.Push(ShaderDataType::Float, 2, true);
+		vblFramebuffer.Push(ShaderDataType::Float, 2, true);
 
 		m_VAFramebuffer->Bind();
-		m_VAFramebuffer->AddBuffer(*m_VBFramebuffer);
-		m_VAFramebuffer->AddLayout(vbl2);
+		m_VAFramebuffer->AddBuffer(vertexBufferFramebuffer);
+		vertexBufferFramebuffer->SetLayout(vblFramebuffer);
 
 		m_Framebuffer = new Framebuffer(1280, 720);
 	}
 
 	Application::~Application()
 	{
-		delete m_VB;
-		delete m_IB;
-		delete m_VA;
-		delete m_Texture;
-		delete m_Framebuffer;
-
 		glfwTerminate();
 	}
 
@@ -93,7 +95,7 @@ namespace DuskEngine
 
 			// TEMP
 			m_Texture->Bind(0);
-			m_Renderer.DrawElements(*m_VA, *m_Shader);
+			m_Renderer.DrawElements(m_VA, m_Shader);
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			glDisable(GL_DEPTH_TEST);

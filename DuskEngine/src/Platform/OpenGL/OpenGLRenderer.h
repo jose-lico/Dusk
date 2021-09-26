@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm.hpp>
-#include "Platform/OpenGL/VertexArray.h"
+#include "Platform/OpenGL/OpenGLVertexArray.h"
 #include "Platform/OpenGL/Shader.h"
 
 namespace DuskEngine 
@@ -19,8 +19,8 @@ namespace DuskEngine
 
 		static const void Clear();
 		static const void ClearColor(const glm::vec4& color);
-		static void DrawElements(const VertexArray& va, const Shader& shader);
-		static void DrawArrays(const VertexArray& va, const Shader& shader, unsigned int start, unsigned int count);
+		static void DrawElements(const std::shared_ptr<VertexArray>& va, const std::shared_ptr<Shader>& shader);
+		static void DrawArrays(const std::shared_ptr<VertexArray>& va, const std::shared_ptr<Shader>& shader, unsigned int start, unsigned int count);
 
 		struct Stats
 		{
