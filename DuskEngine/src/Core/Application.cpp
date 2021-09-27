@@ -5,6 +5,8 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "Renderer/RenderCommand.h"
+#include "Renderer/Renderer.h"
 
 namespace DuskEngine
 {
@@ -12,8 +14,6 @@ namespace DuskEngine
 	{
 		WindowData data;
 		m_Window = new WindowsWindow(data);
-
-		m_Renderer.Init();
 
 		float vertices[] = 
 		{
@@ -90,18 +90,23 @@ namespace DuskEngine
 			m_Framebuffer->Bind();
 			glEnable(GL_DEPTH_TEST);
 
-			m_Renderer.ClearColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
-			m_Renderer.Clear();
+			RenderCommand::SetClearColor({ 1.0f, 0.0f, 0.0f, 1 });
+			RenderCommand::Clear();
+
+			Renderer::BeginScene();
+
+			m_Shader->Bind();
+			m_Texture->Bind(0);
+			Renderer::Submit(m_VA);
+
+			Renderer::EndScene();
 
 			// TEMP
-			m_Texture->Bind(0);
-			m_Renderer.DrawElements(m_VA, m_Shader);
-
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			m_Framebuffer->Unbind();
 			glDisable(GL_DEPTH_TEST);
 
-			m_Renderer.ClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
-			m_Renderer.Clear();
+			RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1 });
+			RenderCommand::Clear();
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
@@ -110,6 +115,8 @@ namespace DuskEngine
 			ImGui::Begin("Framebuffer");
 			ImGui::Image((void*)(intptr_t)m_Framebuffer->GetTexture(), ImVec2(1280, 720));
 			ImGui::End();
+
+			//ImGui::ShowDemoWindow((bool*)true);
 
 			ImGuiIO& io = ImGui::GetIO();
 			int width;

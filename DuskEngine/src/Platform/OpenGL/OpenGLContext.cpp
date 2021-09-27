@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "OpenGLContext.h"
+#include "GLCommon.h"
 
 namespace DuskEngine
 {
@@ -16,7 +17,8 @@ namespace DuskEngine
 	void OpenGLContext::Init()
 	{
 		glfwMakeContextCurrent(m_WindowHandle);
-
+		if (glewInit() != GLEW_OK)
+			std::cout << "Error" << std::endl;
 	}
 
 	void OpenGLContext::SetVSync(bool vsync)

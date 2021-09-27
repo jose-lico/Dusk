@@ -1,17 +1,19 @@
 #pragma once
 
-namespace DuskEngine 
-{
-	enum class RendererAPI
-	{
-		None = 0, OpenGL = 1, D3D11 = 2
-	};
+#include "RenderCommand.h"
+
+namespace DuskEngine {
 
 	class Renderer
 	{
 	public:
-		inline static RendererAPI GetAPI() { return s_RendererAPI; }
-	private:
-		static RendererAPI s_RendererAPI;
+		static void BeginScene();
+		static void EndScene();
+
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+
+		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	};
+
+
 }

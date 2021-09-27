@@ -10,8 +10,8 @@ namespace DuskEngine
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::None:    return nullptr;
-			case RendererAPI::OpenGL:  return new OpenGLIndexBuffer(data, count);
+			case RendererAPI::API::None:    return nullptr;
+			case RendererAPI::API::OpenGL:  return new OpenGLIndexBuffer(data, count);
 		}
 
 		return nullptr;

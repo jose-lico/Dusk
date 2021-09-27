@@ -2,9 +2,10 @@
 
 #include "defines.h"
 #include "Window.h"
-#include "Platform/OpenGL/OpenGLRenderer.h" 
+#include "Platform/OpenGL/Shader.h"
 #include "Platform/OpenGL/Texture.h"
 #include "Platform/OpenGL/Framebuffer.h"
+#include "Renderer/VertexArray.h"
 
 namespace DuskEngine
 {
@@ -18,9 +19,6 @@ namespace DuskEngine
 	private:
 		//bool m_Running = true; using window close for now
 		Window* m_Window;
-
-		// TEMP
-		OpenGLRenderer& m_Renderer = OpenGLRenderer::Get();
 
 		std::shared_ptr<VertexArray> m_VA;
 		std::shared_ptr<Shader> m_Shader;
