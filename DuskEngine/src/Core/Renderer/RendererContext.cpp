@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "RendererContext.h"
 
-#include "Core/Renderer/Renderer.h"
+#include "Renderer.h"
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace DuskEngine
