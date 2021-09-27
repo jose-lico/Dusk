@@ -31,9 +31,7 @@ namespace DuskEngine
 			glfwTerminate();
 		}
 
-#ifdef DUSK_OPENGL
-		m_Context = new OpenGLContext(m_Window);
-#endif
+		m_Context = RendererContext::Create(m_Window);
 
 		m_Context->Init();
 		m_Context->SetVSync(m_Data.VSync);

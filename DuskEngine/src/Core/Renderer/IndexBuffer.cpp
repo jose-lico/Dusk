@@ -12,9 +12,8 @@ namespace DuskEngine
 		{
 			case RendererAPI::API::None:    return nullptr;
 			case RendererAPI::API::OpenGL:  return new OpenGLIndexBuffer(data, count);
-		}
-
-		return nullptr;
-		
+			case RendererAPI::API::D3D11:	return nullptr;
+			default:						return nullptr;
+		}		
 	}
 }
