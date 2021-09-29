@@ -7,10 +7,13 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
+#include "gtc/type_ptr.hpp"
+
 
 namespace DuskEngine
 {
 	Application::Application()
+		:m_Camera(glm::perspective(glm::radians(45.0f), 16.0f/ 9.0f, 0.01f, 100.0f), glm::vec3(-1.0f, 0.0f, 3.0f), glm::vec3(0.0f, -90.0f, 0.0f))
 	{
 		WindowData data;
 		m_Window = new WindowsWindow(data);
@@ -32,7 +35,7 @@ namespace DuskEngine
 
 		m_Shader = std::make_shared<Shader>("res/shaders/simpleTexture.glsl");
 
-		m_Texture = std::make_shared<Texture>("res/textures/rocks.png", GL_RGBA);
+		m_Texture = std::make_shared<Texture>("res/textures/uv_mapper.jpg", GL_RGB);
 		
 		m_VA.reset(VertexArray::Create());
 		
@@ -76,6 +79,7 @@ namespace DuskEngine
 		vertexBufferFramebuffer->SetLayout(vblFramebuffer);
 
 		m_Framebuffer = new Framebuffer(1280, 720);
+		m_Framebuffer->Unbind();
 	}
 
 	Application::~Application()
@@ -85,10 +89,13 @@ namespace DuskEngine
 
 	void Application::Run()
 	{
+		glEnable(GL_DEPTH_TEST);
+
 		while(!m_Window->ShouldClose())
 		{
-			m_Framebuffer->Bind();
-			glEnable(GL_DEPTH_TEST);
+			// TEMP
+			//m_Framebuffer->Bind();
+			//glEnable(GL_DEPTH_TEST);
 
 			RenderCommand::SetClearColor({ 1.0f, 0.0f, 0.0f, 1 });
 			RenderCommand::Clear();
@@ -96,25 +103,26 @@ namespace DuskEngine
 			Renderer::BeginScene();
 
 			m_Shader->Bind();
+			m_Shader->SetUniformMat4("u_ModelViewProjection", m_Camera.GetViewProjectionMatrix());
 			m_Texture->Bind(0);
 			Renderer::Submit(m_VA);
 
 			Renderer::EndScene();
 
 			// TEMP
-			m_Framebuffer->Unbind();
-			glDisable(GL_DEPTH_TEST);
+			//m_Framebuffer->Unbind();
+			//glDisable(GL_DEPTH_TEST);
 
-			RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1 });
-			RenderCommand::Clear();
+			//RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1 });
+			//RenderCommand::Clear();
 
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 
-			ImGui::Begin("Framebuffer");
-			ImGui::Image((void*)(intptr_t)m_Framebuffer->GetTexture(), ImVec2(1280, 720));
-			ImGui::End();
+			//ImGui::Begin("Framebuffer");
+			//ImGui::Image((void*)(intptr_t)m_Framebuffer->GetTexture(), ImVec2(1280, 720));
+			//ImGui::End();
 
 			//ImGui::ShowDemoWindow((bool*)true);
 

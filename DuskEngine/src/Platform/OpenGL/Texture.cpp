@@ -9,6 +9,7 @@ namespace DuskEngine
     Texture::Texture(const char* filepath, unsigned int type)
         :m_ID(0)
     {
+        stbi_set_flip_vertically_on_load(true); // move this somewhere else
         glGenTextures(1, &m_ID);
         glBindTexture(GL_TEXTURE_2D, m_ID);
 
@@ -19,7 +20,7 @@ namespace DuskEngine
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         unsigned char* data;
-        data = stbi_load(filepath, &m_Width, &m_Height, &m_Channels, 4);
+        data = stbi_load(filepath, &m_Width, &m_Height, &m_Channels, 3);
 
         if (data)
         {

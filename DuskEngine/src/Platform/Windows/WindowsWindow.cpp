@@ -6,9 +6,12 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "Platform/OpenGL/OpenGLContext.h"
+#include "GL/glew.h"
 
 namespace DuskEngine
 {
+	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
 	WindowsWindow::WindowsWindow(const WindowData& data)
 	{
 		Init(data);
@@ -35,6 +38,7 @@ namespace DuskEngine
 
 		m_Context->Init();
 		m_Context->SetVSync(m_Data.VSync);
+		glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
 
 		// ImGui temp code
 
@@ -97,5 +101,10 @@ namespace DuskEngine
 	void* WindowsWindow::GetNativeHandle() const
 	{
 		return m_Window;
+	}
+
+	void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+	{
+		glViewport(0, 0, width, height);
 	}
 }

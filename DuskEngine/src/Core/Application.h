@@ -6,6 +6,7 @@
 #include "Platform/OpenGL/Texture.h"
 #include "Platform/OpenGL/Framebuffer.h"
 #include "Renderer/VertexArray.h"
+#include "Renderer/Camera.h"
 
 namespace DuskEngine
 {
@@ -26,5 +27,7 @@ namespace DuskEngine
 
 		Framebuffer* m_Framebuffer;
 		std::shared_ptr<VertexArray> m_VAFramebuffer;
+
+		Camera m_Camera;
 	};
 }

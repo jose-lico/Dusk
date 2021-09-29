@@ -1,6 +1,6 @@
 #include "pch.h"
-
 #include "Shader.h"
+
 #include "GLCommon.h"
 
 namespace DuskEngine
@@ -118,27 +118,27 @@ namespace DuskEngine
 		glUniform1f(GetUniformLocation(name), f);
 	}
 
-	void Shader::SetUniformVec2(const std::string& name, glm::vec2& v)
+	void Shader::SetUniformVec2(const std::string& name, const glm::vec2& v)
 	{
 		glUniform2f(GetUniformLocation(name), v.x, v.y);
 	}
 
-	void Shader::SetUniformVec3(const std::string& name, glm::vec3& v)
+	void Shader::SetUniformVec3(const std::string& name, const glm::vec3& v)
 	{
 		glUniform3f(GetUniformLocation(name), v.x, v.y, v.z);
 	}
 
-	void Shader::SetUniformVec4(const std::string& name, glm::vec4& v)
+	void Shader::SetUniformVec4(const std::string& name, const glm::vec4& v)
 	{
 		glUniform4f(GetUniformLocation(name), v.x, v.y, v.z, v.w);
 	}
 
-	void Shader::SetUniformMat3(const std::string& name, glm::mat3& m)
+	void Shader::SetUniformMat3(const std::string& name, const glm::mat3& m)
 	{
 		glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, &m[0][0]);
 	}
 
-	void Shader::SetUniformMat4(const std::string& name, glm::mat4& m)
+	void Shader::SetUniformMat4(const std::string& name, const glm::mat4& m)
 	{
 		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &m[0][0]);
 	}

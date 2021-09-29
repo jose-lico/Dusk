@@ -6,9 +6,11 @@ layout (location = 1) in vec2 textureCoords;
 
 out vec2 TexCoords;
 
+uniform mat4 u_ModelViewProjection;
+
 void main()
 {
-    gl_Position = vec4(position, 1.0);
+    gl_Position = u_ModelViewProjection * vec4(position, 1.0);
     TexCoords = textureCoords;
 }
 
