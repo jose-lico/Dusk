@@ -18,3 +18,6 @@
 	ignore = dirty
 	path = Dependencies/stb
 	url = https://github.com/qolisipo/stb
+[submodule "Dependencies/spdlog"]
+	path = Dependencies/spdlog
+	url = https://github.com/gabime/spdlog

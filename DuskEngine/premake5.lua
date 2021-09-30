@@ -25,7 +25,8 @@ project "DuskEngine"
 		dependenciesDir .. "/glew/include",
 		dependenciesDir .. "/glm/glm",
 		dependenciesDir .. "/stb",
-		dependenciesDir .. "/imgui"
+		dependenciesDir .. "/imgui",
+		dependenciesDir .. "/spdlog/include"
 	}
 
 	links
