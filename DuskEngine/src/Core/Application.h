@@ -7,6 +7,7 @@
 #include "Platform/OpenGL/Framebuffer.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/Camera.h"
+#include "Utils/Logging/Logger.h"
 
 namespace DuskEngine
 {
@@ -29,5 +30,7 @@ namespace DuskEngine
 		std::shared_ptr<VertexArray> m_VAFramebuffer;
 
 		Camera m_Camera;
+
+		Logger logger;
 	};
 }

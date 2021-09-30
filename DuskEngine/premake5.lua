@@ -43,7 +43,8 @@ project "DuskEngine"
 		"IMGUI_IMPL_OPENGL_LOADER_GLEW",
 		"_CRT_SECURE_NO_WARNINGS",
 
-		"DUSK_OPENGL"
+		"DUSK_OPENGL",
+		"DUSK_DEBUG"
 	}
 
 	filter "system:windows"

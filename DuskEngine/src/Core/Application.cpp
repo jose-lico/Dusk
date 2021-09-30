@@ -8,6 +8,7 @@
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
 #include "gtc/type_ptr.hpp"
+#include "Utils/Logging/Log.h"
 
 
 namespace DuskEngine
@@ -15,6 +16,8 @@ namespace DuskEngine
 	Application::Application()
 		:m_Camera(glm::perspective(glm::radians(45.0f), 16.0f/ 9.0f, 0.01f, 100.0f), glm::vec3(-1.0f, 0.0f, 3.0f), glm::vec3(0.0f, -90.0f, 0.0f))
 	{
+		logger.Init();
+		DUSK_LOG("hello");
 		WindowData data;
 		m_Window = new WindowsWindow(data);
 
@@ -85,6 +88,7 @@ namespace DuskEngine
 	Application::~Application()
 	{
 		glfwTerminate();
+		logger.Shutdown();
 	}
 
 	void Application::Run()
