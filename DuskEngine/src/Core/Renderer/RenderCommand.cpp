@@ -5,5 +5,5 @@
 
 namespace DuskEngine {
 
-	RendererAPI* RenderCommand::s_RendererAPI = RendererAPI::Create();
+	RendererAPI* RenderCommand::s_RendererAPI;
 }

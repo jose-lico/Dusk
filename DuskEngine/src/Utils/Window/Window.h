@@ -2,6 +2,8 @@
 
 #include "pch.h"
 
+#include "Core/Renderer/RendererContext.h"
+
 namespace DuskEngine
 {
 	struct WindowData
@@ -20,9 +22,10 @@ namespace DuskEngine
 	class Window
 	{
 	public:
-		virtual ~Window() {};
+		virtual void Init(const WindowData& data = WindowData()) = 0;
+		virtual void Shutdown() = 0;
 
-		virtual void OnUpdate() = 0;
+		virtual void OnUpdate(RendererContext* context) = 0;
 
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;

@@ -14,7 +14,7 @@ Dusk uses [premake](https://premake.github.io/) as its build system.
 
 1. Clone the repository and its submodules.
 2. Run premake from the root directory and choose the targeted environment.
-    - VS2019 `premake5.exe vs2019`   
+    - VS2019 `premake5.exe vs2019`
     - GCC &nbsp;&nbsp;&nbsp;&nbsp; `./premake5 gmake2`
 3. Compile & run
 

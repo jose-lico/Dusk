@@ -13,6 +13,7 @@ namespace DuskEngine
 		~OpenGLContext();
 
 		virtual void Init() override;
+		virtual void Shutdown() override;
 		virtual void SetVSync(bool vsync) override;
 		virtual void SwapBuffers() override;
 	private:

@@ -1,19 +1,20 @@
 #include "pch.h"
 #include "VertexArray.h"
 
-#include "Renderer.h"
+#include "RendererContext.h"
+
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
 namespace DuskEngine
 {
 	VertexArray* VertexArray::Create()
 	{
-		switch (Renderer::GetAPI())
+		switch (RendererContext::GetAPI())
 		{
-			case RendererAPI::API::None:    return nullptr;
-			case RendererAPI::API::OpenGL:  return new OpenGLVertexArray();
-			case RendererAPI::API::D3D11:	return nullptr;
-			default:						return nullptr;
+			case RendererContext::API::None:    return nullptr;
+			case RendererContext::API::OpenGL:  return new OpenGLVertexArray();
+			case RendererContext::API::D3D11:	return nullptr;
+			default:							return nullptr;
 		}
 	}
 }

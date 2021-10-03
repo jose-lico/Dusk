@@ -13,6 +13,4 @@ namespace DuskEngine {
 
 		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) override;
 	};
-
-
 }

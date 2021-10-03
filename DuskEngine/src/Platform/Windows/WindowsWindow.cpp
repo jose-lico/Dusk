@@ -6,86 +6,38 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "Platform/OpenGL/OpenGLContext.h"
-#include "GL/glew.h"
+#include "Utils/Logging/Log.h"
 
 namespace DuskEngine
 {
-	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
-	WindowsWindow::WindowsWindow(const WindowData& data)
-	{
-		Init(data);
-	}
-
-	WindowsWindow::~WindowsWindow()
-	{
-		Shutdown();
-	}
-
 	void WindowsWindow::Init(const WindowData& data)
 	{
 		m_Data = data;
 
 		glfwInit();
-		m_Window = glfwCreateWindow(data.Width, data.Height, "Dusk Editor", NULL, NULL);
+		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL);
 
 		if (!m_Window)
 		{
+			DUSK_LOG("Window wasn't created properly, shutting glfw down");
 			glfwTerminate();
 		}
-
-		m_Context = RendererContext::Create(m_Window);
-
-		m_Context->Init();
-		m_Context->SetVSync(m_Data.VSync);
-		glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
-
-		// ImGui temp code
-
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
-
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
-
-		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-		/*ImGuiStyle& style = ImGui::GetStyle();
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}*/
-
-		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
-		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
 	void WindowsWindow::Shutdown()
 	{
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
-
 		glfwDestroyWindow(m_Window);
 	}
 
-	void WindowsWindow::OnUpdate()
+	void WindowsWindow::OnUpdate(RendererContext* context)
 	{
-		m_Context->SwapBuffers();
+		context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool vsync)
 	{
-		m_Context->SetVSync(vsync);
-		m_Data.VSync = vsync;
+		//m_Context->SetVSync(vsync);
+		//m_Data.VSync = vsync;
 	}
 
 	bool WindowsWindow::IsVSync() const
@@ -101,10 +53,5 @@ namespace DuskEngine
 	void* WindowsWindow::GetNativeHandle() const
 	{
 		return m_Window;
-	}
-
-	void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-	{
-		glViewport(0, 0, width, height);
 	}
 }

@@ -2,6 +2,7 @@
 
 #include "OpenGLContext.h"
 #include "GLCommon.h"
+#include "Utils/Logging/Log.h"
 
 namespace DuskEngine
 {
@@ -18,7 +19,12 @@ namespace DuskEngine
 	{
 		glfwMakeContextCurrent(m_WindowHandle);
 		if (glewInit() != GLEW_OK)
-			std::cout << "Error" << std::endl;
+			DUSK_ERROR("Failed to initialize glew");
+	}
+
+	void OpenGLContext::Shutdown()
+	{
+		glfwTerminate();
 	}
 
 	void OpenGLContext::SetVSync(bool vsync)

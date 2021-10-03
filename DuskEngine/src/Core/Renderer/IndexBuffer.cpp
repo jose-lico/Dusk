@@ -1,19 +1,20 @@
 #include "pch.h"
 #include "IndexBuffer.h"
 
-#include "Renderer.h"
+#include "RendererContext.h"
+
 #include "Platform/OpenGL/OpenGLIndexBuffer.h"
 
 namespace DuskEngine
 {
 	IndexBuffer* IndexBuffer::Create(const void* data, int count)
 	{
-		switch (Renderer::GetAPI())
+		switch (RendererContext::GetAPI())
 		{
-			case RendererAPI::API::None:    return nullptr;
-			case RendererAPI::API::OpenGL:  return new OpenGLIndexBuffer(data, count);
-			case RendererAPI::API::D3D11:	return nullptr;
-			default:						return nullptr;
+			case RendererContext::API::None:    return nullptr;
+			case RendererContext::API::OpenGL:  return new OpenGLIndexBuffer(data, count);
+			case RendererContext::API::D3D11:	return nullptr;
+			default:							return nullptr;
 		}		
 	}
 }

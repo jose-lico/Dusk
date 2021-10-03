@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Logger.h"
+#include "LoggingManager.h"
 
 #include "Log.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -17,6 +17,7 @@ namespace DuskEngine
 		logger->set_level(spdlog::level::trace);
 		logger->flush_on(spdlog::level::trace);
 		spdlog::register_logger(logger);
+		DUSK_INFO("Logger initialized!");
 	}
 
 	void Logger::Shutdown()

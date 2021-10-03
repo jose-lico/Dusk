@@ -42,7 +42,7 @@ namespace DuskEngine
 
 	void OpenGLVertexArray::Unbind() const
 	{
-		glBindVertexArray(m_ID);
+		glBindVertexArray(0);
 	}
 
 	void OpenGLVertexArray::AddIndices(const std::shared_ptr<IndexBuffer>& ib)
@@ -54,9 +54,10 @@ namespace DuskEngine
 	void OpenGLVertexArray::AddBuffer(const std::shared_ptr<VertexBuffer>& vb)
 	{
 		vb->Bind();
+		m_VertexBuffer = vb;
 
 		const auto& elements = vb->GetLayout().GetElements();
-		int offset = 0;
+		unsigned int offset = 0;
 		for (unsigned int i = 0; i < elements.size(); i++) {
 			const auto& element = elements[i];
 			glVertexAttribPointer(i, element.count, ShaderDataTypeToOpenGLBaseType(element.type), element.normalized, vb->GetLayout().GetStride(), (const void*)offset);

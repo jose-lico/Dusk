@@ -3,6 +3,7 @@
 #include "Texture.h"
 
 #include "stb_image.h"
+#include "Utils/Logging/Log.h"
 
 namespace DuskEngine
 {

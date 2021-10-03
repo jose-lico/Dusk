@@ -7,13 +7,11 @@ namespace DuskEngine {
 	class Renderer
 	{
 	public:
-		static void Init();
-		static void Shutdown();
+		void Init();
+		void Shutdown();
 		static void BeginScene();
 		static void EndScene();
 
 		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
-
-		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	};
 }

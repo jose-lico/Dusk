@@ -21,5 +21,6 @@ namespace DuskEngine
 	private:
 		unsigned int m_ID;
 		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
 	};
 }
