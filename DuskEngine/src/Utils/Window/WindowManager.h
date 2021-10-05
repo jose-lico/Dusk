@@ -7,11 +7,9 @@ namespace DuskEngine
 	class WindowManager
 	{
 	public:
-		WindowManager();
-		~WindowManager() = default;
-		void Init();
-		void Shutdown();
-		Window* GetWindow() { return s_Window; }
+		static void Init();
+		static void Shutdown();
+		static Window* GetWindow() { return s_Window; }
 	private:
 		static Window* s_Window;
 	};

@@ -1,8 +1,8 @@
 #include "pch.h"
-
 #include "Framebuffer.h"
 
 #include "GLCommon.h"
+#include "Utils/Logging/Log.h"
 
 namespace DuskEngine
 {
@@ -26,7 +26,7 @@ namespace DuskEngine
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RenderID);
 
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "error in the framebuffer" << std::endl;
+			DUSK_LOG_ERROR("Error in the Framebuffer");
 	}
 
 	Framebuffer::~Framebuffer()

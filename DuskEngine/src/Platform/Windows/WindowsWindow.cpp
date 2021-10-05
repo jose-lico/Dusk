@@ -1,11 +1,6 @@
 #include "pch.h"
-
 #include "WindowsWindow.h"
 
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
-#include "Platform/OpenGL/OpenGLContext.h"
 #include "Utils/Logging/Log.h"
 
 namespace DuskEngine
@@ -19,25 +14,23 @@ namespace DuskEngine
 
 		if (!m_Window)
 		{
-			DUSK_LOG("Window wasn't created properly, shutting glfw down");
+			DUSK_LOG_ERROR("Window wasn't created properly, shutting glfw down");
 			glfwTerminate();
 		}
+
+		DUSK_LOG_INFO("Window created");
 	}
 
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_Window);
-	}
-
-	void WindowsWindow::OnUpdate(RendererContext* context)
-	{
-		context->SwapBuffers();
+		DUSK_LOG_INFO("Window destroyed");
 	}
 
 	void WindowsWindow::SetVSync(bool vsync)
 	{
-		//m_Context->SetVSync(vsync);
-		//m_Data.VSync = vsync;
+		m_Data.VSync = vsync;
+		glfwSwapInterval(vsync);
 	}
 
 	bool WindowsWindow::IsVSync() const

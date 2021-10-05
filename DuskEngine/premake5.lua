@@ -51,6 +51,7 @@ project "DuskEngine"
 		cppdialect "C++17"
 		staticruntime "off"
 		systemversion "latest"
+
 		defines 
 		{
 			"DUSK_WINDOWS",
@@ -64,6 +65,11 @@ project "DuskEngine"
 		postbuildcommands
 		{
 			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
+		}
+
+		disablewarnings 
+		{ 
+			"4005" 
 		}
 
 	filter "system:linux"

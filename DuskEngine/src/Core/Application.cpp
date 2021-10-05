@@ -1,16 +1,13 @@
 #include "pch.h"
-
 #include "Application.h"
-#include "GL/glew.h"
-#include "Platform/Windows/WindowsWindow.h"
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
-#include "Renderer/RenderCommand.h"
-#include "Renderer/Renderer.h"
-#include "gtc/type_ptr.hpp"
-#include "Utils/Logging/Log.h"
 
+#include "Utils/Logging/Logger.h"
+#include "Utils/Window/WindowManager.h"
+#include "Renderer/Renderer.h"
+#include "Renderer/RenderCommand.h"
+#include "gtc/type_ptr.hpp"
+
+#include "Utils/Logging/Log.h"
 
 namespace DuskEngine
 {
@@ -19,14 +16,19 @@ namespace DuskEngine
 		Init();
 	}
 
+	Application::~Application()
+	{
+		Shutdown();
+	}
+
 	void Application::Init()
 	{
 		// Initialize subsystems
-		logger->Init();
-		windowManager->Init();
-		contextManager = RendererContext::Create(windowManager->GetWindow()->GetNativeHandle());
-		contextManager->Init();
-		renderer->Init();
+		Logger::Init();
+		WindowManager::Init();
+		rendererContext = RendererContext::Create(WindowManager::GetWindow()->GetNativeHandle());
+		rendererContext->Init();
+		Renderer::Init();
 		
 		m_Camera = new Camera(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f), glm::vec3(-1.0f, 0.0f, 3.0f), glm::vec3(0.0f, -90.0f, 0.0f));
 		
@@ -67,9 +69,20 @@ namespace DuskEngine
 		m_VA->AddIndices(indexBuffer);
 	}
 
+	void Application::Shutdown()
+	{
+		DUSK_LOG_INFO("##### SHUTDOWN #####");
+
+		// Shutdown subsystems
+		Renderer::Shutdown();
+		rendererContext->Shutdown();
+		WindowManager::Shutdown();
+		Logger::Shutdown();
+	}
+
 	void Application::Run()
 	{
-		while (!windowManager->GetWindow()->ShouldClose())
+		while (!WindowManager::GetWindow()->ShouldClose())
 		{
 			RenderCommand::SetClearColor({ 1.0f, 0.0f, 0.0f, 1 });
 			RenderCommand::Clear();
@@ -79,16 +92,7 @@ namespace DuskEngine
 			m_Texture->Bind(0);
 			Renderer::Submit(m_VA);
 
-			contextManager->SwapBuffers();
+			rendererContext->SwapBuffers();
 		}
-	}
-
-	void Application::Shutdown()
-	{
-		// Shutdown subsystems
-		renderer->Shutdown();
-		contextManager->Shutdown();
-		windowManager->Shutdown();
-		logger->Shutdown();
 	}
 }

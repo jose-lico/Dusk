@@ -25,8 +25,6 @@ namespace DuskEngine
 		virtual void Init(const WindowData& data = WindowData()) = 0;
 		virtual void Shutdown() = 0;
 
-		virtual void OnUpdate(RendererContext* context) = 0;
-
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;
 

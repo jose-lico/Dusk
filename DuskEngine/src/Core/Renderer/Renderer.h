@@ -7,8 +7,8 @@ namespace DuskEngine {
 	class Renderer
 	{
 	public:
-		void Init();
-		void Shutdown();
+		static void Init();
+		static void Shutdown();
 		static void BeginScene();
 		static void EndScene();
 
