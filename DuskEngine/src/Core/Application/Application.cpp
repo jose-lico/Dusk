@@ -3,11 +3,13 @@
 
 #include "Utils/Logging/Logger.h"
 #include "Utils/Window/WindowManager.h"
-#include "Renderer/Renderer.h"
-#include "Renderer/RenderCommand.h"
-#include "gtc/type_ptr.hpp"
+#include "Core/Renderer/Renderer.h"
+#include "Core/Renderer/RenderCommand.h"
 
+#include "gtc/type_ptr.hpp"
 #include "Utils/Logging/Log.h"
+
+#include "imgui.h"
 
 namespace DuskEngine
 {
@@ -30,6 +32,10 @@ namespace DuskEngine
 		rendererContext->Init();
 		Renderer::Init();
 		
+		m_ImGuiLayer = new ImGuiLayer();
+		m_LayerStack.PushOverlay(m_ImGuiLayer);
+		m_ImGuiLayer->OnAttach();
+
 		m_Camera = new Camera(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f), glm::vec3(-1.0f, 0.0f, 3.0f), glm::vec3(0.0f, -90.0f, 0.0f));
 		
 		float vertices[] =
@@ -79,9 +85,13 @@ namespace DuskEngine
 		WindowManager::Shutdown();
 		Logger::Shutdown();
 	}
-
+	
 	void Application::Run()
 	{
+		static bool showDemoWindow = true;
+		static bool* showDemoWindowPtr;
+		showDemoWindowPtr = &showDemoWindow;
+
 		while (!WindowManager::GetWindow()->ShouldClose())
 		{
 			RenderCommand::SetClearColor({ 1.0f, 0.0f, 0.0f, 1 });
@@ -91,6 +101,10 @@ namespace DuskEngine
 			m_Shader->SetUniformMat4("u_ModelViewProjection", m_Camera->GetViewProjectionMatrix());
 			m_Texture->Bind(0);
 			Renderer::Submit(m_VA);
+
+			m_ImGuiLayer->Begin();
+			if(showDemoWindow) ImGui::ShowDemoWindow(showDemoWindowPtr);
+			m_ImGuiLayer->End();
 
 			rendererContext->SwapBuffers();
 		}
