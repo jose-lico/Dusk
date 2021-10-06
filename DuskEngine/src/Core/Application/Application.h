@@ -9,6 +9,7 @@
 #include "Core/Renderer/Camera.h"
 #include "Utils/ImGui/ImGuiLayer.h"
 #include "LayerStack.h"
+#include "Core/Events/Event.h"
 
 namespace DuskEngine
 {
@@ -21,6 +22,7 @@ namespace DuskEngine
 		void Init();
 		void Run();
 		void Shutdown();
+		void OnEvent(Event& e);
 	private:
 		RendererContext* rendererContext;
 		LayerStack m_LayerStack;

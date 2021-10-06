@@ -28,6 +28,7 @@ namespace DuskEngine
 		// Initialize subsystems
 		Logger::Init();
 		WindowManager::Init();
+		WindowManager::GetWindow()->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		rendererContext = RendererContext::Create(WindowManager::GetWindow()->GetNativeHandle());
 		rendererContext->Init();
 		Renderer::Init();
@@ -36,54 +37,50 @@ namespace DuskEngine
 		m_LayerStack.PushOverlay(m_ImGuiLayer);
 		m_ImGuiLayer->OnAttach();
 
-		m_Camera = new Camera(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f), glm::vec3(-1.0f, 0.0f, 3.0f), glm::vec3(0.0f, -90.0f, 0.0f));
-		
-		float vertices[] =
 		{
-			// positions        // texture coords
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, // top right
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
-			-0.5f,  0.5f, 0.0f,	0.0f, 1.0f  // top left 
-		};
-		
-		unsigned int indices[] =
-		{
-			0, 1, 3,   // first triangle
-			1, 2, 3    // second triangle
-		};
-		
-		m_Shader = std::make_shared<Shader>("res/shaders/simpleTexture.glsl");
+			m_Camera = new Camera(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f), glm::vec3(0.0f, 0.0f, 1.5f), glm::vec3(0.0f, -90.0f, 0.0f));
 
-		m_Texture = std::make_shared<Texture>("res/textures/uv_mapper.jpg", GL_RGB);
+			float vertices[] =
+			{
+				// positions        // texture coords
+				 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, // top right
+				 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
+				-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
+				-0.5f,  0.5f, 0.0f,	0.0f, 1.0f  // top left 
+			};
 
-		m_VA.reset(VertexArray::Create());
+			unsigned int indices[] =
+			{
+				0, 1, 3,   // first triangle
+				1, 2, 3    // second triangle
+			};
 
-		std::shared_ptr<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+			m_Shader = std::make_shared<Shader>("res/shaders/simpleTexture.glsl");
 
-		std::shared_ptr<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+			m_Texture = std::make_shared<Texture>("res/textures/uv_mapper.jpg", GL_RGB);
 
-		VertexBufferLayout vbl;
-		vbl.Push(ShaderDataType::Float, 3, true);
-		vbl.Push(ShaderDataType::Float, 2, true);
-		vertexBuffer->SetLayout(vbl);
+			m_VA.reset(VertexArray::Create());
 
-		m_VA->Bind();
-		m_VA->AddBuffer(vertexBuffer);
-		m_VA->AddIndices(indexBuffer);
+			std::shared_ptr<VertexBuffer> vertexBuffer;
+			vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
+			std::shared_ptr<IndexBuffer> indexBuffer;
+			indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+
+			VertexBufferLayout vbl;
+			vbl.Push(ShaderDataType::Float, 3, true);
+			vbl.Push(ShaderDataType::Float, 2, true);
+			vertexBuffer->SetLayout(vbl);
+
+			m_VA->Bind();
+			m_VA->AddBuffer(vertexBuffer);
+			m_VA->AddIndices(indexBuffer);
+		}
 	}
 
-	void Application::Shutdown()
+	void Application::OnEvent(Event& e)
 	{
-		DUSK_LOG_INFO("##### SHUTDOWN #####");
-
-		// Shutdown subsystems
-		Renderer::Shutdown();
-		rendererContext->Shutdown();
-		WindowManager::Shutdown();
-		Logger::Shutdown();
+		DUSK_LOG_DEBUG(e.ToString());
 	}
 	
 	void Application::Run()
@@ -108,5 +105,16 @@ namespace DuskEngine
 
 			rendererContext->SwapBuffers();
 		}
+	}
+
+	void Application::Shutdown()
+	{
+		DUSK_LOG_INFO("##### SHUTDOWN #####");
+
+		// Shutdown subsystems
+		Renderer::Shutdown();
+		rendererContext->Shutdown();
+		WindowManager::Shutdown();
+		Logger::Shutdown();
 	}
 }

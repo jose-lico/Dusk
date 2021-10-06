@@ -19,9 +19,10 @@ namespace DuskEngine
 
 		unsigned int GetWidth() const override { return m_Data.Width; }
 		unsigned int GetHeight() const override { return m_Data.Height; }
-
-		void SetVSync(bool vsync) override;
 		bool IsVSync() const override;
+
+		void SetEventCallback(const std::function<void(Event&)>& callback) override { m_Data.EventCallback = callback; }
+		void SetVSync(bool vsync) override;
 
 		bool ShouldClose() const override;
 
