@@ -80,12 +80,12 @@ namespace DuskEngine
 
 	void Application::OnEvent(Event& e)
 	{
-		DUSK_LOG_DEBUG(e.ToString());
+		//DUSK_LOG_DEBUG(e.ToString());
 	}
 	
 	void Application::Run()
 	{
-		static bool showDemoWindow = true;
+		static bool showDemoWindow = false;
 		static bool* showDemoWindowPtr;
 		showDemoWindowPtr = &showDemoWindow;
 

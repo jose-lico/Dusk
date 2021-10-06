@@ -160,4 +160,20 @@ namespace DuskEngine
     private:
         unsigned int m_RepeatCount;
     };
+
+    class KeyReleasedEvent : public KeyEvent
+    {
+    public:
+        KeyReleasedEvent(const KeyCode keycode)
+            : KeyEvent(keycode) {}
+
+        std::string ToString() const override
+        {
+            std::stringstream ss;
+            ss << "KeyReleasedEvent: " << m_KeyCode;
+            return ss.str();
+        }
+
+        EVENT_CLASS_TYPE(KeyReleased)
+    };
 }
