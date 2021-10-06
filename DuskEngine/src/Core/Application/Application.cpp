@@ -80,15 +80,16 @@ namespace DuskEngine
 
 	void Application::OnEvent(Event& e)
 	{
-		//DUSK_LOG_DEBUG(e.ToString());
+		for (Layer* layer : m_LayerStack)
+		{
+			if (e.Handled)
+				break;
+			layer->OnEvent(e);
+		}
 	}
 	
 	void Application::Run()
 	{
-		static bool showDemoWindow = false;
-		static bool* showDemoWindowPtr;
-		showDemoWindowPtr = &showDemoWindow;
-
 		while (!WindowManager::GetWindow()->ShouldClose())
 		{
 			RenderCommand::SetClearColor({ 1.0f, 0.0f, 0.0f, 1 });
@@ -100,7 +101,8 @@ namespace DuskEngine
 			Renderer::Submit(m_VA);
 
 			m_ImGuiLayer->Begin();
-			if(showDemoWindow) ImGui::ShowDemoWindow(showDemoWindowPtr);
+			for (Layer* layer : m_LayerStack)
+				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
 			rendererContext->SwapBuffers();

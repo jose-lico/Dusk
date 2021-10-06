@@ -5,6 +5,8 @@
 #include "backends/imgui_impl_opengl3.cpp"
 #include "backends/imgui_impl_glfw.cpp"
 
+#include "Core/Application/Macros.h"
+
 #include <imgui.h>
 
 namespace DuskEngine
@@ -33,6 +35,27 @@ namespace DuskEngine
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
+	}
+
+	void ImGuiLayer::OnImGuiRender()
+	{
+		static bool* showDemoWindowPtr;
+		showDemoWindowPtr = &m_ShowDemoWindow;
+		if (m_ShowDemoWindow) ImGui::ShowDemoWindow(showDemoWindowPtr);
+	}
+
+	void ImGuiLayer::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(ImGuiLayer::ActivateDemoWindow));
+	}
+
+	bool ImGuiLayer::ActivateDemoWindow(KeyPressedEvent& e)
+	{
+		if(e.GetKeyCode() == 32)
+			m_ShowDemoWindow = true;
+
+		return true;
 	}
 
 	void ImGuiLayer::Begin()

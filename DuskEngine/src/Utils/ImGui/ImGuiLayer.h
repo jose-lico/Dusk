@@ -12,8 +12,13 @@ namespace DuskEngine
 
 		void OnAttach() override;
 		void OnDetach() override;
+		void OnImGuiRender() override;
+		void OnEvent(Event& event) override;
 
 		void Begin();
 		void End();
+	private:
+		bool m_ShowDemoWindow = true;
+		bool ActivateDemoWindow(KeyPressedEvent& e);
 	};
 }
