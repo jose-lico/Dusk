@@ -7,6 +7,7 @@
 #include "Core/Renderer/RenderCommand.h"
 
 #include "gtc/type_ptr.hpp"
+#include "gtx/string_cast.hpp"
 #include "Utils/Logging/Log.h"
 #include "Input.h"
 
@@ -91,16 +92,78 @@ namespace DuskEngine
 	
 	void Application::Run()
 	{
+		bool movingCamera = false;
+		bool firstMouse = false;
+		float lastX = WindowManager::GetWindow()->GetWidth()/ 2.0f;
+		float lastY = WindowManager::GetWindow()->GetWidth()/ 2.0f;
+
+
 		while (!WindowManager::GetWindow()->ShouldClose())
 		{
 			RenderCommand::SetClearColor({ 1.0f, 0.0f, 0.0f, 1 });
 			RenderCommand::Clear();
 
-			glm::vec3 pos = m_Camera->GetPosition();
-			if (Input::IsKeyPressed(Key::D))
-				pos.x += 0.01f;
+			// dodgy camera controller
+			{
+				glm::vec3 pos = m_Camera->GetPosition();
+				glm::vec3 input(0.0f);
 
-			m_Camera->SetPosition(pos);
+				if (Input::IsKeyPressed(Key::D))
+					input.x += 0.01f;
+				else if (Input::IsKeyPressed(Key::A))
+					input.x -= 0.01f;
+
+				if (Input::IsKeyPressed(Key::W))
+					input.z -= 0.01f;
+				else if (Input::IsKeyPressed(Key::S))
+					input.z += 0.01f;
+
+				if (Input::IsKeyPressed(Key::Q))
+					input.y += 0.01f;
+				else if (Input::IsKeyPressed(Key::E))
+					input.y -= 0.01f;
+
+				pos += input;
+				m_Camera->SetPosition(pos);
+
+				glm::vec3 rot = m_Camera->GetRotation();
+
+				auto window = (GLFWwindow*)WindowManager::GetWindow()->GetNativeHandle();
+
+				if (!movingCamera && Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
+				{
+					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+					movingCamera = true;
+					firstMouse = true;
+				}
+				else if (!Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
+				{
+					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+					movingCamera = false;
+				}
+
+				if (movingCamera)
+				{
+					if (firstMouse)
+					{
+						lastX = Input::GetMouseX();
+						lastY = Input::GetMouseY();
+						firstMouse = false;
+					}
+
+					float xoffset = Input::GetMouseX() - lastX;
+					float yoffset = lastY - Input::GetMouseY(); // reversed since y-coordinates go from bottom to top
+					lastX = Input::GetMouseX();
+					lastY = Input::GetMouseY();
+
+					xoffset *= 0.02f;
+					yoffset *= 0.02f;
+
+					rot.x += yoffset;
+					rot.y += xoffset;
+					m_Camera->SetRotation(rot);
+				}
+			}
 
 			m_Shader->Bind();
 			m_Shader->SetUniformMat4("u_ModelViewProjection", m_Camera->GetViewProjectionMatrix());
