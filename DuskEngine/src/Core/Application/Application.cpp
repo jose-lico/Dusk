@@ -8,6 +8,7 @@
 
 #include "gtc/type_ptr.hpp"
 #include "Utils/Logging/Log.h"
+#include "Input.h"
 
 #include "imgui.h"
 
@@ -94,6 +95,12 @@ namespace DuskEngine
 		{
 			RenderCommand::SetClearColor({ 1.0f, 0.0f, 0.0f, 1 });
 			RenderCommand::Clear();
+
+			glm::vec3 pos = m_Camera->GetPosition();
+			if (Input::IsKeyPressed(Key::D))
+				pos.x += 0.01f;
+
+			m_Camera->SetPosition(pos);
 
 			m_Shader->Bind();
 			m_Shader->SetUniformMat4("u_ModelViewProjection", m_Camera->GetViewProjectionMatrix());
