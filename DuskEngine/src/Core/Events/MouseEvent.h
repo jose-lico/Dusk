@@ -6,7 +6,6 @@
 namespace DuskEngine
 {
 	using MouseCode = unsigned int;
-
 	namespace Mouse
 	{
 		enum : MouseCode
@@ -24,6 +23,17 @@ namespace DuskEngine
 			MOUSE_BUTTON_LEFT = MOUSE_BUTTON_1,
 			MOUSE_BUTTON_RIGHT = MOUSE_BUTTON_2,
 			MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3
+		};
+	}
+
+	using CursorState = unsigned int;
+	namespace Cursor
+	{
+		enum : CursorState
+		{
+			CURSOR_NORMAL = 0x00034001,
+			CURSOR_HIDDEN = 0x00034002,
+			CURSOR_DISABLED = 0x00034003
 		};
 	}
 

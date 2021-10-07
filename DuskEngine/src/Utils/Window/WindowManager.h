@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Window.h"
+#include "Core/Application/Macros.h"
 
 namespace DuskEngine
 {
-	class WindowManager
+	class DUSK_API WindowManager
 	{
 	public:
 		static void Init();

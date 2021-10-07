@@ -39,4 +39,10 @@ namespace DuskEngine
 
 		return (float)ypos;
 	}
+
+	void Input::SetCursorActive(CursorState state)
+	{
+		auto window = (GLFWwindow*)WindowManager::GetWindow()->GetNativeHandle();
+		glfwSetInputMode(window, GLFW_CURSOR, state);
+	}
 }

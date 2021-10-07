@@ -23,14 +23,14 @@ namespace DuskEngine
 		void Run();
 		void Shutdown();
 		void OnEvent(Event& e);
-	private:
-		RendererContext* rendererContext;
-		LayerStack m_LayerStack;
-		ImGuiLayer* m_ImGuiLayer;
 
-		std::shared_ptr<VertexArray> m_VA;
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<Texture> m_Texture;
-		Camera* m_Camera;
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* overlay);
+	private:
+		LayerStack m_LayerStack;
+		RendererContext* rendererContext;
+		ImGuiLayer* m_ImGuiLayer;
 	};
+
+	Application* CreateApplication();
 }

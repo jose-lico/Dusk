@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Application/Macros.h"
 #include "pch.h"
 
 namespace DuskEngine 
@@ -36,7 +37,7 @@ namespace DuskEngine
 		bool normalized;
 	};
 
-	class VertexBufferLayout
+	class DUSK_API VertexBufferLayout
 	{
 	public:
 		VertexBufferLayout();

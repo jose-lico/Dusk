@@ -5,7 +5,7 @@
 
 namespace DuskEngine
 {
-	class VertexArray
+	class DUSK_API VertexArray
 	{
 	public:
 		virtual ~VertexArray() {}

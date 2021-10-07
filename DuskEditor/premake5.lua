@@ -25,6 +25,11 @@ project "DuskEditor"
 		dependenciesDir .. "/spdlog/include"
 	}
 
+	defines
+	{
+		"DUSK_DEBUG"
+	}
+
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "on"

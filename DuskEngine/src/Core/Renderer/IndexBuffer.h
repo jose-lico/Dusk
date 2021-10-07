@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Core/Application/Macros.h"
+
 namespace DuskEngine
 {
-	class IndexBuffer
+	class DUSK_API IndexBuffer
 	{
 	public:
 		virtual ~IndexBuffer() {}

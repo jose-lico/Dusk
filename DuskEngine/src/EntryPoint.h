@@ -1,9 +1,11 @@
 #pragma once
 
-extern DuskEngine::Application* app;
+extern DuskEngine::Application* DuskEngine::CreateApplication();
 
 int main()
 {
+	auto app = DuskEngine::CreateApplication();
+	
 	// Application loop
 	app->Run();
 

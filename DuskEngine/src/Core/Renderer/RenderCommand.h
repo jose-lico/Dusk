@@ -1,10 +1,11 @@
 #pragma once
 
 #include "RendererAPI.h"
+#include "Core/Application/Macros.h"
 
 namespace DuskEngine {
 
-	class RenderCommand
+	class DUSK_API RenderCommand
 	{
 	public:
 		static void Init();

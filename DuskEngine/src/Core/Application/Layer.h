@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Core/Events/Event.h"
+#include "Core/Application/Macros.h"
 
 namespace DuskEngine
 {
-	class Layer
+	class DUSK_API Layer
 	{
 	public:
 		Layer():Enabled(1) {};

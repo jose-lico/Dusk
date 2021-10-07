@@ -1,7 +1,7 @@
 #pragma once
-
 #include "pch.h"
 
+#include "Core/Application/Macros.h"
 #include "glm.hpp"
 
 namespace DuskEngine 
@@ -13,7 +13,7 @@ namespace DuskEngine
 		std::string FragmentSource;
 	};
 
-	class Shader
+	class DUSK_API Shader
 	{
 	public:
 		Shader(const std::string& filepath);

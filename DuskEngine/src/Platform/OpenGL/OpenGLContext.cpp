@@ -21,6 +21,9 @@ namespace DuskEngine
 		if (glewInit() != GLEW_OK)
 			DUSK_LOG_ERROR("Failed to initialize glew");
 
+		glEnable(GL_CULL_FACE);
+		glFrontFace(GL_CW);
+
 		DUSK_LOG_INFO("OpenGL Context created and initialized")
 	}
 

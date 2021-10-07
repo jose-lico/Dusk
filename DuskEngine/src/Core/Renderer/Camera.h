@@ -1,10 +1,11 @@
 #pragma once
 
 #include "glm.hpp"
+#include "Core/Application/Macros.h"
 
 namespace DuskEngine
 {
-	class Camera 
+	class DUSK_API Camera
 	{
 	public:
 		Camera(const glm::mat4& projection, glm::vec3 position = glm::vec3(0.0f), glm::vec3 rotation = glm::vec3(0.0f));

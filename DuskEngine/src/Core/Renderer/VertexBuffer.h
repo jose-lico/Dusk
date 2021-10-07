@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Core/Renderer/VertexBufferLayout.h"
+#include "Core/Application/Macros.h"
 
 namespace DuskEngine
 {
-	class VertexBuffer
+	class DUSK_API VertexBuffer
 	{
 	public:
 		virtual ~VertexBuffer() {}

@@ -1,10 +1,11 @@
 #pragma once
 
 #include "GLCommon.h"
+#include "Core/Application/Macros.h"
 
 namespace DuskEngine
 {
-	class Texture
+	class DUSK_API Texture
 	{
 	public:
 		Texture(const char* filepath, unsigned int type);
