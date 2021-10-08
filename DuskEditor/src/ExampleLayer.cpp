@@ -9,6 +9,7 @@ ExampleLayer::ExampleLayer()
 
 void ExampleLayer::OnAttach()
 {
+
 	float vertices[] =
 	{
 		// positions        // texture coords
@@ -24,7 +25,7 @@ void ExampleLayer::OnAttach()
 		1, 2, 3    // second triangle
 	};
 
-	m_Shader = std::make_shared<DuskEngine::Shader>("res/shaders/simpleTexture.glsl");
+	m_Shader.reset(DuskEngine::Shader::Create("res/shaders/simpleTexture.glsl"));
 
 	m_Texture = std::make_shared<DuskEngine::Texture>("res/textures/uv_mapper.jpg", GL_RGB);
 
@@ -113,6 +114,7 @@ void ExampleLayer::OnUpdate()
 	}
 
 	m_Shader->Bind();
+
 	m_Shader->SetUniformMat4("u_ModelViewProjection", m_Camera->GetViewProjectionMatrix());
 	m_Texture->Bind(0);
 	DuskEngine::Renderer::Submit(m_VA);

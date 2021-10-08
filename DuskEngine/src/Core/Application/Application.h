@@ -3,7 +3,6 @@
 #include "Macros.h"
 
 #include "Core/Renderer/RendererContext.h"
-#include "Platform/OpenGL/Shader.h"
 #include "Platform/OpenGL/Texture.h"
 #include "Core/Renderer/VertexArray.h"
 #include "Core/Renderer/Camera.h"

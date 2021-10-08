@@ -1,33 +1,33 @@
 #include "pch.h"
-#include "Shader.h"
+#include "OpenGLShader.h"
 
 #include "GLCommon.h"
 
 namespace DuskEngine
 {
-	Shader::Shader(const std::string& filepath)
+	OpenGLShader::OpenGLShader(const std::string& filepath)
 		:m_Filepath(filepath), m_ID(0)
 	{
 		ShaderProgramSource source = ParseShader();
 		m_ID = CreateShader(source.VertexSource, source.FragmentSource);
 	}
 
-	Shader::~Shader()
+	OpenGLShader::~OpenGLShader()
 	{
 		glDeleteProgram(m_ID);
 	}
 
-	void Shader::Bind() const
+	void OpenGLShader::Bind() const
 	{
 		glUseProgram(m_ID);
 	}
 
-	void Shader::Unbind() const
+	void OpenGLShader::Unbind() const
 	{
 		glUseProgram(0);
 	}
 
-	unsigned int Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+	unsigned int OpenGLShader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
 	{
 		unsigned int program = glCreateProgram();
 		unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
@@ -44,7 +44,7 @@ namespace DuskEngine
 		return program;
 	}
 
-	unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
+	unsigned int OpenGLShader::CompileShader(unsigned int type, const std::string& source)
 	{
 		unsigned int id = glCreateShader(type);
 		const char* src = source.c_str();
@@ -65,7 +65,7 @@ namespace DuskEngine
 		return id;
 	}
 
-	ShaderProgramSource Shader::ParseShader()
+	ShaderProgramSource OpenGLShader::ParseShader()
 	{
 		std::ifstream stream(m_Filepath);
 
@@ -99,7 +99,7 @@ namespace DuskEngine
 		return { ss[0].str(), ss[1].str() };
 	}
 	
-	int Shader::GetUniformLocation(const std::string& name)
+	int OpenGLShader::GetUniformLocation(const std::string& name)
 	{
 		if (m_uniformLocations.find(name) != m_uniformLocations.end())
 			return m_uniformLocations[name];
@@ -113,32 +113,32 @@ namespace DuskEngine
 		return location;
 	}
 
-	void Shader::SetUniformFloat(const std::string& name, float f)
+	void OpenGLShader::SetUniformFloat(const std::string& name, float f)
 	{
 		glUniform1f(GetUniformLocation(name), f);
 	}
 
-	void Shader::SetUniformVec2(const std::string& name, const glm::vec2& v)
+	void OpenGLShader::SetUniformVec2(const std::string& name, const glm::vec2& v)
 	{
 		glUniform2f(GetUniformLocation(name), v.x, v.y);
 	}
 
-	void Shader::SetUniformVec3(const std::string& name, const glm::vec3& v)
+	void OpenGLShader::SetUniformVec3(const std::string& name, const glm::vec3& v)
 	{
 		glUniform3f(GetUniformLocation(name), v.x, v.y, v.z);
 	}
 
-	void Shader::SetUniformVec4(const std::string& name, const glm::vec4& v)
+	void OpenGLShader::SetUniformVec4(const std::string& name, const glm::vec4& v)
 	{
 		glUniform4f(GetUniformLocation(name), v.x, v.y, v.z, v.w);
 	}
 
-	void Shader::SetUniformMat3(const std::string& name, const glm::mat3& m)
+	void OpenGLShader::SetUniformMat3(const std::string& name, const glm::mat3& m)
 	{
 		glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, &m[0][0]);
 	}
 
-	void Shader::SetUniformMat4(const std::string& name, const glm::mat4& m)
+	void OpenGLShader::SetUniformMat4(const std::string& name, const glm::mat4& m)
 	{
 		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &m[0][0]);
 	}
