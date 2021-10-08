@@ -1,7 +1,6 @@
 #pragma once
 #include "EventBase.h"
 
-#include "Utils/Logging/Log.h"
 #include <sstream>
 
 namespace DuskEngine

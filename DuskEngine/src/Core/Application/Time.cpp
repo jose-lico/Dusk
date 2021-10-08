@@ -16,7 +16,7 @@ namespace DuskEngine
 
 	void Time::Update()
 	{
-		float currentFrame = glfwGetTime();
+		float currentFrame = (float)glfwGetTime();
 		m_DeltaTime = currentFrame - m_LastFrame;
 		m_LastFrame = currentFrame;
 	}

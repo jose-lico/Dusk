@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "glm.hpp"
+#include "glm/glm.hpp"
 #include "Core/Application/Macros.h"
 
 namespace DuskEngine 

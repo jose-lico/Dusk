@@ -21,7 +21,7 @@ project "DuskEditor"
 		"%{wks.location}/DuskEngine/src",
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
-		dependenciesDir .. "/glm/glm",
+		dependenciesDir .. "/glm",
 		dependenciesDir .. "/spdlog/include"
 	}
 

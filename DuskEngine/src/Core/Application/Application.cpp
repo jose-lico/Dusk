@@ -6,7 +6,6 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
 
-#include "gtx/string_cast.hpp"
 #include "Utils/Logging/Log.h"
 #include "Input.h"
 
