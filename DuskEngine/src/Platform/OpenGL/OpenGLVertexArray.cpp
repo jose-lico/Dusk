@@ -56,11 +56,11 @@ namespace DuskEngine
 		vb->Bind();
 		m_VertexBuffer = vb;
 
-		const auto& elements = vb->GetLayout().GetElements();
+		const auto& elements = vb->GetLayout()->GetElements();
 		unsigned int offset = 0;
 		for (unsigned int i = 0; i < elements.size(); i++) {
 			const auto& element = elements[i];
-			glVertexAttribPointer(i, element.count, ShaderDataTypeToOpenGLBaseType(element.type), element.normalized, vb->GetLayout().GetStride(), (const void*)offset);
+			glVertexAttribPointer(i, element.count, ShaderDataTypeToOpenGLBaseType(element.type), element.normalized, vb->GetLayout()->GetStride(), (const void*)offset);
 			offset += element.count * ShaderDataTypeSize(element.type);
 			glEnableVertexAttribArray(i);
 		}

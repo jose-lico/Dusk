@@ -37,9 +37,10 @@ void ExampleLayer::OnAttach()
 	std::shared_ptr<DuskEngine::IndexBuffer> indexBuffer;
 	indexBuffer.reset(DuskEngine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
 
-	DuskEngine::VertexBufferLayout vbl;
-	vbl.Push(DuskEngine::ShaderDataType::Float, 3, true);
-	vbl.Push(DuskEngine::ShaderDataType::Float, 2, true);
+	std::shared_ptr<DuskEngine::VertexBufferLayout> vbl;
+	vbl = std::make_shared<DuskEngine::VertexBufferLayout>();
+	vbl->Push(DuskEngine::ShaderDataType::Float, 3, true);
+	vbl->Push(DuskEngine::ShaderDataType::Float, 2, true);
 	vertexBuffer->SetLayout(vbl);
 
 	m_VA->Bind();

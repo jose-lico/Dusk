@@ -41,13 +41,13 @@ namespace DuskEngine
 	{
 	public:
 		VertexBufferLayout();
-
+		~VertexBufferLayout();
 		void Push(ShaderDataType type, unsigned int count, bool normalized);
 
-		const std::vector<DuskEngine::VertexBufferElement> GetElements() const { return m_Elements; }
-		unsigned int GetStride() const { return m_Stride; }
+		const std::vector<DuskEngine::VertexBufferElement> GetElements() const;
+		unsigned int GetStride() const;
 	private:
-		std::vector<VertexBufferElement> m_Elements;
-		int m_Stride;
+		class VblImpl;
+		VblImpl* m_Impl;
 	};
 }

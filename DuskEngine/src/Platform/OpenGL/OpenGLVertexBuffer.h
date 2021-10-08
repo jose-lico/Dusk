@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Renderer/VertexBuffer.h"
+#include <memory>
 
 namespace DuskEngine
 {
@@ -13,11 +14,11 @@ namespace DuskEngine
 		void Bind() const override;
 		void Unbind() const override;
 
-		virtual const VertexBufferLayout& GetLayout() const override { return m_Layout; }
-		virtual void SetLayout(const VertexBufferLayout& layout) override { m_Layout = layout; }
+		virtual const std::shared_ptr<VertexBufferLayout>& GetLayout() const override { return m_Layout; }
+		virtual void SetLayout(const std::shared_ptr<VertexBufferLayout>& layout) override { m_Layout = layout; }
 	private:
 		unsigned int m_ID;
-		VertexBufferLayout m_Layout;
+		std::shared_ptr<VertexBufferLayout> m_Layout;
 	};
 }
 
