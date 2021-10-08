@@ -14,5 +14,3 @@
 #include "Core/Application/Input.h"
 #include "Utils/Window/WindowManager.h"
 #include "Core/Application/Time.h"
-
-#include "EntryPoint.h"
