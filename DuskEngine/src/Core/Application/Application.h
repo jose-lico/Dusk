@@ -1,7 +1,5 @@
 #pragma once
-
-#include "GL/glew.h"
-#include "Macros.h"
+#include "Core/Macros/DUSK_API.h"
 
 #include "LayerStack.h"
 #include "Core/Renderer/RendererContext.h"
@@ -26,9 +24,8 @@ namespace DuskEngine
 	private:
 		LayerStack m_LayerStack;
 		RendererContext* rendererContext;
-		
 		ImGuiLayer* m_ImGuiLayer;
 	};
 
-	Application* CreateApplication();
+	extern Application* CreateApplication();
 }

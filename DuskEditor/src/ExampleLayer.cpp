@@ -1,10 +1,11 @@
 #include "ExampleLayer.h"
 
-#include "glm/gtc/type_ptr.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
 ExampleLayer::ExampleLayer()
 {
-	m_Camera = new DuskEngine::Camera(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f), glm::vec3(0.0f, 0.0f, 1.5f), glm::vec3(0.0f, -90.0f, 0.0f));
+	m_Camera = new DuskEngine::Camera(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f),\
+		glm::vec3(0.0f, 0.0f, 1.5f), glm::vec3(0.0f, -90.0f, 0.0f));
 }
 
 void ExampleLayer::OnAttach()
@@ -27,7 +28,7 @@ void ExampleLayer::OnAttach()
 
 	m_Shader.reset(DuskEngine::Shader::Create("res/shaders/simpleTexture.glsl"));
 
-	m_Texture = std::make_shared<DuskEngine::Texture>("res/textures/uv_mapper.jpg", GL_RGB);
+	m_Texture = std::make_shared<DuskEngine::Texture>("res/textures/uv_mapper.jpg", DuskEngine::Texture::TextureType::RGB);
 
 	m_VA.reset(DuskEngine::VertexArray::Create());
 

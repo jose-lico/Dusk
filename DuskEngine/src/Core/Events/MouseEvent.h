@@ -1,7 +1,5 @@
 #pragma once
-
 #include "EventBase.h"
-#include "GLFW/glfw3.h"
 
 namespace DuskEngine
 {

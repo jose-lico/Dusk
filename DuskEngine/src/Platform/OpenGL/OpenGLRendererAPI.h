@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Core/Renderer/RendererAPI.h"
 
 namespace DuskEngine {

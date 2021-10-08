@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "OpenGLShader.h"
-
 #include "GLCommon.h"
 
 namespace DuskEngine

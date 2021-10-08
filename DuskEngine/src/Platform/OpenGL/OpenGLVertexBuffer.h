@@ -1,6 +1,6 @@
 #pragma once
-
 #include "Core/Renderer/VertexBuffer.h"
+
 #include <memory>
 
 namespace DuskEngine

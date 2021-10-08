@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "OpenGLContext.h"
-
 #include "GLCommon.h"
+
 #include "Utils/Logging/Log.h"
 
 namespace DuskEngine

@@ -1,16 +1,15 @@
 #include "pch.h"
 #include "Application.h"
 
-#include "Utils/Logging/Logger.h"
+#include "Core/Macros/BIND_EVENT_FN.h"
+
 #include "Utils/Window/WindowManager.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
+#include "Utils/Logging/Logger.h"
+#include "Time.h"
 
 #include "Utils/Logging/Log.h"
-#include "Input.h"
-
-#include "imgui.h"
-#include "Time.h"
 
 namespace DuskEngine
 {

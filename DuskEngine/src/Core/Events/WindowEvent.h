@@ -1,5 +1,4 @@
 #pragma once
-
 #include "EventBase.h"
 
 namespace DuskEngine

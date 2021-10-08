@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/Macros/DUSK_API.h"
 
 #include "RenderCommand.h"
 

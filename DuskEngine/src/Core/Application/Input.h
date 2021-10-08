@@ -1,8 +1,8 @@
 #pragma once
+#include "Core/Macros/DUSK_API.h"
 
 #include "Core/Events/KeyEvent.h"
 #include "Core/Events/MouseEvent.h"
-#include "Core/Application/Macros.h"
 
 namespace DuskEngine
 {

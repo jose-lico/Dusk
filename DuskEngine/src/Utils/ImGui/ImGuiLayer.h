@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Core/Application/Layer.h"
 
 namespace DuskEngine

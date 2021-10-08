@@ -2,7 +2,8 @@
 #include "Input.h"
 
 #include "Utils/Window/WindowManager.h"
-#include "GLFW/glfw3.h"
+
+#include <GLFW/glfw3.h>
 
 namespace DuskEngine
 {

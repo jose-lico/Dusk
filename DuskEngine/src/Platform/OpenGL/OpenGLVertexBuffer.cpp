@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "OpenGLVertexBuffer.h"
-
 #include "GLCommon.h"
 
 namespace DuskEngine

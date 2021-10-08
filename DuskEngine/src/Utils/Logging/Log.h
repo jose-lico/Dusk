@@ -1,6 +1,6 @@
 #pragma once
 
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 
 #define DUSK_DEFAULT_LOGGER_NAME "Logger"
 

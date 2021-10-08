@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "OpenGLIndexBuffer.h"
-
 #include "GLCommon.h"
 
 namespace DuskEngine 

@@ -1,9 +1,7 @@
 #pragma once
+#include "Core/Macros/DUSK_API.h"
 
-#include "Core/Application/Macros.h"
-#include "glm/glm.hpp"
-
-#include <memory>
+#include <glm/glm.hpp>
 
 namespace DuskEngine
 {

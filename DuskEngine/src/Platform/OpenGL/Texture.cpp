@@ -1,12 +1,14 @@
 #include "pch.h"
 #include "Texture.h"
+#include "GLCommon.h"
 
-#include "stb_image.h"
 #include "Utils/Logging/Log.h"
+
+#include <stb_image.h>
 
 namespace DuskEngine
 {
-    Texture::Texture(const char* filepath, unsigned int type)
+    Texture::Texture(const char* filepath, TextureType type)
         :m_ID(0)
     {
         stbi_set_flip_vertically_on_load(true); // move this somewhere else
@@ -24,7 +26,7 @@ namespace DuskEngine
 
         if (data)
         {
-            glTexImage2D(GL_TEXTURE_2D, 0, type, m_Width, m_Height, 0, type, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, (int)type, m_Width, m_Height, 0, (int)type, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
         }
         else

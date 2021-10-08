@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Core/Application/Macros.h"
-#include "pch.h"
+#include "Core/Macros/DUSK_API.h"
+
+#include <vector>
 
 namespace DuskEngine 
 {

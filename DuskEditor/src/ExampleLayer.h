@@ -7,10 +7,7 @@ public:
 	ExampleLayer();
 	~ExampleLayer() {};
 	void OnAttach() override;
-	//void OnDetach() override {};
 	void OnUpdate() override;
-	//void OnImGuiRender() override {};
-	//void OnEvent(DuskEngine::Event& event) override {};
 private:
 	std::shared_ptr<DuskEngine::VertexArray> m_VA;
 	std::shared_ptr<DuskEngine::Shader> m_Shader;

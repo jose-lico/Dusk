@@ -1,12 +1,11 @@
 #include "pch.h"
 #include "ImGuiLayer.h"
+#include "Core/Macros/BIND_EVENT_FN.h"
 
 #include "Utils/Window/WindowManager.h"
-#include "backends/imgui_impl_opengl3.cpp"
-#include "backends/imgui_impl_glfw.cpp"
 
-#include "Core/Application/Macros.h"
-
+#include <backends/imgui_impl_opengl3.cpp>
+#include <backends/imgui_impl_glfw.cpp>
 #include <imgui.h>
 
 namespace DuskEngine

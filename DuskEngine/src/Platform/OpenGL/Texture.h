@@ -1,14 +1,19 @@
 #pragma once
-
-#include "GLCommon.h"
-#include "Core/Application/Macros.h"
+#include "Core/Macros/DUSK_API.h"
 
 namespace DuskEngine
 {
 	class DUSK_API Texture
 	{
 	public:
-		Texture(const char* filepath, unsigned int type);
+		enum class TextureType
+		{
+			// from glew.h
+			RGB = 0x1907,
+			RGBA
+		};
+
+		Texture(const char* filepath, TextureType type);
 		~Texture();
 		void Bind(unsigned int slot) const;
 		void Unbind() const;
