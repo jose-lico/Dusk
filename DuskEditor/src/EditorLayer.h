@@ -3,11 +3,11 @@
 
 #include "glm/glm.hpp"
 
-class ExampleLayer : public DuskEngine::Layer
+class EditorLayer : public DuskEngine::Layer
 {
 public:
-	ExampleLayer();
-	~ExampleLayer() {};
+	EditorLayer();
+	~EditorLayer() {};
 	void OnAttach() override;
 	void OnUpdate() override;
 	void OnImGuiRender() override;
