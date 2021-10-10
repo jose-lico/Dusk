@@ -1,6 +1,8 @@
 #include "ExampleLayer.h"
+#include "DuskEngine.h"
 
 #include <glm/gtc/type_ptr.hpp>
+#include <imgui.h>
 
 ExampleLayer::ExampleLayer()
 {
@@ -25,6 +27,11 @@ void ExampleLayer::OnAttach()
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
 	};
+
+	DuskEngine::FramebufferSpecification fbSpec;
+	fbSpec.Width = 720;
+	fbSpec.Height = 480;
+	m_FB.reset(DuskEngine::FrameBuffer::Create(fbSpec));
 
 	m_Shader.reset(DuskEngine::Shader::Create("res/shaders/simpleTexture.glsl"));
 
@@ -51,6 +58,7 @@ void ExampleLayer::OnAttach()
 
 void ExampleLayer::OnUpdate()
 {
+	m_FB->Bind();
 	DuskEngine::RenderCommand::SetClearColor({ 1.0f, 0.0f, 0.0f, 1 });
 	DuskEngine::RenderCommand::Clear();
 
@@ -116,8 +124,27 @@ void ExampleLayer::OnUpdate()
 	}
 
 	m_Shader->Bind();
-
 	m_Shader->SetUniformMat4("u_ModelViewProjection", m_Camera->GetViewProjectionMatrix());
 	m_Texture->Bind(0);
 	DuskEngine::Renderer::Submit(m_VA);
+	m_FB->Unbind();
+
+	DuskEngine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1 });
+	DuskEngine::RenderCommand::Clear();
+}
+
+void ExampleLayer::OnImGuiRender()
+{
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
+	ImGui::Begin("Viewport");
+	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+	if(m_ViewportSize != *(glm::vec2*)&viewportSize)
+	{
+		m_ViewportSize = { viewportSize.x, viewportSize.y };
+		m_FB->Resize(m_ViewportSize);
+		m_Camera->SetProjection(glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f));
+	}
+	ImGui::Image((void*)m_FB->GetColorAttachmentID(), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+	ImGui::End();
+	ImGui::PopStyleVar();
 }

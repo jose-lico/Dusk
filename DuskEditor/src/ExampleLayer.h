@@ -1,6 +1,8 @@
 #pragma once
 #include "DuskEngine.h"
 
+#include "glm/glm.hpp"
+
 class ExampleLayer : public DuskEngine::Layer
 {
 public:
@@ -8,14 +10,17 @@ public:
 	~ExampleLayer() {};
 	void OnAttach() override;
 	void OnUpdate() override;
+	void OnImGuiRender() override;
 private:
 	std::shared_ptr<DuskEngine::VertexArray> m_VA;
 	std::shared_ptr<DuskEngine::Shader> m_Shader;
 	std::shared_ptr<DuskEngine::Texture> m_Texture;
+	std::shared_ptr<DuskEngine::FrameBuffer> m_FB;
 	DuskEngine::Camera* m_Camera;
 
 	bool movingCamera = false;
 	bool firstMouse = false;
 	float lastX = DuskEngine::WindowManager::GetWindow()->GetWidth() / 2.0f;
 	float lastY = DuskEngine::WindowManager::GetWindow()->GetWidth() / 2.0f;
+	glm::vec2 m_ViewportSize;
 };

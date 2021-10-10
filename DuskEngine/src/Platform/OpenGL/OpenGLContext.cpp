@@ -21,6 +21,7 @@ namespace DuskEngine
 		if (glewInit() != GLEW_OK)
 			DUSK_LOG_ERROR("Failed to initialize glew");
 
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glFrontFace(GL_CW);
 

@@ -19,6 +19,7 @@ namespace DuskEngine
 
 		void SetPosition(const glm::vec3& position);
 		void SetRotation(const glm::vec3& rotation);
+		void SetProjection(const glm::mat4& projection);
 	private:
 		class CameraImpl;
 		CameraImpl* m_Impl;

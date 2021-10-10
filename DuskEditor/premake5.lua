@@ -22,7 +22,8 @@ project "DuskEditor"
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
 		dependenciesDir .. "/glm",
-		dependenciesDir .. "/spdlog/include"
+		dependenciesDir .. "/spdlog/include",
+		dependenciesDir .. "/imgui"
 	}
 
 	defines

@@ -22,6 +22,7 @@ namespace DuskEngine
 
 		void SetPosition(const glm::vec3& position) { m_Position = position; RecalculateViewMatrix(); }
 		void SetRotation(const glm::vec3& rotation) { m_Rotation = rotation; RecalculateViewMatrix(); }
+		void SetProjection(const glm::mat4& projection) { m_ProjectionMatrix = projection; RecalculateViewMatrix(); }
 	private:
 		void RecalculateViewMatrix();
 		glm::mat4 m_ProjectionMatrix;
@@ -91,5 +92,10 @@ namespace DuskEngine
 	void Camera::SetRotation(const glm::vec3& rotation)
 	{
 		m_Impl->SetRotation(rotation);
+	}
+
+	void Camera::SetProjection(const glm::mat4& projection)
+	{
+		m_Impl->SetProjection(projection);
 	}
 }
