@@ -1,7 +1,7 @@
 #pragma once
 #include "DuskEngine.h"
 
-#include "Panels/ScenePanel.h"
+#include "glm/glm.hpp"
 
 class EditorLayer : public DuskEngine::Layer
 {
@@ -9,7 +9,6 @@ public:
 	EditorLayer();
 	~EditorLayer() {};
 	void OnAttach() override;
-	void OnDetach() override;
 	void OnUpdate() override;
 	void OnImGuiRender() override;
 private:
@@ -23,9 +22,5 @@ private:
 	bool firstMouse = false;
 	float lastX = DuskEngine::WindowManager::GetWindow()->GetWidth() / 2.0f;
 	float lastY = DuskEngine::WindowManager::GetWindow()->GetWidth() / 2.0f;
-
-	ScenePanel* scenePanel;
-	DuskEngine::DuskEntity m_Entity;
-
-	std::shared_ptr<DuskEngine::Scene> m_Scene;
+	glm::vec2 m_ViewportSize;
 };
