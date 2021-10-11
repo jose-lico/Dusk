@@ -8,13 +8,10 @@ EditorLayer::EditorLayer()
 {
 	m_Camera = new DuskEngine::Camera(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f),\
 		glm::vec3(0.0f, 0.0f, 1.5f), glm::vec3(0.0f, -90.0f, 0.0f));
-
-	m_ViewportSize = glm::vec2(0.0f);
 }
 
 void EditorLayer::OnAttach()
 {
-
 	float vertices[] =
 	{
 		// positions        // texture coords
@@ -34,6 +31,8 @@ void EditorLayer::OnAttach()
 	fbSpec.Width = 720;
 	fbSpec.Height = 480;
 	m_FB.reset(DuskEngine::FrameBuffer::Create(fbSpec));
+
+	scenePanel = new ScenePanel(m_FB, *m_Camera);
 
 	m_Shader.reset(DuskEngine::Shader::Create("res/shaders/simpleTexture.glsl"));
 
@@ -56,10 +55,22 @@ void EditorLayer::OnAttach()
 	m_VA->Bind();
 	m_VA->AddBuffer(vertexBuffer);
 	m_VA->AddIndices(indexBuffer);
+
+	m_Scene = std::make_shared<DuskEngine::Scene>();
+
+	m_Entity = m_Scene->CreateEntity();
+	m_Entity.AddComponent<DuskEngine::TransformC>();
+}
+
+void EditorLayer::OnDetach()
+{
+	m_Entity.DestroyEntity();
 }
 
 void EditorLayer::OnUpdate()
 {
+	m_Scene->OnUpdate();
+
 	m_FB->Bind();
 	DuskEngine::RenderCommand::SetClearColor({ 1.0f, 0.0f, 0.0f, 1 });
 	DuskEngine::RenderCommand::Clear();
@@ -126,6 +137,8 @@ void EditorLayer::OnUpdate()
 	}
 
 	m_Shader->Bind();
+	//m_Shader->SetUniformVec3("u_Color", m_Entity.GetComponent<DuskEngine::MeshRenderer>().Color);
+	m_Shader->SetUniformVec3("u_Color", glm::vec3{1.0f});
 	m_Shader->SetUniformMat4("u_ModelViewProjection", m_Camera->GetViewProjectionMatrix());
 	m_Texture->Bind(0);
 	DuskEngine::Renderer::Submit(m_VA);
@@ -210,21 +223,12 @@ void EditorLayer::OnImGuiRender()
 			ImGui::EndMenu();
 		}
 
+		scenePanel->OnImGuiRender();
+		static bool demo = true;
+		ImGui::ShowDemoWindow((bool*)demo);
+
 		ImGui::EndMenuBar();
 	}
-
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
-	ImGui::Begin("Viewport");
-	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-	if (m_ViewportSize != *(glm::vec2*)&viewportSize)
-	{
-		m_ViewportSize = { viewportSize.x, viewportSize.y };
-		m_FB->Resize(m_ViewportSize);
-		m_Camera->SetProjection(glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f));
-	}
-	ImGui::Image((void*)m_FB->GetColorAttachmentID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-	ImGui::End();
-	ImGui::PopStyleVar();
 
 	ImGui::End();
 }

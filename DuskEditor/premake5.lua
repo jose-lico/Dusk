@@ -23,7 +23,8 @@ project "DuskEditor"
 		dependenciesDir .. "/glew/include",
 		dependenciesDir .. "/glm",
 		dependenciesDir .. "/spdlog/include",
-		dependenciesDir .. "/imgui"
+		dependenciesDir .. "/imgui",
+		dependenciesDir .. "/entt/single_include"
 	}
 
 	defines

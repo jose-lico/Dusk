@@ -15,5 +15,8 @@
 #include "Core/Application/Input.h"
 #include "Utils/Window/WindowManager.h"
 #include "Core/Application/Time.h"
+#include "Core/ECS/Scene.h"
+#include "Core/ECS/DuskEntity.h"
+#include "Core/ECS/Components.h"
 
 #include "Utils/ImGui/ImGuiLayer.h"
