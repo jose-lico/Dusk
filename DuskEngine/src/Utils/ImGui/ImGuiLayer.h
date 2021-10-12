@@ -17,6 +17,7 @@ namespace DuskEngine
 		void Begin();
 		void End();
 	private:
+		void ApplyStyle();
 		bool m_ShowDemoWindow = false;
 		bool ActivateDemoWindow(KeyPressedEvent& e);
 	};

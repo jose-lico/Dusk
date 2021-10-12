@@ -1,6 +1,5 @@
 #include "SceneViewportPanel.h"
 
-#include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
 SceneViewportPanel::SceneViewportPanel(std::shared_ptr<DuskEngine::FrameBuffer>& fb, std::shared_ptr<DuskEngine::Camera> camera)
@@ -14,6 +13,7 @@ void SceneViewportPanel::OnImGuiRender()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 	ImGui::Begin("Viewport");
+	
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 	if (m_ViewportSize != *(glm::vec2*)&viewportSize)
 	{

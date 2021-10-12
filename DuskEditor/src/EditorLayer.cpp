@@ -5,6 +5,7 @@
 #include <imgui.h>
 
 #include "Panels/SceneViewportPanel.h"
+#include "Panels/HierarchyPanel.h"
 
 EditorLayer::EditorLayer()
 {
@@ -64,6 +65,7 @@ void EditorLayer::OnAttach()
 	}
 
 	m_Panels.push_back(new SceneViewportPanel(m_FB, m_Camera));
+	m_Panels.push_back(new HierarchyPanel());
 }
 
 void EditorLayer::OnUpdate()
