@@ -14,4 +14,3 @@ bin-int
 premake5
 
 Makefile
-DuskEditor/imgui.ini

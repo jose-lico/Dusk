@@ -41,7 +41,8 @@ project "DuskEngine"
 		"_CRT_SECURE_NO_WARNINGS",
 
 		"DUSK_OPENGL",
-		"DUSK_DEBUG"
+		"DUSK_DEBUG",
+		"DUSK_DLL"
 	}
 
 
@@ -52,8 +53,7 @@ project "DuskEngine"
 
 		defines 
 		{
-			"DUSK_WINDOWS",
-			"DUSK_DLL"
+			"DUSK_WINDOWS"
 		}
 		links
 		{
