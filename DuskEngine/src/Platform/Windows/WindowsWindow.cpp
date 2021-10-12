@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "WindowsWindow.h"
 
-#include "Utils/Logging/Log.h"
+#include "Core/Macros/LOG.h"
 
 namespace DuskEngine
 {
@@ -14,11 +14,11 @@ namespace DuskEngine
 
 		if (!m_Window)
 		{
-			DUSK_LOG_ERROR("Window wasn't created properly, shutting glfw down");
+			ERROR("Window wasn't created properly, shutting glfw down");
 			glfwTerminate();
 		}
 
-		DUSK_LOG_INFO("Window created");
+		TRACE("Window created");
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 
@@ -101,7 +101,7 @@ namespace DuskEngine
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_Window);
-		DUSK_LOG_INFO("Window destroyed");
+		TRACE("Window destroyed");
 	}
 
 	void WindowsWindow::SetVSync(bool vsync)

@@ -2,14 +2,12 @@
 #include "Application.h"
 
 #include "Core/Macros/BIND_EVENT_FN.h"
+#include "Core/Macros/LOG.h"
 
 #include "Utils/Window/WindowManager.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
-#include "Utils/Logging/Logger.h"
 #include "Time.h"
-
-#include "Utils/Logging/Log.h"
 
 namespace DuskEngine
 {
@@ -26,7 +24,7 @@ namespace DuskEngine
 	void Application::Init()
 	{
 		// Initialize subsystems
-		Logger::Init();
+		CREATE_LOGGER
 		WindowManager::Init();
 		WindowManager::GetWindow()->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		rendererContext = RendererContext::Create(WindowManager::GetWindow()->GetNativeHandle());
@@ -79,12 +77,11 @@ namespace DuskEngine
 
 	void Application::Shutdown()
 	{
-		DUSK_LOG_INFO("##### SHUTDOWN #####");
+		TRACE("##### SHUTDOWN #####");
 
 		// Shutdown subsystems
 		Renderer::Shutdown();
 		rendererContext->Shutdown();
 		WindowManager::Shutdown();
-		Logger::Shutdown();
 	}
 }

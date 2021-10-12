@@ -2,6 +2,7 @@
 #include "DuskEngine.h"
 
 #include "glm/glm.hpp"
+#include <spdlog/spdlog.h>
 
 class EditorLayer : public DuskEngine::Layer
 {
@@ -17,6 +18,8 @@ private:
 	std::shared_ptr<DuskEngine::Texture> m_Texture;
 	std::shared_ptr<DuskEngine::FrameBuffer> m_FB;
 	DuskEngine::Camera* m_Camera;
+
+	std::shared_ptr<spdlog::logger> logger;
 
 	bool movingCamera = false;
 	bool firstMouse = false;

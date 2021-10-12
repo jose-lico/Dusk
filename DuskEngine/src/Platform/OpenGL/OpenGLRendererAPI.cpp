@@ -2,13 +2,13 @@
 #include "OpenGLRendererAPI.h"
 #include "GLCommon.h"
 
-#include "Utils/Logging/Log.h"
+#include "Core/Macros/LOG.h"
 
 namespace DuskEngine {
 
 	void OpenGLRendererAPI::Init()
 	{
-		DUSK_LOG_INFO("OpenGL API Created")
+		TRACE("OpenGL API Created")
 	}
 
 	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)

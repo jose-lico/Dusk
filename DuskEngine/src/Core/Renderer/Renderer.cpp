@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Renderer.h"
 
-#include "Utils/Logging/Log.h"
+#include "Core/Macros/LOG.h"
 
 namespace DuskEngine {
 
@@ -9,12 +9,12 @@ namespace DuskEngine {
 	{
 		RenderCommand::Init();
 
-		DUSK_LOG_INFO("Renderer intialized")
+		TRACE("Renderer Initilialized")
 	}
 
 	void Renderer::Shutdown()
 	{
-		DUSK_LOG_INFO("Renderer shutdown")
+		TRACE("Renderer shutdown")
 	}
 
 	void Renderer::BeginScene()

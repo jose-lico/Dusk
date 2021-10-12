@@ -3,6 +3,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_sinks.h>
 
 EditorLayer::EditorLayer()
 {
@@ -14,7 +16,6 @@ EditorLayer::EditorLayer()
 
 void EditorLayer::OnAttach()
 {
-
 	float vertices[] =
 	{
 		// positions        // texture coords
@@ -56,6 +57,10 @@ void EditorLayer::OnAttach()
 	m_VA->Bind();
 	m_VA->AddBuffer(vertexBuffer);
 	m_VA->AddIndices(indexBuffer);
+
+	CREATE_APP_LOGGER
+	APP_TRACE("Tracing from the app")
+	APP_LOG("Logging from the app")
 }
 
 void EditorLayer::OnUpdate()

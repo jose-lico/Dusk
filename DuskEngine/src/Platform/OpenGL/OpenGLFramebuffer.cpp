@@ -2,7 +2,7 @@
 #include "OpenGLFramebuffer.h"
 #include "GLCommon.h"
 
-#include "Utils/Logging/Log.h"
+#include "Core/Macros/LOG.h"
 
 namespace DuskEngine
 {
@@ -45,7 +45,7 @@ namespace DuskEngine
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
 
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			DUSK_LOG_ERROR("Error in the Framebuffer");
+			ERROR("Error in the Framebuffer");
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

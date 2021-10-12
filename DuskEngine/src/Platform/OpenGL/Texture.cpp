@@ -2,7 +2,7 @@
 #include "Texture.h"
 #include "GLCommon.h"
 
-#include "Utils/Logging/Log.h"
+#include "Core/Macros/LOG.h"
 
 #include <stb_image.h>
 
@@ -31,7 +31,7 @@ namespace DuskEngine
         }
         else
         {
-            std::cout << "Error loading texture" << std::endl;
+            ERROR("Error loading texture!")
         }
 
         stbi_image_free(data);

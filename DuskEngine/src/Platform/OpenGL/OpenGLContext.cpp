@@ -2,7 +2,7 @@
 #include "OpenGLContext.h"
 #include "GLCommon.h"
 
-#include "Utils/Logging/Log.h"
+#include "Core/Macros/LOG.h"
 
 namespace DuskEngine
 {
@@ -19,20 +19,20 @@ namespace DuskEngine
 	{
 		glfwMakeContextCurrent(m_WindowHandle);
 		if (glewInit() != GLEW_OK)
-			DUSK_LOG_ERROR("Failed to initialize glew");
+			FATAL("Failed to initialize glew");
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glFrontFace(GL_CW);
 
-		DUSK_LOG_INFO("OpenGL Context created and initialized")
+		TRACE("OpenGL Context created and initialized")
 	}
 
 	void OpenGLContext::Shutdown()
 	{
 		glfwTerminate();
 
-		DUSK_LOG_INFO("OpenGL Context shutdown")
+		TRACE("OpenGL Context shutdown")
 	}
 
 	void OpenGLContext::SwapBuffers()
