@@ -20,6 +20,8 @@ namespace DuskEngine
 
 		TRACE("Window created");
 
+		glfwWindowHint(GLFW_SAMPLES, 4);
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 
 		// glfw callbacks

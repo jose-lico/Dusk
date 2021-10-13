@@ -22,11 +22,11 @@ void EditorLayer::OnAttach()
 
 		float vertices[] =
 		{
-			// positions        // texture coords
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, // top right
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
-			-0.5f,  0.5f, 0.0f,	0.0f, 1.0f  // top left 
+			// positions        // tex		// normals
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top right
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom right
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
+			-0.5f,  0.5f, 0.0f,	0.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left 
 		};
 
 		unsigned int indices[] =
@@ -41,9 +41,7 @@ void EditorLayer::OnAttach()
 		m_FB.reset(DuskEngine::FrameBuffer::Create(fbSpec));
 
 		m_Shader.reset(DuskEngine::Shader::Create("res/shaders/simpleTexture.glsl"));
-
 		m_Texture = std::make_shared<DuskEngine::Texture>("res/textures/uv_mapper.jpg", DuskEngine::Texture::TextureType::RGB);
-
 		m_VA.reset(DuskEngine::VertexArray::Create());
 
 		std::shared_ptr<DuskEngine::VertexBuffer> vertexBuffer;
@@ -56,12 +54,20 @@ void EditorLayer::OnAttach()
 		vbl = std::make_shared<DuskEngine::VertexBufferLayout>();
 		vbl->Push(DuskEngine::ShaderDataType::Float, 3, true);
 		vbl->Push(DuskEngine::ShaderDataType::Float, 2, true);
+		vbl->Push(DuskEngine::ShaderDataType::Float, 3, true);
 		vertexBuffer->SetLayout(vbl);
 
-		m_VA->Bind();
-		m_VA->AddBuffer(vertexBuffer);
-		m_VA->AddIndices(indexBuffer);
+		auto entity = std::make_shared<DuskEngine::DuskEntity>();
+		auto transform = std::make_shared<DuskEngine::TransformComponent>();
+		transform->position = glm::vec3(0.0f);
 
+		auto renderer = std::make_shared<DuskEngine::RendererComponent>(vertexBuffer, indexBuffer, m_Shader, m_Texture);
+		renderer->modelMatrix = transform->modelMatrix;
+		renderer->viewProjectionMatrix = m_Camera->GetViewProjectionMatrix();
+
+		entity->AddComponent(transform);
+		entity->AddComponent(renderer);
+		m_Scene.AddEntity(entity);
 	}
 
 	m_Panels.push_back(new SceneViewportPanel(m_FB, m_Camera));
@@ -71,7 +77,7 @@ void EditorLayer::OnAttach()
 void EditorLayer::OnUpdate()
 {
 	m_FB->Bind();
-	DuskEngine::RenderCommand::SetClearColor({ 1.0f, 0.0f, 0.0f, 1 });
+	DuskEngine::RenderCommand::SetClearColor({ 0.3f, 0.3f, 0.3f, 1 });
 	DuskEngine::RenderCommand::Clear();
 
 	// dodgy camera controller
@@ -135,10 +141,14 @@ void EditorLayer::OnUpdate()
 		}
 	}
 
+	/*m_Texture->Bind(0);
 	m_Shader->Bind();
-	m_Shader->SetUniformMat4("u_ModelViewProjection", m_Camera->GetViewProjectionMatrix());
-	m_Texture->Bind(0);
-	DuskEngine::Renderer::Submit(m_VA);
+	m_Shader->SetUniformMat4("u_ViewProjection", m_Camera->GetViewProjectionMatrix());
+	m_Shader->SetUniformMat4("u_Model", glm::mat4(1.0f));
+	DuskEngine::Renderer::Submit(m_VA);*/
+	
+	m_Scene.OnEntityUpdate();
+
 	m_FB->Unbind();
 
 	DuskEngine::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1 });
@@ -153,6 +163,8 @@ void EditorLayer::OnImGuiRender()
 	{
 		panel->OnImGuiRender();
 	}
+
+	m_Scene.OnEntityImGui();
 
 	m_Dockspace.EndDockspace();
 }

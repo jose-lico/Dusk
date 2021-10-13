@@ -3,6 +3,8 @@
 
 #include "RenderCommand.h"
 
+#include <memory>
+
 namespace DuskEngine {
 
 	class DUSK_API Renderer

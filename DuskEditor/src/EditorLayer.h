@@ -26,4 +26,7 @@ private:
 	bool firstMouse = false;
 	float lastX = DuskEngine::WindowManager::GetWindow()->GetWidth() / 2.0f;
 	float lastY = DuskEngine::WindowManager::GetWindow()->GetWidth() / 2.0f;
+
+
+	DuskEngine::Scene m_Scene;
 };

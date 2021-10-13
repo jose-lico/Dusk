@@ -17,3 +17,5 @@
 #include "Core/Application/Time.h"
 
 #include "Utils/ImGui/ImGuiLayer.h"
+
+#include "Core/ECS/Components.h"

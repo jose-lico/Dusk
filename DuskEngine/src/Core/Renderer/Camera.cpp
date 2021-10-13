@@ -11,6 +11,7 @@ namespace DuskEngine
 		CameraImpl(const glm::mat4& projection, glm::vec3 position, glm::vec3 rotation)
 			:m_ProjectionMatrix(projection), m_ViewMatrix(1.0f), m_Position(position), m_Rotation(rotation) 
 		{
+			m_ViewProjectionMatrix = std::make_shared<glm::mat4>();
 			RecalculateViewMatrix();
 		}
 
@@ -18,7 +19,7 @@ namespace DuskEngine
 		const glm::vec3& GetRotation() { return m_Rotation; }
 		const glm::mat4& GetProjectionMatrix() { return m_ProjectionMatrix; }
 		const glm::mat4& GetViewMatrix() { return m_ViewMatrix; }
-		const glm::mat4& GetViewProjectionMatrix() { return m_ViewProjectionMatrix; }
+		const std::shared_ptr<glm::mat4> GetViewProjectionMatrix() { return m_ViewProjectionMatrix; }
 
 		void SetPosition(const glm::vec3& position) { m_Position = position; RecalculateViewMatrix(); }
 		void SetRotation(const glm::vec3& rotation) { m_Rotation = rotation; RecalculateViewMatrix(); }
@@ -27,7 +28,7 @@ namespace DuskEngine
 		void RecalculateViewMatrix();
 		glm::mat4 m_ProjectionMatrix;
 		glm::mat4 m_ViewMatrix;
-		glm::mat4 m_ViewProjectionMatrix;
+		std::shared_ptr<glm::mat4> m_ViewProjectionMatrix;
 
 		glm::vec3 m_Position;
 		glm::vec3 m_Rotation;
@@ -46,7 +47,7 @@ namespace DuskEngine
 
 		m_ViewMatrix = glm::lookAt(m_Position, m_Position + front, up);
 
-		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
+		*m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
 
 	Camera::Camera(const glm::mat4& projection, glm::vec3 position, glm::vec3 rotation)
@@ -79,7 +80,7 @@ namespace DuskEngine
 		return m_Impl->GetViewMatrix();
 	}
 
-	const glm::mat4& Camera::GetViewProjectionMatrix()
+	const std::shared_ptr<glm::mat4> Camera::GetViewProjectionMatrix()
 	{
 		return m_Impl->GetViewProjectionMatrix();
 	}
