@@ -22,7 +22,7 @@ namespace DuskEngine
 	void TransformComponent::ImGuiComponent()
 	{
 		ImGui::Begin("Transform");
-		ImGui::SliderFloat3("Position", &position[0], -5.0f, 5.0f);
+		ImGui::DragFloat3("Position", &position[0], .01f);
 		ImGui::End();
 	}
 }
