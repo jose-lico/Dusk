@@ -23,7 +23,8 @@ project "DuskEditor"
 		dependenciesDir .. "/glew/include",
 		dependenciesDir .. "/glm",
 		dependenciesDir .. "/spdlog/include",
-		dependenciesDir .. "/imgui"
+		dependenciesDir .. "/imgui",
+		dependenciesDir .. "/entt/src"
 	}
 
 	defines
@@ -33,7 +34,7 @@ project "DuskEditor"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "on"
+		staticruntime "off"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
 

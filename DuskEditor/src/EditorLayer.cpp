@@ -1,11 +1,11 @@
 #include "EditorLayer.h"
 #include "DuskEngine.h"
 
+#include "Panels/HierarchyPanel.h"
+#include "Panels/SceneViewportPanel.h"
+
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
-
-#include "Panels/SceneViewportPanel.h"
-#include "Panels/HierarchyPanel.h"
 
 EditorLayer::EditorLayer()
 {
@@ -72,6 +72,10 @@ void EditorLayer::OnAttach()
 
 	m_Panels.push_back(new SceneViewportPanel(m_FB, m_Camera));
 	m_Panels.push_back(new HierarchyPanel());
+
+	DuskEngine::SceneEntt teste;
+	auto ent = teste.CreateEntity();
+	teste.AddComponent<DuskEngine::Transform>(ent);
 }
 
 void EditorLayer::OnUpdate()
