@@ -1,9 +1,6 @@
 #include "EditorLayer.h"
 #include "DuskEngine.h"
 
-#include "Panels/HierarchyPanel.h"
-#include "Panels/SceneViewportPanel.h"
-
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 
@@ -18,7 +15,7 @@ void EditorLayer::OnAttach()
 {
 	{
 		m_Camera = std::make_shared<DuskEngine::Camera>(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f), \
-			glm::vec3(0.0f, 0.0f, 1.5f), glm::vec3(0.0f, -90.0f, 0.0f));
+			glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, -90.0f, 0.0f));
 
 		float vertices[] =
 		{
@@ -64,15 +61,25 @@ void EditorLayer::OnAttach()
 
 	m_SceneEntt = std::make_shared<DuskEngine::SceneEntt>(m_Camera);
 	auto ent = m_SceneEntt->CreateEntity();
+	auto ent2 = m_SceneEntt->CreateEntity();
 	
-	auto& t = ent.AddComponent<DuskEngine::Transform>();
+	ent.AddComponent<DuskEngine::Transform>();
+	auto& t = ent2.AddComponent<DuskEngine::Transform>();
+	t.Position = glm::vec3(-2.0f, 0.0f, 0.0f);
 	auto& mesh = ent.AddComponent<DuskEngine::MeshRenderer>();
+	auto& mesh2 = ent2.AddComponent<DuskEngine::MeshRenderer>();
 
 	mesh.VA = m_VA;
 	mesh.SH = m_Shader;
 	mesh.TX = m_Texture;
 
-	m_Panels.push_back(new HierarchyPanel(m_SceneEntt));
+	mesh2.VA = m_VA;
+	mesh2.SH = m_Shader;
+	mesh2.TX = m_Texture;
+
+	inspector = new InspectorPanel();
+	m_Panels.push_back(inspector);
+	m_Panels.push_back(new HierarchyPanel(m_SceneEntt, inspector));
 	m_Panels.push_back(new SceneViewportPanel(m_FB, m_Camera));
 }
 

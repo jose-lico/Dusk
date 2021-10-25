@@ -7,7 +7,7 @@
 
 namespace DuskEngine
 {
-	class Entity
+	class DUSK_API Entity
 	{
 	public:
 		Entity() = default;
@@ -24,6 +24,12 @@ namespace DuskEngine
 		T& GetComponent()
 		{
 			return m_Scene->m_Registry.get<T>(m_EntityHandle);
+		}
+
+		template<typename T>
+		bool HasComponent()
+		{
+			return m_Scene->m_Registry.has<T>(m_EntityHandle);
 		}
 	private:
 		entt::entity m_EntityHandle;

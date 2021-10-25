@@ -1,8 +1,7 @@
 #pragma once
 #include "DuskEngine.h"
 
-#include "Panels/Dockspace.h"
-#include "Panels/PanelBase.h"
+#include "Panels.h"
 
 class EditorLayer : public DuskEngine::Layer
 {
@@ -27,9 +26,7 @@ private:
 	float lastX = DuskEngine::WindowManager::GetWindow()->GetWidth() / 2.0f;
 	float lastY = DuskEngine::WindowManager::GetWindow()->GetWidth() / 2.0f;
 
-
-	//DuskEngine::Scene m_Scene;
-
-
 	std::shared_ptr<DuskEngine::SceneEntt> m_SceneEntt;
+
+	InspectorPanel* inspector;
 };
