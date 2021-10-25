@@ -4,17 +4,20 @@
 #include "DuskEngine.h"
 #include "InspectorPanel.h"
 
-class HierarchyPanel : public PanelBase
+namespace DuskEngine
 {
-public:
-	HierarchyPanel(std::shared_ptr<DuskEngine::SceneEntt>& scene, InspectorPanel* inspector);
-	~HierarchyPanel() = default;
+	class HierarchyPanel : public PanelBase
+	{
+	public:
+		HierarchyPanel(std::shared_ptr<SceneEntt>& scene, InspectorPanel* inspector);
+		~HierarchyPanel() = default;
 
-	virtual void OnImGuiRender() override;
-private:
-	std::shared_ptr<DuskEngine::SceneEntt> m_SceneEntt;
-	friend class SceneEntt;
+		virtual void OnImGuiRender() override;
+	private:
+		std::shared_ptr<SceneEntt> m_SceneEntt;
+		friend class SceneEntt;
 
-	InspectorPanel* m_Inspector;
-	DuskEngine::Entity* m_InspectedEntity = nullptr;
-};
+		InspectorPanel* m_Inspector;
+		Entity* m_InspectedEntity = nullptr;
+	};
+}

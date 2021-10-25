@@ -5,8 +5,6 @@
 
 #include <entt/entity/registry.hpp>
 
-class HierarchyPanel;
-
 namespace DuskEngine
 {
 	class Entity;
@@ -24,6 +22,6 @@ namespace DuskEngine
 		std::shared_ptr<DuskEngine::Camera> m_Camera;
 
 		friend class Entity;
-		friend class ::HierarchyPanel;
+		friend class HierarchyPanel;
 	};
 }

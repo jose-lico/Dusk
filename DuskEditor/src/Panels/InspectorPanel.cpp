@@ -2,17 +2,20 @@
 
 #include "imgui.h"
 
-InspectorPanel::InspectorPanel()
+namespace DuskEngine
 {
-}
-
-void InspectorPanel::OnImGuiRender()
-{
-	if(m_Entity)
+	InspectorPanel::InspectorPanel()
 	{
-		ImGui::Begin("Inspector");
-		auto& transform = m_Entity->GetComponent<DuskEngine::Transform>();
-		ImGui::DragFloat3("Position", &transform.Position[0], .01f);
-		ImGui::End();
+	}
+
+	void InspectorPanel::OnImGuiRender()
+	{
+		if (m_Entity)
+		{
+			ImGui::Begin("Inspector");
+			auto& transform = m_Entity->GetComponent<Transform>();
+			ImGui::DragFloat3("Position", &transform.Position[0], .01f);
+			ImGui::End();
+		}
 	}
 }

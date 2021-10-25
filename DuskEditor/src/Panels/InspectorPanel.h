@@ -3,14 +3,17 @@
 
 #include "DuskEngine.h"
 
-class InspectorPanel : public PanelBase
+namespace DuskEngine
 {
-public:
-	InspectorPanel();
-	~InspectorPanel() = default;
+	class InspectorPanel : public PanelBase
+	{
+	public:
+		InspectorPanel();
+		~InspectorPanel() = default;
 
-	virtual void OnImGuiRender() override;
-	void SetEntity(DuskEngine::Entity* entity) { m_Entity = entity; }
-private:
-	DuskEngine::Entity* m_Entity = nullptr;
-};
+		virtual void OnImGuiRender() override;
+		void SetEntity(DuskEngine::Entity* entity) { m_Entity = entity; }
+	private:
+		DuskEngine::Entity* m_Entity = nullptr;
+	};
+}

@@ -1,11 +1,14 @@
 #pragma once
 
-class Dockspace
+namespace DuskEngine
 {
-public:
-	Dockspace() = default;
-	~Dockspace() = default;
+	class Dockspace
+	{
+	public:
+		Dockspace() = default;
+		~Dockspace() = default;
 
-	void BeginDockspace();
-	void EndDockspace();
-};
+		void BeginDockspace();
+		void EndDockspace();
+	};
+}

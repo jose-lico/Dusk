@@ -2,11 +2,14 @@
 
 #include <imgui.h>
 
-class PanelBase
+namespace DuskEngine
 {
-public:
-	PanelBase() = default;
-	~PanelBase() = default;
+	class PanelBase
+	{
+	public:
+		PanelBase() = default;
+		~PanelBase() = default;
 
-	virtual void OnImGuiRender() = 0;
-};
+		virtual void OnImGuiRender() = 0;
+	};
+}

@@ -3,20 +3,23 @@
 
 #include "EditorLayer.h"
 
-class DuskEditor : public DuskEngine::Application
+namespace DuskEngine
 {
-public:
-	DuskEditor()
+	class DuskEditor : public Application
 	{
-		PushLayer(new EditorLayer());
-	}
+	public:
+		DuskEditor()
+		{
+			PushLayer(new EditorLayer());
+		}
 
-	~DuskEditor()
+		~DuskEditor()
+		{
+		}
+	};
+
+	Application* CreateApplication()
 	{
+		return new DuskEditor();
 	}
-};
-
-DuskEngine::Application* DuskEngine::CreateApplication()
-{
-	return new DuskEditor();
 }
