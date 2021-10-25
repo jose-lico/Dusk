@@ -1,32 +1,29 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
+#include "Core/Renderer/Camera.h"
+
 #include <entt/entity/registry.hpp>
-#include "glm/glm.hpp"
+
+class HierarchyPanel;
 
 namespace DuskEngine
 {
-	struct Transform
-	{
-		glm::mat4 transform;
-
-		Transform() = default;
-		Transform(glm::mat4& t):transform(t){}
-	};
+	class Entity;
 
 	class DUSK_API SceneEntt
 	{
 	public:
-		SceneEntt();
+		SceneEntt(std::shared_ptr<DuskEngine::Camera>& camera);
 		~SceneEntt();
-		entt::entity CreateEntity();
-
-		template<typename T>
-		void AddComponent(entt::entity ent)
-		{
-			m_Registry.emplace<T>(ent);
-		}
+		Entity CreateEntity();
+		void OnUpdate();
 	private:
 		entt::registry m_Registry;
+
+		std::shared_ptr<DuskEngine::Camera> m_Camera;
+
+		friend class Entity;
+		friend class HierarchyPanel;
 	};
 }

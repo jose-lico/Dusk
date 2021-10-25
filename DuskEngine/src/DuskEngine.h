@@ -21,3 +21,5 @@
 #include "Core/ECS/Components.h"
 
 #include "Core/ECS/entt/SceneEntt.h"
+#include "Core/ECS/entt/Entity.h"
+#include "Core/ECS/entt/Components.h"

@@ -28,5 +28,8 @@ private:
 	float lastY = DuskEngine::WindowManager::GetWindow()->GetWidth() / 2.0f;
 
 
-	DuskEngine::Scene m_Scene;
+	//DuskEngine::Scene m_Scene;
+
+
+	std::shared_ptr<DuskEngine::SceneEntt> m_SceneEntt;
 };

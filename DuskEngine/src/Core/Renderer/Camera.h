@@ -15,7 +15,7 @@ namespace DuskEngine
 		const glm::vec3& GetRotation();
 		const glm::mat4& GetProjectionMatrix();
 		const glm::mat4& GetViewMatrix();
-		const std::shared_ptr<glm::mat4> GetViewProjectionMatrix();
+		const glm::mat4& GetViewProjectionMatrix();
 
 		void SetPosition(const glm::vec3& position);
 		void SetRotation(const glm::vec3& rotation);

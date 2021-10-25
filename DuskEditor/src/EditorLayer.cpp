@@ -57,25 +57,23 @@ void EditorLayer::OnAttach()
 		vbl->Push(DuskEngine::ShaderDataType::Float, 3, true);
 		vertexBuffer->SetLayout(vbl);
 
-		auto entity = std::make_shared<DuskEngine::DuskEntity>();
-		auto transform = std::make_shared<DuskEngine::TransformComponent>();
-		transform->position = glm::vec3(0.0f);
-
-		auto renderer = std::make_shared<DuskEngine::RendererComponent>(vertexBuffer, indexBuffer, m_Shader, m_Texture);
-		renderer->modelMatrix = transform->modelMatrix;
-		renderer->viewProjectionMatrix = m_Camera->GetViewProjectionMatrix();
-
-		entity->AddComponent(transform);
-		entity->AddComponent(renderer);
-		m_Scene.AddEntity(entity);
+		m_VA->Bind();
+		m_VA->AddBuffer(vertexBuffer);
+		m_VA->AddIndices(indexBuffer);
 	}
 
-	m_Panels.push_back(new SceneViewportPanel(m_FB, m_Camera));
-	m_Panels.push_back(new HierarchyPanel());
+	m_SceneEntt = std::make_shared<DuskEngine::SceneEntt>(m_Camera);
+	auto ent = m_SceneEntt->CreateEntity();
+	
+	auto& t = ent.AddComponent<DuskEngine::Transform>();
+	auto& mesh = ent.AddComponent<DuskEngine::MeshRenderer>();
 
-	DuskEngine::SceneEntt teste;
-	auto ent = teste.CreateEntity();
-	teste.AddComponent<DuskEngine::Transform>(ent);
+	mesh.VA = m_VA;
+	mesh.SH = m_Shader;
+	mesh.TX = m_Texture;
+
+	m_Panels.push_back(new HierarchyPanel(m_SceneEntt));
+	m_Panels.push_back(new SceneViewportPanel(m_FB, m_Camera));
 }
 
 void EditorLayer::OnUpdate()
@@ -145,13 +143,7 @@ void EditorLayer::OnUpdate()
 		}
 	}
 
-	/*m_Texture->Bind(0);
-	m_Shader->Bind();
-	m_Shader->SetUniformMat4("u_ViewProjection", m_Camera->GetViewProjectionMatrix());
-	m_Shader->SetUniformMat4("u_Model", glm::mat4(1.0f));
-	DuskEngine::Renderer::Submit(m_VA);*/
-	
-	m_Scene.OnEntityUpdate();
+	m_SceneEntt->OnUpdate();
 
 	m_FB->Unbind();
 
@@ -167,8 +159,6 @@ void EditorLayer::OnImGuiRender()
 	{
 		panel->OnImGuiRender();
 	}
-
-	m_Scene.OnEntityImGui();
 
 	m_Dockspace.EndDockspace();
 }
