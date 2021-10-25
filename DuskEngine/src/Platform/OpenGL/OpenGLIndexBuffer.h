@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Renderer/IndexBuffer.h"
+#include "Core/Renderer/Resources/Buffer.h"
 
 namespace DuskEngine
 {

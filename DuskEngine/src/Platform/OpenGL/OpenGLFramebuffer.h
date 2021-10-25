@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Renderer/Framebuffer.h"
+#include "Core/Renderer/Resources/Framebuffer.h"
 
 #include <glm/glm.hpp>
 

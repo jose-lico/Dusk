@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Shader.h"
 
-#include "RendererContext.h"
+#include "Core/Renderer/RendererContext.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
 

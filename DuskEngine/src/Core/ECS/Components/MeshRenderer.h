@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Core/Renderer/VertexArray.h"
-#include "Core/Renderer/Shader.h"
-#include "Platform/OpenGL/Texture.h"
+#include "Core/Renderer/Resources/VertexArray.h"
+#include "Core/Renderer/Resources/Shader.h"
+#include "Core/Renderer/Resources/Texture.h"
 
 namespace DuskEngine
 {

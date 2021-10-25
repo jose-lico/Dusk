@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Renderer/VertexBuffer.h"
+#include "Core/Renderer/Resources/Buffer.h"
 
 #include <memory>
 

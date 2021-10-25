@@ -4,12 +4,12 @@
 #include "Core/Application/Layer.h"
 #include "Core/Events/Event.h"
 
-#include "Platform/OpenGL/Texture.h"
-#include "Core/Renderer/Shader.h"
-#include "Core/Renderer/VertexArray.h"
+#include "Core/Renderer/Resources/Shader.h"
+#include "Core/Renderer/Resources/Texture.h"
+#include "Core/Renderer/Resources/VertexArray.h"
 #include "Core/Renderer/Camera.h"
 #include "Core/Renderer/Renderer.h"
-#include "Core/Renderer/Framebuffer.h"
+#include "Core/Renderer/Resources/Framebuffer.h"
 
 #include "Core/Macros/LOG.h"
 #include "Core/Application/Input.h"

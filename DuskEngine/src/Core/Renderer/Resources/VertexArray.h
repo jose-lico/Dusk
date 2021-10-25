@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Core/Renderer/VertexBuffer.h"
-#include "Core/Renderer/IndexBuffer.h"
+#include "Buffer.h"
 
 namespace DuskEngine
 {

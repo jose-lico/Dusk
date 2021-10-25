@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Renderer/VertexArray.h"
+#include "Core/Renderer/Resources/VertexArray.h"
 
 #include "OpenGLVertexBuffer.h"
 #include "OpenGLIndexBuffer.h"
