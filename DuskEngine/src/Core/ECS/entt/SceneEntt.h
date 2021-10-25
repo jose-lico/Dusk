@@ -24,6 +24,6 @@ namespace DuskEngine
 		std::shared_ptr<DuskEngine::Camera> m_Camera;
 
 		friend class Entity;
-		friend class HierarchyPanel;
+		friend class ::HierarchyPanel;
 	};
 }
