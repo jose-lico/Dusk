@@ -155,8 +155,8 @@ namespace DuskEngine
 
 		m_FB->Unbind();
 
-		RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1 });
-		RenderCommand::Clear();
+		//RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1 });
+		//RenderCommand::Clear();
 	}
 
 	void EditorLayer::OnImGuiRender()

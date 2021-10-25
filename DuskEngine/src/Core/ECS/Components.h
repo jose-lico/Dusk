@@ -1,7 +1,4 @@
 #pragma once
 
-#include "Scene.h"
-#include "DuskEntity.h"
-
-#include "RendererComponent.h"
-#include "TransformComponent.h"
+#include "Components/Transform.h"
+#include "Components/MeshRenderer.h"

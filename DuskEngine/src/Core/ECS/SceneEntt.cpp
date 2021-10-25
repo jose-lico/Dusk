@@ -11,7 +11,7 @@
 
 namespace DuskEngine
 {
-	SceneEntt::SceneEntt(std::shared_ptr<DuskEngine::Camera>& camera)
+	SceneEntt::SceneEntt(std::shared_ptr<Camera>& camera)
 		:m_Camera(camera)
 	{
 	}
