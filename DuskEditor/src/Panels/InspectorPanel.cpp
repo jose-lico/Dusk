@@ -19,7 +19,9 @@ namespace DuskEngine
 			auto& transform = m_Entity->GetComponent<Transform>();
 			ImGui::Text("Transform");
 			ImGui::DragFloat3("Position", &transform.Position[0], .01f);
-			ImGui::DragFloat3("Rotation", &transform.Rotation[0], .01f);
+			glm::vec3 rotation = glm::degrees(transform.Rotation);
+			ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 0.0f);
+			transform.Rotation = glm::radians(rotation);
 			ImGui::DragFloat3("Scale", &transform.Scale[0], .01f);
 			ImGui::Separator();
 
