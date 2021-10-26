@@ -18,6 +18,7 @@ end
 	include "Dependencies/glew"
 	include "Dependencies/glfw"
 	include "Dependencies/imgui"
+	include "Dependencies/nativefiledialog/build"
 
 if _ACTION ~= "gmake2" then
 	group "Engine"

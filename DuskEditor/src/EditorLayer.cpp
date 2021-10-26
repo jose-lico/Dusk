@@ -39,7 +39,7 @@ namespace DuskEngine
 			m_FB.reset(FrameBuffer::Create(fbSpec));
 
 			m_Shader.reset(Shader::Create("res/shaders/simpleTexture.glsl"));
-			m_Texture.reset(Texture::Create("res/textures/uv_mapper.jpg"));
+			m_Texture.reset(Texture::Create("res/textures/rocks.png"));
 			m_VA.reset(VertexArray::Create());
 
 			std::shared_ptr<VertexBuffer> vertexBuffer;

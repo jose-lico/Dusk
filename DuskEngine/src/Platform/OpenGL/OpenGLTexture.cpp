@@ -9,15 +9,13 @@
 namespace DuskEngine
 {
     OpenGLTexture::OpenGLTexture(const char* filepath)
-        :m_ID(0)
+        :m_ID(0), m_Width(0), m_Height(0)
     {
         stbi_set_flip_vertically_on_load(true); // move this somewhere else
 
         int width, height, channels;
         unsigned char* data;
         data = stbi_load(filepath, &width, &height, &channels, 0);
-
-        LOG(channels)
 
         if (data)
         {

@@ -13,7 +13,8 @@ project "DuskEditor"
 
 	links
 	{
-		"DuskEngine"
+		"DuskEngine",
+		"nfd"
 	}
 
 	includedirs
@@ -24,7 +25,8 @@ project "DuskEditor"
 		dependenciesDir .. "/glm",
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/imgui",
-		dependenciesDir .. "/entt/src"
+		dependenciesDir .. "/entt/src",
+		dependenciesDir .. "/nativefiledialog/src/include"
 	}
 
 	defines

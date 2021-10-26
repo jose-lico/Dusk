@@ -43,11 +43,8 @@ namespace DuskEngine
 				front.z = sin(glm::radians(transform.Rotation.y)) * cos(glm::radians(transform.Rotation.y));
 
 				transform.Front = glm::normalize(front);
-
 				transform.Right = glm::normalize(glm::cross(transform.Front, glm::vec3(0.0f, 1.0f, 0.0f)));
-
-				transform.Up = glm::normalize(glm::cross(transform.Right, transform.Front));
-
+				transform.Up = glm::normalize(glm::cross(transform.Right, transform.Front));	
 			}
 		}
 
@@ -66,11 +63,11 @@ namespace DuskEngine
 				mesh.TX->Bind(0);
 				mesh.SH->Bind();
 
-				glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.Position)
+				transform.Model = glm::translate(glm::mat4(1.0f), transform.Position)
 					* glm::toMat4(glm::quat(transform.Rotation))
 					* glm::scale(glm::mat4(1.0f), transform.Scale);
 
-				mesh.SH->SetUniformMat4("u_Model", model);
+				mesh.SH->SetUniformMat4("u_Model", transform.Model);
 				mesh.SH->SetUniformMat4("u_ViewProjection", m_Camera->GetViewProjectionMatrix());
 
 				Renderer::Submit(mesh.VA);

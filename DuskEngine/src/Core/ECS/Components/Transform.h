@@ -15,6 +15,8 @@ namespace DuskEngine
 		glm::vec3 Right = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 Up = { 0.0f, 0.0f, 0.0f };
 
+		glm::mat4 Model = glm::mat4(1.0f);
+
 		Transform() = default;
 		Transform(const Transform&) = default;
 		Transform(const glm::vec3& position)

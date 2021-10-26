@@ -24,3 +24,6 @@
 [submodule "Dependencies/entt"]
 	path = Dependencies/entt
 	url = https://github.com/skypjack/entt
+[submodule "Dependencies/nativefiledialog"]
+	path = Dependencies/nativefiledialog
+	url = https://github.com/qolisipo/nativefiledialog
