@@ -20,7 +20,7 @@ namespace DuskEngine
 			ImGui::Text("Transform");
 			ImGui::DragFloat3("Position", &transform.Position[0], .01f);
 			glm::vec3 rotation = glm::degrees(transform.Rotation);
-			ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 0.0f);
+			if(ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 0.0f))
 			transform.Rotation = glm::radians(rotation);
 			ImGui::DragFloat3("Scale", &transform.Scale[0], .01f);
 			ImGui::Separator();
@@ -29,6 +29,7 @@ namespace DuskEngine
 			ImGui::Text("Mesh Renderer");
 			if(ImGui::ImageButton((void*)mesh.TX->GetRendererID(), ImVec2{ 80, 80 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
 			{
+
 				APP_LOG("It clicked!")
 				nfdchar_t* outPath = NULL;
 				nfdresult_t result = NFD_OpenDialog("png,jpg;pdf", NULL, &outPath);

@@ -31,4 +31,10 @@ namespace DuskEngine {
 		RenderCommand::DrawIndexed(vertexArray);
 	}
 
+	void Renderer::Submit(const std::shared_ptr<Mesh>& mesh)
+	{
+		mesh->m_VA->Bind();
+		RenderCommand::DrawIndexed(mesh->m_VA);
+	}
+
 }

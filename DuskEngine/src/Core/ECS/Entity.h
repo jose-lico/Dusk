@@ -14,10 +14,10 @@ namespace DuskEngine
 		Entity(entt::entity handle, SceneEntt* scene);
 		~Entity() = default;
 
-		template<typename T>
-		T& AddComponent()
+		template<typename T, typename... Args >
+		T& AddComponent(Args&&... args)
 		{
-			return m_Scene->m_Registry.emplace<T>(m_EntityHandle);
+			return m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
 		}
 
 		template<typename T>

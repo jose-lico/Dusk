@@ -70,7 +70,7 @@ namespace DuskEngine
 				mesh.SH->SetUniformMat4("u_Model", transform.Model);
 				mesh.SH->SetUniformMat4("u_ViewProjection", m_Camera->GetViewProjectionMatrix());
 
-				Renderer::Submit(mesh.VA);
+				Renderer::Submit(mesh.MS);
 			}
 		}
 	}

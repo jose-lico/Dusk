@@ -2,6 +2,7 @@
 #include "Core/Macros/DUSK_API.h"
 
 #include "RenderCommand.h"
+#include "Resources/Mesh.h"
 
 #include <memory>
 
@@ -16,5 +17,6 @@ namespace DuskEngine {
 		static void EndScene();
 
 		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+		static void Submit(const std::shared_ptr<Mesh>& mesh);
 	};
 }

@@ -4,6 +4,7 @@
 #include "Core/Application/Layer.h"
 #include "Core/Events/Event.h"
 
+#include "Core/Renderer/Resources/Mesh.h"
 #include "Core/Renderer/Resources/Shader.h"
 #include "Core/Renderer/Resources/Texture.h"
 #include "Core/Renderer/Resources/VertexArray.h"

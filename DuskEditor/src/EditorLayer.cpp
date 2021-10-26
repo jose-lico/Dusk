@@ -40,43 +40,20 @@ namespace DuskEngine
 
 			m_Shader.reset(Shader::Create("res/shaders/simpleTexture.glsl"));
 			m_Texture.reset(Texture::Create("res/textures/rocks.png"));
-			m_VA.reset(VertexArray::Create());
+			
+			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, (unsigned int)sizeof(vertices), 
+				indices, (unsigned int)(sizeof(indices)/sizeof(unsigned int)));
 
-			std::shared_ptr<VertexBuffer> vertexBuffer;
-			vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+			m_SceneEntt = std::make_shared<SceneEntt>(m_Camera);
+			auto ent = m_SceneEntt->CreateEntity();
+			auto ent2 = m_SceneEntt->CreateEntity();
 
-			std::shared_ptr<IndexBuffer> indexBuffer;
-			indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+			ent.AddComponent<Transform>();
+			ent2.AddComponent<Transform>(glm::vec3(-2.0f, 0.0f, 0.0f));
 
-			std::shared_ptr<VertexBufferLayout> vbl;
-			vbl = std::make_shared<VertexBufferLayout>();
-			vbl->Push(ShaderDataType::Float, 3, true);
-			vbl->Push(ShaderDataType::Float, 2, true);
-			vbl->Push(ShaderDataType::Float, 3, true);
-			vertexBuffer->SetLayout(vbl);
-
-			m_VA->Bind();
-			m_VA->AddBuffer(vertexBuffer);
-			m_VA->AddIndices(indexBuffer);
+			ent.AddComponent<MeshRenderer>(mesh, m_Shader, m_Texture);
+			ent2.AddComponent<MeshRenderer>(mesh, m_Shader, m_Texture);
 		}
-
-		m_SceneEntt = std::make_shared<SceneEntt>(m_Camera);
-		auto ent = m_SceneEntt->CreateEntity();
-		auto ent2 = m_SceneEntt->CreateEntity();
-
-		ent.AddComponent<Transform>();
-		auto& t = ent2.AddComponent<Transform>();
-		t.Position = glm::vec3(-2.0f, 0.0f, 0.0f);
-		auto& mesh = ent.AddComponent<MeshRenderer>();
-		auto& mesh2 = ent2.AddComponent<MeshRenderer>();
-
-		mesh.VA = m_VA;
-		mesh.SH = m_Shader;
-		mesh.TX = m_Texture;
-
-		mesh2.VA = m_VA;
-		mesh2.SH = m_Shader;
-		mesh2.TX = m_Texture;
 
 		inspector = new InspectorPanel();
 		m_Panels.push_back(inspector);
