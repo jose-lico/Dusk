@@ -18,32 +18,14 @@ namespace DuskEngine
 			m_Camera = std::make_shared<Camera>(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f), \
 				glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, -90.0f, 0.0f));
 
-			float vertices[] =
-			{
-				// positions        // tex		// normals
-				 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top right
-				 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom right
-				-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
-				-0.5f,  0.5f, 0.0f,	0.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left 
-			};
-
-			unsigned int indices[] =
-			{
-				0, 1, 3,   // first triangle
-				1, 2, 3    // second triangle
-			};
-
 			FramebufferSpecification fbSpec;
 			fbSpec.Width = 720;
 			fbSpec.Height = 480;
 			m_FB.reset(FrameBuffer::Create(fbSpec));
 
 			m_Shader.reset(Shader::Create("res/shaders/simpleTexture.glsl"));
-			m_Texture.reset(Texture::Create("res/textures/rocks.png"));
+			m_Texture.reset(Texture::Create("res/textures/uv_mapper.jpg"));
 			
-			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, (unsigned int)sizeof(vertices), 
-				indices, (unsigned int)(sizeof(indices)/sizeof(unsigned int)));
-
 			m_SceneEntt = std::make_shared<SceneEntt>(m_Camera);
 			auto ent = m_SceneEntt->CreateEntity();
 			auto ent2 = m_SceneEntt->CreateEntity();
@@ -51,8 +33,8 @@ namespace DuskEngine
 			ent.AddComponent<Transform>();
 			ent2.AddComponent<Transform>(glm::vec3(-2.0f, 0.0f, 0.0f));
 
-			ent.AddComponent<MeshRenderer>(mesh, m_Shader, m_Texture);
-			ent2.AddComponent<MeshRenderer>(mesh, m_Shader, m_Texture);
+			ent.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), m_Shader, m_Texture);
+			ent2.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), m_Shader, m_Texture);
 		}
 
 		inspector = new InspectorPanel();
@@ -131,9 +113,6 @@ namespace DuskEngine
 		m_SceneEntt->OnUpdate();
 
 		m_FB->Unbind();
-
-		//RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1 });
-		//RenderCommand::Clear();
 	}
 
 	void EditorLayer::OnImGuiRender()

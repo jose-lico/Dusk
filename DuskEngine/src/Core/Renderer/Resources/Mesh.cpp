@@ -7,6 +7,9 @@ namespace DuskEngine
 {
 	Mesh::Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count)
 	{
+		m_VA.reset(VertexArray::Create());
+		m_VA->Bind();
+
 		std::shared_ptr<VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(VertexBuffer::Create(vertices, size));
 
@@ -20,9 +23,6 @@ namespace DuskEngine
 		vbl->Push(ShaderDataType::Float, 3, true);
 		vertexBuffer->SetLayout(vbl);
 
-		m_VA.reset(VertexArray::Create());
-
-		m_VA->Bind();
 		m_VA->AddBuffer(vertexBuffer);
 		m_VA->AddIndices(indexBuffer);
 	}
