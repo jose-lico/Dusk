@@ -20,6 +20,6 @@
 #include "Utils/ImGui/ImGuiLayer.h"
 #include "Utils/Rendering/PrimitiveMesh.h"
 
-#include "Core/ECS/SceneEntt.h"
+#include "Core/ECS/Scene.h"
 #include "Core/ECS/Entity.h"
 #include "Core/ECS/Components.h"

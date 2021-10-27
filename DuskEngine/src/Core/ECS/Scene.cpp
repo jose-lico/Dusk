@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "SceneEntt.h"
+#include "Scene.h"
 
 #include "Entity.h"
 #include "Components.h"
@@ -11,22 +11,24 @@
 
 namespace DuskEngine
 {
-	SceneEntt::SceneEntt(std::shared_ptr<Camera>& camera)
+	Scene::Scene(std::shared_ptr<Camera>& camera)
 		:m_Camera(camera)
 	{
 	}
 
-	SceneEntt::~SceneEntt()
+	Scene::~Scene()
 	{
 	}
 
-	Entity SceneEntt::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Entity entity = { m_Registry.create(), this };
+		entity.AddComponent<Transform>();
+		entity.AddComponent<Meta>(name);
 		return entity;
 	}
 
-	void SceneEntt::OnUpdate()
+	void Scene::OnUpdate()
 	{
 		{
 			// TODO: for static objects in the future only calculate this once and not every frame

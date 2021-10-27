@@ -28,7 +28,7 @@ namespace DuskEngine
 		float lastX = WindowManager::GetWindow()->GetWidth() / 2.0f;
 		float lastY = WindowManager::GetWindow()->GetWidth() / 2.0f;
 
-		std::shared_ptr<SceneEntt> m_SceneEntt;
+		std::shared_ptr<Scene> m_SceneEntt;
 
 		InspectorPanel* inspector;
 	};

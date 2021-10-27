@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include "SceneEntt.h"
+#include "Scene.h"
 
 #include <entt/entt.hpp>
 
@@ -11,7 +11,7 @@ namespace DuskEngine
 	{
 	public:
 		Entity() = default;
-		Entity(entt::entity handle, SceneEntt* scene);
+		Entity(entt::entity handle, Scene* scene);
 		~Entity() = default;
 
 		template<typename T, typename... Args >
@@ -33,6 +33,6 @@ namespace DuskEngine
 		}
 	private:
 		entt::entity m_EntityHandle;
-		SceneEntt* m_Scene;
+		Scene* m_Scene;
 	};
 }

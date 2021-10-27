@@ -9,12 +9,12 @@ namespace DuskEngine
 {
 	class Entity;
 
-	class DUSK_API SceneEntt
+	class DUSK_API Scene
 	{
 	public:
-		SceneEntt(std::shared_ptr<Camera>& camera);
-		~SceneEntt();
-		Entity CreateEntity();
+		Scene(std::shared_ptr<Camera>& camera);
+		~Scene();
+		Entity CreateEntity(const std::string& name);
 		void OnUpdate();
 	private:
 		entt::registry m_Registry;

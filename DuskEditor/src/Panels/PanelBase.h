@@ -1,7 +1,5 @@
 #pragma once
 
-#include <imgui.h>
-
 namespace DuskEngine
 {
 	class PanelBase

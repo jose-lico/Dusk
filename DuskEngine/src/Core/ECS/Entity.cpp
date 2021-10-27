@@ -3,7 +3,7 @@
 
 namespace DuskEngine
 {
-	Entity::Entity(entt::entity handle, SceneEntt* scene)
+	Entity::Entity(entt::entity handle, Scene* scene)
 		:m_EntityHandle(handle), m_Scene(scene)
 	{
 	}

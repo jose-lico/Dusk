@@ -4,20 +4,20 @@
 
 namespace DuskEngine
 {
-	HierarchyPanel::HierarchyPanel(std::shared_ptr<SceneEntt>& scene, InspectorPanel* inspector)
-		:m_SceneEntt(scene), m_Inspector(inspector)
+	HierarchyPanel::HierarchyPanel(std::shared_ptr<Scene>& scene, InspectorPanel* inspector)
+		:m_Scene(scene), m_Inspector(inspector)
 	{
 	}
 
 	void HierarchyPanel::OnImGuiRender()
 	{
 		ImGui::Begin("Hierarchy");
-		m_SceneEntt->m_Registry.each([&](auto entityID)
+		m_Scene->m_Registry.each([&](auto entityID)
 			{
-				std::string s = "Entity " + std::to_string((unsigned int)entityID);
-				if (ImGui::Button(s.c_str()))
+				auto& meta = m_Scene->m_Registry.get<Meta>(entityID);
+				if (ImGui::Button(meta.Name.c_str()))
 				{
-					m_InspectedEntity = new Entity(entityID, m_SceneEntt.get());
+					m_InspectedEntity = new Entity(entityID, m_Scene.get());
 					m_Inspector->SetEntity(m_InspectedEntity);
 				}
 			});

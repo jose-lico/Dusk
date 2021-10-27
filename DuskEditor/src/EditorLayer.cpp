@@ -26,12 +26,12 @@ namespace DuskEngine
 			m_Shader.reset(Shader::Create("res/shaders/simpleTexture.glsl"));
 			m_Texture.reset(Texture::Create("res/textures/uv_mapper.jpg"));
 			
-			m_SceneEntt = std::make_shared<SceneEntt>(m_Camera);
-			auto ent = m_SceneEntt->CreateEntity();
-			auto ent2 = m_SceneEntt->CreateEntity();
+			m_SceneEntt = std::make_shared<Scene>(m_Camera);
+			auto ent = m_SceneEntt->CreateEntity("Quad");
+			auto ent2 = m_SceneEntt->CreateEntity("Cube");
 
-			ent.AddComponent<Transform>();
-			ent2.AddComponent<Transform>(glm::vec3(-2.0f, 0.0f, 0.0f));
+			auto& t = ent2.GetComponent<Transform>();
+			t.Position = glm::vec3(-2.0f, 0.0f, 0.0f);
 
 			ent.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), m_Shader, m_Texture);
 			ent2.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), m_Shader, m_Texture);
