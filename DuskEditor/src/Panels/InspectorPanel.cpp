@@ -16,38 +16,44 @@ namespace DuskEngine
 		ImGui::Begin("Inspector");
 		if (m_Entity)
 		{
-			auto& transform = m_Entity->GetComponent<Transform>();
-			ImGui::Text("Transform");
-			ImGui::DragFloat3("Position", &transform.Position[0], .01f);
-			glm::vec3 rotation = glm::degrees(transform.Rotation);
-			if(ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 0.0f))
-			transform.Rotation = glm::radians(rotation);
-			ImGui::DragFloat3("Scale", &transform.Scale[0], .01f);
-			ImGui::Separator();
-
-			auto& mesh = m_Entity->GetComponent<MeshRenderer>();
-			ImGui::Text("Mesh Renderer");
-			if(ImGui::ImageButton((void*)mesh.TX->GetRendererID(), ImVec2{ 80, 80 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
+			if(m_Entity->HasComponent<Transform>())
 			{
+				auto& transform = m_Entity->GetComponent<Transform>();
+				ImGui::Text("Transform");
+				ImGui::DragFloat3("Position", &transform.Position[0], .01f);
 
-				APP_LOG("It clicked!")
-				nfdchar_t* outPath = NULL;
-				nfdresult_t result = NFD_OpenDialog("png,jpg;pdf", NULL, &outPath);
-				if (result == NFD_OKAY)
+				glm::vec3 rotation = glm::degrees(transform.Rotation);
+				if (ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 0.0f))
+					transform.Rotation = glm::radians(rotation);
+				
+				ImGui::DragFloat3("Scale", &transform.Scale[0], .01f);
+				ImGui::Separator();
+			}
+			
+			if (m_Entity->HasComponent<MeshRenderer>())
+			{
+				auto& mesh = m_Entity->GetComponent<MeshRenderer>();
+				ImGui::Text("Mesh Renderer");
+				if (ImGui::ImageButton((void*)mesh.TX->GetRendererID(), ImVec2{ 80, 80 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
 				{
-					APP_LOG("Success!");
-					APP_LOG(outPath);
-					mesh.TX.reset(Texture::Create(outPath));
-					free(outPath);
+					nfdchar_t* outPath = NULL;
+					nfdresult_t result = NFD_OpenDialog("png,jpg;pdf", NULL, &outPath);
+					if (result == NFD_OKAY)
+					{
+						mesh.TX.reset(Texture::Create(outPath));
+						free(outPath);
+					}
 				}
-				else if (result == NFD_CANCEL)
-				{
-					APP_LOG("User pressed cancel.");
-				}
-				else
-				{
-					APP_LOG("Error: %s\n", NFD_GetError());
-				}
+				ImGui::Separator();
+			}
+
+			if (m_Entity->HasComponent<Camera>())
+			{
+				auto& camera = m_Entity->GetComponent<Camera>();
+				ImGui::Text("Camera");
+				ImGui::Checkbox("Primary Camera", &camera.MainCamera);
+
+				ImGui::Separator();
 			}
 		}
 		ImGui::End();

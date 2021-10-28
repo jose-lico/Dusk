@@ -5,7 +5,7 @@
 
 namespace DuskEngine
 {
-	SceneViewportPanel::SceneViewportPanel(std::shared_ptr<FrameBuffer>& fb, std::shared_ptr<Camera> camera)
+	SceneViewportPanel::SceneViewportPanel(std::shared_ptr<FrameBuffer>& fb, Entity camera)
 	{
 		m_ViewportSize = glm::vec2(0.0f);
 		m_FB = fb;
@@ -22,7 +22,7 @@ namespace DuskEngine
 		{
 			m_ViewportSize = { viewportSize.x, viewportSize.y };
 			m_FB->Resize(m_ViewportSize);
-			m_Camera->SetProjection(glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f));
+			m_Camera.GetComponent<Camera>().ProjectionMatrix = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f);
 		}
 		ImGui::Image((void*)m_FB->GetColorAttachmentID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();

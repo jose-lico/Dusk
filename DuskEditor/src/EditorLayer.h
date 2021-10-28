@@ -13,23 +13,23 @@ namespace DuskEngine
 		void OnAttach() override;
 		void OnUpdate() override;
 		void OnImGuiRender() override;
+
+		void EditorCamera();
 	private:
 		Dockspace m_Dockspace;
 		std::vector<PanelBase*> m_Panels;
 
-		std::shared_ptr<FrameBuffer> m_FB;
-		std::shared_ptr<VertexArray> m_VA;
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<Texture> m_Texture;
-		std::shared_ptr<Camera> m_Camera;
+		std::shared_ptr<Scene> m_Scene;
+		//InspectorPanel* inspector;
+		Entity camera;
+		std::unique_ptr<InspectorPanel> inspector;
 
+		std::shared_ptr<FrameBuffer> m_FB;
+
+		// camera stuff remove later
 		bool movingCamera = false;
 		bool firstMouse = false;
 		float lastX = WindowManager::GetWindow()->GetWidth() / 2.0f;
 		float lastY = WindowManager::GetWindow()->GetWidth() / 2.0f;
-
-		std::shared_ptr<Scene> m_SceneEntt;
-
-		InspectorPanel* inspector;
 	};
 }

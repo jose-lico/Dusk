@@ -11,8 +11,7 @@
 
 namespace DuskEngine
 {
-	Scene::Scene(std::shared_ptr<Camera>& camera)
-		:m_Camera(camera)
+	Scene::Scene()
 	{
 	}
 
@@ -33,16 +32,18 @@ namespace DuskEngine
 		{
 			// TODO: for static objects in the future only calculate this once and not every frame
 
+			// Should I/Do I need to even calculate Front, Right and Up vectors every frame? probably not
+
 			auto view = m_Registry.view<Transform>();
 			for (auto entity : view)
 			{
-				auto transform = view.get<Transform>(entity);
+				auto& transform = view.get<Transform>(entity);
 
 				glm::vec3 front;
 
-				front.x = cos(glm::radians(transform.Rotation.y)) * cos(glm::radians(transform.Rotation.x));
-				front.y = sin(glm::radians(transform.Rotation.x));
-				front.z = sin(glm::radians(transform.Rotation.y)) * cos(glm::radians(transform.Rotation.y));
+				front.x = cos(transform.Rotation.y) * cos(transform.Rotation.x);
+				front.y = sin(transform.Rotation.x);
+				front.z = sin(transform.Rotation.y) * cos(transform.Rotation.x);
 
 				transform.Front = glm::normalize(front);
 				transform.Right = glm::normalize(glm::cross(transform.Front, glm::vec3(0.0f, 1.0f, 0.0f)));
@@ -50,17 +51,28 @@ namespace DuskEngine
 			}
 		}
 
+		glm::mat4 VPM;
 		{
-			// TODO: get cameras and get vp matrix here. For now scene has a camera obj
+			auto view = m_Registry.view<Transform, Camera>();
+			for (auto entity : view)
+			{
+				auto& [transform, camera] = view.get<Transform, Camera>(entity);
 
-			//auto view = m_Registry.view<Camera>();
+				if(camera.MainCamera)
+				{
+					camera.ViewMatrix= glm::lookAt(transform.Position, transform.Position + transform.Front, transform.Up);
+
+					camera.ViewProjectionMatrix = camera.ProjectionMatrix * camera.ViewMatrix;
+					VPM = camera.ViewProjectionMatrix;
+				}
+			}
 		}
 
 		{
 			auto view = m_Registry.view<Transform, MeshRenderer>();
 			for (auto entity : view)
 			{
-				auto [transform, mesh] = view.get<Transform, MeshRenderer>(entity);
+				auto& [transform, mesh] = view.get<Transform, MeshRenderer>(entity);
 
 				mesh.TX->Bind(0);
 				mesh.SH->Bind();
@@ -70,7 +82,7 @@ namespace DuskEngine
 					* glm::scale(glm::mat4(1.0f), transform.Scale);
 
 				mesh.SH->SetUniformMat4("u_Model", transform.Model);
-				mesh.SH->SetUniformMat4("u_ViewProjection", m_Camera->GetViewProjectionMatrix());
+				mesh.SH->SetUniformMat4("u_ViewProjection", VPM);
 
 				Renderer::Submit(mesh.MS);
 			}

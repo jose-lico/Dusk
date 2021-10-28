@@ -8,7 +8,6 @@
 #include "Core/Renderer/Resources/Shader.h"
 #include "Core/Renderer/Resources/Texture.h"
 #include "Core/Renderer/Resources/VertexArray.h"
-#include "Core/Renderer/Camera.h"
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/Resources/Framebuffer.h"
 

@@ -1,7 +1,7 @@
 #include "EditorLayer.h"
 
 #include <glm/gtc/type_ptr.hpp>
-#include <imgui.h>
+#include <glm/gtx/string_cast.hpp>
 
 namespace DuskEngine
 {
@@ -14,33 +14,38 @@ namespace DuskEngine
 
 	void EditorLayer::OnAttach()
 	{
-		{
-			m_Camera = std::make_shared<Camera>(glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f), \
-				glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, -90.0f, 0.0f));
+		FramebufferSpecification fbSpec;
+		fbSpec.Width = 720;
+		fbSpec.Height = 480;
+		m_FB.reset(FrameBuffer::Create(fbSpec));
 
-			FramebufferSpecification fbSpec;
-			fbSpec.Width = 720;
-			fbSpec.Height = 480;
-			m_FB.reset(FrameBuffer::Create(fbSpec));
+		std::shared_ptr<Shader> shader;
+		std::shared_ptr<Texture> texture;
 
-			m_Shader.reset(Shader::Create("res/shaders/simpleTexture.glsl"));
-			m_Texture.reset(Texture::Create("res/textures/uv_mapper.jpg"));
-			
-			m_SceneEntt = std::make_shared<Scene>(m_Camera);
-			auto ent = m_SceneEntt->CreateEntity("Quad");
-			auto ent2 = m_SceneEntt->CreateEntity("Cube");
+		shader.reset(Shader::Create("res/shaders/simpleTexture.glsl"));
+		texture.reset(Texture::Create("res/textures/uv_mapper.jpg"));
+		
+		m_Scene = std::make_shared<Scene>();
 
-			auto& t = ent2.GetComponent<Transform>();
-			t.Position = glm::vec3(-2.0f, 0.0f, 0.0f);
+		auto quad = m_Scene->CreateEntity("Quad");
+		quad.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), shader, texture);
+		
+		auto cube = m_Scene->CreateEntity("Cube");
+		auto& t = cube.GetComponent<Transform>();
+		t.Position = glm::vec3(-2.0f, 0.0f, 0.0f);
+		cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), shader, texture);
 
-			ent.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), m_Shader, m_Texture);
-			ent2.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), m_Shader, m_Texture);
-		}
-
-		inspector = new InspectorPanel();
-		m_Panels.push_back(inspector);
-		m_Panels.push_back(new HierarchyPanel(m_SceneEntt, inspector));
-		m_Panels.push_back(new SceneViewportPanel(m_FB, m_Camera));
+		camera = m_Scene->CreateEntity("Camera");
+		auto& c = camera.AddComponent<Camera>();
+		c.ProjectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
+		auto& cameraTransform = camera.GetComponent<Transform>();
+		cameraTransform.Position = glm::vec3(0.0f, 0.0f, 3.0f);
+		cameraTransform.Rotation = glm::radians(glm::vec3(0.0f, -90.0f, 0.0f));
+		
+		inspector = std::make_unique<InspectorPanel>();
+		m_Panels.push_back(inspector.get());
+		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector.get()));
+		m_Panels.push_back(new SceneViewportPanel(m_FB, camera));
 	}
 
 	void EditorLayer::OnUpdate()
@@ -49,68 +54,9 @@ namespace DuskEngine
 		RenderCommand::SetClearColor({ 0.3f, 0.3f, 0.3f, 1 });
 		RenderCommand::Clear();
 
-		// dodgy camera controller
-		{
-			glm::vec3 pos = m_Camera->GetPosition();
-			glm::vec3 input(0.0f);
+		EditorCamera();
 
-			if (Input::IsKeyPressed(Key::D))
-				input.x += 3.0f * Time::GetDeltaTime();
-			else if (Input::IsKeyPressed(Key::A))
-				input.x -= 3.0f * Time::GetDeltaTime();
-
-			if (Input::IsKeyPressed(Key::W))
-				input.z -= 3.0f * Time::GetDeltaTime();
-			else if (Input::IsKeyPressed(Key::S))
-				input.z += 3.0f * Time::GetDeltaTime();
-
-			if (Input::IsKeyPressed(Key::Q))
-				input.y += 3.0f * Time::GetDeltaTime();
-			else if (Input::IsKeyPressed(Key::E))
-				input.y -= 3.0f * Time::GetDeltaTime();
-
-			pos += input;
-			m_Camera->SetPosition(pos);
-
-			glm::vec3 rot = m_Camera->GetRotation();
-
-			if (!movingCamera && Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
-			{
-				Input::SetCursorActive(Cursor::CURSOR_DISABLED);
-				movingCamera = true;
-				firstMouse = true;
-			}
-			else if (!Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
-			{
-				Input::SetCursorActive(Cursor::CURSOR_NORMAL);
-				movingCamera = false;
-			}
-
-			if (movingCamera)
-			{
-				if (firstMouse)
-				{
-					lastX = Input::GetMouseX();
-					lastY = Input::GetMouseY();
-					firstMouse = false;
-				}
-
-				float xoffset = Input::GetMouseX() - lastX;
-				float yoffset = lastY - Input::GetMouseY(); // reversed since y-coordinates go from bottom to top
-
-				lastX = Input::GetMouseX();
-				lastY = Input::GetMouseY();
-
-				xoffset *= 20.0f * Time::GetDeltaTime();
-				yoffset *= 20.0f * Time::GetDeltaTime();
-
-				rot.x += yoffset;
-				rot.y += xoffset;
-				m_Camera->SetRotation(rot);
-			}
-		}
-
-		m_SceneEntt->OnUpdate();
+		m_Scene->OnUpdate();
 
 		m_FB->Unbind();
 	}
@@ -125,5 +71,69 @@ namespace DuskEngine
 		}
 
 		m_Dockspace.EndDockspace();
+	}
+
+	// rework in the future to normalize input yadda yadda ya
+
+	void EditorLayer::EditorCamera()
+	{
+		auto& transform = camera.GetComponent<Transform>();
+		glm::vec3 pos = transform.Position;
+		
+		float velocity = 3.0f * Time::GetDeltaTime();
+
+		if (Input::IsKeyPressed(Key::W))
+			pos += transform.Front * velocity;
+		else if (Input::IsKeyPressed(Key::S))
+			pos -= transform.Front * velocity;
+
+		if (Input::IsKeyPressed(Key::D))
+			pos += transform.Right * velocity;
+		else if (Input::IsKeyPressed(Key::A))
+			pos -= transform.Right * velocity;
+
+		if (Input::IsKeyPressed(Key::E))
+			pos.y += velocity;
+		else if (Input::IsKeyPressed(Key::Q))
+			pos.y -= velocity;
+
+		transform.Position = pos;
+
+		if (!movingCamera && Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
+		{
+			Input::SetCursorActive(Cursor::CURSOR_DISABLED);
+			movingCamera = true;
+			firstMouse = true;
+		}
+		else if (!Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
+		{
+			Input::SetCursorActive(Cursor::CURSOR_NORMAL);
+			movingCamera = false;
+		}
+
+		if (movingCamera)
+		{
+			glm::vec3 rot = transform.Rotation;
+
+			if (firstMouse)
+			{
+				lastX = Input::GetMouseX();
+				lastY = Input::GetMouseY();
+				firstMouse = false;
+			}
+
+			float xoffset = Input::GetMouseX() - lastX;
+			float yoffset = lastY - Input::GetMouseY();
+
+			lastX = Input::GetMouseX();
+			lastY = Input::GetMouseY();
+
+			xoffset *= 0.5f * Time::GetDeltaTime();
+			yoffset *= 0.5f* Time::GetDeltaTime();
+
+			rot.x += yoffset;
+			rot.y += xoffset;
+			transform.Rotation = rot;
+		}
 	}
 }
