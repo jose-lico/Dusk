@@ -44,6 +44,17 @@ namespace DuskEngine
 						free(outPath);
 					}
 				}
+
+				if(mesh.MaterialTeste)
+				{
+					for(auto uniform : mesh.MaterialTeste->m_Uniforms)
+					{
+						if(uniform.Type == UniformType::Vec3)
+						{
+							ImGui::ColorEdit3(uniform.Name.c_str(), (float*)uniform.Data);
+						}
+					}
+				}
 				ImGui::Separator();
 			}
 

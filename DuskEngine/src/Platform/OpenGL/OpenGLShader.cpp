@@ -2,6 +2,8 @@
 #include "OpenGLShader.h"
 #include "GLCommon.h"
 
+#include "Core/Macros/LOG.h"
+
 namespace DuskEngine
 {
 	OpenGLShader::OpenGLShader(const std::string& filepath)
@@ -56,7 +58,8 @@ namespace DuskEngine
 		if (!success)
 		{
 			glGetShaderInfoLog(id, 512, NULL, infoLog);
-			std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+			ERROR("ERROR::SHADER::COMPILATION_FAILED") 
+			ERROR(infoLog);
 			glDeleteShader(id);
 			return 0;
 		}
@@ -91,6 +94,25 @@ namespace DuskEngine
 			}
 			else
 			{
+				if (line.find("uniform") != std::string::npos && line.find("u_") != std::string::npos) // musnt be an expected uniform
+				{
+					std::string::size_type typeBegin = line.find(" ") + 1;
+					std::string::size_type typeEnd = line.find(" ", typeBegin);
+					std::string type = line.substr(typeBegin, typeEnd - typeBegin);
+
+					std::string::size_type nameBegin = line.find("u_") + 2;
+					std::string::size_type nameEnd = line.find(";", nameBegin);
+					std::string name = line.substr(nameBegin, nameEnd - nameBegin);
+
+					UniformType uniformType;
+					if (type == "vec3")
+						uniformType = UniformType::Vec3;
+					if(type == "sampler2D")
+						uniformType = UniformType::Texture;
+					UniformSpecs.push_back(UniformSpec(name, uniformType));
+
+					LOG(name)
+				}
 				ss[(int)type] << line << '\n';
 			}
 		}
@@ -104,8 +126,6 @@ namespace DuskEngine
 			return m_uniformLocations[name];
 
 		int location = glGetUniformLocation(m_ID, name.c_str());
-		//if (location == -1)
-			//std::cout << "Warning: uniform " << name << " does not exist." << std::endl;
 
 		m_uniformLocations[name] = location;
 

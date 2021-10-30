@@ -4,9 +4,24 @@
 #include <glm/glm.hpp>
 
 #include <string>
+#include <vector>
 
 namespace DuskEngine 
 {
+	enum class UniformType
+	{
+		Vec3, Texture
+	};
+
+	struct UniformSpec
+	{
+		std::string Name;
+		UniformType Type;
+
+		UniformSpec(const std::string& name, UniformType type) : Name(name), Type(type)
+		{};
+	};
+
 	class DUSK_API Shader 
 	{
 	public:
@@ -21,5 +36,7 @@ namespace DuskEngine
 		virtual void SetUniformMat4(const std::string& name, const glm::mat4& m) = 0;
 
 		static Shader* Create(const std::string& filepath);
+
+		std::vector<UniformSpec> UniformSpecs;
 	};
 }

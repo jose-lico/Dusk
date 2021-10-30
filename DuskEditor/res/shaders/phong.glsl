@@ -9,15 +9,15 @@ out vec2 TexCoords;
 out vec3 Normal;
 out vec3 FragPos;
 
-uniform mat4 u_Model;
-uniform mat4 u_ViewProjection;
+uniform mat4 e_Model;
+uniform mat4 e_ViewProjection;
 
 void main()
 {
-    gl_Position = u_ViewProjection * u_Model * vec4(position, 1.0);
-    FragPos = vec3(u_Model * vec4(position, 1.0));
+    gl_Position = e_ViewProjection * e_Model * vec4(position, 1.0);
+    FragPos = vec3(e_Model * vec4(position, 1.0));
     TexCoords = textureCoords;
-    Normal = mat3(transpose(inverse(u_Model))) * normal;
+    Normal = mat3(transpose(inverse(e_Model))) * normal;
 }
 
 #shader fragment
@@ -29,17 +29,21 @@ in vec3 FragPos;
 
 out vec4 FragColor;
 
-uniform sampler2D Texture;
+uniform sampler2D u_Texture;
+uniform vec3 u_TestUniform;
+uniform vec3 e_LightDirection; // front vector for directional light
+uniform vec3 e_LightColor;
 
 void main()
 {
-    vec3 lightColor = vec3(0.5, 0.5, 0.5);
-    float ambientStrength = 0.3;
-    vec3 ambient = ambientStrength * lightColor * vec3(texture(Texture, TexCoords));
+    // ambient lighting
+	float ambientStrength = 0.2;
+    vec3 ambient = u_TestUniform * vec3(texture(u_Texture, TexCoords)) * ambientStrength;
 
-    vec3 lightPos = vec3(1.0, -1.0, -1.0);
-    vec3 lightDir = normalize(lightPos - FragPos);
-    vec3 diffuse = lightColor * max(dot(normalize(Normal), -lightDir), 0.0) * vec3(texture(Texture, TexCoords));
+    vec3 lightDir = normalize(e_LightDirection);
+    vec3 diffuse = u_TestUniform * max(dot(normalize(Normal), -lightDir), 0.0) * vec3(texture(u_Texture, TexCoords));
 
-    FragColor = vec4(ambient + diffuse, 1.0);
+    vec3 total = ambient + diffuse;
+
+    FragColor = vec4(total, 1.0);
 }

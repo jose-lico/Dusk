@@ -4,6 +4,7 @@
 #include "Core/Renderer/Resources/Shader.h"
 #include "Core/Renderer/Resources/Texture.h"
 #include "Core/Renderer/Resources/Mesh.h"
+#include "Core/Renderer/Resources/Material.h"
 
 namespace DuskEngine
 {
@@ -14,6 +15,7 @@ namespace DuskEngine
 		std::shared_ptr<Mesh> MS;
 		std::shared_ptr<Shader> SH;
 		std::shared_ptr<Texture> TX;
+		std::shared_ptr<Material> MaterialTeste = nullptr;
 
 		MeshRenderer() = default;
 		MeshRenderer(std::shared_ptr<Mesh>& mesh, std::shared_ptr<Shader>& shader, std::shared_ptr<Texture>& texture)

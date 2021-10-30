@@ -21,12 +21,12 @@ namespace DuskEngine
 		void Bind() const override;
 		void Unbind() const override;
 
-		void SetUniformFloat(const std::string& name, float f) override;
-		void SetUniformVec2(const std::string& name , const glm::vec2& v) override;
-		void SetUniformVec3(const std::string& name , const glm::vec3& v) override;
-		void SetUniformVec4(const std::string& name , const glm::vec4& v) override;
-		void SetUniformMat3(const std::string& name , const glm::mat3& m) override;
-		void SetUniformMat4(const std::string& name , const glm::mat4& m) override;
+		virtual void SetUniformFloat(const std::string& name, float f) override;
+		virtual void SetUniformVec2(const std::string& name , const glm::vec2& v) override;
+		virtual void SetUniformVec3(const std::string& name , const glm::vec3& v) override;
+		virtual void SetUniformVec4(const std::string& name , const glm::vec4& v) override;
+		virtual void SetUniformMat3(const std::string& name , const glm::mat3& m) override;
+		virtual void SetUniformMat4(const std::string& name , const glm::mat4& m) override;
 	private:
 		std::unordered_map<std::string, int> m_uniformLocations;
 		unsigned int m_ID;
