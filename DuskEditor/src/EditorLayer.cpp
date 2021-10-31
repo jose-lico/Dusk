@@ -23,12 +23,16 @@ namespace DuskEngine
 		std::shared_ptr<Shader> shaderSimpleTexture;
 		std::shared_ptr<Shader> shaderSimpleColor;
 		std::shared_ptr<Texture> texture;
+		std::shared_ptr<Texture> textureDiffuse;
+		std::shared_ptr<Texture> textureSpecular;
 		std::shared_ptr<Texture> textureLight;
 
 		shader.reset(Shader::Create("res/shaders/phong.glsl"));
 		shaderSimpleColor.reset(Shader::Create("res/shaders/simpleColor.glsl"));
 		shaderSimpleTexture.reset(Shader::Create("res/shaders/simpleTexture.glsl"));
 		texture.reset(Texture::Create("res/textures/uv_mapper.jpg"));
+		textureDiffuse.reset(Texture::Create("res/textures/diffuse.png"));
+		textureSpecular.reset(Texture::Create("res/textures/specular.png"));
 		textureLight.reset(Texture::Create("res/textures/white.png"));
 
 		m_Scene = std::make_shared<Scene>();
@@ -40,7 +44,8 @@ namespace DuskEngine
 		cube.GetComponent<Transform>().Position = { -2.0f, 0.0f, 0.0f };
 		auto& mesh = cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), shader, texture);
 		auto& mat = mesh.MaterialTeste = std::make_shared<Material>(shader);
-		mat->SetUniformData("DiffuseColor", glm::vec3{ 1.0f, 1.0f, 1.0f });
+		mat->SetUniformData("Diffuse", textureDiffuse->GetRendererID());
+		mat->SetUniformData("Specular", textureSpecular->GetRendererID());
 		
 
 		camera = m_Scene->CreateEntity("Camera");
@@ -54,7 +59,7 @@ namespace DuskEngine
 		auto& lightTransform = light.GetComponent<Transform>();
 		lightTransform.Position = { -2.0f, 1.0f, 1.0f };
 		lightTransform.Scale = { .1f,.1f,.1f };
-		lightTransform.Rotation = glm::radians(glm::vec3(-30.0f,-45.0f, 0.0f));
+		lightTransform.Rotation = glm::radians(glm::vec3(-15.0f,-40.0f, 0.0f));
 		light.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), shaderSimpleColor, texture);
 
 		inspector = std::make_unique<InspectorPanel>();

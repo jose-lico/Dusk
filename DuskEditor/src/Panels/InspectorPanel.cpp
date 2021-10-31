@@ -46,7 +46,7 @@ namespace DuskEngine
 						if (uniform.Type == UniformType::Texture)
 						{
 							ImGui::Text(uniform.Name.c_str());
-							if (ImGui::ImageButton((unsigned int*)uniform.Data, ImVec2{ 40, 40 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
+							if (ImGui::ImageButton((void*)*(unsigned int*)uniform.Data, ImVec2{ 40, 40 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
 							{
 								nfdchar_t* path = NULL;
 								nfdresult_t result = NFD_OpenDialog("png,jpg;pdf", NULL, &path);
