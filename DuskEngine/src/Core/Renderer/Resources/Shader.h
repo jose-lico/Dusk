@@ -10,7 +10,7 @@ namespace DuskEngine
 {
 	enum class UniformType
 	{
-		Vec3, Texture
+		Vec3, Texture, Float, Int, Unknown
 	};
 
 	struct UniformSpec
@@ -28,6 +28,7 @@ namespace DuskEngine
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+		virtual void SetUniformInt(const std::string& name, int i) = 0;
 		virtual void SetUniformFloat(const std::string& name, float f) = 0;
 		virtual void SetUniformVec2(const std::string& name, const glm::vec2& v) = 0;
 		virtual void SetUniformVec3(const std::string& name, const glm::vec3& v) = 0;

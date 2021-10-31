@@ -41,6 +41,12 @@ namespace DuskEngine
 					if (result == NFD_OKAY)
 					{
 						mesh.TX.reset(Texture::Create(outPath));
+
+						if(mesh.MaterialTeste)
+						{
+							mesh.MaterialTeste->SetUniform("Texture", mesh.TX->GetRendererID());
+						}
+
 						free(outPath);
 					}
 				}

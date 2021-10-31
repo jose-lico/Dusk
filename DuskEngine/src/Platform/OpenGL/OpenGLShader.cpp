@@ -105,10 +105,7 @@ namespace DuskEngine
 					std::string name = line.substr(nameBegin, nameEnd - nameBegin);
 
 					UniformType uniformType;
-					if (type == "vec3")
-						uniformType = UniformType::Vec3;
-					if(type == "sampler2D")
-						uniformType = UniformType::Texture;
+					uniformType = GetType(type);
 					UniformSpecs.push_back(UniformSpec(name, uniformType));
 
 					LOG(name)
@@ -120,6 +117,16 @@ namespace DuskEngine
 		return { ss[0].str(), ss[1].str() };
 	}
 	
+	UniformType OpenGLShader::GetType(const std::string& type)
+	{
+		if (type == "vec3")
+			return UniformType::Vec3;
+		if (type == "sampler2D")
+			return UniformType::Texture;
+
+		return UniformType::Unknown;
+	}
+
 	int OpenGLShader::GetUniformLocation(const std::string& name)
 	{
 		if (m_uniformLocations.find(name) != m_uniformLocations.end())
@@ -130,6 +137,11 @@ namespace DuskEngine
 		m_uniformLocations[name] = location;
 
 		return location;
+	}
+
+	void OpenGLShader::SetUniformInt(const std::string& name, int i)
+	{
+		glUniform1i(GetUniformLocation(name), i);
 	}
 
 	void OpenGLShader::SetUniformFloat(const std::string& name, float f)

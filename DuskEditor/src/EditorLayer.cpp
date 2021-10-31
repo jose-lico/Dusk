@@ -38,7 +38,9 @@ namespace DuskEngine
 		
 		auto cube = m_Scene->CreateEntity("Lit Quad");
 		cube.GetComponent<Transform>().Position = { -2.0f, 0.0f, 0.0f };
-		cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), shader, texture).MaterialTeste = std::make_shared<Material>(shader);
+		auto& mesh = cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), shader, texture);
+		auto& mat = mesh.MaterialTeste = std::make_shared<Material>(shader);
+		mat->SetUniform("DiffuseColor", glm::vec3{ 1.0f, 1.0f, 1.0f });
 		
 
 		camera = m_Scene->CreateEntity("Camera");
