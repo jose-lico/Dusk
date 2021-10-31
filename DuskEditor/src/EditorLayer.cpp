@@ -40,7 +40,7 @@ namespace DuskEngine
 		cube.GetComponent<Transform>().Position = { -2.0f, 0.0f, 0.0f };
 		auto& mesh = cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), shader, texture);
 		auto& mat = mesh.MaterialTeste = std::make_shared<Material>(shader);
-		mat->SetUniform("DiffuseColor", glm::vec3{ 1.0f, 1.0f, 1.0f });
+		mat->SetUniformData("DiffuseColor", glm::vec3{ 1.0f, 1.0f, 1.0f });
 		
 
 		camera = m_Scene->CreateEntity("Camera");
@@ -52,9 +52,9 @@ namespace DuskEngine
 		auto light = m_Scene->CreateEntity("Light");
 		light.AddComponent<Light>().Color = {1.0f, 1.0f, 1.0f};
 		auto& lightTransform = light.GetComponent<Transform>();
-		lightTransform.Position = { -2.0f, 0.0f, 1.0f };
+		lightTransform.Position = { -2.0f, 1.0f, 1.0f };
 		lightTransform.Scale = { .1f,.1f,.1f };
-		lightTransform.Rotation = { 0.0f,glm::radians(-90.0f), 0.0f };
+		lightTransform.Rotation = glm::radians(glm::vec3(-30.0f,-45.0f, 0.0f));
 		light.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), shaderSimpleColor, texture);
 
 		inspector = std::make_unique<InspectorPanel>();

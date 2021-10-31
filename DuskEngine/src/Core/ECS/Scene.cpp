@@ -51,6 +51,7 @@ namespace DuskEngine
 			}
 		}
 
+		glm::vec3 cameraPos;
 		glm::mat4 VPM;
 		{
 			auto view = m_Registry.view<Transform, Camera>();
@@ -64,6 +65,7 @@ namespace DuskEngine
 
 					camera.ViewProjectionMatrix = camera.ProjectionMatrix * camera.ViewMatrix;
 					VPM = camera.ViewProjectionMatrix;
+					cameraPos = transform.Position;
 				}
 			}
 		}
@@ -76,13 +78,15 @@ namespace DuskEngine
 
 				// 1. Set "default" expected uniforms, whose data does not belong to the material - MVP, Lights
 				// 2. Iterate thru remaining uniforms and set them based on material data - Textures.
-
-				mesh.TX->Bind(0);
-				mesh.SH->Bind();
-
+				
 				if(mesh.MaterialTeste)
 				{
 					mesh.MaterialTeste->SetUniforms();
+				}
+				else
+				{
+					mesh.SH->Bind();
+					mesh.TX->Bind(0);
 				}
 
 				transform.Model = glm::translate(glm::mat4(1.0f), transform.Position)
@@ -91,6 +95,7 @@ namespace DuskEngine
 
 				mesh.SH->SetUniformMat4("e_Model", transform.Model);
 				mesh.SH->SetUniformMat4("e_ViewProjection", VPM);
+				mesh.SH->SetUniformVec3("e_ViewPosition", cameraPos);
 
 				auto lights = m_Registry.view<Light>();
 				

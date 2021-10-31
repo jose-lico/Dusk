@@ -11,10 +11,6 @@ namespace DuskEngine
 	Material::Material(std::shared_ptr<Shader>& shader)
 		:m_Shader(shader)
 	{
-		// setup shader program if needed
-
-		// get uniform names and types from shader
-
 		for(auto uniform : shader->UniformSpecs)
 		{
 			auto u = Uniform(uniform.Name, uniform.Type);
@@ -38,6 +34,7 @@ namespace DuskEngine
 
 	void Material::SetUniforms()
 	{
+		m_Shader->Bind();
 		unsigned int textSlot = 0;
 		for (auto uniform : m_Uniforms)
 		{

@@ -27,15 +27,16 @@ namespace DuskEngine
 		void SetUniforms();
 
 		template<typename T>
-		void SetUniform(const std::string& name, T data)
+		void SetUniformData(const std::string& name, T data)
 		{
-			*(T*)m_UniformsMap[name]->Data = data;
+			if (m_UniformsMap.find(name) != m_UniformsMap.end())
+				*(T*)m_UniformsMap[name]->Data = data;
 		}
 	private:
 		// Map is for direct access to set uniform values
 		std::unordered_map<std::string, Uniform*> m_UniformsMap;
 
-		// Vector is where the actual uniform values are located, for iteration
+		// Vector is where the actual uniform values are located, for iteration - editor drawing and sending to shader
 		std::vector<Uniform> m_Uniforms;
 		std::shared_ptr<Shader> m_Shader;
 
