@@ -40,7 +40,7 @@ namespace DuskEngine
 		auto quad = m_Scene->CreateEntity("Unlit Quad");
 		quad.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), shaderSimpleTexture, texture);
 		
-		auto cube = m_Scene->CreateEntity("Lit Quad");
+		auto cube = m_Scene->CreateEntity("Lit Cube");
 		cube.GetComponent<Transform>().Position = { -2.0f, 0.0f, 0.0f };
 		auto& mesh = cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), shader, texture);
 		auto& mat = mesh.MaterialTeste = std::make_shared<Material>(shader);
@@ -54,7 +54,7 @@ namespace DuskEngine
 		cameraTransform.Position = glm::vec3(0.0f, 0.0f, 3.0f);
 		cameraTransform.Rotation = glm::radians(glm::vec3(0.0f, -90.0f, 0.0f));
 		
-		auto light = m_Scene->CreateEntity("Light");
+		auto light = m_Scene->CreateEntity("Directional Light");
 		light.AddComponent<Light>().Color = {1.0f, 1.0f, 1.0f};
 		auto& lightTransform = light.GetComponent<Transform>();
 		lightTransform.Position = { -2.0f, 1.0f, 1.0f };
