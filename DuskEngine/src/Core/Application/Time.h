@@ -3,7 +3,7 @@
 
 namespace DuskEngine
 {
-	class DUSK_API Time 
+	class DUSK_EXPORT Time
 	{
 	public:
 		static void Init();

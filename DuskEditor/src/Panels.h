@@ -4,3 +4,4 @@
 #include "Panels/HierarchyPanel.h"
 #include "Panels/SceneViewportPanel.h"
 #include "Panels/InspectorPanel.h"
+#include "Panels/ConsolePanel.h"

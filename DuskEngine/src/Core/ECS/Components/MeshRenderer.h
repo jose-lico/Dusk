@@ -10,16 +10,12 @@ namespace DuskEngine
 {
 	struct MeshRenderer
 	{
-		// TODO: Shader and Texture will be also part of a material object
-		
 		std::shared_ptr<Mesh> MS;
-		std::shared_ptr<Shader> SH;
-		std::shared_ptr<Texture> TX;
-		std::shared_ptr<Material> MaterialTeste = nullptr;
+		std::shared_ptr<Material> Mat;
 
 		MeshRenderer() = default;
-		MeshRenderer(std::shared_ptr<Mesh>& mesh, std::shared_ptr<Shader>& shader, std::shared_ptr<Texture>& texture)
-			:MS(mesh), SH(shader), TX(texture)
+		MeshRenderer(std::shared_ptr<Mesh>& mesh, std::shared_ptr<Material>& material)
+			:MS(mesh), Mat(material)
 		{}
 	};
 }

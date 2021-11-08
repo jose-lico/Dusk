@@ -19,36 +19,34 @@ namespace DuskEngine
 		fbSpec.Height = 480;
 		m_FB.reset(FrameBuffer::Create(fbSpec));
 
-		std::shared_ptr<Shader> shader;
-		std::shared_ptr<Shader> shaderSimpleTexture;
-		std::shared_ptr<Shader> shaderSimpleColor;
-		std::shared_ptr<Texture> texture;
+		std::shared_ptr<Texture> textureQuad;
 		std::shared_ptr<Texture> textureDiffuse;
 		std::shared_ptr<Texture> textureSpecular;
-		std::shared_ptr<Texture> textureLight;
-
-		shader.reset(Shader::Create("res/shaders/phong.glsl"));
-		shaderSimpleColor.reset(Shader::Create("res/shaders/simpleColor.glsl"));
-		shaderSimpleTexture.reset(Shader::Create("res/shaders/simpleTexture.glsl"));
-		texture.reset(Texture::Create("res/textures/uv_mapper.jpg"));
+		textureQuad.reset(Texture::Create("res/textures/uv_mapper.jpg"));
 		textureDiffuse.reset(Texture::Create("res/textures/diffuse.png"));
 		textureSpecular.reset(Texture::Create("res/textures/specular.png"));
-		textureLight.reset(Texture::Create("res/textures/white.png"));
+
+		std::shared_ptr<Shader> shaderCube;
+		std::shared_ptr<Shader> shaderQuad;
+		shaderCube.reset(Shader::Create("res/shaders/phong.glsl"));
+		shaderQuad.reset(Shader::Create("res/shaders/simpleTexture.glsl"));
+
+		std::shared_ptr<Material> cubeMaterial = std::make_shared<Material>(shaderCube);
+		std::shared_ptr<Material> quadMaterial = std::make_shared<Material>(shaderQuad);
+		cubeMaterial->SetUniformData("Diffuse", textureDiffuse);
+		cubeMaterial->SetUniformData("Specular", textureSpecular);
+		quadMaterial->SetUniformData("Texture", textureQuad);
 
 		m_Scene = std::make_shared<Scene>();
 
 		auto quad = m_Scene->CreateEntity("Unlit Quad");
-		quad.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), shaderSimpleTexture, texture);
+		quad.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), quadMaterial);
 		
 		auto cube = m_Scene->CreateEntity("Lit Cube");
 		cube.GetComponent<Transform>().Position = { -2.0f, 0.0f, 0.0f };
-		auto& mesh = cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), shader, texture);
-		auto& mat = mesh.MaterialTeste = std::make_shared<Material>(shader);
-		mat->SetUniformData("Diffuse", textureDiffuse->GetRendererID());
-		mat->SetUniformData("Specular", textureSpecular->GetRendererID());
+		cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), cubeMaterial);
 		
-
-		camera = m_Scene->CreateEntity("Camera");
+		camera = m_Scene->CreateEntity("Editor Camera");
 		camera.AddComponent<Camera>().ProjectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
 		auto& cameraTransform = camera.GetComponent<Transform>();
 		cameraTransform.Position = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -58,14 +56,13 @@ namespace DuskEngine
 		light.AddComponent<Light>().Color = {1.0f, 1.0f, 1.0f};
 		auto& lightTransform = light.GetComponent<Transform>();
 		lightTransform.Position = { -2.0f, 1.0f, 1.0f };
-		lightTransform.Scale = { .1f,.1f,.1f };
 		lightTransform.Rotation = glm::radians(glm::vec3(-15.0f,-40.0f, 0.0f));
-		light.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), shaderSimpleColor, texture);
 
 		inspector = std::make_unique<InspectorPanel>();
 		m_Panels.push_back(inspector.get());
 		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector.get()));
 		m_Panels.push_back(new SceneViewportPanel(m_FB, camera));
+		m_Panels.push_back(new ConsolePanel());
 	}
 
 	void EditorLayer::OnUpdate()
@@ -85,7 +82,7 @@ namespace DuskEngine
 	{
 		m_Dockspace.BeginDockspace();
 
-		for (PanelBase* panel : m_Panels)
+		for (Panel* panel : m_Panels)
 		{
 			panel->OnImGuiRender();
 		}

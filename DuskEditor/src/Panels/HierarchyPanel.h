@@ -6,7 +6,7 @@
 
 namespace DuskEngine
 {
-	class HierarchyPanel : public PanelBase
+	class HierarchyPanel : public Panel
 	{
 	public:
 		HierarchyPanel(std::shared_ptr<Scene>& scene, InspectorPanel* inspector);

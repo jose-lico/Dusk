@@ -8,7 +8,7 @@
 
 namespace DuskEngine
 {
-	class DUSK_API Mesh
+	class DUSK_EXPORT Mesh
 	{
 	public:
 		Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count);

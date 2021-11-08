@@ -5,7 +5,7 @@
 
 namespace DuskEngine
 {
-	class DUSK_API WindowManager
+	class DUSK_EXPORT WindowManager
 	{
 	public:
 		static void Init();

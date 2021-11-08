@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
+#include "Core/Macros/LOG.h"
 
 #include "Shader.h"
 
@@ -13,13 +14,13 @@ namespace DuskEngine
 	{
 		std::string Name;
 		UniformType Type;
-		void* Data = nullptr;
+		std::shared_ptr<void> Data = nullptr;
 
 		Uniform(const std::string& name, UniformType type) : Name(name) , Type(type)
 		{}
 	};
 
-	class DUSK_API Material
+	class DUSK_EXPORT Material
 	{
 	public:
 		Material(std::shared_ptr<Shader>& shader); // or path
@@ -27,10 +28,12 @@ namespace DuskEngine
 		void SetUniforms();
 
 		template<typename T>
-		void SetUniformData(const std::string& name, T data)
+		void SetUniformData(const std::string& name, T& data)
 		{
 			if (m_UniformsMap.find(name) != m_UniformsMap.end())
-				*(T*)m_UniformsMap[name]->Data = data;
+				m_UniformsMap[name]->Data = std::make_shared<T>(data);
+			else
+				APP_LOG("Uniform doesnt exist")
 		}
 	private:
 		// Map is for direct access to set uniform values
@@ -43,5 +46,6 @@ namespace DuskEngine
 		size_t GetSize(UniformType type);
 
 		friend class InspectorPanel;
+		friend class Scene;
 	};
 }

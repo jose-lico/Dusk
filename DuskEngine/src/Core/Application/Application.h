@@ -8,7 +8,7 @@
 
 namespace DuskEngine
 {
-	class DUSK_API Application
+	class DUSK_EXPORT Application
 	{
 	public:
 		Application();

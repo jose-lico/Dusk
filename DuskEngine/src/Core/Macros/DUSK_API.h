@@ -1,11 +1,15 @@
 #pragma once
 
 #ifdef DUSK_WINDOWS
-	#ifdef DUSK_DLL
-		#define DUSK_API __declspec(dllexport)
+	#if defined(DUSK_EXE) || defined(DUSK_LIB)
+		#define DUSK_EXPORT 
 	#else
-		#define DUSK_API __declspec(dllimport)
+		#ifdef DUSK_DLL
+			#define DUSK_EXPORT __declspec(dllexport)
+		#else
+			#define DUSK_EXPORT __declspec(dllimport)
+		#endif
 	#endif
 #elif DUSK_LINUX
-	#define DUSK_API 
+	#define DUSK_EXPORT 
 #endif

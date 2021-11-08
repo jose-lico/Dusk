@@ -3,11 +3,12 @@
 
 namespace DuskEngine
 {
-	class DUSK_API Texture
+	class DUSK_EXPORT Texture
 	{
 	public:
 		static Texture* Create(const char* filepath);
 
+		virtual ~Texture() = default;
 		virtual unsigned int GetRendererID() const = 0;
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;

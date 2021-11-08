@@ -5,7 +5,7 @@
 
 namespace DuskEngine
 {
-	class DUSK_API Layer
+	class DUSK_EXPORT Layer
 	{
 	public:
 		Layer():Enabled(1) {};

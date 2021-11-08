@@ -22,7 +22,7 @@ namespace DuskEngine
 		{};
 	};
 
-	class DUSK_API Shader 
+	class DUSK_EXPORT Shader
 	{
 	public:
 		virtual void Bind() const = 0;

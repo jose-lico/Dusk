@@ -5,7 +5,7 @@
 
 namespace DuskEngine
 {
-	class DUSK_API PrimitiveMesh
+	class DUSK_EXPORT PrimitiveMesh
 	{
 	public:
 		static std::shared_ptr<Mesh> Quad();

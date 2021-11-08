@@ -5,7 +5,7 @@
 
 namespace DuskEngine
 {
-	class SceneViewportPanel : public PanelBase
+	class SceneViewportPanel : public Panel
 	{
 	public:
 		SceneViewportPanel(std::shared_ptr<FrameBuffer>& fb, Entity camera);

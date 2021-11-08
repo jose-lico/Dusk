@@ -2,11 +2,11 @@
 
 namespace DuskEngine
 {
-	class PanelBase
+	class Panel
 	{
 	public:
-		PanelBase() = default;
-		~PanelBase() = default;
+		Panel() = default;
+		~Panel() = default;
 
 		virtual void OnImGuiRender() = 0;
 	};

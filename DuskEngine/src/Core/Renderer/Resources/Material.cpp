@@ -1,10 +1,9 @@
 #include "pch.h"
 #include "Material.h"
 
-#include "Core/Macros/LOG.h"
+#include "Texture.h"
 
-// This is terrible
-#include "Platform/OpenGL/GLCommon.h"
+#include "Core/Macros/LOG.h"
 
 namespace DuskEngine
 {
@@ -13,8 +12,8 @@ namespace DuskEngine
 	{
 		for(auto uniform : shader->UniformSpecs)
 		{
+			// maybe initiliaze uniforms to default value;
 			auto u = Uniform(uniform.Name, uniform.Type);
-			u.Data = malloc(GetSize(u.Type));
 			m_Uniforms.push_back(u);
 		}
 
@@ -24,12 +23,9 @@ namespace DuskEngine
 		}
 	}
 
+	
 	Material::~Material()
 	{
-		for (auto uniform : m_Uniforms)
-		{
-			free(uniform.Data);
-		}
 	}
 
 	void Material::SetUniforms()
@@ -42,11 +38,11 @@ namespace DuskEngine
 			switch(uniform.Type)
 			{
 			case UniformType::Vec3:
-				m_Shader->SetUniformVec3("u_" + uniform.Name, *(glm::vec3*)uniform.Data); // u_ + dodgy
+				m_Shader->SetUniformVec3("u_" + uniform.Name, *std::static_pointer_cast<glm::vec3>(uniform.Data)); // u_ + dodgy
 				break;
-			case UniformType::Texture: 
+			case UniformType::Texture:
 				m_Shader->SetUniformInt("u_" + uniform.Name, textSlot);
-				glBindTextureUnit(textSlot++, *(unsigned int*)uniform.Data); // forgive me
+				std::static_pointer_cast<std::shared_ptr<Texture>>(uniform.Data)->get()->Bind(textSlot++);
 				break;
 			}
 		}

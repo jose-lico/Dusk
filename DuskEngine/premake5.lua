@@ -1,5 +1,5 @@
 project "DuskEngine"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
 
 	targetdir ("%{wks.location}/bin/" .. outputDir .. "/%{prj.name}")
@@ -37,13 +37,14 @@ project "DuskEngine"
 
 	defines
 	{
-		"GLFW_INCLUDE_NONE",
-		"GLEW_STATIC",
-		"_CRT_SECURE_NO_WARNINGS",
-
 		"DUSK_OPENGL",
 		"DUSK_DEBUG",
-		"DUSK_DLL"
+		"DUSK_LIB",
+		--"DUSK_DLL",
+
+		"GLFW_INCLUDE_NONE",
+		"GLEW_STATIC",
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 
@@ -51,24 +52,21 @@ project "DuskEngine"
 		cppdialect "C++17"
 		staticruntime "off"
 		systemversion "latest"
+		defines "DUSK_WINDOWS"
 
-		defines 
-		{
-			"DUSK_WINDOWS"
-		}
 		links
 		{
 			"opengl32"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
-		}
-
 		disablewarnings 
 		{ 
 			"4005" 
+		}
+
+		postbuildcommands
+		{
+			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
 		}
 
 	filter "system:linux"

@@ -5,7 +5,7 @@
 
 namespace DuskEngine {
 
-	class DUSK_API RenderCommand
+	class DUSK_EXPORT RenderCommand
 	{
 	public:
 		static void Init();

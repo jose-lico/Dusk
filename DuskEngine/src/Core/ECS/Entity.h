@@ -7,7 +7,7 @@
 
 namespace DuskEngine
 {
-	class DUSK_API Entity
+	class DUSK_EXPORT Entity
 	{
 	public:
 		Entity() = default;

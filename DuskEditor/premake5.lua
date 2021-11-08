@@ -31,7 +31,8 @@ project "DuskEditor"
 
 	defines
 	{
-		"DUSK_DEBUG"
+		"DUSK_DEBUG",
+		"DUSK_EXE"
 	}
 
 	filter "system:windows"

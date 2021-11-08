@@ -76,36 +76,25 @@ namespace DuskEngine
 			{
 				auto& [transform, mesh] = view.get<Transform, MeshRenderer>(entity);
 
-				// 1. Set "default" expected uniforms, whose data does not belong to the material - MVP, Lights
-				// 2. Iterate thru remaining uniforms and set them based on material data - Textures.
-				
-				if(mesh.MaterialTeste)
-				{
-					mesh.MaterialTeste->SetUniforms();
-				}
-				else
-				{
-					mesh.SH->Bind();
-					mesh.TX->Bind(0);
-				}
+				mesh.Mat->SetUniforms();
 
 				transform.Model = glm::translate(glm::mat4(1.0f), transform.Position)
 					* glm::toMat4(glm::quat(transform.Rotation))
 					* glm::scale(glm::mat4(1.0f), transform.Scale);
 
-				mesh.SH->SetUniformMat4("e_Model", transform.Model);
-				mesh.SH->SetUniformMat4("e_ViewProjection", VPM);
-				mesh.SH->SetUniformVec3("e_ViewPosition", cameraPos);
+				mesh.Mat->m_Shader->SetUniformMat4("e_Model", transform.Model);
+				mesh.Mat->m_Shader->SetUniformMat4("e_ViewProjection", VPM);
+				mesh.Mat->m_Shader->SetUniformVec3("e_ViewPosition", cameraPos);
 
 				auto lights = m_Registry.view<Light>();
 				
 				for(auto light : lights)
-				{
+				{  
 					auto& lightTransform = m_Registry.get<Transform>(light);
 					glm::vec3 lightColor = m_Registry.get<Light>(light).Color;
-					mesh.SH->SetUniformVec3("e_LightPosition", lightTransform.Position);
-					mesh.SH->SetUniformVec3("e_LightDirection", lightTransform.Front);
-					mesh.SH->SetUniformVec3("e_LightColor", lightColor);
+					mesh.Mat->m_Shader->SetUniformVec3("e_LightPosition", lightTransform.Position);
+					mesh.Mat->m_Shader->SetUniformVec3("e_LightDirection", lightTransform.Front);
+					mesh.Mat->m_Shader->SetUniformVec3("e_LightColor", lightColor);
 				}
 
 				Renderer::Submit(mesh.MS);

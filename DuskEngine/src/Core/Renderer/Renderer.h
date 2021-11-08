@@ -8,7 +8,7 @@
 
 namespace DuskEngine {
 
-	class DUSK_API Renderer
+	class DUSK_EXPORT Renderer
 	{
 	public:
 		static void Init();

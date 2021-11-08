@@ -17,7 +17,7 @@ namespace DuskEngine
 		void EditorCamera();
 	private:
 		Dockspace m_Dockspace;
-		std::vector<PanelBase*> m_Panels;
+		std::vector<Panel*> m_Panels;
 
 		std::shared_ptr<Scene> m_Scene;
 		//InspectorPanel* inspector;

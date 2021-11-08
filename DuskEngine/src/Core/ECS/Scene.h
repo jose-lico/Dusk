@@ -7,7 +7,7 @@ namespace DuskEngine
 {
 	class Entity;
 
-	class DUSK_API Scene
+	class DUSK_EXPORT Scene
 	{
 	public:
 		Scene();

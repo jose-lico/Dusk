@@ -55,6 +55,7 @@ namespace DuskEngine
 
     OpenGLTexture::~OpenGLTexture()
     {
+        LOG("Deleting texture")
         glDeleteTextures(1, &m_ID);
     }
 

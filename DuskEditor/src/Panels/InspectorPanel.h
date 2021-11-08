@@ -5,7 +5,7 @@
 
 namespace DuskEngine
 {
-	class InspectorPanel : public PanelBase
+	class InspectorPanel : public Panel
 	{
 	public:
 		InspectorPanel();

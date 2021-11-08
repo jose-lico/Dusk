@@ -6,7 +6,7 @@
 
 namespace DuskEngine
 {
-	class DUSK_API Input 
+	class DUSK_EXPORT Input
 	{
 	public:
 		static bool IsKeyPressed(const KeyCode keycode);

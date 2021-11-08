@@ -38,7 +38,7 @@ namespace DuskEngine
 		bool normalized;
 	};
 
-	class DUSK_API VertexBufferLayout
+	class DUSK_EXPORT VertexBufferLayout
 	{
 	public:
 		VertexBufferLayout();
@@ -52,7 +52,7 @@ namespace DuskEngine
 		VblImpl* m_Impl;
 	};
 
-	class DUSK_API VertexBuffer
+	class DUSK_EXPORT VertexBuffer
 	{
 	public:
 		virtual ~VertexBuffer() {}
@@ -66,7 +66,7 @@ namespace DuskEngine
 		static VertexBuffer* Create(const void* data, int size);
 	};
 
-	class DUSK_API IndexBuffer
+	class DUSK_EXPORT IndexBuffer
 	{
 	public:
 		virtual ~IndexBuffer() {}

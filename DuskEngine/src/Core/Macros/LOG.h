@@ -7,7 +7,7 @@
 #define LOGGER_APP "Application"
 #define DEFAULT_PATTERN logger->set_pattern("%^[%T] %n: %v%$");
 
-#ifdef DUSK_DLL
+#if !defined(DUSK_EXE) && (defined(DUSK_DLL) || defined(DUSK_LIB))
 	#ifdef DUSK_DEBUG
 		#define CREATE_LOGGER\
 			{\

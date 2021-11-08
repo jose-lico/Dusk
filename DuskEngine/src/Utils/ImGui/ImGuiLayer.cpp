@@ -90,8 +90,8 @@ namespace DuskEngine
 
 	void ImGuiLayer::ApplyStyle()
 	{
-		//ImGuiIO& io = ImGui::GetIO();
-		//io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Regulat.ttf", 10);
+		ImGuiIO& io = ImGui::GetIO();
+		io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Regular.ttf", 15);
 		ImGui::GetStyle().FrameRounding = 4.0f;
 		ImGui::GetStyle().GrabRounding = 4.0f;
 

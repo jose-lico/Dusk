@@ -11,7 +11,7 @@ namespace DuskEngine
 		unsigned int Samples = 1;
 	};
 
-	class DUSK_API FrameBuffer
+	class DUSK_EXPORT FrameBuffer
 	{
 	public:
 		virtual const FramebufferSpecification& GetSpecification() const = 0;
