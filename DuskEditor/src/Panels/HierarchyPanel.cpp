@@ -9,6 +9,11 @@ namespace DuskEngine
 	{
 	}
 
+	HierarchyPanel::~HierarchyPanel()
+	{
+
+	}
+
 	void HierarchyPanel::OnImGuiRender()
 	{
 		ImGui::Begin("Hierarchy");

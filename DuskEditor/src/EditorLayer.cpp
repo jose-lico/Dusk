@@ -12,6 +12,15 @@ namespace DuskEngine
 		APP_LOG("Logging from the app")
 	}
 
+	EditorLayer::~EditorLayer()
+	{
+		inspector.release();
+		for (Panel* panel : m_Panels)
+		{
+			delete panel;
+		}
+	}
+
 	void EditorLayer::OnAttach()
 	{
 		FramebufferSpecification fbSpec;
@@ -19,25 +28,13 @@ namespace DuskEngine
 		fbSpec.Height = 480;
 		m_FB.reset(FrameBuffer::Create(fbSpec));
 
-		std::shared_ptr<Texture> textureQuad;
-		std::shared_ptr<Texture> textureDiffuse;
-		std::shared_ptr<Texture> textureSpecular;
-		textureQuad.reset(Texture::Create("res/textures/uv_mapper.jpg"));
-		textureDiffuse.reset(Texture::Create("res/textures/diffuse.png"));
-		textureSpecular.reset(Texture::Create("res/textures/specular.png"));
-
-		std::shared_ptr<Shader> shaderCube;
-		std::shared_ptr<Shader> shaderQuad;
-		shaderCube.reset(Shader::Create("res/shaders/phong.glsl"));
-		shaderQuad.reset(Shader::Create("res/shaders/simpleTexture.glsl"));
-
-		std::shared_ptr<Material> cubeMaterial = std::make_shared<Material>(shaderCube);
-		std::shared_ptr<Material> quadMaterial = std::make_shared<Material>(shaderQuad);
-		cubeMaterial->SetUniformData("Diffuse", textureDiffuse);
-		cubeMaterial->SetUniformData("Specular", textureSpecular);
-		quadMaterial->SetUniformData("Texture", textureQuad);
-
 		m_Scene = std::make_shared<Scene>();
+
+		Ref<Material> cubeMaterial = MakeRef<Material>(Shader::Create("res/shaders/phong.glsl"));
+		Ref<Material> quadMaterial = MakeRef<Material>(Shader::Create("res/shaders/simpleTexture.glsl"));
+		cubeMaterial->SetTexture("Diffuse", Texture::Create("res/textures/diffuse.png"));
+		cubeMaterial->SetTexture("Specular", Texture::Create("res/textures/specular.png"));
+		quadMaterial->SetTexture("Texture", Texture::Create("res/textures/uv_mapper.jpg"));
 
 		auto quad = m_Scene->CreateEntity("Unlit Quad");
 		quad.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), quadMaterial);

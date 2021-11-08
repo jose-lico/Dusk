@@ -3,6 +3,8 @@
 
 namespace DuskEngine
 {
+	const char* PrimitiveMesh::m_Primitives[] = { "Quad", "Cube" };
+
     std::shared_ptr<Mesh> PrimitiveMesh::Quad()
     {
 		float vertices[] =

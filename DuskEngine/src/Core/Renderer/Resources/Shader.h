@@ -1,6 +1,8 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
+#include "Utils/Memory/Memory.h"
+
 #include <glm/glm.hpp>
 
 #include <string>
@@ -25,6 +27,10 @@ namespace DuskEngine
 	class DUSK_EXPORT Shader
 	{
 	public:
+		static Ref<Shader> Create(const std::string& filepath);
+
+		virtual ~Shader() = default;
+
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
@@ -35,8 +41,6 @@ namespace DuskEngine
 		virtual void SetUniformVec4(const std::string& name, const glm::vec4& v) = 0;
 		virtual void SetUniformMat3(const std::string& name, const glm::mat3& m) = 0;
 		virtual void SetUniformMat4(const std::string& name, const glm::mat4& m) = 0;
-
-		static Shader* Create(const std::string& filepath);
 
 		std::vector<UniformSpec> UniformSpecs;
 	};

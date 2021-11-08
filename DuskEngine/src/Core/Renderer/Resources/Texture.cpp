@@ -7,12 +7,12 @@
 
 namespace DuskEngine
 {
-    Texture* Texture::Create(const char* filepath)
+	Ref<Texture> Texture::Create(const char* filepath)
     {
 		switch (RendererContext::GetAPI())
 		{
 			case RendererContext::API::None:    return nullptr;
-			case RendererContext::API::OpenGL:  return new OpenGLTexture(filepath);
+			case RendererContext::API::OpenGL:  return MakeRef<OpenGLTexture>(filepath);
 			case RendererContext::API::D3D11:	return nullptr;
 			default:							return nullptr;
 		}

@@ -17,6 +17,7 @@ namespace DuskEngine
 
 	Scene::~Scene()
 	{
+		m_Registry.clear();
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -76,7 +77,7 @@ namespace DuskEngine
 			{
 				auto& [transform, mesh] = view.get<Transform, MeshRenderer>(entity);
 
-				mesh.Mat->SetUniforms();
+				mesh.Mat->UploadUniforms();
 
 				transform.Model = glm::translate(glm::mat4(1.0f), transform.Position)
 					* glm::toMat4(glm::quat(transform.Rotation))

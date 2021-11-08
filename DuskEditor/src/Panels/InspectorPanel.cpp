@@ -33,8 +33,13 @@ namespace DuskEngine
 			if (m_Entity->HasComponent<MeshRenderer>())
 			{
 				auto& mesh = m_Entity->GetComponent<MeshRenderer>();
-				ImGui::Text("Material");
+				
+				ImGui::Text("Mesh Renderer");
+				ImGui::Text("Mesh");
+				
+				ImGui::Separator();
 
+				ImGui::Text("Material");
 				for(auto uniform : mesh.Mat->m_Uniforms)
 				{
 					if(uniform.Type == UniformType::Vec3)
@@ -45,15 +50,13 @@ namespace DuskEngine
 					if (uniform.Type == UniformType::Texture)
 					{
 						ImGui::Text(uniform.Name.c_str());
-						if (ImGui::ImageButton((void*)std::static_pointer_cast<std::shared_ptr<Texture>>(uniform.Data)->get()->GetRendererID(), ImVec2{ 40, 40 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
+						if (ImGui::ImageButton((void*)std::static_pointer_cast<Texture>(uniform.Data)->GetRendererID(), ImVec2{ 40, 40 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
 						{
 							nfdchar_t* path = NULL;
 							nfdresult_t result = NFD_OpenDialog("png;jpg", NULL, &path);
 							if (result == NFD_OKAY)
 							{
-								std::shared_ptr<Texture> texture;
-								texture.reset(Texture::Create(path));
-								mesh.Mat->SetUniformData(uniform.Name, texture);
+								mesh.Mat->SetTexture(uniform.Name, Texture::Create(path));
 								free(path);
 							}
 						}

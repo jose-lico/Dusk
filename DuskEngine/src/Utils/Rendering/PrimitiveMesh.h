@@ -10,5 +10,8 @@ namespace DuskEngine
 	public:
 		static std::shared_ptr<Mesh> Quad();
 		static std::shared_ptr<Mesh> Cube();
+	private:
+		static const char* m_Primitives[];
+		friend class InspectorPanel;
 	};
 }

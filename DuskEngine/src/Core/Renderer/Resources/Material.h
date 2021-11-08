@@ -1,7 +1,8 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
-#include "Core/Macros/LOG.h"
 
+#include "Utils/Memory/Memory.h"
+#include "Texture.h"
 #include "Shader.h"
 
 #include <vector>
@@ -23,27 +24,25 @@ namespace DuskEngine
 	class DUSK_EXPORT Material
 	{
 	public:
-		Material(std::shared_ptr<Shader>& shader); // or path
+		Material() = default;
+		Material(std::shared_ptr<Shader>& shader);
+		Material(const std::string& shaderPath);		
 		~Material();
-		void SetUniforms();
+		void UploadUniforms();
 
-		template<typename T>
-		void SetUniformData(const std::string& name, T& data)
-		{
-			if (m_UniformsMap.find(name) != m_UniformsMap.end())
-				m_UniformsMap[name]->Data = std::make_shared<T>(data);
-			else
-				APP_LOG("Uniform doesnt exist")
-		}
+		void SetFloat(const std::string& name, float f);
+		void SetVec2(const std::string& name, glm::vec2& v);
+		void SetVec3(const std::string& name, glm::vec3& v);
+		void SetVec4(const std::string& name, glm::vec4& v);
+		void SetTexture(const std::string& name, Ref<Texture>& texture);
 	private:
+		std::shared_ptr<Shader> m_Shader;
+
 		// Map is for direct access to set uniform values
 		std::unordered_map<std::string, Uniform*> m_UniformsMap;
 
 		// Vector is where the actual uniform values are located, for iteration - editor drawing and sending to shader
 		std::vector<Uniform> m_Uniforms;
-		std::shared_ptr<Shader> m_Shader;
-
-		size_t GetSize(UniformType type);
 
 		friend class InspectorPanel;
 		friend class Scene;

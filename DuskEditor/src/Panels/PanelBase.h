@@ -6,7 +6,7 @@ namespace DuskEngine
 	{
 	public:
 		Panel() = default;
-		~Panel() = default;
+		virtual ~Panel() = default;
 
 		virtual void OnImGuiRender() = 0;
 	};

@@ -1,12 +1,14 @@
 #pragma once
-#include "../../Macros/DUSK_API.h"
+#include "Core/Macros/DUSK_API.h"
+
+#include "Utils/Memory/Memory.h"
 
 namespace DuskEngine
 {
 	class DUSK_EXPORT Texture
 	{
 	public:
-		static Texture* Create(const char* filepath);
+		static Ref<Texture> Create(const char* filepath);
 
 		virtual ~Texture() = default;
 		virtual unsigned int GetRendererID() const = 0;

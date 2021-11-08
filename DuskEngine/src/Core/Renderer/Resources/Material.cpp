@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "Material.h"
 
-#include "Texture.h"
-
 #include "Core/Macros/LOG.h"
 
 namespace DuskEngine
@@ -12,7 +10,6 @@ namespace DuskEngine
 	{
 		for(auto uniform : shader->UniformSpecs)
 		{
-			// maybe initiliaze uniforms to default value;
 			auto u = Uniform(uniform.Name, uniform.Type);
 			m_Uniforms.push_back(u);
 		}
@@ -23,12 +20,15 @@ namespace DuskEngine
 		}
 	}
 
-	
+	Material::Material(const std::string& shaderPath)
+	{
+	}
+
 	Material::~Material()
 	{
 	}
 
-	void Material::SetUniforms()
+	void Material::UploadUniforms()
 	{
 		m_Shader->Bind();
 		unsigned int textSlot = 0;
@@ -42,23 +42,37 @@ namespace DuskEngine
 				break;
 			case UniformType::Texture:
 				m_Shader->SetUniformInt("u_" + uniform.Name, textSlot);
-				std::static_pointer_cast<std::shared_ptr<Texture>>(uniform.Data)->get()->Bind(textSlot++);
+				std::static_pointer_cast<Texture>(uniform.Data)->Bind(textSlot++);
 				break;
 			}
 		}
 	}
 
-	size_t Material::GetSize(UniformType type)
+	void Material::SetFloat(const std::string& name, float f)
 	{
-		{
-			switch (type)
-			{
-			case UniformType::Vec3:		return sizeof(glm::vec3);
-			case UniformType::Texture:  return sizeof(unsigned int);
-			case UniformType::Float:	return sizeof(float);
-			case UniformType::Int:		return sizeof(int);
-			case UniformType::Unknown:	return 0;
-			}
-		}
+		if (m_UniformsMap.find(name) != m_UniformsMap.end())
+			m_UniformsMap[name]->Data = std::make_shared<float>(f);
+		else
+			LOG("Uniform doesnt exist")
+	}
+
+	void Material::SetVec2(const std::string& name, glm::vec2& v)
+	{
+	}
+
+	void Material::SetVec3(const std::string& name, glm::vec3& v)
+	{
+	}
+
+	void Material::SetVec4(const std::string& name, glm::vec4& v)
+	{
+	}
+
+	void Material::SetTexture(const std::string& name, Ref<Texture>& texture)
+	{
+		if (m_UniformsMap.find(name) != m_UniformsMap.end())
+			m_UniformsMap[name]->Data = texture;
+		else
+			LOG("Texture '" + name + "' doesnt exist")
 	}
 }

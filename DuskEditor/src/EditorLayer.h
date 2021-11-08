@@ -9,7 +9,7 @@ namespace DuskEngine
 	{
 	public:
 		EditorLayer();
-		~EditorLayer() {};
+		~EditorLayer();
 		void OnAttach() override;
 		void OnUpdate() override;
 		void OnImGuiRender() override;
@@ -20,7 +20,6 @@ namespace DuskEngine
 		std::vector<Panel*> m_Panels;
 
 		std::shared_ptr<Scene> m_Scene;
-		//InspectorPanel* inspector;
 		Entity camera;
 		std::unique_ptr<InspectorPanel> inspector;
 
