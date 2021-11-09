@@ -6,15 +6,27 @@
 
 namespace DuskEngine
 {
-	OpenGLShader::OpenGLShader(const std::string& filepath)
+	OpenGLShader::OpenGLShader(const std::string& filepath, const std::string& name)
 		:m_Filepath(filepath), m_ID(0)
 	{
+		if (name.empty())
+		{
+			std::string::size_type begin = filepath.rfind("/") + 1;
+			std::string::size_type end = filepath.find(".");
+			std::string filename = filepath.substr(begin, end - begin);
+			m_Name = filename;
+		}
+		else
+			m_Name = name;
+
 		ShaderProgramSource source = ParseShader();
 		m_ID = CreateShader(source.VertexSource, source.FragmentSource);
+		LOG("Created Shader " + m_Name)
 	}
 
 	OpenGLShader::~OpenGLShader()
 	{
+		LOG("Deleted Shader " + m_Name)
 		glDeleteProgram(m_ID);
 	}
 
@@ -107,8 +119,6 @@ namespace DuskEngine
 					UniformType uniformType;
 					uniformType = GetType(type);
 					UniformSpecs.push_back(UniformSpec(name, uniformType));
-
-					LOG(name)
 				}
 				ss[(int)type] << line << '\n';
 			}

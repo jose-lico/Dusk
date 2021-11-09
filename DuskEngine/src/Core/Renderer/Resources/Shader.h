@@ -27,7 +27,7 @@ namespace DuskEngine
 	class DUSK_EXPORT Shader
 	{
 	public:
-		static Ref<Shader> Create(const std::string& filepath);
+		static Ref<Shader> Create(const std::string& filepath, const std::string& name = "");
 
 		virtual ~Shader() = default;
 
@@ -41,6 +41,8 @@ namespace DuskEngine
 		virtual void SetUniformVec4(const std::string& name, const glm::vec4& v) = 0;
 		virtual void SetUniformMat3(const std::string& name, const glm::mat3& m) = 0;
 		virtual void SetUniformMat4(const std::string& name, const glm::mat4& m) = 0;
+
+		virtual const std::string& GetName() const = 0;
 
 		std::vector<UniformSpec> UniformSpecs;
 	};

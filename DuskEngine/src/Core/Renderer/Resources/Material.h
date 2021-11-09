@@ -26,8 +26,8 @@ namespace DuskEngine
 	{
 	public:
 		Material() = default;
-		Material(std::shared_ptr<Shader>& shader);
-		Material(const std::string& shaderPath);		
+		Material(std::shared_ptr<Shader>& shader, const std::string& name = "");
+		Material(const std::string& shaderPath, const std::string& name = "");
 		~Material();
 		void UploadUniforms();
 
@@ -36,8 +36,12 @@ namespace DuskEngine
 		void SetVec3(const std::string& name, glm::vec3& v);
 		void SetVec4(const std::string& name, glm::vec4& v);
 		void SetTexture(const std::string& name, Ref<Texture>& texture);
+
+		const std::string& GetName() const { return m_Name; }
 	private:
+		void CreateUniforms();
 		std::shared_ptr<Shader> m_Shader;
+		std::string m_Name;
 
 		// Map is for direct access to set uniform values
 		std::unordered_map<std::string, Uniform*> m_UniformsMap;

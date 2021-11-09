@@ -5,23 +5,27 @@
 
 namespace DuskEngine
 {
-	Material::Material(std::shared_ptr<Shader>& shader)
+	Material::Material(std::shared_ptr<Shader>& shader, const std::string& name)
 		:m_Shader(shader)
 	{
-		for(auto uniform : shader->UniformSpecs)
-		{
-			auto u = Uniform(uniform.Name, uniform.Type);
-			m_Uniforms.push_back(u);
-		}
+		if (name.empty())
+			m_Name = m_Shader->GetName();
+		else
+			m_Name = name;
 
-		for (auto& uniform : m_Uniforms)
-		{
-			m_UniformsMap[uniform.Name] = &uniform;
-		}
+		CreateUniforms();
 	}
 
-	Material::Material(const std::string& shaderPath)
+	Material::Material(const std::string& shaderPath, const std::string& name)
 	{
+		m_Shader = Shader::Create(shaderPath);
+
+		if (name.empty())
+			m_Name = m_Shader->GetName();
+		else
+			m_Name = name;
+
+		CreateUniforms();
 	}
 
 	Material::~Material()
@@ -74,5 +78,19 @@ namespace DuskEngine
 			m_UniformsMap[name]->Data = texture;
 		else
 			LOG("Texture '" + name + "' doesnt exist")
+	}
+
+	void Material::CreateUniforms()
+	{
+		for (auto uniform : m_Shader->UniformSpecs)
+		{
+			auto u = Uniform(uniform.Name, uniform.Type);
+			m_Uniforms.push_back(u);
+		}
+
+		for (auto& uniform : m_Uniforms)
+		{
+			m_UniformsMap[uniform.Name] = &uniform;
+		}
 	}
 }

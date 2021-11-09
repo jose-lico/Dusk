@@ -8,14 +8,24 @@
 
 namespace DuskEngine
 {
-    OpenGLTexture::OpenGLTexture(const char* filepath)
+    OpenGLTexture::OpenGLTexture(const std::string& filepath, const std::string& name)
         :m_ID(0), m_Width(0), m_Height(0)
     {
+        if (name.empty()) 
+        {
+            std::string::size_type begin = filepath.rfind("/") + 1;
+            std::string::size_type end = filepath.find(".");
+            std::string filename = filepath.substr(begin, end - begin);
+            m_Name = filename;
+        }
+        else
+            m_Name = name;
+
         stbi_set_flip_vertically_on_load(true); // move this somewhere else
 
         int width, height, channels;
         unsigned char* data;
-        data = stbi_load(filepath, &width, &height, &channels, 0);
+        data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
 
         if (data)
         {
@@ -47,15 +57,17 @@ namespace DuskEngine
         }
         else
         {
-            ERROR("Error loading texture!")
+            ERROR("Error loading texture " + m_Name)
         }
 
         stbi_image_free(data);
+
+        LOG("Created Texture " + m_Name)
     }
 
     OpenGLTexture::~OpenGLTexture()
     {
-        LOG("Deleting texture")
+        LOG("Deleting texture " + m_Name)
         glDeleteTextures(1, &m_ID);
     }
 

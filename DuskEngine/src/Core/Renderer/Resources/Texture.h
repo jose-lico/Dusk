@@ -3,12 +3,14 @@
 
 #include "Utils/Memory/Memory.h"
 
+#include <string>
+
 namespace DuskEngine
 {
 	class DUSK_EXPORT Texture
 	{
 	public:
-		static Ref<Texture> Create(const char* filepath);
+		static Ref<Texture> Create(const std::string& filepath, const std::string& name = "");
 
 		virtual ~Texture() = default;
 		virtual unsigned int GetRendererID() const = 0;

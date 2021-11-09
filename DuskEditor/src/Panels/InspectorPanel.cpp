@@ -39,7 +39,7 @@ namespace DuskEngine
 				
 				ImGui::Separator();
 
-				ImGui::Text("Material");
+				ImGui::Text(mesh.material->GetName().c_str());
 				for(auto uniform : mesh.material->m_Uniforms)
 				{
 					if(uniform.Type == UniformType::Vec3)
