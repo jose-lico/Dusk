@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Components.h"
 #include "Core/Renderer/Renderer.h"
+#include "Core/Renderer/RenderCommand.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -17,7 +18,6 @@ namespace DuskEngine
 
 	Scene::~Scene()
 	{
-		m_Registry.clear();
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -42,13 +42,13 @@ namespace DuskEngine
 
 				glm::vec3 front;
 
-				front.x = cos(transform.Rotation.y) * cos(transform.Rotation.x);
-				front.y = sin(transform.Rotation.x);
-				front.z = sin(transform.Rotation.y) * cos(transform.Rotation.x);
+				front.x = cos(transform.rotation.y) * cos(transform.rotation.x);
+				front.y = sin(transform.rotation.x);
+				front.z = sin(transform.rotation.y) * cos(transform.rotation.x);
 
-				transform.Front = glm::normalize(front);
-				transform.Right = glm::normalize(glm::cross(transform.Front, glm::vec3(0.0f, 1.0f, 0.0f)));
-				transform.Up = glm::normalize(glm::cross(transform.Right, transform.Front));	
+				transform.front = glm::normalize(front);
+				transform.right = glm::normalize(glm::cross(transform.front, glm::vec3(0.0f, 1.0f, 0.0f)));
+				transform.up = glm::normalize(glm::cross(transform.right, transform.front));	
 			}
 		}
 
@@ -60,46 +60,53 @@ namespace DuskEngine
 			{
 				auto& [transform, camera] = view.get<Transform, Camera>(entity);
 
-				if(camera.MainCamera)
+				if(camera.main)
 				{
-					camera.ViewMatrix= glm::lookAt(transform.Position, transform.Position + transform.Front, transform.Up);
+					camera.viewMatrix= glm::lookAt(transform.position, transform.position + transform.front, transform.up);
 
-					camera.ViewProjectionMatrix = camera.ProjectionMatrix * camera.ViewMatrix;
-					VPM = camera.ViewProjectionMatrix;
-					cameraPos = transform.Position;
+					camera.viewProjectionMatrix = camera.projectionMatrix * camera.viewMatrix;
+					VPM = camera.viewProjectionMatrix;
+					cameraPos = transform.position;
 				}
 			}
 		}
 
+		Renderer::BeginScene();
+
+		RenderCommand::SetClearColor({ 0.3f, 0.3f, 0.3f, 1 });
+		RenderCommand::Clear();
 		{
+			// Most of this should maybe be moved to the renderer
 			auto view = m_Registry.view<Transform, MeshRenderer>();
 			for (auto entity : view)
 			{
 				auto& [transform, mesh] = view.get<Transform, MeshRenderer>(entity);
 
-				mesh.Mat->UploadUniforms();
+				mesh.material->UploadUniforms();
 
-				transform.Model = glm::translate(glm::mat4(1.0f), transform.Position)
-					* glm::toMat4(glm::quat(transform.Rotation))
-					* glm::scale(glm::mat4(1.0f), transform.Scale);
+				transform.model = glm::translate(glm::mat4(1.0f), transform.position)
+					* glm::toMat4(glm::quat(transform.rotation))
+					* glm::scale(glm::mat4(1.0f), transform.scale);
 
-				mesh.Mat->m_Shader->SetUniformMat4("e_Model", transform.Model);
-				mesh.Mat->m_Shader->SetUniformMat4("e_ViewProjection", VPM);
-				mesh.Mat->m_Shader->SetUniformVec3("e_ViewPosition", cameraPos);
+				mesh.material->m_Shader->SetUniformMat4("e_Model", transform.model);
+				mesh.material->m_Shader->SetUniformMat4("e_ViewProjection", VPM);
+				mesh.material->m_Shader->SetUniformVec3("e_ViewPosition", cameraPos);
 
 				auto lights = m_Registry.view<Light>();
 				
 				for(auto light : lights)
 				{  
 					auto& lightTransform = m_Registry.get<Transform>(light);
-					glm::vec3 lightColor = m_Registry.get<Light>(light).Color;
-					mesh.Mat->m_Shader->SetUniformVec3("e_LightPosition", lightTransform.Position);
-					mesh.Mat->m_Shader->SetUniformVec3("e_LightDirection", lightTransform.Front);
-					mesh.Mat->m_Shader->SetUniformVec3("e_LightColor", lightColor);
+					glm::vec3 lightColor = m_Registry.get<Light>(light).color;
+					mesh.material->m_Shader->SetUniformVec3("e_LightPosition", lightTransform.position);
+					mesh.material->m_Shader->SetUniformVec3("e_LightDirection", lightTransform.front);
+					mesh.material->m_Shader->SetUniformVec3("e_LightColor", lightColor);
 				}
 
-				Renderer::Submit(mesh.MS);
+				Renderer::Submit(mesh.mesh);
 			}
+
+			Renderer::EndScene();
 		}
 	}
 }

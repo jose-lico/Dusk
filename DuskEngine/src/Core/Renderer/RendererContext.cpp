@@ -2,6 +2,7 @@
 #include "RendererContext.h"
 
 #include "Renderer.h"
+
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace DuskEngine
@@ -12,12 +13,12 @@ namespace DuskEngine
 	RendererContext::API RendererContext::s_API = RendererContext::API::D3D11;
 #endif
 
-	RendererContext* RendererContext::Create(void* window)
+	UniqueRef<RendererContext> RendererContext::Create(void* window)
 	{
 		switch (s_API)
 		{
 			case RendererContext::API::None:    return nullptr;
-			case RendererContext::API::OpenGL:  return new OpenGLContext((GLFWwindow*)window);
+			case RendererContext::API::OpenGL:  return MakeUnique<OpenGLContext>((GLFWwindow*)window);
 			case RendererContext::API::D3D11:	return nullptr;
 			default:							return nullptr;
 		}

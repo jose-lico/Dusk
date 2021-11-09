@@ -9,11 +9,6 @@ namespace DuskEngine
 	float Time::m_DeltaTime = 0.0f;
 	float Time::m_LastFrame = 0.0f;
 
-	void Time::Init()
-	{
-
-	}
-
 	void Time::Update()
 	{
 		float currentFrame = (float)glfwGetTime();

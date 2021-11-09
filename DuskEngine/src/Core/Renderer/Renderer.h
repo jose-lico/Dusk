@@ -1,10 +1,9 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include "RenderCommand.h"
-#include "Resources/Mesh.h"
+#include "Utils/Memory/Memory.h"
 
-#include <memory>
+#include "Resources/Mesh.h"
 
 namespace DuskEngine {
 
@@ -16,7 +15,7 @@ namespace DuskEngine {
 		static void BeginScene();
 		static void EndScene();
 
-		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
-		static void Submit(const std::shared_ptr<Mesh>& mesh);
+		static void Submit(const Ref<VertexArray>& vertexArray);
+		static void Submit(const Ref<Mesh>& mesh);
 	};
 }

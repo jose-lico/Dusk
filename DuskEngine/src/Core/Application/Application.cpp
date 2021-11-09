@@ -6,7 +6,6 @@
 
 #include "Utils/Window/WindowManager.h"
 #include "Core/Renderer/Renderer.h"
-#include "Core/Renderer/RenderCommand.h"
 #include "Time.h"
 
 namespace DuskEngine
@@ -23,8 +22,7 @@ namespace DuskEngine
 
 	void Application::Init()
 	{
-		// Initialize subsystems
-		CREATE_LOGGER
+		CREATE_LOGGER // Will be reworked in the future
 		WindowManager::Init();
 		WindowManager::GetWindow()->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		rendererContext = RendererContext::Create(WindowManager::GetWindow()->GetNativeHandle());
@@ -36,14 +34,13 @@ namespace DuskEngine
 		m_ImGuiLayer->OnAttach();
 	}
 
-	void Application::OnEvent(Event& e)
+	void Application::Shutdown()
 	{
-		for (Layer* layer : m_LayerStack)
-		{
-			if (e.Handled)
-				break;
-			layer->OnEvent(e);
-		}
+		TRACE("##### SHUTDOWN #####");
+
+		Renderer::Shutdown();
+		rendererContext->Shutdown();
+		WindowManager::Shutdown();
 	}
 
 	void Application::PushLayer(Layer* layer)
@@ -57,31 +54,34 @@ namespace DuskEngine
 		m_LayerStack.PushLayer(overlay);
 		overlay->OnAttach();
 	}
-	
+
+	void Application::OnEvent(Event& e)
+	{
+		for (Layer* layer : m_LayerStack)
+		{
+			if (e.Handled)
+				break;
+			if(layer->Enabled)
+				layer->OnEvent(e);
+		}
+	}
+
 	void Application::Run()
 	{
 		while (!WindowManager::GetWindow()->ShouldClose())
 		{
 			Time::Update();
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				if (layer->Enabled)
+					layer->OnUpdate();
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
+				if (layer->Enabled)
+					layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
 			rendererContext->SwapBuffers();
 		}
-	}
-
-	void Application::Shutdown()
-	{
-		TRACE("##### SHUTDOWN #####");
-
-		// Shutdown subsystems
-		Renderer::Shutdown();
-		rendererContext->Shutdown();
-		WindowManager::Shutdown();
 	}
 }

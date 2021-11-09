@@ -18,7 +18,7 @@ namespace DuskEngine
 		const FramebufferSpecification& GetSpecification() const override { return m_Spec; }
 
 		void Resize();
-		void Resize(glm::vec2 viewportSize) override;
+		void Resize(glm::vec2& viewportSize) override;
 
 	private:
 		FramebufferSpecification m_Spec;

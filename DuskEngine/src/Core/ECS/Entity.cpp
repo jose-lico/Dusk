@@ -7,4 +7,8 @@ namespace DuskEngine
 		:m_EntityHandle(handle), m_Scene(scene)
 	{
 	}
+
+	Entity::~Entity()
+	{
+	}
 }

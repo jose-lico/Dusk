@@ -19,12 +19,11 @@ namespace DuskEngine
 		Dockspace m_Dockspace;
 		std::vector<Panel*> m_Panels;
 
-		std::shared_ptr<Scene> m_Scene;
+		Ref<Scene> m_Scene;
+		Ref<FrameBuffer> m_FB;
+
 		Entity camera;
-		std::unique_ptr<InspectorPanel> inspector;
-
-		std::shared_ptr<FrameBuffer> m_FB;
-
+		
 		// camera stuff remove later
 		bool movingCamera = false;
 		bool firstMouse = false;

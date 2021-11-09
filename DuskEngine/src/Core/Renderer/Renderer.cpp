@@ -3,6 +3,8 @@
 
 #include "Core/Macros/LOG.h"
 
+#include "RenderCommand.h"
+
 namespace DuskEngine {
 
 	void Renderer::Init()
@@ -25,16 +27,15 @@ namespace DuskEngine {
 	{
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray)
+	void Renderer::Submit(const Ref<VertexArray>& vertexArray)
 	{
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Mesh>& mesh)
+	void Renderer::Submit(const Ref<Mesh>& mesh)
 	{
 		mesh->m_VA->Bind();
 		RenderCommand::DrawIndexed(mesh->m_VA);
 	}
-
 }

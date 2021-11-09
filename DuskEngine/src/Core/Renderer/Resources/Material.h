@@ -2,6 +2,7 @@
 #include "Core/Macros/DUSK_API.h"
 
 #include "Utils/Memory/Memory.h"
+
 #include "Texture.h"
 #include "Shader.h"
 

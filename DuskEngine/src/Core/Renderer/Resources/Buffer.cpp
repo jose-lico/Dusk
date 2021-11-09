@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Buffer.h"
 
-#include "../RendererContext.h"
+#include "Core/Renderer/RendererContext.h"
 
 #include "Platform/OpenGL/OpenGLVertexBuffer.h"
 #include "Platform/OpenGL/OpenGLIndexBuffer.h"

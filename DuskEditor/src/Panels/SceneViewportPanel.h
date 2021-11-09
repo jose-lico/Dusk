@@ -8,12 +8,12 @@ namespace DuskEngine
 	class SceneViewportPanel : public Panel
 	{
 	public:
-		SceneViewportPanel(std::shared_ptr<FrameBuffer>& fb, Entity camera);
+		SceneViewportPanel(Ref<FrameBuffer>& fb, Entity camera);
 		~SceneViewportPanel() = default;
 
 		virtual void OnImGuiRender() override;
 	private:
-		std::shared_ptr<FrameBuffer> m_FB;
+		Ref<FrameBuffer> m_FB;
 		glm::vec2 m_ViewportSize;
 		Entity m_Camera;
 	};

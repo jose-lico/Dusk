@@ -12,7 +12,7 @@ namespace DuskEngine
 	public:
 		Entity() = default;
 		Entity(entt::entity handle, Scene* scene);
-		~Entity() = default;
+		~Entity();
 
 		template<typename T, typename... Args >
 		T& AddComponent(Args&&... args)

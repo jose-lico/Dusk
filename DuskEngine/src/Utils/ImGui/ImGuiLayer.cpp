@@ -12,6 +12,14 @@
 
 namespace DuskEngine
 {
+	ImGuiLayer::ImGuiLayer()
+	{
+	}
+
+	ImGuiLayer::~ImGuiLayer()
+	{
+	}
+
 	void ImGuiLayer::OnAttach()
 	{
 		IMGUI_CHECKVERSION();
@@ -55,7 +63,7 @@ namespace DuskEngine
 
 	bool ImGuiLayer::ActivateDemoWindow(KeyPressedEvent& e)
 	{
-		if(e.GetKeyCode() == 32)
+		if(e.GetKeyCode() == Key::P)
 			m_ShowDemoWindow = true;
 
 		return true;

@@ -9,7 +9,7 @@ namespace DuskEngine
 	class LayerStack
 	{
 	public:
-		LayerStack() = default;
+		LayerStack();
 		~LayerStack();
 
 		void PushLayer(Layer * layer);

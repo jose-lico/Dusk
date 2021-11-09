@@ -5,7 +5,7 @@ namespace DuskEngine
 {
 	const char* PrimitiveMesh::m_Primitives[] = { "Quad", "Cube" };
 
-    std::shared_ptr<Mesh> PrimitiveMesh::Quad()
+    Ref<Mesh> PrimitiveMesh::Quad()
     {
 		float vertices[] =
 		{
@@ -22,7 +22,7 @@ namespace DuskEngine
 			1, 2, 3    // second triangle
 		};
 
-		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, (unsigned int)sizeof(vertices),
+		Ref<Mesh> mesh = MakeRef<Mesh>(vertices, (unsigned int)sizeof(vertices),
 			indices, (unsigned int)(sizeof(indices) / sizeof(unsigned int)));
 
         return mesh;
@@ -30,7 +30,7 @@ namespace DuskEngine
 
 	// This is terrible, redo in the future
 
-	std::shared_ptr<Mesh> PrimitiveMesh::Cube()
+	Ref<Mesh> PrimitiveMesh::Cube()
 	{
 		float vertices[] =
 		{
@@ -90,7 +90,7 @@ namespace DuskEngine
 			23,22,21
 		};
 
-		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, (unsigned int)sizeof(vertices),
+		Ref<Mesh> mesh = MakeRef<Mesh>(vertices, (unsigned int)sizeof(vertices),
 			indices, (unsigned int)(sizeof(indices) / sizeof(unsigned int)));
 
 		return mesh;

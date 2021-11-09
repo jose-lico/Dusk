@@ -20,13 +20,13 @@ namespace DuskEngine
 			{
 				auto& transform = m_Entity->GetComponent<Transform>();
 				ImGui::Text("Transform");
-				ImGui::DragFloat3("Position", &transform.Position[0], .01f);
+				ImGui::DragFloat3("Position", &transform.position[0], .01f);
 
-				glm::vec3 rotation = glm::degrees(transform.Rotation);
+				glm::vec3 rotation = glm::degrees(transform.rotation);
 				if (ImGui::DragFloat3("Rotation", &rotation[0], 0.1f, 0.0f, 0.0f))
-					transform.Rotation = glm::radians(rotation);
+					transform.rotation = glm::radians(rotation);
 				
-				ImGui::DragFloat3("Scale", &transform.Scale[0], .01f);
+				ImGui::DragFloat3("Scale", &transform.scale[0], .01f);
 				ImGui::Separator();
 			}
 			
@@ -40,7 +40,7 @@ namespace DuskEngine
 				ImGui::Separator();
 
 				ImGui::Text("Material");
-				for(auto uniform : mesh.Mat->m_Uniforms)
+				for(auto uniform : mesh.material->m_Uniforms)
 				{
 					if(uniform.Type == UniformType::Vec3)
 					{
@@ -56,7 +56,7 @@ namespace DuskEngine
 							nfdresult_t result = NFD_OpenDialog("png;jpg", NULL, &path);
 							if (result == NFD_OKAY)
 							{
-								mesh.Mat->SetTexture(uniform.Name, Texture::Create(path));
+								mesh.material->SetTexture(uniform.Name, Texture::Create(path));
 								free(path);
 							}
 						}
@@ -69,7 +69,7 @@ namespace DuskEngine
 			{
 				auto& camera = m_Entity->GetComponent<Camera>();
 				ImGui::Text("Camera");
-				ImGui::Checkbox("Primary Camera", &camera.MainCamera);
+				ImGui::Checkbox("Primary Camera", &camera.main);
 
 				ImGui::Separator();
 			}

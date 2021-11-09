@@ -15,12 +15,12 @@ namespace DuskEngine
 		void Bind() const override;
 		void Unbind() const override;
 
-		void AddBuffer(const std::shared_ptr<VertexBuffer>& vb) override;
-		void AddIndices(const std::shared_ptr<IndexBuffer>& ib) override;
-		const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
+		void AddBuffer(const Ref<VertexBuffer>& vb) override;
+		void AddIndices(const Ref<IndexBuffer>& ib) override;
+		const Ref<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
 	private:
 		unsigned int m_ID;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;
-		std::shared_ptr<VertexBuffer> m_VertexBuffer;
+		Ref<IndexBuffer> m_IndexBuffer;
+		Ref<VertexBuffer> m_VertexBuffer;
 	};
 }

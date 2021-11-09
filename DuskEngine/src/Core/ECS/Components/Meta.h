@@ -6,10 +6,10 @@ namespace DuskEngine
 {
 	struct Meta
 	{
-		std::string Name;
+		std::string name;
 
 		Meta() = default;
 		Meta(const std::string& name)
-			:Name(name) {}
+			:name(name) {}
 	};
 }

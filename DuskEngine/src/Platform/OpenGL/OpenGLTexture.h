@@ -1,7 +1,6 @@
 #pragma once
 #include "Core/Renderer/Resources/Texture.h"
 
-
 namespace DuskEngine
 {
 	class OpenGLTexture : public Texture

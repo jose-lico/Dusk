@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Texture.h"
 
-#include "../RendererContext.h"
+#include "Core/Renderer/RendererContext.h"
 
 #include "Platform/OpenGL/OpenGLTexture.h"
 

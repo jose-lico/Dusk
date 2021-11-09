@@ -50,7 +50,7 @@ namespace DuskEngine
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void OpenGLFramebuffer::Resize(glm::vec2 viewportSize)
+	void OpenGLFramebuffer::Resize(glm::vec2& viewportSize)
 	{
 		m_Spec.Width = (unsigned int)viewportSize.x;
 		m_Spec.Height = (unsigned int)viewportSize.y;

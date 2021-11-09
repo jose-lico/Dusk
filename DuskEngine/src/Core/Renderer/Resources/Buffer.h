@@ -1,7 +1,8 @@
 #pragma once
-#include "../../Macros/DUSK_API.h"
+#include "Core/Macros/DUSK_API.h"
 
-#include <memory>
+#include "Utils/Memory/Memory.h"
+
 #include <vector>
 
 namespace DuskEngine
@@ -60,8 +61,8 @@ namespace DuskEngine
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		virtual const std::shared_ptr<VertexBufferLayout>& GetLayout() const = 0;
-		virtual void SetLayout(const std::shared_ptr<VertexBufferLayout>& layout) = 0;
+		virtual const Ref<VertexBufferLayout>& GetLayout() const = 0;
+		virtual void SetLayout(const Ref<VertexBufferLayout>& layout) = 0;
 
 		static VertexBuffer* Create(const void* data, int size);
 	};

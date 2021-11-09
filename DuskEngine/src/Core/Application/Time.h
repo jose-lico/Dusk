@@ -6,7 +6,6 @@ namespace DuskEngine
 	class DUSK_EXPORT Time
 	{
 	public:
-		static void Init();
 		static void Update();
 		static float GetDeltaTime() { return m_DeltaTime; }
 		static float GetTime() { return m_Time; }

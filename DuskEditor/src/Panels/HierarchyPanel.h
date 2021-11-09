@@ -9,7 +9,7 @@ namespace DuskEngine
 	class HierarchyPanel : public Panel
 	{
 	public:
-		HierarchyPanel(std::shared_ptr<Scene>& scene, InspectorPanel* inspector);
+		HierarchyPanel(std::shared_ptr<Scene>& scene, InspectorPanel& inspector);
 		~HierarchyPanel();
 
 		virtual void OnImGuiRender() override;

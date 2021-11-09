@@ -14,7 +14,6 @@ namespace DuskEngine
 
 	EditorLayer::~EditorLayer()
 	{
-		inspector.release();
 		for (Panel* panel : m_Panels)
 		{
 			delete panel;
@@ -28,7 +27,7 @@ namespace DuskEngine
 		fbSpec.Height = 480;
 		m_FB.reset(FrameBuffer::Create(fbSpec));
 
-		m_Scene = std::make_shared<Scene>();
+		m_Scene = MakeRef<Scene>();
 
 		Ref<Material> cubeMaterial = MakeRef<Material>(Shader::Create("res/shaders/phong.glsl"));
 		Ref<Material> quadMaterial = MakeRef<Material>(Shader::Create("res/shaders/simpleTexture.glsl"));
@@ -40,24 +39,24 @@ namespace DuskEngine
 		quad.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), quadMaterial);
 		
 		auto cube = m_Scene->CreateEntity("Lit Cube");
-		cube.GetComponent<Transform>().Position = { -2.0f, 0.0f, 0.0f };
+		cube.GetComponent<Transform>().position = { -2.0f, 0.0f, 0.0f };
 		cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), cubeMaterial);
 		
 		camera = m_Scene->CreateEntity("Editor Camera");
-		camera.AddComponent<Camera>().ProjectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
+		camera.AddComponent<Camera>().projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
 		auto& cameraTransform = camera.GetComponent<Transform>();
-		cameraTransform.Position = glm::vec3(0.0f, 0.0f, 3.0f);
-		cameraTransform.Rotation = glm::radians(glm::vec3(0.0f, -90.0f, 0.0f));
+		cameraTransform.position = glm::vec3(0.0f, 0.0f, 3.0f);
+		cameraTransform.rotation = glm::radians(glm::vec3(0.0f, -90.0f, 0.0f));
 		
 		auto light = m_Scene->CreateEntity("Directional Light");
-		light.AddComponent<Light>().Color = {1.0f, 1.0f, 1.0f};
+		light.AddComponent<Light>().color = {1.0f, 1.0f, 1.0f};
 		auto& lightTransform = light.GetComponent<Transform>();
-		lightTransform.Position = { -2.0f, 1.0f, 1.0f };
-		lightTransform.Rotation = glm::radians(glm::vec3(-15.0f,-40.0f, 0.0f));
+		lightTransform.position = { -2.0f, 1.0f, 1.0f };
+		lightTransform.rotation = glm::radians(glm::vec3(-15.0f,-40.0f, 0.0f));
 
-		inspector = std::make_unique<InspectorPanel>();
-		m_Panels.push_back(inspector.get());
-		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector.get()));
+		m_Panels.push_back(new InspectorPanel());
+		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
+		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector));
 		m_Panels.push_back(new SceneViewportPanel(m_FB, camera));
 		m_Panels.push_back(new ConsolePanel());
 	}
@@ -65,8 +64,6 @@ namespace DuskEngine
 	void EditorLayer::OnUpdate()
 	{
 		m_FB->Bind();
-		RenderCommand::SetClearColor({ 0.3f, 0.3f, 0.3f, 1 });
-		RenderCommand::Clear();
 
 		EditorCamera();
 
@@ -92,26 +89,26 @@ namespace DuskEngine
 	void EditorLayer::EditorCamera()
 	{
 		auto& transform = camera.GetComponent<Transform>();
-		glm::vec3 pos = transform.Position;
+		glm::vec3 pos = transform.position;
 		
 		float velocity = 3.0f * Time::GetDeltaTime();
 
 		if (Input::IsKeyPressed(Key::W))
-			pos += transform.Front * velocity;
+			pos += transform.front * velocity;
 		else if (Input::IsKeyPressed(Key::S))
-			pos -= transform.Front * velocity;
+			pos -= transform.front * velocity;
 
 		if (Input::IsKeyPressed(Key::D))
-			pos += transform.Right * velocity;
+			pos += transform.right * velocity;
 		else if (Input::IsKeyPressed(Key::A))
-			pos -= transform.Right * velocity;
+			pos -= transform.right * velocity;
 
 		if (Input::IsKeyPressed(Key::E))
 			pos.y += velocity;
 		else if (Input::IsKeyPressed(Key::Q))
 			pos.y -= velocity;
 
-		transform.Position = pos;
+		transform.position = pos;
 
 		if (!movingCamera && Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
 		{
@@ -127,7 +124,7 @@ namespace DuskEngine
 
 		if (movingCamera)
 		{
-			glm::vec3 rot = transform.Rotation;
+			glm::vec3 rot = transform.rotation;
 
 			if (firstMouse)
 			{
@@ -147,7 +144,7 @@ namespace DuskEngine
 
 			rot.x += yoffset;
 			rot.y += xoffset;
-			transform.Rotation = rot;
+			transform.rotation = rot;
 		}
 	}
 }

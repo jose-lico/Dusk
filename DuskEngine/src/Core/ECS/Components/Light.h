@@ -6,6 +6,6 @@ namespace DuskEngine
 {
 	struct Light
 	{
-		glm::vec3 Color;
+		glm::vec3 color;
 	};
 }

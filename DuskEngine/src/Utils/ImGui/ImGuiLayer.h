@@ -6,8 +6,8 @@ namespace DuskEngine
 	class ImGuiLayer : public Layer
 	{
 	public:
-		ImGuiLayer() = default;
-		~ImGuiLayer() = default;
+		ImGuiLayer();
+		~ImGuiLayer();
 
 		void OnAttach() override;
 		void OnDetach() override;

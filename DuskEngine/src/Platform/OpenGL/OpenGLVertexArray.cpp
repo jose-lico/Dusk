@@ -44,13 +44,13 @@ namespace DuskEngine
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddIndices(const std::shared_ptr<IndexBuffer>& ib)
+	void OpenGLVertexArray::AddIndices(const Ref<IndexBuffer>& ib)
 	{
 		ib->Bind();
 		m_IndexBuffer = ib;
 	}
 
-	void OpenGLVertexArray::AddBuffer(const std::shared_ptr<VertexBuffer>& vb)
+	void OpenGLVertexArray::AddBuffer(const Ref<VertexBuffer>& vb)
 	{
 		vb->Bind();
 		m_VertexBuffer = vb;
