@@ -30,6 +30,7 @@ in vec3 FragPos;
 out vec4 FragColor;
 
 uniform sampler2D u_Diffuse;
+uniform vec3 u_DiffuseColor;
 uniform sampler2D u_Specular;
 
 uniform vec3 e_LightDirection; // front vector for directional light
@@ -43,7 +44,7 @@ void main()
     vec3 ambient = e_LightColor * vec3(texture(u_Diffuse, TexCoords)) * ambientStrength;
 
     vec3 lightDir = normalize(-e_LightDirection);
-    vec3 diffuse = e_LightColor * max(dot(normalize(Normal), lightDir), 0.0) * vec3(texture(u_Diffuse, TexCoords));
+    vec3 diffuse = e_LightColor * max(dot(normalize(Normal), lightDir), 0.0) * vec3(texture(u_Diffuse, TexCoords)) * u_DiffuseColor;
 
     float specularStrength = 0.5;
 	vec3 reflectDir = reflect(-lightDir, Normal);

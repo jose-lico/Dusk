@@ -5,7 +5,7 @@
 
 namespace DuskEngine
 {
-	Material::Material(std::shared_ptr<Shader>& shader, const std::string& name)
+	Material::Material(Ref<Shader>& shader, const std::string& name)
 		:m_Shader(shader)
 	{
 		if (name.empty())
@@ -55,7 +55,7 @@ namespace DuskEngine
 	void Material::SetFloat(const std::string& name, float f)
 	{
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
-			m_UniformsMap[name]->Data = std::make_shared<float>(f);
+			m_UniformsMap[name]->Data = MakeRef<float>(f);
 		else
 			LOG("Uniform doesnt exist")
 	}
@@ -91,6 +91,25 @@ namespace DuskEngine
 		for (auto& uniform : m_Uniforms)
 		{
 			m_UniformsMap[uniform.Name] = &uniform;
+		}
+
+		UniformsDefaultValue();
+	}
+
+	void Material::UniformsDefaultValue()
+	{
+		for (auto& uniform : m_Uniforms)
+		{
+			// switch uniform type
+			switch (uniform.Type)
+			{
+			case UniformType::Vec3:
+				uniform.Data = MakeRef<glm::vec3>(1.0);
+				break;
+			case UniformType::Texture:
+				uniform.Data = Texture::Create("res/textures/white.png");
+				break;
+			}
 		}
 	}
 }

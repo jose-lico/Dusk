@@ -38,8 +38,30 @@ namespace DuskEngine
 				ImGui::Text("Mesh");
 				
 				ImGui::Separator();
-
 				ImGui::Text(mesh.material->GetName().c_str());
+
+				const char* shaders[] = { "phong.glsl", "simpleColor.glsl", "simpleTexture.glsl" };
+				static int item_current_idx = 0; // Here we store our selection data as an index.
+				const char* combo_label = shaders[item_current_idx];  // Label to preview before opening the combo (technically it could be anything)
+				if (ImGui::BeginCombo("Shader", combo_label))
+				{
+					for (int n = 0; n < IM_ARRAYSIZE(shaders); n++)
+					{
+						const bool is_selected = (item_current_idx == n);
+						if (ImGui::Selectable(shaders[n], is_selected))
+						{
+							item_current_idx = n;
+							std::string s = shaders[n];
+							mesh.material = MakeRef<Material>(Shader::Create("res/shaders/" + s));
+							mesh.material->UniformsDefaultValue();
+						}
+
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();
+					}
+					ImGui::EndCombo();
+				}
+
 				for(auto uniform : mesh.material->m_Uniforms)
 				{
 					if(uniform.Type == UniformType::Vec3)

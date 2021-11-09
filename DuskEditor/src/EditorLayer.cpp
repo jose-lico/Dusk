@@ -29,7 +29,7 @@ namespace DuskEngine
 
 		m_Scene = MakeRef<Scene>();
 
-		Ref<Material> cubeMaterial = MakeRef<Material>(Shader::Create("res/shaders/phong.glsl"), "Phong-Material");
+		Ref<Material> cubeMaterial = MakeRef<Material>(Shader::Create("res/shaders/phong.glsl"), "Phong Material");
 		Ref<Material> quadMaterial = MakeRef<Material>(Shader::Create("res/shaders/simpleTexture.glsl"));
 		cubeMaterial->SetTexture("Diffuse", Texture::Create("res/textures/diffuse.png"));
 		cubeMaterial->SetTexture("Specular", Texture::Create("res/textures/specular.png"));
