@@ -90,7 +90,8 @@ namespace DuskEngine
 		model = new Model("res/models/teapot.fbx");
 
 		auto modelTeste = m_Scene->CreateEntity("Model");
-		auto& modelMesh = modelTeste.AddComponent<MeshRenderer>(model->m_Meshes[0], lightMaterial);
+		modelTeste.GetComponent<Transform>().position = { 2.0f, -.75f, 0.0f };
+		modelTeste.AddComponent<MeshRenderer>(model->m_Meshes[0], MakeRef<Material>(Shader::Create("res/shaders/phong.glsl"), "Phong Material"));
 	}
 
 	void EditorLayer::OnUpdate()
