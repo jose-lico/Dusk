@@ -9,6 +9,7 @@
 #include "Core/Renderer/Resources/Material.h"
 #include "Core/Renderer/Resources/Texture.h"
 #include "Core/Renderer/Resources/Framebuffer.h"
+#include "Core/Renderer/Resources/Model.h"
 
 #include "Core/Macros/LOG.h"
 #include "Core/Application/Input.h"

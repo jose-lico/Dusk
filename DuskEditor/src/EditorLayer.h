@@ -24,6 +24,8 @@ namespace DuskEngine
 
 		Entity camera;
 		
+		Model* model;
+
 		// camera stuff remove later
 		bool movingCamera = false;
 		bool firstMouse = false;

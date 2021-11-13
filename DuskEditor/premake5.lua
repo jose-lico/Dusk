@@ -26,7 +26,8 @@ project "DuskEditor"
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/imgui",
 		dependenciesDir .. "/entt/src",
-		dependenciesDir .. "/nativefiledialog/src/include"
+		dependenciesDir .. "/nativefiledialog/src/include",
+		dependenciesDir .. "/assimp/include"
 	}
 
 	defines

@@ -10,6 +10,8 @@ namespace DuskEngine
 		CREATE_APP_LOGGER
 		APP_TRACE("Tracing from the app")
 		APP_LOG("Logging from the app")
+
+		
 	}
 
 	EditorLayer::~EditorLayer()
@@ -18,6 +20,8 @@ namespace DuskEngine
 		{
 			delete panel;
 		}
+
+		delete model;
 	}
 
 	void EditorLayer::OnAttach()
@@ -82,6 +86,11 @@ namespace DuskEngine
 		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector));
 		m_Panels.push_back(new SceneViewportPanel(m_FB, camera));
 		m_Panels.push_back(new ConsolePanel());
+
+		model = new Model("res/models/teapot.fbx");
+
+		auto modelTeste = m_Scene->CreateEntity("Model");
+		auto& modelMesh = modelTeste.AddComponent<MeshRenderer>(model->m_Meshes[0], lightMaterial);
 	}
 
 	void EditorLayer::OnUpdate()

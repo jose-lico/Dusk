@@ -25,14 +25,21 @@ project "DuskEngine"
 		dependenciesDir .. "/stb",
 		dependenciesDir .. "/imgui",
 		dependenciesDir .. "/spdlog/include",
-		dependenciesDir .. "/entt/src"
+		dependenciesDir .. "/entt/src",
+		dependenciesDir .. "/assimp/include"
 	}
 
 	links
 	{
 		"glfw3",
 		"glew",
-		"ImGui"
+		"ImGui",
+		"assimp-vc140-mt"
+	}
+
+	libdirs 
+	{
+		dependenciesDir .. "/assimp"
 	}
 
 	defines
@@ -64,10 +71,10 @@ project "DuskEngine"
 			"4005" 
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
-		}
+		-- postbuildcommands
+		-- {
+		-- 	("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
+		-- }
 
 	filter "system:linux"
 		cppdialect "C++17"
