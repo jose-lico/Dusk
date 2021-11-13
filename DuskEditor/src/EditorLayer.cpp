@@ -48,11 +48,34 @@ namespace DuskEngine
 		cameraTransform.position = glm::vec3(0.0f, 0.0f, 3.0f);
 		cameraTransform.rotation = glm::radians(glm::vec3(0.0f, -90.0f, 0.0f));
 		
-		auto light = m_Scene->CreateEntity("Directional Light");
-		light.AddComponent<Light>().color = {1.0f, 1.0f, 1.0f};
+		Ref<Material> lightMaterial = MakeRef<Material>(Shader::Create("res/shaders/simpleColor.glsl"));
+		auto light = m_Scene->CreateEntity("Point Light");
+		auto& l = light.AddComponent<Light>();
+		l.color = { 1.0f, 1.0f, 1.0f };
+		l.type = LightType::Point;
 		auto& lightTransform = light.GetComponent<Transform>();
 		lightTransform.position = { -2.0f, 1.0f, 1.0f };
-		lightTransform.rotation = glm::radians(glm::vec3(-15.0f,-40.0f, 0.0f));
+		lightTransform.scale = { 0.1f, 0.1f, 0.1f };
+		light.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), lightMaterial);
+
+		auto light2 = m_Scene->CreateEntity("Point Light 2");
+		auto& l2 = light2.AddComponent<Light>();
+		l2.color = { 1.0f, 0.0f, 0.0f };
+		l2.type = LightType::Point;
+		auto& lightTransform2 = light2.GetComponent<Transform>();
+		lightTransform2.position = { 2.0f, 1.0f, 1.0f };
+		lightTransform2.scale = { 0.1f, 0.1f, 0.1f };
+		light2.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), lightMaterial);
+
+		auto light3 = m_Scene->CreateEntity("Directional Light");
+		auto& l3 = light3.AddComponent<Light>();
+		l3.color = { 1.0f, 1.0f, 1.0f };
+		l3.type = LightType::Directional;
+		auto& lightTransform3 = light3.GetComponent<Transform>();
+		lightTransform3.position = { -3.0f, 1.0f, 1.0f };
+		lightTransform3.scale = { 0.1f, 0.1f, 0.1f };
+		lightTransform3.rotation = glm::radians(glm::vec3(-15.0f, -40.0f, 0.0f));
+		light3.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), lightMaterial);
 
 		m_Panels.push_back(new InspectorPanel());
 		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();

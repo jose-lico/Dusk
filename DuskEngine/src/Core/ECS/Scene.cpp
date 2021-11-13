@@ -93,15 +93,39 @@ namespace DuskEngine
 				mesh.material->m_Shader->SetUniformVec3("e_ViewPosition", cameraPos);
 
 				auto lights = m_Registry.view<Light>();
-				
-				for(auto light : lights)
-				{  
-					auto& lightTransform = m_Registry.get<Transform>(light);
-					glm::vec3 lightColor = m_Registry.get<Light>(light).color;
-					mesh.material->m_Shader->SetUniformVec3("e_LightPosition", lightTransform.position);
-					mesh.material->m_Shader->SetUniformVec3("e_LightDirection", lightTransform.front);
-					mesh.material->m_Shader->SetUniformVec3("e_LightColor", lightColor);
+
+				int dirLightIndex = 0;
+				int pointLightIndex = 0;
+
+				// this is very dodgy, redo later, probably with specific structs for each light
+
+				for (size_t i = 0; i < 8; i++) // max lights
+				{
+					mesh.material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(i) + "].Color", glm::vec3(0.0));
+					mesh.material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(i) + "].Color", glm::vec3(0.0));
 				}
+
+				for (auto light : lights)
+				{
+					auto& [l, t] = m_Registry.get<Light, Transform>(light);
+					glm::vec3 lightColor = l.color;
+					switch(l.type)
+					{
+						case LightType::Directional:
+							mesh.material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(dirLightIndex) + "].Color", lightColor);
+							mesh.material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(dirLightIndex++) + "].Direction", t.front);
+							break;
+						case LightType::Point:
+							mesh.material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(pointLightIndex) + "].Color", lightColor);
+							mesh.material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(pointLightIndex++) + "].Position", t.position);
+							break;
+						case LightType::Spot:
+							break;
+					}
+				}
+
+				mesh.material->m_Shader->SetUniformInt("e_DirectionalLightsCount", dirLightIndex);
+				mesh.material->m_Shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
 
 				Renderer::Submit(mesh.mesh);
 			}

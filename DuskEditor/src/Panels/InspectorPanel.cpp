@@ -41,8 +41,8 @@ namespace DuskEngine
 				ImGui::Text(mesh.material->GetName().c_str());
 
 				const char* shaders[] = { "phong.glsl", "simpleColor.glsl", "simpleTexture.glsl" };
-				static int item_current_idx = 0; // Here we store our selection data as an index.
-				const char* combo_label = shaders[item_current_idx];  // Label to preview before opening the combo (technically it could be anything)
+				static int item_current_idx = 0;
+				const char* combo_label = shaders[item_current_idx];
 				if (ImGui::BeginCombo("Shader", combo_label))
 				{
 					for (int n = 0; n < IM_ARRAYSIZE(shaders); n++)
@@ -50,10 +50,13 @@ namespace DuskEngine
 						const bool is_selected = (item_current_idx == n);
 						if (ImGui::Selectable(shaders[n], is_selected))
 						{
-							item_current_idx = n;
-							std::string s = shaders[n];
-							mesh.material = MakeRef<Material>(Shader::Create("res/shaders/" + s));
-							mesh.material->UniformsDefaultValue();
+							if (n != item_current_idx)
+							{
+								item_current_idx = n;
+								std::string s = shaders[n];
+								mesh.material = MakeRef<Material>(Shader::Create("res/shaders/" + s));
+								mesh.material->UniformsDefaultValue();
+							}
 						}
 
 						if (is_selected)
@@ -93,6 +96,40 @@ namespace DuskEngine
 				ImGui::Text("Camera");
 				ImGui::Checkbox("Primary Camera", &camera.main);
 
+				ImGui::Separator();
+			}
+
+			if (m_Entity->HasComponent<Light>())
+			{
+				auto& light = m_Entity->GetComponent<Light>();
+				ImGui::Text("Light");
+				ImGui::ColorEdit3("Light Color", &light.color[0]);
+
+				const char* types[] = { "Directional", "Point"};
+				static int item_current_idx = 0;
+				const char* combo_label = types[item_current_idx];
+				if (ImGui::BeginCombo("Type", combo_label))
+				{
+					for (int n = 0; n < IM_ARRAYSIZE(types); n++)
+					{
+						const bool is_selected = (item_current_idx == n);
+						if (ImGui::Selectable(types[n], is_selected))
+						{
+							if (n != item_current_idx)
+							{
+								item_current_idx = n;
+								if(types[n] == "Directional")
+									light.type = LightType::Directional;
+								if(types[n] == "Point")
+									light.type = LightType::Point;
+							}
+						}
+
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();
+					}
+					ImGui::EndCombo();
+				}
 				ImGui::Separator();
 			}
 		}
