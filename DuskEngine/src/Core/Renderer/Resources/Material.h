@@ -47,6 +47,7 @@ namespace DuskEngine
 		// Map is for direct access to set uniform values
 		std::unordered_map<std::string, Uniform*> m_UniformsMap;
 
+
 		// Vector is where the actual uniform values are located, for iteration - editor drawing and sending to shader
 		std::vector<Uniform> m_Uniforms;
 

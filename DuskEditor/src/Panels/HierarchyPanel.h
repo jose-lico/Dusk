@@ -9,15 +9,17 @@ namespace DuskEngine
 	class HierarchyPanel : public Panel
 	{
 	public:
-		HierarchyPanel(std::shared_ptr<Scene>& scene, InspectorPanel& inspector);
+		HierarchyPanel(Ref<Scene>& scene, InspectorPanel& inspector);
 		~HierarchyPanel();
 
 		virtual void OnImGuiRender() override;
 	private:
-		std::shared_ptr<Scene> m_Scene;
-		friend class Scene;
-
+		Ref<Scene> m_Scene;
 		InspectorPanel* m_Inspector;
-		Entity* m_InspectedEntity = nullptr;
+
+		std::vector<bool> m_SelectableStatus;
+		std::vector<Entity*> m_SelectedEntities;
+
+		friend class Scene;
 	};
 }

@@ -5,7 +5,7 @@
 
 namespace DuskEngine
 {
-	SceneViewportPanel::SceneViewportPanel(std::shared_ptr<FrameBuffer>& fb, Entity camera)
+	SceneViewportPanel::SceneViewportPanel(Ref<FrameBuffer>& fb, Entity camera)
 	{
 		m_ViewportSize = glm::vec2(0.0f);
 		m_FB = fb;

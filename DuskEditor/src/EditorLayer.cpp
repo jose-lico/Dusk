@@ -81,17 +81,17 @@ namespace DuskEngine
 		lightTransform3.rotation = glm::radians(glm::vec3(-15.0f, -40.0f, 0.0f));
 		light3.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), lightMaterial);
 
-		m_Panels.push_back(new InspectorPanel());
-		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
-		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector));
-		m_Panels.push_back(new SceneViewportPanel(m_FB, camera));
-		m_Panels.push_back(new ConsolePanel());
-
 		model = new Model("res/models/teapot.fbx");
 
 		auto modelTeste = m_Scene->CreateEntity("Model");
 		modelTeste.GetComponent<Transform>().position = { 2.0f, -.75f, 0.0f };
 		modelTeste.AddComponent<MeshRenderer>(model->m_Meshes[0], MakeRef<Material>(Shader::Create("res/shaders/phong.glsl"), "Phong Material"));
+
+		m_Panels.push_back(new InspectorPanel());
+		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
+		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector));
+		m_Panels.push_back(new SceneViewportPanel(m_FB, camera));
+		m_Panels.push_back(new ConsolePanel());
 	}
 
 	void EditorLayer::OnUpdate()

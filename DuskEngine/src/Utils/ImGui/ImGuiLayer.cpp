@@ -33,7 +33,7 @@ namespace DuskEngine
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
 		//ImGui::StyleColorsDark();
-		ImGui::StyleColorsClassic();
+		//ImGui::StyleColorsClassic();
 
 		ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)WindowManager::GetWindow()->GetNativeHandle(), true);
 		ImGui_ImplOpenGL3_Init("#version 410");
