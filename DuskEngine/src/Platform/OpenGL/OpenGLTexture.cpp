@@ -14,7 +14,7 @@ namespace DuskEngine
         if (name.empty()) 
         {
             std::string::size_type begin = filepath.rfind("/") + 1;
-            std::string::size_type end = filepath.find(".");
+            std::string::size_type end = filepath.rfind(".");
             std::string filename = filepath.substr(begin, end - begin);
             m_Name = filename;
         }
