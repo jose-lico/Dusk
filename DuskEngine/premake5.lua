@@ -26,7 +26,7 @@ project "DuskEngine"
 		dependenciesDir .. "/imgui",
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/entt/src",
-		dependenciesDir .. "/assimp/include"
+		dependenciesDir .. "/assimp-1/include"
 	}
 
 	links
@@ -34,12 +34,7 @@ project "DuskEngine"
 		"glfw3",
 		"glew",
 		"ImGui",
-		"assimp-vc140-mt"
-	}
-
-	libdirs 
-	{
-		dependenciesDir .. "/assimp"
+		"assimp"
 	}
 
 	defines
@@ -57,7 +52,7 @@ project "DuskEngine"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "off"
+		staticruntime "on"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
 

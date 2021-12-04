@@ -28,3 +28,6 @@
 	ignore = dirty
 	path = Dependencies/nativefiledialog
 	url = https://github.com/qolisipo/nativefiledialog
+[submodule "Dependencies/assimp-1"]
+	path = Dependencies/assimp-1
+	url = https://github.com/qolisipo/assimp-1

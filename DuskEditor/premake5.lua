@@ -27,7 +27,7 @@ project "DuskEditor"
 		dependenciesDir .. "/imgui",
 		dependenciesDir .. "/entt/src",
 		dependenciesDir .. "/nativefiledialog/src/include",
-		dependenciesDir .. "/assimp/include"
+		dependenciesDir .. "/assimp-1/include"
 	}
 
 	defines
@@ -38,7 +38,7 @@ project "DuskEditor"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "off"
+		staticruntime "on"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
 
