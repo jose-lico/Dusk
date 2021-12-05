@@ -12,8 +12,8 @@ project "DuskEngine"
 	{
 		"src/**.h",
 		"src/**.cpp",
-		dependenciesDir .. "/stb/stb_image.h",
-		dependenciesDir .. "/stb/stb_image.cpp"
+		
+		dependenciesDir .. "/stb/stb/stb_image.h"
 	}
 
 	includedirs

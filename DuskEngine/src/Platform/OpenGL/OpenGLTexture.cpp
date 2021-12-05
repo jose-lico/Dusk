@@ -4,7 +4,7 @@
 
 #include "Core/Macros/LOG.h"
 
-#include <stb_image.h>
+#include <stb/stb_image.h>
 
 namespace DuskEngine
 {
