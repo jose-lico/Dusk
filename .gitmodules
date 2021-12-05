@@ -1,17 +1,10 @@
 [submodule "Dependencies/glfw"]
-	ignore = dirty
 	path = Dependencies/glfw
 	url = https://github.com/qolisipo/glfw
 [submodule "Dependencies/glew"]
-	ignore = dirty
 	path = Dependencies/glew
 	url = https://github.com/qolisipo/glew
-[submodule "Dependencies/glm"]
-	ignore = dirty
-	path = Dependencies/glm
-	url = https://github.com/g-truc/glm
 [submodule "Dependencies/imgui"]
-	ignore = dirty
 	path = Dependencies/imgui
 	url = https://github.com/qolisipo/imgui
 [submodule "Dependencies/spdlog"]
@@ -21,7 +14,6 @@
 	path = Dependencies/entt
 	url = https://github.com/skypjack/entt
 [submodule "Dependencies/nativefiledialog"]
-	ignore = dirty
 	path = Dependencies/nativefiledialog
 	url = https://github.com/qolisipo/nativefiledialog
 [submodule "Dependencies/assimp-1"]
