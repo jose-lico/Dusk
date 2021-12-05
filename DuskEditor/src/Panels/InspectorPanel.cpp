@@ -4,7 +4,7 @@
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
-#include <nfd.h>
+#include <nfd/nfd.h>
 
 namespace DuskEngine
 {
