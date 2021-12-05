@@ -21,9 +21,9 @@ project "DuskEngine"
 		"src",
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
-		dependenciesDir .. "/glm",
+		dependenciesDir .. "/glm/include",
 		dependenciesDir .. "/stb",
-		dependenciesDir .. "/imgui",
+		dependenciesDir .. "/imgui/include",
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/entt/src",
 		dependenciesDir .. "/assimp-1/include"

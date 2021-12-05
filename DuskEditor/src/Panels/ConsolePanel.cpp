@@ -1,6 +1,6 @@
 #include "ConsolePanel.h"
 
-#include <imgui.h>
+#include <imgui/imgui.h>
 
 namespace DuskEngine
 {

@@ -22,9 +22,9 @@ project "DuskEditor"
 		"%{wks.location}/DuskEngine/src",
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
-		dependenciesDir .. "/glm",
+		dependenciesDir .. "/glm/include",
 		dependenciesDir .. "/spdlog/include",
-		dependenciesDir .. "/imgui",
+		dependenciesDir .. "/imgui/include",
 		dependenciesDir .. "/entt/src",
 		dependenciesDir .. "/nativefiledialog/src/include",
 		dependenciesDir .. "/assimp-1/include"

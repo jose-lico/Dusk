@@ -1,6 +1,6 @@
 #include "HierarchyPanel.h"
 
-#include "imgui.h"
+#include <imgui/imgui.h>
 
 namespace DuskEngine
 {

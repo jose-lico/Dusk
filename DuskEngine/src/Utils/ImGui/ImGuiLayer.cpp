@@ -4,11 +4,11 @@
 
 #include "Utils/Window/WindowManager.h"
 
-#include <imgui.h>
+#include <imgui/imgui.h>
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
-#include <backends/imgui_impl_opengl3.cpp>
-#include <backends/imgui_impl_glfw.cpp>
+#include <../backends/imgui_impl_opengl3.cpp>
+#include <../backends/imgui_impl_glfw.cpp>
 
 namespace DuskEngine
 {
