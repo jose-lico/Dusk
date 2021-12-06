@@ -1,5 +1,7 @@
 #include "Dockspace.h"
 
+#include "DuskEngine.h"
+
 #include <imgui/imgui.h>
 
 static bool p_open = true;
@@ -63,6 +65,15 @@ namespace DuskEngine
 
 				if (ImGui::MenuItem("Close", NULL, false, p_open != NULL))
 					*(&p_open) = false;
+				ImGui::EndMenu();
+			}
+
+			if((ImGui::BeginMenu("Project")))
+			{
+				if(ImGui::MenuItem("Test", "Ctrl + Space"))
+				{
+					APP_LOG("Hello", "Space")
+				}
 				ImGui::EndMenu();
 			}
 

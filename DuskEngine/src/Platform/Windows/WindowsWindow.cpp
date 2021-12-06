@@ -10,7 +10,8 @@ namespace DuskEngine
 		m_Data = data;
 
 		glfwInit();
-		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL);
+		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL); // size currently irrelevant cuz maximized
+		glfwMaximizeWindow(m_Window);
 
 		if (!m_Window)
 		{
