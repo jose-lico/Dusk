@@ -20,7 +20,7 @@ end
 	include "Dependencies/imgui"
 	include "Dependencies/assimp-1"
 	include "Dependencies/nativefiledialog/build"
-
+	include "Dependencies/yaml-cpp"
 if _ACTION ~= "gmake2" then
 	group "Engine"
 end

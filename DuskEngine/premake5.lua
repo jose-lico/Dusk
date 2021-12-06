@@ -26,7 +26,8 @@ project "DuskEngine"
 		dependenciesDir .. "/imgui/include",
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/entt/src",
-		dependenciesDir .. "/assimp-1/include"
+		dependenciesDir .. "/assimp-1/include",
+		dependenciesDir .. "/yaml-cpp/include"
 	}
 
 	links
@@ -34,7 +35,8 @@ project "DuskEngine"
 		"glfw3",
 		"glew",
 		"ImGui",
-		"assimp"
+		"assimp",
+		"yaml-cpp"
 	}
 
 	defines

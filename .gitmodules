@@ -25,3 +25,6 @@
 [submodule "Dependencies/glm"]
 	path = Dependencies/glm
 	url = https://github.com/qolisipo/glm
+[submodule "Dependencies/yaml-cpp"]
+	path = Dependencies/yaml-cpp
+	url = https://github.com/qolisipo/yaml-cpp

@@ -27,7 +27,8 @@ project "DuskEditor"
 		dependenciesDir .. "/imgui/include",
 		dependenciesDir .. "/entt/src",
 		dependenciesDir .. "/nativefiledialog/src/include",
-		dependenciesDir .. "/assimp-1/include"
+		dependenciesDir .. "/assimp-1/include",
+		dependenciesDir .. "/yaml-cpp/include"
 	}
 
 	defines
