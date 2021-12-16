@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include <visit_struct/visit_struct.hpp>
+
 namespace DuskEngine
 {
 	struct Meta
@@ -13,3 +15,5 @@ namespace DuskEngine
 			:name(name) {}
 	};
 }
+
+VISITABLE_STRUCT(DuskEngine::Meta, name);

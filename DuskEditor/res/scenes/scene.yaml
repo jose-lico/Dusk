@@ -1,0 +1,51 @@
+Scene: Untitled
+Entities:
+  - Entity: 12837192831273
+    Meta:
+      name: Model
+    Transform:
+      position: [2, -0.75, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+  - Entity: 12837192831273
+    Meta:
+      name: Directional Light
+    Transform:
+      position: [-3, 1, 1]
+      rotation: [-0.261799395, -0.69813168, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+  - Entity: 12837192831273
+    Meta:
+      name: Point Light 2
+    Transform:
+      position: [2, 1, 1]
+      rotation: [0, 0, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+  - Entity: 12837192831273
+    Meta:
+      name: Point Light
+    Transform:
+      position: [-2, 1, 1]
+      rotation: [0, 0, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+  - Entity: 12837192831273
+    Meta:
+      name: Editor Camera
+    Transform:
+      position: [0, 0, 3]
+      rotation: [0, -1.57079637, 0]
+      scale: [1, 1, 1]
+  - Entity: 12837192831273
+    Meta:
+      name: Lit Cube
+    Transform:
+      position: [-2, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+  - Entity: 12837192831273
+    Meta:
+      name: Unlit Quad
+    Transform:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]

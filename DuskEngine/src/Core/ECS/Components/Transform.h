@@ -3,9 +3,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <visit_struct/visit_struct.hpp>
+
 namespace DuskEngine
 {
-	struct Transform
+	struct Transform 
 	{
 		glm::vec3 position = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 rotation = { 0.0f, 0.0f, 0.0f };
@@ -21,5 +23,7 @@ namespace DuskEngine
 		Transform(const Transform&) = default;
 		Transform(const glm::vec3& position)
 			: position(position) {}
-	};
+	};	
 }
+
+VISITABLE_STRUCT(DuskEngine::Transform, position, rotation, scale);

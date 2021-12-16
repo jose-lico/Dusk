@@ -22,3 +22,5 @@
 #include "Core/ECS/Scene.h"
 #include "Core/ECS/Entity.h"
 #include "Core/ECS/Components.h"
+
+#include "Core/Serialization/SceneSerializer.h"

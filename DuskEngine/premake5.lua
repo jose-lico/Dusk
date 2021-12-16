@@ -27,7 +27,8 @@ project "DuskEngine"
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/entt/src",
 		dependenciesDir .. "/assimp-1/include",
-		dependenciesDir .. "/yaml-cpp/include"
+		dependenciesDir .. "/yaml-cpp/include",
+		dependenciesDir .. "/visit_struct/include"
 	}
 
 	links
@@ -48,7 +49,8 @@ project "DuskEngine"
 
 		"GLFW_INCLUDE_NONE",
 		"GLEW_STATIC",
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"YAML_CPP_STATIC_DEFINE"
 	}
 
 
