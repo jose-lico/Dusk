@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include <visit_struct/visit_struct.hpp>
+
 namespace DuskEngine
 {
 	struct Camera	
@@ -13,3 +15,5 @@ namespace DuskEngine
 		bool main = true;
 	};
 }
+
+VISITABLE_STRUCT(DuskEngine::Camera, main);

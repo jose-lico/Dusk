@@ -35,6 +35,8 @@ Entities:
       position: [0, 0, 3]
       rotation: [0, -1.57079637, 0]
       scale: [1, 1, 1]
+    Camera:
+      main: true
   - Entity: 12837192831273
     Meta:
       name: Lit Cube

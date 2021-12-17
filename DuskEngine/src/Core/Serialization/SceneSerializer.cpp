@@ -98,6 +98,7 @@ namespace DuskEngine
 
 				SerializeComponentText<Meta>("Meta", out, entity);
 				SerializeComponentText<Transform>("Transform", out, entity);
+				SerializeComponentText<Camera>("Camera", out, entity);
 
 				out << YAML::EndMap; // Entity
 				
@@ -110,7 +111,6 @@ namespace DuskEngine
     }
 
 	
-
     void SceneSerializer::SerializeBinary(const Ref<Scene>& scene, const std::string& path)
     {
     }

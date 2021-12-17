@@ -29,7 +29,8 @@ project "DuskEditor"
 		dependenciesDir .. "/nativefiledialog/src/include",
 		dependenciesDir .. "/assimp-1/include",
 		dependenciesDir .. "/yaml-cpp/include",
-		dependenciesDir .. "/visit_struct/include"
+		dependenciesDir .. "/visit_struct/include",
+		dependenciesDir .. "/stduuid/include"
 	}
 
 	defines
