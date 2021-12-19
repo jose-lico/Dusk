@@ -99,6 +99,7 @@ namespace DuskEngine
 				SerializeComponentText<Meta>("Meta", out, entity);
 				SerializeComponentText<Transform>("Transform", out, entity);
 				SerializeComponentText<Camera>("Camera", out, entity);
+				SerializeComponentText<MeshRenderer>("MeshRenderer", out, entity);
 
 				out << YAML::EndMap; // Entity
 				

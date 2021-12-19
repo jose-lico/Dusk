@@ -37,6 +37,8 @@ namespace DuskEngine
 		cubeMaterial->SetTexture("Specular", Texture::Create("res/textures/specular.png"));
 		quadMaterial->SetTexture("Texture", Texture::Create("res/textures/uv_mapper.jpg"));
 
+		cubeMaterial->SerializeText("res/materials/cubeMaterial.meta");
+
 		auto quad = m_Scene->CreateEntity("Unlit Quad");
 		quad.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), quadMaterial);
 		

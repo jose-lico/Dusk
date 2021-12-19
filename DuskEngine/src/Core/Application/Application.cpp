@@ -38,6 +38,7 @@ namespace DuskEngine
 		// temp
 
 		ResourceManager r;
+		r.CreateUUIDs();
 		r.LoadUUIDs();
 	}
 

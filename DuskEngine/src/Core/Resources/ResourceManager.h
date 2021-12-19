@@ -15,12 +15,15 @@ namespace DuskEngine
 		~ResourceManager();
 
 		// Loads all UUIDs in the project
+		void CreateUUIDs();
 		void LoadUUIDs();
 
 		// Checks all the UUIDs present in the scene, loads the corresponding resources
 		void LoadResources(Ref<Scene>& scene);
 	private:
 		std::filesystem::path m_CurrentDirectory;
-		//std::unordered_map<uuids::uuid, std::string> m_UUIDsMap;
+
+
+		std::unordered_map<std::string, std::string> m_UUIDsMap;
 	};
 }

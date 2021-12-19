@@ -3,6 +3,8 @@
 
 #include "Core/Macros/LOG.h"
 
+#include <yaml-cpp/yaml.h>
+
 namespace DuskEngine
 {
 	Material::Material(Ref<Shader>& shader, const std::string& name)
@@ -78,6 +80,31 @@ namespace DuskEngine
 			m_UniformsMap[name]->Data = texture;
 		else
 			LOG("Texture '" + name + "' doesnt exist")
+	}
+
+	void Material::SerializeText(const std::string& path)
+	{
+		YAML::Emitter out;
+		out << YAML::BeginMap;
+		out << YAML::Key << "Material" << YAML::Value << m_Name;
+
+		for (auto& uniform : m_Uniforms)
+		{
+			switch (uniform.Type)
+			{
+			case UniformType::Vec3:
+				out << YAML::Key << uniform.Name << YAML::Value << &uniform.Data;
+				break;
+			case UniformType::Texture:
+				out << YAML::Key << uniform.Name << YAML::Value << &uniform.Data;
+				break;
+			}
+		}
+
+		out << YAML::EndMap;
+
+		std::ofstream fout(path);
+		fout << out.c_str();
 	}
 
 	void Material::CreateUniforms()

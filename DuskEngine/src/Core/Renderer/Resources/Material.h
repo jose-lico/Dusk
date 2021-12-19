@@ -39,6 +39,11 @@ namespace DuskEngine
 		
 		const std::string& GetName() const { return m_Name; }
 		void UniformsDefaultValue();
+
+		// Serialization
+
+		void SerializeText(const std::string& path);
+		void DeserializeText(const std::string& path);
 	private:
 		void CreateUniforms();
 		Ref<Shader> m_Shader;
