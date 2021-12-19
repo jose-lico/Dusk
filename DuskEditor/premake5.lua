@@ -30,7 +30,8 @@ project "DuskEditor"
 		dependenciesDir .. "/assimp-1/include",
 		dependenciesDir .. "/yaml-cpp/include",
 		dependenciesDir .. "/visit_struct/include",
-		dependenciesDir .. "/stduuid/include"
+		dependenciesDir .. "/stduuid/include",
+		dependenciesDir .. "/stduuid/gsl"
 	}
 
 	defines

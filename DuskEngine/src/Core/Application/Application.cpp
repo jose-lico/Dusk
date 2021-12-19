@@ -8,6 +8,8 @@
 #include "Core/Renderer/Renderer.h"
 #include "Time.h"
 
+#include "Core/Resources/ResourceManager.h"
+
 namespace DuskEngine
 {
 	Application::Application()
@@ -32,6 +34,11 @@ namespace DuskEngine
 		m_ImGuiLayer = new ImGuiLayer();
 		m_LayerStack.PushOverlay(m_ImGuiLayer);
 		m_ImGuiLayer->OnAttach();
+
+		// temp
+
+		ResourceManager r;
+		r.LoadUUIDs();
 	}
 
 	void Application::Shutdown()
