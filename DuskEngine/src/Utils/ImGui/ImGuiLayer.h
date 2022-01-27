@@ -3,10 +3,12 @@
 
 namespace DuskEngine
 {
+	class Window;
+
 	class ImGuiLayer : public Layer
 	{
 	public:
-		ImGuiLayer();
+		ImGuiLayer(Window* window);
 		~ImGuiLayer();
 
 		void OnAttach() override;
@@ -20,5 +22,8 @@ namespace DuskEngine
 		void ApplyStyle();
 		bool m_ShowDemoWindow = false;
 		bool ActivateDemoWindow(KeyPressedEvent& e);
+
+		// Owned by WindowManager
+		Window* m_Window;
 	};
 }

@@ -24,76 +24,91 @@ namespace DuskEngine
 
 	void EditorLayer::OnAttach()
 	{
-		FramebufferSpecification fbSpec;
-		fbSpec.Width = 720;
-		fbSpec.Height = 480;
-		m_FB.reset(FrameBuffer::Create(fbSpec));
+		{
+			FramebufferSpecification fbSpec;
+			fbSpec.Width = 720;
+			fbSpec.Height = 480;
+			m_FB.reset(FrameBuffer::Create(fbSpec));
+
+			m_Scene = MakeRef<Scene>();
+
+			Ref<Material> cubeMaterial = MakeRef<Material>(Shader::Create("res/shaders/phong.glsl"), "Phong Material");
+			Ref<Material> quadMaterial = MakeRef<Material>(Shader::Create("res/shaders/simpleTexture.glsl"));
+			Ref<Material> modelMaterial = MakeRef<Material>(Shader::Create("res/shaders/phong.glsl"), "Phong Material");
+			Ref<Material> lightMaterial = MakeRef<Material>(Shader::Create("res/shaders/simpleColor.glsl"));
+
+			cubeMaterial->SetTexture("Diffuse", Texture::Create("res/textures/diffuse.png"));
+			cubeMaterial->SetTexture("Specular", Texture::Create("res/textures/specular.png"));
+			quadMaterial->SetTexture("Texture", Texture::Create("res/textures/uv_mapper.jpg"));
+
+			auto quad = m_Scene->CreateEntity("Unlit Quad");
+			quad.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), quadMaterial);
+
+			auto cube = m_Scene->CreateEntity("Lit Cube");
+			cube.GetComponent<Transform>().position = { -2.0f, 0.0f, 0.0f };
+			cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), cubeMaterial);
+
+			camera = m_Scene->CreateEntity("Editor Camera");
+			camera.AddComponent<Camera>().projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
+			auto& cameraTransform = camera.GetComponent<Transform>();
+			cameraTransform.position = glm::vec3(0.0f, 0.0f, 3.0f);
+			cameraTransform.rotation = glm::radians(glm::vec3(0.0f, -90.0f, 0.0f));
+
+			auto light = m_Scene->CreateEntity("Point Light");
+			auto& l = light.AddComponent<Light>();
+			l.color = { 1.0f, 1.0f, 1.0f };
+			l.type = LightType::Point;
+			auto& lightTransform = light.GetComponent<Transform>();
+			lightTransform.position = { -2.0f, 1.0f, 1.0f };
+			lightTransform.scale = { 0.1f, 0.1f, 0.1f };
+			light.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), lightMaterial);
+
+			auto light2 = m_Scene->CreateEntity("Point Light 2");
+			auto& l2 = light2.AddComponent<Light>();
+			l2.color = { 1.0f, 0.0f, 0.0f };
+			l2.type = LightType::Point;
+			auto& lightTransform2 = light2.GetComponent<Transform>();
+			lightTransform2.position = { 2.0f, 1.0f, 1.0f };
+			lightTransform2.scale = { 0.1f, 0.1f, 0.1f };
+			light2.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), lightMaterial);
+
+			auto light3 = m_Scene->CreateEntity("Directional Light");
+			auto& l3 = light3.AddComponent<Light>();
+			l3.color = { 1.0f, 1.0f, 1.0f };
+			l3.type = LightType::Directional;
+			auto& lightTransform3 = light3.GetComponent<Transform>();
+			lightTransform3.position = { -3.0f, 1.0f, 1.0f };
+			lightTransform3.scale = { 0.1f, 0.1f, 0.1f };
+			lightTransform3.rotation = glm::radians(glm::vec3(-15.0f, -40.0f, 0.0f));
+			light3.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), lightMaterial);
+
+			model = new Model("res/models/teapot.fbx");
+
+			auto modelTeste = m_Scene->CreateEntity("Model");
+			modelTeste.GetComponent<Transform>().position = { 3.0f, -.75f, 0.0f };
+			modelTeste.AddComponent<MeshRenderer>(model->m_Meshes[0], modelMaterial);
+
+			/*cubeMaterial->SerializeText("res/materials/cubeMaterial.material");
+			quadMaterial->SerializeText("res/materials/quadMaterial.material");
+			lightMaterial->SerializeText("res/materials/lightMaterial.material");
+			modelMaterial->SerializeText("res/materials/modelMaterial.material");*/
+		}
 
 		m_Scene = MakeRef<Scene>();
 
-		Ref<Material> cubeMaterial = MakeRef<Material>(Shader::Create("res/shaders/phong.glsl"), "Phong Material");
-		Ref<Material> quadMaterial = MakeRef<Material>(Shader::Create("res/shaders/simpleTexture.glsl"));
-		cubeMaterial->SetTexture("Diffuse", Texture::Create("res/textures/diffuse.png"));
-		cubeMaterial->SetTexture("Specular", Texture::Create("res/textures/specular.png"));
-		quadMaterial->SetTexture("Texture", Texture::Create("res/textures/uv_mapper.jpg"));
+		APP_LOG("End of scope")
 
-		cubeMaterial->SerializeText("res/materials/cubeMaterial.meta");
+		SceneSerializer::DeserializeText(m_Scene, "res/scenes/scene.yaml");
+		camera = Entity((entt::entity)4, m_Scene.get());
 
-		auto quad = m_Scene->CreateEntity("Unlit Quad");
-		quad.AddComponent<MeshRenderer>(PrimitiveMesh::Quad(), quadMaterial);
-		
-		auto cube = m_Scene->CreateEntity("Lit Cube");
-		cube.GetComponent<Transform>().position = { -2.0f, 0.0f, 0.0f };
-		cube.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), cubeMaterial);
-		
-		camera = m_Scene->CreateEntity("Editor Camera");
-		camera.AddComponent<Camera>().projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
-		auto& cameraTransform = camera.GetComponent<Transform>();
-		cameraTransform.position = glm::vec3(0.0f, 0.0f, 3.0f);
-		cameraTransform.rotation = glm::radians(glm::vec3(0.0f, -90.0f, 0.0f));
-		
-		Ref<Material> lightMaterial = MakeRef<Material>(Shader::Create("res/shaders/simpleColor.glsl"));
-		auto light = m_Scene->CreateEntity("Point Light");
-		auto& l = light.AddComponent<Light>();
-		l.color = { 1.0f, 1.0f, 1.0f };
-		l.type = LightType::Point;
-		auto& lightTransform = light.GetComponent<Transform>();
-		lightTransform.position = { -2.0f, 1.0f, 1.0f };
-		lightTransform.scale = { 0.1f, 0.1f, 0.1f };
-		light.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), lightMaterial);
-
-		auto light2 = m_Scene->CreateEntity("Point Light 2");
-		auto& l2 = light2.AddComponent<Light>();
-		l2.color = { 1.0f, 0.0f, 0.0f };
-		l2.type = LightType::Point;
-		auto& lightTransform2 = light2.GetComponent<Transform>();
-		lightTransform2.position = { 2.0f, 1.0f, 1.0f };
-		lightTransform2.scale = { 0.1f, 0.1f, 0.1f };
-		light2.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), lightMaterial);
-
-		auto light3 = m_Scene->CreateEntity("Directional Light");
-		auto& l3 = light3.AddComponent<Light>();
-		l3.color = { 1.0f, 1.0f, 1.0f };
-		l3.type = LightType::Directional;
-		auto& lightTransform3 = light3.GetComponent<Transform>();
-		lightTransform3.position = { -3.0f, 1.0f, 1.0f };
-		lightTransform3.scale = { 0.1f, 0.1f, 0.1f };
-		lightTransform3.rotation = glm::radians(glm::vec3(-15.0f, -40.0f, 0.0f));
-		light3.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), lightMaterial);
-
-		model = new Model("res/models/teapot.fbx");
-		
-		auto modelTeste = m_Scene->CreateEntity("Model");
-		modelTeste.GetComponent<Transform>().position = { 2.0f, -.75f, 0.0f };
-		modelTeste.AddComponent<MeshRenderer>(model->m_Meshes[0], MakeRef<Material>(Shader::Create("res/shaders/phong.glsl"), "Phong Material"));
-		
 		m_Panels.push_back(new InspectorPanel());
 		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
 		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector));
 		m_Panels.push_back(new SceneViewportPanel(m_FB, camera));
 		m_Panels.push_back(new ConsolePanel());
 
-		SceneSerializer::SerializeText(m_Scene, "res/scenes/scene.yaml");
+		//SceneSerializer::SerializeText(m_Scene, "res/scenes/scene.yaml");
+		
 	}
 
 	void EditorLayer::OnUpdate()

@@ -2,7 +2,7 @@
 #include "ImGuiLayer.h"
 #include "Core/Macros/BIND_EVENT_FN.h"
 
-#include "Utils/Window/WindowManager.h"
+#include "Utils/Window/Window.h"
 
 #include <imgui/imgui.h>
 
@@ -12,7 +12,8 @@
 
 namespace DuskEngine
 {
-	ImGuiLayer::ImGuiLayer()
+	ImGuiLayer::ImGuiLayer(Window* window)
+		:m_Window(window)
 	{
 	}
 
@@ -35,7 +36,7 @@ namespace DuskEngine
 		//ImGui::StyleColorsDark();
 		//ImGui::StyleColorsClassic();
 
-		ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)WindowManager::GetWindow()->GetNativeHandle(), true);
+		ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)m_Window->GetNativeHandle(), true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 
 		ApplyStyle();
@@ -81,7 +82,7 @@ namespace DuskEngine
 		ImGuiIO& io = ImGui::GetIO();
 		int width;
 		int height;
-		glfwGetWindowSize((GLFWwindow*)WindowManager::GetWindow()->GetNativeHandle(), &width, &height);
+		glfwGetWindowSize((GLFWwindow*)m_Window->GetNativeHandle(), &width, &height);
 		io.DisplaySize = ImVec2((float)width, (float)height);
 
 		ImGui::Render();

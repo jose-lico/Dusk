@@ -31,7 +31,7 @@ namespace DuskEngine
 		// camera stuff remove later
 		bool movingCamera = false;
 		bool firstMouse = false;
-		float lastX = WindowManager::GetWindow()->GetWidth() / 2.0f;
-		float lastY = WindowManager::GetWindow()->GetWidth() / 2.0f;
+		float lastX = Application::Get().GetWindow().GetWidth() / 2.0f;
+		float lastY = Application::Get().GetWindow().GetHeight() / 2.0f;
 	};
 }

@@ -10,24 +10,20 @@ namespace DuskEngine
 	class WindowsWindow : public Window 
 	{
 	public:
-		WindowsWindow() = default;
-		~WindowsWindow() = default;
+		WindowsWindow(const WindowData& data = WindowData());
+		~WindowsWindow();
 
-		void Init(const WindowData& data = WindowData()) override;
-		void Shutdown() override;
+		virtual unsigned int GetWidth() const override { return m_Data.Width; }
+		virtual unsigned int GetHeight() const override { return m_Data.Height; }
+		virtual bool IsVSync() const override;
 
-		unsigned int GetWidth() const override { return m_Data.Width; }
-		unsigned int GetHeight() const override { return m_Data.Height; }
-		bool IsVSync() const override;
+		virtual void SetEventCallback(const std::function<void(Event&)>& callback) override { m_Data.EventCallback = callback; }
+		virtual void SetVSync(bool vsync) override;
 
-		void SetEventCallback(const std::function<void(Event&)>& callback) override { m_Data.EventCallback = callback; }
-		void SetVSync(bool vsync) override;
+		virtual bool ShouldClose() const override;
 
-		bool ShouldClose() const override;
-
-		void* GetNativeHandle() const override;
+		virtual void* GetNativeHandle() const override;
 	private:
 		GLFWwindow* m_Window;
-		WindowData m_Data;
 	};
 }

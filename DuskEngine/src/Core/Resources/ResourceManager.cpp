@@ -5,16 +5,16 @@
 #include <iosfwd>
 #include "Core/Renderer/Resources/Shader.h"
 
+#include "Core/Macros/LOG.h"
+#include "Utils/Serialization/Yaml.h"
+
+#include <yaml-cpp/yaml.h>
+
 namespace DuskEngine
 {
-	ResourceManager::ResourceManager()
-	{
-		m_CurrentDirectory = "res";
-	}
+	std::filesystem::path ResourceManager::m_CurrentDirectory = "res";
 
-	ResourceManager::~ResourceManager()
-	{
-	}
+	std::unordered_map<std::string, std::string> ResourceManager::m_UUIDsMap;
 
 	void ResourceManager::CreateUUIDs()
 	{
@@ -74,16 +74,52 @@ namespace DuskEngine
 				}
 			}
 		}
-
-		if(m_UUIDsMap.find("278cbf4a-f5d1-4136-a5c6-ea242a6b17e1") != m_UUIDsMap.end())
-		{
-			std::cout << m_UUIDsMap["278cbf4a-f5d1-4136-a5c6-ea242a6b17e1"] << std::endl;
-			Ref<Shader> shader = Shader::Create(m_UUIDsMap["278cbf4a-f5d1-4136-a5c6-ea242a6b17e1"]);
-		}
-
 	}
 
-	void ResourceManager::LoadResources(Ref<Scene>& scene)
+	std::string ResourceManager::GetUUID(const std::string& path)
 	{
+		std::ifstream infile(path);
+		std::string sLine;
+		if (infile.good())
+		{
+			getline(infile, sLine);
+			return sLine;
+		}
+	}
+
+	// Separate this into more functions later
+	Ref<Material> ResourceManager::LoadMaterial(const std::string& uuid)
+	{
+		std::ifstream stream(m_UUIDsMap[uuid]);
+		
+		std::stringstream strStream;
+
+		strStream << stream.rdbuf();
+
+		YAML::Node data = YAML::Load(strStream.str());
+
+		auto shader = Shader::Create(m_UUIDsMap[data["Shader"].as<std::string>()]);
+		//shader->m_UUID = *uuids::uuid::from_string(m_UUIDsMap[data["Shader"].as<std::string>()]);
+
+		Ref<Material> material = MakeRef<Material>(shader, data["Material"].as<std::string>());
+
+		for (auto& uniform : material->m_Uniforms)
+		{
+			switch (uniform.Type)
+			{
+			case UniformType::Vec3:
+				//uniform.Data = MakeRef<glm::vec3>(data[uniform.Name].as<glm::vec3>());
+				uniform.Data = MakeRef<glm::vec3>(1.0f);
+				break;
+			case UniformType::Texture:
+				auto texture = Texture::Create(m_UUIDsMap[data[uniform.Name].as<std::string>()]);
+				//texture->m_UUID = *uuids::uuid::from_string(m_UUIDsMap[data[uniform.Name].as<std::string>()]);
+				uniform.Data = texture;
+				break;
+			}
+		}
+
+		// Set uniforms
+		return material;
 	}
 }

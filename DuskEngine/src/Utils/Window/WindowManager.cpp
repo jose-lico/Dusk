@@ -3,24 +3,26 @@
 
 #include "Platform/Windows/WindowsWindow.h"
 
+#include <GLFW/glfw3.h>
+
 namespace DuskEngine
 {
-	Window* WindowManager::s_Window;
-
-	void WindowManager::Init()
+	WindowManager::WindowManager()
 	{
+		glfwInit();
+
 		// For now both Linux and Windows will use WindowsWindow.h
-#ifdef DUSK_WINDOWS
-		s_Window = new WindowsWindow();
-		s_Window->Init();
-#elif DUSK_LINUX
-		s_Window = new WindowsWindow();
-		s_Window->Init();
+#ifdef  DUSK_WINDOWS
+		m_Window = new WindowsWindow();
+#elif	DUSK_LINUX
+		m_Window = new WindowsWindow();
 #endif
 	}
 
-	void WindowManager::Shutdown()
+	WindowManager::~WindowManager()
 	{
-		s_Window->Shutdown();
+		delete m_Window;
+
+		glfwTerminate();
 	}
 }

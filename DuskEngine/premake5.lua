@@ -52,7 +52,8 @@ project "DuskEngine"
 		"GLFW_INCLUDE_NONE",
 		"GLEW_STATIC",
 		"_CRT_SECURE_NO_WARNINGS",
-		"YAML_CPP_STATIC_DEFINE"
+		"YAML_CPP_STATIC_DEFINE",
+		"UUID_SYSTEM_GENERATOR"
 	}
 
 
@@ -69,7 +70,8 @@ project "DuskEngine"
 
 		disablewarnings 
 		{ 
-			"4005" 
+			"4003",
+			"4005"
 		}
 
 		-- postbuildcommands

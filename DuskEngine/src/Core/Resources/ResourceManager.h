@@ -6,24 +6,20 @@
 #include <unordered_map>
 #include <filesystem>
 
+#include "Core/Renderer/Resources/Material.h"
+
 namespace DuskEngine
 {
 	class ResourceManager
 	{
 	public:
-		ResourceManager();
-		~ResourceManager();
-
-		// Loads all UUIDs in the project
-		void CreateUUIDs();
-		void LoadUUIDs();
-
-		// Checks all the UUIDs present in the scene, loads the corresponding resources
-		void LoadResources(Ref<Scene>& scene);
+		static void CreateUUIDs();
+		static void LoadUUIDs();
+		static std::string GetUUID(const std::string& path);
+		static Ref<Material> LoadMaterial(const std::string& uuid);
 	private:
-		std::filesystem::path m_CurrentDirectory;
+		static std::filesystem::path m_CurrentDirectory;
 
-
-		std::unordered_map<std::string, std::string> m_UUIDsMap;
+		static std::unordered_map<std::string, std::string> m_UUIDsMap;
 	};
 }

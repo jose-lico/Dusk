@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
+#include "Core/Resources/Resource.h"
 #include "Utils/Memory/Memory.h"
 
 #include "Texture.h"
@@ -22,7 +23,7 @@ namespace DuskEngine
 		{}
 	};
 
-	class DUSK_EXPORT Material
+	class DUSK_EXPORT Material : public Resource
 	{
 	public:
 		Material() = default;
@@ -58,5 +59,6 @@ namespace DuskEngine
 
 		friend class InspectorPanel;
 		friend class Scene;
+		friend class ResourceManager;
 	};
 }

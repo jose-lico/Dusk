@@ -10,8 +10,6 @@ namespace DuskEngine {
 	class DUSK_EXPORT Renderer
 	{
 	public:
-		static void Init();
-		static void Shutdown();
 		static void BeginScene();
 		static void EndScene();
 

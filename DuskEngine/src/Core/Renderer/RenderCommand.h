@@ -16,5 +16,4 @@ namespace DuskEngine {
 	private:
 		static RendererAPI* s_RendererAPI;
 	};
-
 }

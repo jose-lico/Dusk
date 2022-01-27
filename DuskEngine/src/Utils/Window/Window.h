@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pch.h"
+#include <functional>
 
 #include "Core/Renderer/RendererContext.h"
 #include "Core/Events/Event.h"
@@ -16,7 +16,7 @@ namespace DuskEngine
 
 		std::function<void(Event&)> EventCallback;
 
-		WindowData(const std::string& title = "Window", unsigned int width = 1920, unsigned height = 1080, bool vsync = true)
+		WindowData(const std::string& title = "Dusk Engine", unsigned int width = 1080, unsigned height = 720, bool vsync = true)
 			: Title(title), Width(width), Height(height), VSync(vsync)
 		{
 		}
@@ -25,8 +25,7 @@ namespace DuskEngine
 	class Window
 	{
 	public:
-		virtual void Init(const WindowData& data = WindowData()) = 0;
-		virtual void Shutdown() = 0;
+		virtual ~Window() = default;
 
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;
@@ -38,5 +37,7 @@ namespace DuskEngine
 		virtual bool ShouldClose() const = 0;
 
 		virtual void* GetNativeHandle() const = 0;
+	protected:
+		WindowData m_Data;
 	};
 }

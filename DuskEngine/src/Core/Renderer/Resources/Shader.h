@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
+#include "Core/Resources/Resource.h"
 #include "Utils/Memory/Memory.h"
 
 #include <glm/glm.hpp>
@@ -24,7 +25,7 @@ namespace DuskEngine
 		{};
 	};
 
-	class DUSK_EXPORT Shader
+	class DUSK_EXPORT Shader : public Resource
 	{
 	public:
 		static Ref<Shader> Create(const std::string& filepath, const std::string& name = "");
@@ -45,5 +46,7 @@ namespace DuskEngine
 		virtual const std::string& GetName() const = 0;
 
 		std::vector<UniformSpec> UniformSpecs;
+
+		friend class ResourceManager;
 	};
 }

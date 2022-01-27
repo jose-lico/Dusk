@@ -7,18 +7,6 @@
 
 namespace DuskEngine {
 
-	void Renderer::Init()
-	{
-		RenderCommand::Init();
-
-		TRACE("Renderer Initilialized")
-	}
-
-	void Renderer::Shutdown()
-	{
-		TRACE("Renderer shutdown")
-	}
-
 	void Renderer::BeginScene()
 	{
 	}

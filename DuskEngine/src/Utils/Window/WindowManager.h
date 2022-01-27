@@ -8,10 +8,11 @@ namespace DuskEngine
 	class DUSK_EXPORT WindowManager
 	{
 	public:
-		static void Init();
-		static void Shutdown();
-		static Window* GetWindow() { return s_Window; }
+		WindowManager();
+		~WindowManager();
+		
+		Window* GetWindow() { return m_Window; }
 	private:
-		static Window* s_Window;
+		Window* m_Window;
 	};
 }

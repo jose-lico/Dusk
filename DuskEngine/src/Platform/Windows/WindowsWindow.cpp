@@ -5,13 +5,9 @@
 
 namespace DuskEngine
 {
-	void WindowsWindow::Init(const WindowData& data)
+	WindowsWindow::WindowsWindow(const WindowData& data)
 	{
-		m_Data = data;
-
-		glfwInit();
-		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL); // size currently irrelevant cuz maximized
-		glfwMaximizeWindow(m_Window);
+		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL);
 
 		if (!m_Window)
 		{
@@ -22,8 +18,8 @@ namespace DuskEngine
 		TRACE("Window created");
 
 		glfwWindowHint(GLFW_SAMPLES, 4);
-
 		glfwSetWindowUserPointer(m_Window, &m_Data);
+		glfwMaximizeWindow(m_Window);
 
 		// glfw callbacks
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -32,24 +28,24 @@ namespace DuskEngine
 
 				switch (action)
 				{
-					case GLFW_PRESS:
-					{
-						KeyPressedEvent event(key, 0);
-						data.EventCallback(event);
-						break;
-					}
-					case GLFW_RELEASE:
-					{
-						KeyReleasedEvent event(key);
-						data.EventCallback(event);
-						break;
-					}
-					case GLFW_REPEAT:
-					{
-						KeyPressedEvent event(key, 1);
-						data.EventCallback(event);
-						break;
-					}
+				case GLFW_PRESS:
+				{
+					KeyPressedEvent event(key, 0);
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					KeyReleasedEvent event(key);
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_REPEAT:
+				{
+					KeyPressedEvent event(key, 1);
+					data.EventCallback(event);
+					break;
+				}
 				}
 			});
 
@@ -69,18 +65,18 @@ namespace DuskEngine
 
 				switch (action)
 				{
-					case GLFW_PRESS:
-					{
-						MouseButtonPressedEvent event(button);
-						data.EventCallback(event);
-						break;
-					}
-					case GLFW_RELEASE:
-					{
-						MouseButtonReleasedEvent event(button);
-						data.EventCallback(event);
-						break;
-					}
+				case GLFW_PRESS:
+				{
+					MouseButtonPressedEvent event(button);
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					MouseButtonReleasedEvent event(button);
+					data.EventCallback(event);
+					break;
+				}
 				}
 			});
 
@@ -101,7 +97,7 @@ namespace DuskEngine
 			});
 	}
 
-	void WindowsWindow::Shutdown()
+	WindowsWindow::~WindowsWindow()
 	{
 		glfwDestroyWindow(m_Window);
 		TRACE("Window destroyed");

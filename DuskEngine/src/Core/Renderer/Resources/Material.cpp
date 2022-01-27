@@ -2,6 +2,8 @@
 #include "Material.h"
 
 #include "Core/Macros/LOG.h"
+#include "Core/Resources/ResourceManager.h"
+#include "Utils/Serialization/Yaml.h"
 
 #include <yaml-cpp/yaml.h>
 
@@ -32,6 +34,7 @@ namespace DuskEngine
 
 	Material::~Material()
 	{
+		LOG("Deleted Material " + m_Name)
 	}
 
 	void Material::UploadUniforms()
@@ -84,19 +87,23 @@ namespace DuskEngine
 
 	void Material::SerializeText(const std::string& path)
 	{
+		// TEMP 
+		m_UUID = *uuids::uuid::from_string(ResourceManager::GetUUID(path + ".meta"));
+
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Material" << YAML::Value << m_Name;
+		out << YAML::Key << "Shader" << YAML::Value << uuids::to_string(m_Shader->GetUUID());
 
 		for (auto& uniform : m_Uniforms)
 		{
 			switch (uniform.Type)
 			{
 			case UniformType::Vec3:
-				out << YAML::Key << uniform.Name << YAML::Value << &uniform.Data;
+				out << YAML::Key << uniform.Name << YAML::Value << *std::static_pointer_cast<glm::vec3>(uniform.Data);
 				break;
 			case UniformType::Texture:
-				out << YAML::Key << uniform.Name << YAML::Value << &uniform.Data;
+				out << YAML::Key << uniform.Name << YAML::Value << uuids::to_string(std::static_pointer_cast<Texture>(uniform.Data)->GetUUID());
 				break;
 			}
 		}
@@ -127,7 +134,6 @@ namespace DuskEngine
 	{
 		for (auto& uniform : m_Uniforms)
 		{
-			// switch uniform type
 			switch (uniform.Type)
 			{
 			case UniformType::Vec3:

@@ -9,30 +9,21 @@ namespace DuskEngine
 	OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
 		:m_WindowHandle(windowHandle)
 	{
-	}
-
-	OpenGLContext::~OpenGLContext()
-	{
-	}
-
-	void OpenGLContext::Init()
-	{
 		glfwMakeContextCurrent(m_WindowHandle);
+
 		if (glewInit() != GLEW_OK)
-			FATAL("Failed to initialize glew");
+			FATAL("Failed to initialize glew!");
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_MULTISAMPLE);
 		glEnable(GL_CULL_FACE);
 		glFrontFace(GL_CW);
 
-		TRACE("OpenGL Context created and initialized")
+		TRACE("OpenGL Context created and initialized.")
 	}
 
-	void OpenGLContext::Shutdown()
+	OpenGLContext::~OpenGLContext()
 	{
-		glfwTerminate();
-
 		TRACE("OpenGL Context shutdown")
 	}
 

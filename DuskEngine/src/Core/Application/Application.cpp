@@ -10,45 +10,39 @@
 
 #include "Core/Resources/ResourceManager.h"
 
+#include "Core/Renderer/RenderCommand.h"
+
 namespace DuskEngine
 {
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application()
 	{
-		Init();
+		s_Instance = this;
+
+		CREATE_LOGGER // Rework in the future
+		
+		m_WindowManager = new WindowManager();
+		m_WindowManager->GetWindow()->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+
+		m_RendererContext = RendererContext::Create(m_WindowManager->GetWindow()->GetNativeHandle());
+		
+		RenderCommand::Init();
+
+		ResourceManager::CreateUUIDs();
+		ResourceManager::LoadUUIDs();
+
+		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
+		m_LayerStack.PushOverlay(m_ImGuiLayer);
+		m_ImGuiLayer->OnAttach();
 	}
 
 	Application::~Application()
 	{
-		Shutdown();
-	}
-
-	void Application::Init()
-	{
-		CREATE_LOGGER // Will be reworked in the future
-		WindowManager::Init();
-		WindowManager::GetWindow()->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
-		rendererContext = RendererContext::Create(WindowManager::GetWindow()->GetNativeHandle());
-		rendererContext->Init();
-		Renderer::Init();
-		
-		m_ImGuiLayer = new ImGuiLayer();
-		m_LayerStack.PushOverlay(m_ImGuiLayer);
-		m_ImGuiLayer->OnAttach();
-
-		// temp
-
-		ResourceManager r;
-		r.CreateUUIDs();
-		r.LoadUUIDs();
-	}
-
-	void Application::Shutdown()
-	{
 		TRACE("##### SHUTDOWN #####");
 
-		Renderer::Shutdown();
-		rendererContext->Shutdown();
-		WindowManager::Shutdown();
+		delete m_RendererContext;
+		delete m_WindowManager;
 	}
 
 	void Application::PushLayer(Layer* layer)
@@ -76,7 +70,7 @@ namespace DuskEngine
 
 	void Application::Run()
 	{
-		while (!WindowManager::GetWindow()->ShouldClose())
+		while (!m_WindowManager->GetWindow()->ShouldClose())
 		{
 			Time::Update();
 			for (Layer* layer : m_LayerStack)
@@ -89,7 +83,12 @@ namespace DuskEngine
 					layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
-			rendererContext->SwapBuffers();
+			m_RendererContext->SwapBuffers();
 		}
+	}
+
+	Window& Application::GetWindow()
+	{
+		return *m_WindowManager->GetWindow();
 	}
 }

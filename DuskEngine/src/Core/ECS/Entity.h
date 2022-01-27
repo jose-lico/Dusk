@@ -14,10 +14,14 @@ namespace DuskEngine
 		Entity(entt::entity handle, Scene* scene);
 		~Entity();
 
+		// Can only have one of each component. In the future only certain components will have this restriction, such as Transform or Meta.
 		template<typename T, typename... Args >
 		T& AddComponent(Args&&... args)
 		{
-			return m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			if (!HasComponent<T>())
+				return m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			else
+				return GetComponent<T>();
 		}
 
 		template<typename T>

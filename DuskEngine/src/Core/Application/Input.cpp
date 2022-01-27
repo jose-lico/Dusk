@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Input.h"
 
-#include "Utils/Window/WindowManager.h"
+#include "Core/Application/Application.h"
 
 #include <GLFW/glfw3.h>
 
@@ -9,7 +9,7 @@ namespace DuskEngine
 {
 	bool Input::IsKeyPressed(const KeyCode keycode)
 	{
-		auto window = (GLFWwindow*)WindowManager::GetWindow()->GetNativeHandle();
+		auto window = (GLFWwindow*)Application::Get().GetWindow().GetNativeHandle();
 		if (glfwGetKey(window, keycode) == GLFW_PRESS)
 			return true;
 		return false;
@@ -17,7 +17,7 @@ namespace DuskEngine
 
 	bool Input::IsMouseButtonPressed(const MouseCode mousecode)
 	{
-		auto window = (GLFWwindow*)WindowManager::GetWindow()->GetNativeHandle();
+		auto window = (GLFWwindow*)Application::Get().GetWindow().GetNativeHandle();
 		if (glfwGetMouseButton(window, mousecode) == GLFW_PRESS)
 			return true;
 		return false;
@@ -25,7 +25,7 @@ namespace DuskEngine
 
 	float Input::GetMouseX()
 	{
-		auto window = (GLFWwindow*)WindowManager::GetWindow()->GetNativeHandle();
+		auto window = (GLFWwindow*)Application::Get().GetWindow().GetNativeHandle();
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 
@@ -34,7 +34,7 @@ namespace DuskEngine
 
 	float Input::GetMouseY()
 	{
-		auto window = (GLFWwindow*)WindowManager::GetWindow()->GetNativeHandle();
+		auto window = (GLFWwindow*)Application::Get().GetWindow().GetNativeHandle();
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 
@@ -43,7 +43,7 @@ namespace DuskEngine
 
 	void Input::SetCursorActive(CursorState state)
 	{
-		auto window = (GLFWwindow*)WindowManager::GetWindow()->GetNativeHandle();
+		auto window = (GLFWwindow*)Application::Get().GetWindow().GetNativeHandle();
 		glfwSetInputMode(window, GLFW_CURSOR, state);
 	}
 }
