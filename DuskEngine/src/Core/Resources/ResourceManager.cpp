@@ -8,8 +8,6 @@
 #include "Core/Macros/LOG.h"
 #include "Utils/Serialization/Yaml.h"
 
-#include <yaml-cpp/yaml.h>
-
 namespace DuskEngine
 {
 	std::filesystem::path ResourceManager::m_CurrentDirectory = "res";
@@ -91,7 +89,6 @@ namespace DuskEngine
 	Ref<Material> ResourceManager::LoadMaterial(const std::string& uuid)
 	{
 		std::ifstream stream(m_UUIDsMap[uuid]);
-		
 		std::stringstream strStream;
 
 		strStream << stream.rdbuf();
@@ -99,21 +96,19 @@ namespace DuskEngine
 		YAML::Node data = YAML::Load(strStream.str());
 
 		auto shader = Shader::Create(m_UUIDsMap[data["Shader"].as<std::string>()]);
-		//shader->m_UUID = *uuids::uuid::from_string(m_UUIDsMap[data["Shader"].as<std::string>()]);
+		shader->m_UUID = *uuids::uuid::from_string(data["Shader"].as<std::string>());
 
 		Ref<Material> material = MakeRef<Material>(shader, data["Material"].as<std::string>());
-
 		for (auto& uniform : material->m_Uniforms)
 		{
 			switch (uniform.Type)
 			{
 			case UniformType::Vec3:
-				//uniform.Data = MakeRef<glm::vec3>(data[uniform.Name].as<glm::vec3>());
-				uniform.Data = MakeRef<glm::vec3>(1.0f);
+				uniform.Data = MakeRef<glm::vec3>(data[uniform.Name].as<glm::vec3>());
 				break;
 			case UniformType::Texture:
 				auto texture = Texture::Create(m_UUIDsMap[data[uniform.Name].as<std::string>()]);
-				//texture->m_UUID = *uuids::uuid::from_string(m_UUIDsMap[data[uniform.Name].as<std::string>()]);
+				texture->m_UUID = *uuids::uuid::from_string(data[uniform.Name].as<std::string>());
 				uniform.Data = texture;
 				break;
 			}

@@ -24,6 +24,7 @@ namespace DuskEngine
 
 	void EditorLayer::OnAttach()
 	{
+		// Soon to be gone :)
 		{
 			FramebufferSpecification fbSpec;
 			fbSpec.Width = 720;
@@ -87,11 +88,6 @@ namespace DuskEngine
 			auto modelTeste = m_Scene->CreateEntity("Model");
 			modelTeste.GetComponent<Transform>().position = { 3.0f, -.75f, 0.0f };
 			modelTeste.AddComponent<MeshRenderer>(model->m_Meshes[0], modelMaterial);
-
-			/*cubeMaterial->SerializeText("res/materials/cubeMaterial.material");
-			quadMaterial->SerializeText("res/materials/quadMaterial.material");
-			lightMaterial->SerializeText("res/materials/lightMaterial.material");
-			modelMaterial->SerializeText("res/materials/modelMaterial.material");*/
 		}
 
 		m_Scene = MakeRef<Scene>();
@@ -107,8 +103,7 @@ namespace DuskEngine
 		m_Panels.push_back(new SceneViewportPanel(m_FB, camera));
 		m_Panels.push_back(new ConsolePanel());
 
-		//SceneSerializer::SerializeText(m_Scene, "res/scenes/scene.yaml");
-		
+		//SceneSerializer::SerializeText(m_Scene, "res/scenes/scene.yaml");		
 	}
 
 	void EditorLayer::OnUpdate()

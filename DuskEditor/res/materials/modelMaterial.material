@@ -1,5 +1,5 @@
 Material: Phong Material
 Shader: 273a0e85-9157-41a8-a769-8eb00ebc93ee
 Diffuse: 89f26dd0-7e5a-4bb2-990e-764b391bed42
-DiffuseColor: 1
+DiffuseColor: [0.0888053253, 0.132743359, 0.0698958412]
 Specular: 89f26dd0-7e5a-4bb2-990e-764b391bed42
