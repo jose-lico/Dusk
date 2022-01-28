@@ -37,3 +37,6 @@
 [submodule "Dependencies/Fork-Awesome"]
 	path = Dependencies/Fork-Awesome
 	url = https://github.com/ForkAwesome/Fork-Awesome
+[submodule "Dependencies/IconFontCppHeaders"]
+	path = Dependencies/IconFontCppHeaders
+	url = https://github.com/juliettef/IconFontCppHeaders
