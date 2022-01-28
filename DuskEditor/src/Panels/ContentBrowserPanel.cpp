@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ContentBrowserPanel.h"
 
+#include <IconsForkAwesome.h>
+
 #include <imgui/imgui.h>
 
 namespace DuskEngine
@@ -16,6 +18,9 @@ namespace DuskEngine
 	void ContentBrowserPanel::OnImGuiRender()
 	{
 		ImGui::Begin("Content Browser");
+
+		ImGui::Text(ICON_FK_BULLHORN "  idk");
+
 		ImGui::End();
 	}
 }

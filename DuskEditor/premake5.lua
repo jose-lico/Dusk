@@ -31,7 +31,8 @@ project "DuskEditor"
 		dependenciesDir .. "/yaml-cpp/include",
 		dependenciesDir .. "/visit_struct/include",
 		dependenciesDir .. "/stduuid/include",
-		dependenciesDir .. "/stduuid/gsl"
+		dependenciesDir .. "/stduuid/gsl",
+		dependenciesDir .. "/IconFontCppHeaders"
 	}
 
 	defines

@@ -4,6 +4,8 @@
 
 #include "Utils/Window/Window.h"
 
+#include <IconsForkAwesome.h>
+
 #include <imgui/imgui.h>
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
@@ -42,6 +44,12 @@ namespace DuskEngine
 		ApplyStyle();
 
 		ImGui::GetStyle().WindowMenuButtonPosition = ImGuiDir_None;
+		static const ImWchar icons_ranges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
+		ImFontConfig icons_config; 
+		icons_config.MergeMode = true; 
+		icons_config.PixelSnapH = true;
+
+		io.Fonts->AddFontFromFileTTF("../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 16.0f, &icons_config, icons_ranges);
 	}
 
 	void ImGuiLayer::OnDetach()
