@@ -34,3 +34,6 @@
 [submodule "Dependencies/stduuid"]
 	path = Dependencies/stduuid
 	url = https://github.com/mariusbancila/stduuid
+[submodule "Dependencies/Fork-Awesome"]
+	path = Dependencies/Fork-Awesome
+	url = https://github.com/ForkAwesome/Fork-Awesome

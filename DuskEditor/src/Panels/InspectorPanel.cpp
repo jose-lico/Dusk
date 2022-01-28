@@ -102,7 +102,7 @@ namespace DuskEngine
 			// TODO
 		}
 	}
-
+	
 	void InspectorPanel::TransformInspector(std::vector<Transform*>& transforms)
 	{
 		if(transforms.size() == 1)

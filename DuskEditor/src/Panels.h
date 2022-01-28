@@ -5,3 +5,4 @@
 #include "Panels/SceneViewportPanel.h"
 #include "Panels/InspectorPanel.h"
 #include "Panels/ConsolePanel.h"
+#include "Panels/ContentBrowserPanel.h"

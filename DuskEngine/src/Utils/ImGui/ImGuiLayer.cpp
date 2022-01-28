@@ -40,6 +40,8 @@ namespace DuskEngine
 		ImGui_ImplOpenGL3_Init("#version 410");
 
 		ApplyStyle();
+
+		ImGui::GetStyle().WindowMenuButtonPosition = ImGuiDir_None;
 	}
 
 	void ImGuiLayer::OnDetach()

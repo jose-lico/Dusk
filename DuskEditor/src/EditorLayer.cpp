@@ -102,6 +102,7 @@ namespace DuskEngine
 		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector));
 		m_Panels.push_back(new SceneViewportPanel(m_FB, camera));
 		m_Panels.push_back(new ConsolePanel());
+		m_Panels.push_back(new ContentBrowserPanel());
 
 		//SceneSerializer::SerializeText(m_Scene, "res/scenes/scene.yaml");		
 	}
