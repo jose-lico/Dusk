@@ -35,9 +35,6 @@ namespace DuskEngine
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-		//ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
-
 		ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)m_Window->GetNativeHandle(), true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 
@@ -110,7 +107,7 @@ namespace DuskEngine
 	void ImGuiLayer::ApplyStyle()
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Regular.ttf", 15);
+		io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Regular.ttf", 16);
 		ImGui::GetStyle().FrameRounding = 4.0f;
 		ImGui::GetStyle().GrabRounding = 4.0f;
 

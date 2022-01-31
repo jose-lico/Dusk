@@ -1,6 +1,7 @@
 #include "HierarchyPanel.h"
 
 #include <imgui/imgui.h>
+#include <IconsForkAwesome.h>
 
 namespace DuskEngine
 {
@@ -18,7 +19,8 @@ namespace DuskEngine
 
 	void HierarchyPanel::OnImGuiRender()
 	{
-		ImGui::Begin("Scene Hierarchy");
+		ImGui::Begin(ICON_FK_TH_LIST " Scene Hierarchy");
+
 		int entityIndex = 0;
 		m_Scene->m_Registry.each([&](auto entityID)
 			{

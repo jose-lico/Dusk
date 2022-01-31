@@ -5,11 +5,12 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <nfd/nfd.h>
+#include <IconsForkAwesome.h>
 
 namespace DuskEngine
 {
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const std::string& name, std::vector<Entity*>& m_SelectedEntities, UIFunction function);
+	static void DrawComponent(const char* name, std::vector<Entity*>& m_SelectedEntities, UIFunction function);
 
 	InspectorPanel::InspectorPanel()
 	{
@@ -17,7 +18,7 @@ namespace DuskEngine
 
 	void InspectorPanel::OnImGuiRender()
 	{
-		ImGui::Begin("Inspector");
+		ImGui::Begin(ICON_FK_INFO_CIRCLE " Inspector");
 
 		if(m_SelectedEntities->size() > 0)
 		{
@@ -28,16 +29,16 @@ namespace DuskEngine
 				ImGui::Separator();
 			}
 
-			DrawComponent<Transform>("Transform", *m_SelectedEntities, TransformInspector);
-			DrawComponent<Camera>("Camera", *m_SelectedEntities, CameraInspector);
-			DrawComponent<Light>("Light", *m_SelectedEntities, LightInspector);
-			DrawComponent<MeshRenderer>("Material", *m_SelectedEntities, MaterialInspector);
+			DrawComponent<Transform>(ICON_FK_CUBE " Transform", *m_SelectedEntities, TransformInspector);
+			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA " Camera", *m_SelectedEntities, CameraInspector);
+			DrawComponent<Light>(ICON_FK_LIGHTBULB_O " Light", *m_SelectedEntities, LightInspector);
+			DrawComponent<MeshRenderer>(ICON_FK_PAINT_BRUSH " Material", *m_SelectedEntities, MaterialInspector);
 		}
 		ImGui::End();
 	}
 
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const std::string& name, std::vector<Entity*>& m_SelectedEntities, UIFunction function)
+	static void DrawComponent(const char* name, std::vector<Entity*>& m_SelectedEntities, UIFunction function)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed |
 			ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
@@ -57,7 +58,7 @@ namespace DuskEngine
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
 		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 		
-		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name.c_str());
+		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name);
 		ImGui::PopStyleVar(
 		);
 		ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
@@ -228,7 +229,6 @@ namespace DuskEngine
 							item_current_idx = n;
 							std::string s = shaders[n];
 							meshes[0]->material = MakeRef<Material>(Shader::Create("res/shaders/" + s));
-							meshes[0]->material->UniformsDefaultValue();
 						}
 					}
 

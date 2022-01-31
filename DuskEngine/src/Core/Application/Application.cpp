@@ -29,7 +29,7 @@ namespace DuskEngine
 		
 		RenderCommand::Init();
 
-		ResourceManager::CreateUUIDs();
+		ResourceManager::Init();
 		ResourceManager::LoadUUIDs();
 
 		m_ImGuiLayer = new ImGuiLayer(&GetWindow());

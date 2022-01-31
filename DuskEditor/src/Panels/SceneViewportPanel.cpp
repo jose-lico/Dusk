@@ -2,6 +2,7 @@
 
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <IconsForkAwesome.h>
 
 namespace DuskEngine
 {
@@ -17,9 +18,8 @@ namespace DuskEngine
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBringToFrontOnFocus;
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
-		ImGui::Begin("Viewport", (bool *)true, window_flags);
+		ImGui::Begin(ICON_FK_EYE " Viewport", (bool *)true, window_flags);
 
-		
 		if (ImGui::BeginMenuBar())
 		{
             ImGui::MenuItem("Stats", "", &stats);

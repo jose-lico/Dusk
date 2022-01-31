@@ -57,7 +57,8 @@ namespace DuskEngine
         }
         else
         {
-            ERROR("Error loading texture " + m_Name)
+            ERROR("Error loading texture '" + m_Name + "'")
+            return;
         }
 
         stbi_image_free(data);

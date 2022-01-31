@@ -116,6 +116,7 @@ namespace DuskEngine
 
 	void Material::CreateUniforms()
 	{
+		LOG("Created Material " + m_Name)
 		for (auto uniform : m_Shader->UniformSpecs)
 		{
 			auto u = Uniform(uniform.Name, uniform.Type);
