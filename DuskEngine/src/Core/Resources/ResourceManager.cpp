@@ -120,6 +120,7 @@ namespace DuskEngine
 		auto shader = LoadShader(data["Shader"].as<std::string>());
 
 		Ref<Material> material = MakeRef<Material>(shader, data["Material"].as<std::string>());
+		material->m_UUID = *uuids::uuid::from_string(uuid);
 
 		for (auto& uniform : material->m_Uniforms)
 		{

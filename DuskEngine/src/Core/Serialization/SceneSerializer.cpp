@@ -9,6 +9,7 @@
 
 #include "Utils/Rendering/PrimitiveMesh.h"
 #include "Utils/Serialization/Yaml.h"
+
 #include <glm/glm.hpp>
 
 namespace DuskEngine
@@ -37,6 +38,7 @@ namespace DuskEngine
 				SerializeComponentText<Transform>("Transform", out, entity);
 				SerializeComponentText<Camera>("Camera", out, entity);
 				SerializeComponentText<MeshRenderer>("MeshRenderer", out, entity);
+				SerializeComponentText<Light>("Light", out, entity);
 
 				out << YAML::EndMap; // Entity
 				
@@ -101,14 +103,19 @@ namespace DuskEngine
 					auto& mr = deserializedEntity.AddComponent<MeshRenderer>();
 
 					mr.material = ResourceManager::LoadMaterial(meshRenderer["material"].as<std::string>());
-					mr.mesh = PrimitiveMesh::Cube();
+					mr.mesh = PrimitiveMesh::Cube(); // replace with actual model, from file or PrimitiveMesh
+				}
+
+				auto light = entity["Light"];
+				if (light)
+				{
+					auto& l = deserializedEntity.AddComponent<Light>();
+
+					l.color = light["color"].as<glm::vec3>();
+					l.type = Light::LightTypeEnum(light["type"].as<std::string>());
 				}
 			}
 		}
-
-
-		// mr.mesh = ResourceManager.loadMesh(guid)
-		// mr.material = ResourceManager.loadMaterial(guid) (returns material instance)
 
         return false;
     }

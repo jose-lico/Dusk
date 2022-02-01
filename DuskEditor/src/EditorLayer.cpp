@@ -129,6 +129,13 @@ namespace DuskEngine
 			panel->OnImGuiRender();
 		}
 
+		ImGui::Begin("Save Scene");
+
+		if(ImGui::Button("Save Scene"))
+			SceneSerializer::SerializeText(m_Scene, "res/scenes/scene.yaml");
+
+		ImGui::End();
+
 		m_Dockspace.EndDockspace();
 	}
 

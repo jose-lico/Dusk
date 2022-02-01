@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Renderer/Resources/Material.h"
+#include "Core/ECS/Components.h"
 
 #include <yaml-cpp/yaml.h>
 #include <glm/glm.hpp>
@@ -27,6 +28,14 @@ namespace DuskEngine
 	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Material>& material)
 	{
 		out << YAML::Value << uuids::to_string(material->GetUUID());
+
+		return out;
+	}
+
+	inline
+	YAML::Emitter& operator<<(YAML::Emitter& out, const LightType type)
+	{
+		out << YAML::Value << Light::LightTypeString(type);
 
 		return out;
 	}
