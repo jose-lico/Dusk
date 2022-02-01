@@ -97,6 +97,8 @@ namespace DuskEngine
 		SceneSerializer::DeserializeText(m_Scene, "res/scenes/scene.yaml");
 		camera = Entity((entt::entity)4, m_Scene.get());
 
+		//APP_LOG(Entity((entt::entity)0, m_Scene.get()).GetComponent<Meta>().name);
+
 		m_Panels.push_back(new InspectorPanel());
 		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
 		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector));

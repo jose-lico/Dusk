@@ -254,7 +254,14 @@ namespace DuskEngine
 						nfdresult_t result = NFD_OpenDialog("png;jpg", NULL, &path);
 						if (result == NFD_OKAY)
 						{
-							meshes[0]->material->SetTexture(uniform.Name, Texture::Create(path));
+							// very temporary, but works!
+							auto texture = Texture::Create(path);
+							std::stringstream ss;
+							ss << path;
+							ss << ".meta";
+							texture->m_UUID = *uuids::uuid::from_string(ResourceManager::GetUUID(ss.str()));
+							meshes[0]->material->SetTexture(uniform.Name,texture);
+							meshes[0]->material->SerializeText("res/materials/cubeMaterial.material");
 							free(path);
 						}
 					}

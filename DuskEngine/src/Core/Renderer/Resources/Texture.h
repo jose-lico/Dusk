@@ -21,5 +21,6 @@ namespace DuskEngine
 		virtual void Bind(unsigned int slot = 0) const = 0;
 
 		friend class ResourceManager;
+		friend class InspectorPanel;
 	};
 }

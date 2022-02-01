@@ -94,6 +94,7 @@ namespace DuskEngine
 				{
 					// Entities always have transforms
 					auto& c = deserializedEntity.AddComponent<Camera>();
+					c.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f); // should be a serialized property
 					c.main = camera["main"].as<bool>();
 				}
 
