@@ -25,6 +25,35 @@ namespace DuskEngine
 	}
 
 	inline
+	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Mesh>& mesh)
+	{
+		out << YAML::BeginMap;
+
+		auto type = mesh->GetType();
+
+		switch (type)
+		{
+		case DuskEngine::MeshType::Quad:
+			out << YAML::Key << "fileID" << YAML::Value << 0;
+			break;
+		case DuskEngine::MeshType::Cube:
+			out << YAML::Key << "fileID" << YAML::Value << 1;
+			break;
+		case DuskEngine::MeshType::Model:
+			out << YAML::Key << "fileID" << YAML::Value << 2;
+			break;
+		default:
+			out << YAML::Key << "fileID" << YAML::Value << -1;
+			break;
+		}
+
+		out << YAML::Key << "uuid" << YAML::Value << uuids::to_string(mesh->GetUUID());
+		out << YAML::EndMap;
+
+		return out;
+	}
+
+	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Material>& material)
 	{
 		out << YAML::Value << uuids::to_string(material->GetUUID());

@@ -23,7 +23,7 @@ namespace DuskEngine
 		};
 
 		Ref<Mesh> mesh = MakeRef<Mesh>(vertices, (unsigned int)sizeof(vertices),
-			indices, (unsigned int)(sizeof(indices) / sizeof(unsigned int)));
+			indices, (unsigned int)(sizeof(indices) / sizeof(unsigned int)), MeshType::Quad);
 
         return mesh;
     }
@@ -91,7 +91,7 @@ namespace DuskEngine
 		};
 
 		Ref<Mesh> mesh = MakeRef<Mesh>(vertices, (unsigned int)sizeof(vertices),
-			indices, (unsigned int)(sizeof(indices) / sizeof(unsigned int)));
+			indices, (unsigned int)(sizeof(indices) / sizeof(unsigned int)), MeshType::Cube);
 
 		return mesh;
 	}

@@ -3,6 +3,7 @@
 
 #include "Buffer.h"
 #include "VertexArray.h"
+#include "Core/Resources/Resource.h"
 
 #include <memory>
 #include <glm/glm.hpp>
@@ -15,12 +16,24 @@ namespace DuskEngine
 		glm::vec3 Normal;
 	};
 
-	class DUSK_EXPORT Mesh
+	enum class MeshType
+	{
+		Quad,
+		Cube,
+		Model
+	};
+
+	class DUSK_EXPORT Mesh : public Resource
 	{
 	public:
-		Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count);
+		Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count, MeshType type);
 		Mesh(std::vector<Vertex>& vertices, unsigned int* indices, unsigned int count);
 		~Mesh();
 		std::shared_ptr<VertexArray> m_VA;
+		MeshType GetType() { return m_Type; }
+	private:
+		MeshType m_Type;
+
+		friend class ResourceManager;
 	};
 }

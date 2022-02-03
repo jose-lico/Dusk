@@ -2,58 +2,16 @@ Scene: Untitled
 Entities:
   - Entity: 12837192831273
     Meta:
-      name: Model
+      name: Unlit Quad
     Transform:
-      position: [3, -0.75, 0]
+      position: [0, 0, 0]
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
     MeshRenderer:
-      material: 2fbf0300-2732-492a-8672-032e010d8e72
-  - Entity: 12837192831273
-    Meta:
-      name: Directional Light
-    Transform:
-      position: [-3, 1, 1]
-      rotation: [-0.261799395, -0.69813168, 0]
-      scale: [0.100000001, 0.100000001, 0.100000001]
-    MeshRenderer:
-      material: 18d19a86-e2e3-41e4-b980-b5594c4df096
-    Light:
-      type: Directional
-      color: [1, 1, 1]
-  - Entity: 12837192831273
-    Meta:
-      name: Point Light 2
-    Transform:
-      position: [2, 1, 1]
-      rotation: [0, 0, 0]
-      scale: [0.100000001, 0.100000001, 0.100000001]
-    MeshRenderer:
-      material: 18d19a86-e2e3-41e4-b980-b5594c4df096
-    Light:
-      type: Point
-      color: [1, 0, 0]
-  - Entity: 12837192831273
-    Meta:
-      name: Point Light
-    Transform:
-      position: [-2, 1, 1]
-      rotation: [0, 0, 0]
-      scale: [0.100000001, 0.100000001, 0.100000001]
-    MeshRenderer:
-      material: 18d19a86-e2e3-41e4-b980-b5594c4df096
-    Light:
-      type: Point
-      color: [0.0942156464, 0.827004194, 0.316834807]
-  - Entity: 12837192831273
-    Meta:
-      name: Editor Camera
-    Transform:
-      position: [-5.89434195, 3.46899247, 4.55785465]
-      rotation: [-0.337454438, -1.04161954, 0]
-      scale: [1, 1, 1]
-    Camera:
-      main: true
+      mesh:
+        fileID: 0
+        uuid: 00000000-0000-0000-0000-000000000000
+      material: e5389bcf-ca32-47ae-9cc0-a296c257a3fc
   - Entity: 12837192831273
     Meta:
       name: Lit Cube
@@ -62,13 +20,73 @@ Entities:
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
     MeshRenderer:
+      mesh:
+        fileID: 1
+        uuid: 00000000-0000-0000-0000-000000000000
       material: 1e636a00-4ce1-49c2-bdaa-6d93d22c6686
   - Entity: 12837192831273
     Meta:
-      name: Unlit Quad
+      name: Editor Camera
     Transform:
-      position: [0, 0, 0]
+      position: [-1.44492877, 4.03971004, 6.20573902]
+      rotation: [-0.551114559, -1.37890124, 0]
+      scale: [1, 1, 1]
+    Camera:
+      main: true
+  - Entity: 12837192831273
+    Meta:
+      name: Point Light
+    Transform:
+      position: [-1.57000005, 1, 1]
+      rotation: [0, 0, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+    MeshRenderer:
+      mesh:
+        fileID: 1
+        uuid: 00000000-0000-0000-0000-000000000000
+      material: 18d19a86-e2e3-41e4-b980-b5594c4df096
+    Light:
+      type: Point
+      color: [0.0942156464, 0.827004194, 0.316834807]
+  - Entity: 12837192831273
+    Meta:
+      name: Point Light 2
+    Transform:
+      position: [2, 1, 1]
+      rotation: [0, 0, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+    MeshRenderer:
+      mesh:
+        fileID: 1
+        uuid: 00000000-0000-0000-0000-000000000000
+      material: 18d19a86-e2e3-41e4-b980-b5594c4df096
+    Light:
+      type: Point
+      color: [1, 0, 0]
+  - Entity: 12837192831273
+    Meta:
+      name: Directional Light
+    Transform:
+      position: [-3, 1, 1]
+      rotation: [-0.261799395, -0.69813168, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+    MeshRenderer:
+      mesh:
+        fileID: 1
+        uuid: 00000000-0000-0000-0000-000000000000
+      material: 18d19a86-e2e3-41e4-b980-b5594c4df096
+    Light:
+      type: Directional
+      color: [1, 1, 1]
+  - Entity: 12837192831273
+    Meta:
+      name: Model
+    Transform:
+      position: [3, -0.75, 0]
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
     MeshRenderer:
-      material: e5389bcf-ca32-47ae-9cc0-a296c257a3fc
+      mesh:
+        fileID: 2
+        uuid: 4b6ff6a4-8c23-45c8-b7ab-42b3522f9035
+      material: 1e636a00-4ce1-49c2-bdaa-6d93d22c6686

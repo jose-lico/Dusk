@@ -155,8 +155,14 @@ namespace DuskEngine
 		return texture;
 	}
 
-	Ref<Model> ResourceManager::LoadModel(const std::string& uuid)
+	//TODO - improve model and mesh api and useflow
+	Ref<Mesh> ResourceManager::LoadModel(const std::string& uuid)
 	{
-		return Ref<Model>();
+		Model* m = new Model(m_UUIDsMap[uuid]);
+		Ref<Mesh> mesh = m->m_Meshes[0];
+		mesh->m_Type = MeshType::Model;
+		mesh->m_UUID = *uuids::uuid::from_string(uuid);
+		delete(m);
+		return mesh;
 	}
 }

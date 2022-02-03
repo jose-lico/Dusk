@@ -17,9 +17,6 @@ namespace DuskEngine
 	template<typename T>
 	static void SerializeComponentText(const std::string& name, YAML::Emitter& out, Entity entity);	
 	
-	template<typename T>
-	static void DeserializeComponentText(const std::string& name, YAML::Node& data, Entity entity);
-
     void SceneSerializer::SerializeText(const Ref<Scene>& scene, const std::string& path)
     {
         YAML::Emitter out;
@@ -31,8 +28,8 @@ namespace DuskEngine
             {
                 Entity entity = { entityID, scene.get() };
                 
-				out << YAML::BeginMap; // Entity
-				out << YAML::Key << "Entity" << YAML::Value << "12837192831273"; // TODO: Entity ID goes here
+				out << YAML::BeginMap;
+				out << YAML::Key << "Entity" << YAML::Value << "12837192831273";
 
 				SerializeComponentText<Meta>("Meta", out, entity);
 				SerializeComponentText<Transform>("Transform", out, entity);
@@ -40,7 +37,7 @@ namespace DuskEngine
 				SerializeComponentText<MeshRenderer>("MeshRenderer", out, entity);
 				SerializeComponentText<Light>("Light", out, entity);
 
-				out << YAML::EndMap; // Entity
+				out << YAML::EndMap;
 				
             });
         out << YAML::EndSeq;
@@ -50,7 +47,6 @@ namespace DuskEngine
         fout << out.c_str();
     }
 
-	
     void SceneSerializer::SerializeBinary(const Ref<Scene>& scene, const std::string& path)
     {
     }
@@ -82,7 +78,6 @@ namespace DuskEngine
 				auto transform = entity["Transform"];
 				if (transform)
 				{
-					// Entities always have transforms
 					auto& t = deserializedEntity.GetComponent<Transform>();
 					t.position = transform["position"].as<glm::vec3>();
 					t.rotation = transform["rotation"].as<glm::vec3>();
@@ -92,7 +87,6 @@ namespace DuskEngine
 				auto camera = entity["Camera"];
 				if (camera)
 				{
-					// Entities always have transforms
 					auto& c = deserializedEntity.AddComponent<Camera>();
 					c.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f); // should be a serialized property
 					c.main = camera["main"].as<bool>();
@@ -104,7 +98,17 @@ namespace DuskEngine
 					auto& mr = deserializedEntity.AddComponent<MeshRenderer>();
 
 					mr.material = ResourceManager::LoadMaterial(meshRenderer["material"].as<std::string>());
-					mr.mesh = PrimitiveMesh::Cube(); // replace with actual model, from file or PrimitiveMesh
+
+					auto mesh = meshRenderer["mesh"];
+
+					int type = mesh["fileID"].as<int>();
+
+					if(type == 0)
+						mr.mesh = PrimitiveMesh::Quad();
+					if (type == 1)
+						mr.mesh = PrimitiveMesh::Cube();
+					if (type == 2)
+						mr.mesh = ResourceManager::LoadModel(mesh["uuid"].as<std::string>());
 				}
 
 				auto light = entity["Light"];
@@ -118,7 +122,7 @@ namespace DuskEngine
 			}
 		}
 
-        return false;
+        return true;
     }
 
     bool SceneSerializer::DeserializeBinary(const Ref<Scene>& scene, const std::string& path)
@@ -143,24 +147,5 @@ namespace DuskEngine
 
 			out << YAML::EndMap;
 		}
-	}
-
-	template<typename T>
-	void DeserializeComponentText(const std::string& name, YAML::Node& data, Entity entity)
-	{
-		/*auto componentData = data[name];
-		if(componentData)
-		{
-			auto& component = entity.AddComponent<T>();
-			int index = 0;
-			visit_struct::for_each(component, [&componentData, &component, &index](const char* name, auto& value)
-				{
-					if (std::is_same<visit_struct::type_at<index, T>, bool>())
-					{
-						int i = 5;
-					}
-					index++;
-				});	
-		}*/
 	}
 }

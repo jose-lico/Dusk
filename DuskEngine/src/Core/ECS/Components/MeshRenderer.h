@@ -19,4 +19,4 @@ namespace DuskEngine
 	};
 }
 
-VISITABLE_STRUCT(DuskEngine::MeshRenderer, material);
+VISITABLE_STRUCT(DuskEngine::MeshRenderer, mesh, material);

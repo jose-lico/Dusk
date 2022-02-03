@@ -95,9 +95,7 @@ namespace DuskEngine
 		APP_LOG("End of scope")
 
 		SceneSerializer::DeserializeText(m_Scene, "res/scenes/scene.yaml");
-		camera = Entity((entt::entity)4, m_Scene.get());
-
-		//APP_LOG(Entity((entt::entity)0, m_Scene.get()).GetComponent<Meta>().name);
+		camera = *m_Scene->GetMainCamera();
 
 		m_Panels.push_back(new InspectorPanel());
 		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
@@ -105,8 +103,6 @@ namespace DuskEngine
 		m_Panels.push_back(new SceneViewportPanel(m_FB, camera));
 		m_Panels.push_back(new ConsolePanel());
 		m_Panels.push_back(new ContentBrowserPanel());
-
-		//SceneSerializer::SerializeText(m_Scene, "res/scenes/scene.yaml");		
 	}
 
 	void EditorLayer::OnUpdate()

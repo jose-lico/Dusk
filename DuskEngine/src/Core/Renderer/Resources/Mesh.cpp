@@ -5,7 +5,8 @@
 
 namespace DuskEngine
 {
-	Mesh::Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count)
+	Mesh::Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count, MeshType type)
+		:m_Type(type)
 	{
 		m_VA.reset(VertexArray::Create());
 		m_VA->Bind();

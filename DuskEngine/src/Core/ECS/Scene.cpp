@@ -28,6 +28,20 @@ namespace DuskEngine
 		return entity;
 	}
 
+	Entity* Scene::GetMainCamera()
+	{
+		auto view = m_Registry.view<Camera>();
+
+		for (auto entity : view)
+		{
+			auto& camera = view.get<Camera>(entity);
+			if (camera.main)
+				return new Entity(entity, this);
+		}
+
+		return nullptr;
+	}
+
 	void Scene::OnUpdate()
 	{
 		{

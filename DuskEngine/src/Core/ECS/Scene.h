@@ -12,7 +12,18 @@ namespace DuskEngine
 	public:
 		Scene();
 		~Scene();
+
 		Entity CreateEntity(const std::string& name);
+		
+		template<typename T>
+		Entity* FindEntityOfType()
+		{
+			auto view = m_Registry.view<T>();
+			return view.size() > 0 ? new Entity(view.front(), this) : nullptr;
+		}
+
+		Entity* GetMainCamera();
+
 		void OnUpdate();
 	private:
 		entt::registry m_Registry;
