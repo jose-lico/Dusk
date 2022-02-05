@@ -20,6 +20,23 @@ namespace DuskEngine
 		ProcessNode(scene->mRootNode, scene);
 	}
 
+	Model::Model(const std::filesystem::path& path, const uuids::uuid& uuid)
+	{
+		m_UUID = uuid;
+		m_Path = path;
+		m_Name = path.filename().string();
+
+		Assimp::Importer import;
+		const aiScene* scene = import.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_FlipWindingOrder);
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		{
+			std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+			return;
+		}
+
+		ProcessNode(scene->mRootNode, scene);
+	}
+
 	Model::~Model()
 	{
 	}

@@ -14,6 +14,7 @@ namespace DuskEngine
 		};
 
 		OpenGLTexture(const std::string& filepath, const std::string& name = "");
+		OpenGLTexture(const std::filesystem::path& path, const uuids::uuid& uuid);
 		~OpenGLTexture();
 
 		virtual void Bind(unsigned int slot = 0) const override;
@@ -24,6 +25,5 @@ namespace DuskEngine
 		unsigned int m_ID;
 		unsigned int m_Width;
 		unsigned int m_Height;
-		std::string m_Name;
 	};
 }

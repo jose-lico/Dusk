@@ -97,7 +97,7 @@ namespace DuskEngine
 				{
 					auto& mr = deserializedEntity.AddComponent<MeshRenderer>();
 
-					mr.material = ResourceManager::LoadMaterial(meshRenderer["material"].as<std::string>());
+					mr.material = ResourceManager::LoadMaterial(meshRenderer["material"].as<uuids::uuid>());
 
 					auto mesh = meshRenderer["mesh"];
 
@@ -108,7 +108,7 @@ namespace DuskEngine
 					if (type == 1)
 						mr.mesh = PrimitiveMesh::Cube();
 					if (type == 2)
-						mr.mesh = ResourceManager::LoadModel(mesh["uuid"].as<std::string>());
+						mr.mesh = ResourceManager::LoadModel(mesh["uuid"].as<uuids::uuid>());
 				}
 
 				auto light = entity["Light"];

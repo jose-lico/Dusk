@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <iosfwd>
+
 #include "Core/Renderer/Resources/Shader.h"
 
 #include "Core/Macros/LOG.h"
@@ -13,7 +14,7 @@ namespace DuskEngine
 	std::filesystem::path ResourceManager::m_RootDirectory = "res";
 	std::filesystem::path ResourceManager::m_CurrentDirectory;
 
-	std::unordered_map<std::string, std::string> ResourceManager::m_UUIDsMap;
+	std::unordered_map<uuids::uuid, std::filesystem::path> ResourceManager::m_UUIDsMap;
 
 	void ResourceManager::Init()
 	{
@@ -38,14 +39,13 @@ namespace DuskEngine
 				{
 					std::ifstream infile(directoryEntry.path());
 
+					// TODO -> This can be cleaned up a lot
 					if (infile.good())
 					{
-						std::string sLine;
+						std::string sLine; 
 						getline(infile, sLine);
-						//std::cout << sLine << std::endl;
 						std::string path = m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string();
-						//std::cout << m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string() << std::endl;
-						m_UUIDsMap[sLine] = path;
+						m_UUIDsMap[*uuids::uuid::from_string(sLine)] = path;
 					}
 				}
 			}
@@ -70,7 +70,6 @@ namespace DuskEngine
 			{
 				std::filesystem::path metaFile = directoryEntry.path().string() + ".meta";
 
-				// If meta file does not exist and file is not already a meta file
 				if(!std::filesystem::exists(metaFile) && directoryEntry.path().extension() != ".meta")
 				{
 					std::string message = "Creating meta file for " + directoryEntry.path().filename().string();
@@ -84,7 +83,7 @@ namespace DuskEngine
 					myfile << id;
 					myfile.close();
 
-					m_UUIDsMap[uuids::to_string(id)] = directoryEntry.path().string();
+					m_UUIDsMap[id] = directoryEntry.path();
 				}
 			}
 		}
@@ -108,7 +107,7 @@ namespace DuskEngine
 		}
 	}
 
-	Ref<Material> ResourceManager::LoadMaterial(const std::string& uuid)
+	Ref<Material> ResourceManager::LoadMaterial(const uuids::uuid& uuid)
 	{
 		std::ifstream stream(m_UUIDsMap[uuid]);
 		std::stringstream strStream;
@@ -117,10 +116,9 @@ namespace DuskEngine
 
 		YAML::Node data = YAML::Load(strStream.str());
 
-		auto shader = LoadShader(data["Shader"].as<std::string>());
+		auto shader = LoadShader(data["Shader"].as<uuids::uuid>());
 
-		Ref<Material> material = MakeRef<Material>(shader, data["Material"].as<std::string>());
-		material->m_UUID = *uuids::uuid::from_string(uuid);
+		Ref<Material> material = MakeRef<Material>(shader, m_UUIDsMap[uuid], uuid);
 
 		for (auto& uniform : material->m_Uniforms)
 		{
@@ -130,7 +128,7 @@ namespace DuskEngine
 				uniform.Data = MakeRef<glm::vec3>(data[uniform.Name].as<glm::vec3>());
 				break;
 			case UniformType::Texture:
-				auto texture = Texture::Create(m_UUIDsMap[data[uniform.Name].as<std::string>()]);
+				auto texture = Texture::Create(m_UUIDsMap[data[uniform.Name].as<uuids::uuid>()].string());
 				uniform.Data = texture;
 				break;
 			}
@@ -139,29 +137,25 @@ namespace DuskEngine
 		return material;
 	}
 
-	Ref<Shader> ResourceManager::LoadShader(const std::string& uuid)
+	Ref<Shader> ResourceManager::LoadShader(const uuids::uuid& uuid)
 	{
-		auto shader = Shader::Create(m_UUIDsMap[uuid]);
-		shader->m_UUID = *uuids::uuid::from_string(uuid);
-
-		return shader;
+		return Shader::Create(m_UUIDsMap[uuid], uuid);
 	}
 
-	Ref<Texture> ResourceManager::LoadTexture(const std::string& uuid)
+	Ref<Texture> ResourceManager::LoadTexture(const uuids::uuid& uuid)
 	{
-		auto texture = Texture::Create(m_UUIDsMap[uuid]);
-		texture->m_UUID = *uuids::uuid::from_string(uuid);
-
-		return texture;
+		return Texture::Create(m_UUIDsMap[uuid], uuid);
 	}
 
 	//TODO - improve model and mesh api and useflow
-	Ref<Mesh> ResourceManager::LoadModel(const std::string& uuid)
+	Ref<Mesh> ResourceManager::LoadModel(const uuids::uuid& uuid)
 	{
-		Model* m = new Model(m_UUIDsMap[uuid]);
-		Ref<Mesh> mesh = m->m_Meshes[0];
+		Model* m = new Model(m_UUIDsMap[uuid].string());
+		Ref<Mesh> mesh = m->GetFirstMesh();
 		mesh->m_Type = MeshType::Model;
-		mesh->m_UUID = *uuids::uuid::from_string(uuid);
+		mesh->m_UUID = uuid;
+		mesh->m_Name = m->GetName();
+		mesh->m_Path = m->GetPath();
 		delete(m);
 		return mesh;
 	}

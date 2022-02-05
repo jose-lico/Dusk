@@ -243,7 +243,8 @@ namespace DuskEngine
 			{
 				if (uniform.Type == UniformType::Vec3)
 				{
-					ImGui::ColorEdit3(uniform.Name.c_str(), std::static_pointer_cast<float>(uniform.Data).get());
+					if (ImGui::ColorEdit3(uniform.Name.c_str(), std::static_pointer_cast<float>(uniform.Data).get())) 
+						meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 				}
 
 				if (uniform.Type == UniformType::Texture)
@@ -262,7 +263,7 @@ namespace DuskEngine
 							ss << ".meta";
 							texture->m_UUID = *uuids::uuid::from_string(ResourceManager::GetUUID(ss.str()));
 							meshes[0]->material->SetTexture(uniform.Name,texture);
-							meshes[0]->material->SerializeText("res/materials/cubeMaterial.material");
+							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 							free(path);
 						}
 					}

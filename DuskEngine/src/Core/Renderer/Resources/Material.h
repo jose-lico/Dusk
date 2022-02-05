@@ -28,6 +28,8 @@ namespace DuskEngine
 	public:
 		Material() = default;
 		Material(Ref<Shader>& shader, const std::string& name = "");
+		Material(Ref<Shader>& shader, const std::filesystem::path& path, const uuids::uuid& uuid);
+		//Material(Ref<Shader>& shader, const uuids::uuid& uuid);
 		Material(const std::string& shaderPath, const std::string& name = "");
 		~Material();
 		void UploadUniforms();
@@ -48,11 +50,9 @@ namespace DuskEngine
 	private:
 		void CreateUniforms();
 		Ref<Shader> m_Shader;
-		std::string m_Name;
 
 		// Map is for direct access to set uniform values
 		std::unordered_map<std::string, Uniform*> m_UniformsMap;
-
 
 		// Vector is where the actual uniform values are located, for iteration - editor drawing and sending to shader
 		std::vector<Uniform> m_Uniforms;

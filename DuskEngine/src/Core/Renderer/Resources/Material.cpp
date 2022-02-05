@@ -20,6 +20,23 @@ namespace DuskEngine
 		CreateUniforms();
 	}
 
+	Material::Material(Ref<Shader>& shader, const std::filesystem::path& path, const uuids::uuid& uuid)
+		:m_Shader(shader)
+	{
+		m_UUID = uuid;
+		m_Path = path;
+		m_Name = path.filename().string();
+
+		CreateUniforms();
+	}
+
+	/*Material::Material(Ref<Shader>& shader, const uuids::uuid& uuid)
+	{
+		m_UUID = uuid;
+		m_Path = path;
+		m_Name = path.filename().string();
+	}*/
+
 	Material::Material(const std::string& shaderPath, const std::string& name)
 	{
 		m_Shader = Shader::Create(shaderPath);
@@ -112,6 +129,10 @@ namespace DuskEngine
 
 		std::ofstream fout(path);
 		fout << out.c_str();
+	}
+
+	void Material::DeserializeText(const std::string& path)
+	{
 	}
 
 	void Material::CreateUniforms()

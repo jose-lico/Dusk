@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Renderer/Resources/Shader.h"
 
+#include <filesystem>
 #include <unordered_map>
 
 namespace DuskEngine 
@@ -16,6 +17,7 @@ namespace DuskEngine
 	{
 	public:
 		OpenGLShader(const std::string& filepath, const std::string& name = "");
+		OpenGLShader(const std::filesystem::path& path, const uuids::uuid& uuid);
 		~OpenGLShader();
 
 		void Bind() const override;
@@ -28,12 +30,9 @@ namespace DuskEngine
 		virtual void SetUniformVec4(const std::string& name , const glm::vec4& v) override;
 		virtual void SetUniformMat3(const std::string& name , const glm::mat3& m) override;
 		virtual void SetUniformMat4(const std::string& name , const glm::mat4& m) override;
-		virtual const std::string& GetName() const override { return m_Name; }
 	private:
 		std::unordered_map<std::string, int> m_uniformLocations;
 		unsigned int m_ID;
-		std::string m_Filepath;
-		std::string m_Name;
 
 		UniformType GetType(const std::string& type);
 		int GetUniformLocation(const std::string& name);

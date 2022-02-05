@@ -123,4 +123,22 @@ namespace YAML {
 			return true;
 		}
 	};
+
+	template<>
+	struct convert<uuids::uuid>
+	{
+		static Node encode(const uuids::uuid& rhs)
+		{
+			Node node;
+			node.push_back(uuids::to_string(rhs));
+			node.SetStyle(EmitterStyle::Default);
+			return node;
+		}
+
+		static bool decode(const Node& node, uuids::uuid& rhs)
+		{
+			rhs = *uuids::uuid::from_string(node.as<std::string>());
+			return true;
+		}
+	};
 }

@@ -12,6 +12,7 @@ namespace DuskEngine
 	{
 	public:
 		static Ref<Texture> Create(const std::string& filepath, const std::string& name = "");
+		static Ref<Texture> Create(const std::filesystem::path& path, const uuids::uuid& uuid);
 
 		virtual ~Texture() = default;
 		virtual unsigned int GetRendererID() const = 0;

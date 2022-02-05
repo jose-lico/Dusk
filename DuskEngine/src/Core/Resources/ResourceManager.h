@@ -22,15 +22,15 @@ namespace DuskEngine
 		
 		static std::string GetUUID(const std::string& path);
 
-		static Ref<Material> LoadMaterial(const std::string& uuid);
-		static Ref<Shader> LoadShader(const std::string& uuid);
-		static Ref<Texture> LoadTexture(const std::string& uuid);
-		static Ref<Mesh> LoadModel(const std::string& uuid);
+		static Ref<Material> LoadMaterial(const uuids::uuid& uuid);
+		static Ref<Shader> LoadShader(const uuids::uuid& uuid);
+		static Ref<Texture> LoadTexture(const uuids::uuid& uuid);
+		static Ref<Mesh> LoadModel(const uuids::uuid& uuid);
 	private:
 		//static void CreateUUID();
 		static std::filesystem::path m_RootDirectory;
 		static std::filesystem::path m_CurrentDirectory;
 
-		static std::unordered_map<std::string, std::string> m_UUIDsMap;
+		static std::unordered_map <uuids::uuid, std::filesystem::path> m_UUIDsMap;
 	};
 }

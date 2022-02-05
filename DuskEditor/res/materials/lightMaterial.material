@@ -1,3 +1,3 @@
-Material: simpleColor
+Material: lightMaterial.material
 Shader: 278cbf4a-f5d1-4136-a5c6-ea242a6b17e1
-Color: [1, 1, 1]
+Color: [0, 1, 0.301960796]

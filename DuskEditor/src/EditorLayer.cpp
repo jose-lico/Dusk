@@ -40,8 +40,6 @@ namespace DuskEngine
 
 	void EditorLayer::OnUpdate()
 	{
-		//ResourceManager::CreateUUIDs();
-
 		m_FB->Bind();
 
 		m_Scene->OnUpdate();

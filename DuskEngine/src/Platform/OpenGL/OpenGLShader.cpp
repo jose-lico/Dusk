@@ -6,8 +6,8 @@
 
 namespace DuskEngine
 {
+	// TODO -> Rework or remove
 	OpenGLShader::OpenGLShader(const std::string& filepath, const std::string& name)
-		:m_Filepath(filepath), m_ID(0)
 	{
 		if (name.empty())
 		{
@@ -21,6 +21,19 @@ namespace DuskEngine
 
 		ShaderProgramSource source = ParseShader();
 		m_ID = CreateShader(source.VertexSource, source.FragmentSource);
+		LOG("Created Shader " + m_Name)
+	}
+
+	OpenGLShader::OpenGLShader(const std::filesystem::path& path, const uuids::uuid& uuid)
+	{
+		m_UUID = uuid;
+		m_Path = path;
+		m_Name = path.filename().string();
+		
+		ShaderProgramSource source = ParseShader();
+		
+		m_ID = CreateShader(source.VertexSource, source.FragmentSource);
+		
 		LOG("Created Shader " + m_Name)
 	}
 
@@ -81,7 +94,7 @@ namespace DuskEngine
 
 	ShaderProgramSource OpenGLShader::ParseShader()
 	{
-		std::ifstream stream(m_Filepath);
+		std::ifstream stream(m_Path);
 
 		enum class ShaderType
 		{
