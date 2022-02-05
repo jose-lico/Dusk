@@ -1,40 +1,60 @@
 # Dusk
 
-Dusk is a WIP 3D game engine in C++.<br/>
-It is a personal project where I am learning more about how a game engine and all of its systems function under the hood.<br/>
-The rendering backend is in OpenGL. It supports both Windows and Linux (tested on Ubuntu).
+**Dusk is a WIP 3D Game Engine**. It is a personal project where I am learning more about how a game engine and all of its systems function under the hood. It is aiming to be a simple tool that can create games for multiple platforms.
 
 <p align="center">
 <img src="images/dusk_windows.png">
 </p>
 
-## Features
+## Current Features
 
-Dusk is very early in development and so its features are very barebones.
+Dusk is very early in development and so its features are barebones.
 
-- Basic rendering
-- Phong lighting
+- Uses a build system for the project and all its dependencies
+- Logging system
+- Simple 3D Rendering
+- Ability to import 3D models (.fbx or .obj)
+- Phong Lighting
+- Material System
+- Resource management with UUIDs
+- Resource de/serialization (Scenes, Materials) 
 - ECS using entt
-- Editor using imgui
+- Editor tool using imgui
+
+## Goals
+
+It is always good to have goals that push you forward and give you a glimpse of what the future might hold.
+
+- Better editor tool
+- Support for multiple graphics APIs
+- Concept of a Runtime
+- Ability to export games
+- Mono Scripting
+- Physics
+- Audio
+- Profiling
+- Multithreaded
+- PBR workflow
+- Concept of Projects
+
+And many many more.
 
 ## Building Dusk
 
-I have only tested building Dusk in VS2019 and G++. There is a focus on making sure Dusk builds on atleast these 2 environments. More might be added in the future.
+*Dusk used to compile on both MSVC for Windows and GCC for Linux. However, at he moment, the GCC setup is broken and the project does not compile sucessfully. This will hopefully be fixed in the future.*
 
-Dusk Engine is built into a DLL/shared library which is used by the Dusk Editor executable.
-All the engines dependencies are built into static libraries which are linked into the engine.
+To build Dusk from source, first clone the repository and all of its submodules.
 
-Dusk uses [premake](https://premake.github.io/) as its build system.
+`git clone --recurse-submodules https://github.com/qolisipo/Dusk`<br>
 
-1. Clone the repository and its submodules.
-2. Run the python script in the scripts folder, or run premake from the root directory and choose the targeted environment.
-    - VS2019 `premake5.exe vs2019`
-    - GCC &nbsp;&nbsp;&nbsp;&nbsp; `./premake5 gmake2`
-3. Compile & run
+Dusk uses [premake](https://premake.github.io/) as its build system.<br>
 
-On Linux you might need to install some packages such as:
-  - `libgl1-mesa-dev`
-  - `xorg-dev`
+To generate the project files, run premake from the project root directory and choose the targeted environment.
+
+- VS2019 `premake5.exe vs2019`
+- GCC &nbsp;&nbsp;&nbsp;&nbsp; `./premake5 gmake2`
+
+After these steps the project should compile and run.
 
 ## Dependencies
 
