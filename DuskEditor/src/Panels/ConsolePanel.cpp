@@ -7,6 +7,7 @@ namespace DuskEngine
 	void ConsolePanel::OnImGuiRender()
 	{
 		ImGui::Begin("Console");
+        CheckFocus();
 		ImGui::BeginTabBar("MyTabBar");
         if (ImGui::BeginTabItem("Engine"))
         {

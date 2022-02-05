@@ -17,10 +17,12 @@ namespace DuskEngine
 
 		virtual void OnImGuiRender() override;
 	private:
-		void CreateResources();
+		void CreateDirectoryItems();
+		void CreateDirectoryResources();
 		std::filesystem::path m_CurrentDirectory;
 		
 		std::vector<Ref<Texture>> m_Icons;
+		std::vector<std::filesystem::directory_entry> m_DirEntries;
 		Ref<Texture> m_FolderIcon;
 		Ref<Texture> m_UnknownIcon;
 	};

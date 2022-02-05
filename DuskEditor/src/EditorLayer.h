@@ -13,25 +13,11 @@ namespace DuskEngine
 		void OnAttach() override;
 		void OnUpdate() override;
 		void OnImGuiRender() override;
-
-		void EditorCamera();
 	private:
 		Dockspace m_Dockspace;
 		std::vector<Panel*> m_Panels;
 
 		Ref<Scene> m_Scene;
 		Ref<FrameBuffer> m_FB;
-
-		Entity camera;
-		
-		//temp
-		Model* model;
-		Model* model2;
-
-		// camera stuff remove later
-		bool movingCamera = false;
-		bool firstMouse = false;
-		float lastX = Application::Get().GetWindow().GetWidth() / 2.0f;
-		float lastY = Application::Get().GetWindow().GetHeight() / 2.0f;
 	};
 }

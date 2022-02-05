@@ -28,8 +28,8 @@ Entities:
     Meta:
       name: Editor Camera
     Transform:
-      position: [-1.44492877, 4.03971004, 6.20573902]
-      rotation: [-0.551114559, -1.37890124, 0]
+      position: [-2.16205883, 2.06673384, 6.30833483]
+      rotation: [-0.34712851, -1.50391674, 0]
       scale: [1, 1, 1]
     Camera:
       main: true

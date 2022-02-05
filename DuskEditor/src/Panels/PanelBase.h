@@ -9,5 +9,7 @@ namespace DuskEngine
 		virtual ~Panel() = default;
 
 		virtual void OnImGuiRender() = 0;
+	protected:
+		void CheckFocus();
 	};
 }
