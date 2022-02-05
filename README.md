@@ -58,12 +58,7 @@ After these steps the project should compile and run.
 
 ## Dependencies
 
-Building and learning about game engines is a massive task, so I am taking some shortcuts where I can and resorting to popular libraries for certain functionality.
+Building a game engine is a massive task, and although I am trying to learn as much as possible about every nook and crany, sometimes shortcuts must be taken so I can maximize my time, effort and focus. Therefore I am resorting to popular libraries for certain functionality.
+Some of these libraries will be swapped out in the future for a custom solution, once I feel like its time/the engine is a bit more mature.
 
-  - [GLEW](http://glew.sourceforge.net/) - Cross-platform OpenGL loading library
-  - [GLFW](https://www.glfw.org/) - Cross-platform creation of windows, context and input handling
-  - [glm](https://github.com/g-truc/glm) - Header only mathematics library for graphics software
-  - [stb](https://github.com/nothings/stb) - Header only one-file library to import images (only using [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h))
-  - [Dear ImGui](https://github.com/ocornut/imgui) - Immediate mode graphic user interface
-  - [spdlog](https://github.com/gabime/spdlog) - Fast C++ logging library
-  - [entt](https://github.com/skypjack/entt) - Fast and reliable entity component system (ECS)
+[Dependencies List](https://github.com/qolisipo/Dusk/blob/main/DEPENDENCIES.md)
