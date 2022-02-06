@@ -20,7 +20,7 @@
 
 # The Story
 
-If you are interested in reading about the journey that led me to this project, refer [here](link-to-story).
+If you are interested in reading about the journey that led me to this project, refer [here](https://github.com/qolisipo/Dusk/blob/main/STORY.md).
 
 # Features
 
