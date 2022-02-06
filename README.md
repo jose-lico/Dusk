@@ -6,7 +6,23 @@
 <img src="images/dusk_windows.png">
 </p>
 
-## Current Features
+# Table of Contents
+
+  * [The Story](#the-story)
+  * [Features](#features)
+  * [Goals](#goals)
+  * [Getting Dusk](#getting-dusk)
+    * [Building Dusk](#building-dusk)
+    * [Binaries](#binaries)
+  * [Dependencies](#dependencies)
+  * [Resources](#resources)
+  
+
+# The Story
+
+If you are interested in reading about the journey that led me to this project, refer [here](link-to-story).
+
+# Features
 
 Dusk is very early in development and so its features are barebones.
 
@@ -21,27 +37,34 @@ Dusk is very early in development and so its features are barebones.
 - ECS using entt
 - Editor tool using imgui
 
-## Goals
+# Goals
 
 It is always good to have goals that push you forward and give you a glimpse of what the future might hold.
 
+Dusk's short term goal is to reach the MVP stage of a game engine. For me, this means to be able to create and manipulate scenes and the objects
+that live in it, create assets such as materials, and finally having the concept of a runtime and being able to export a game build which can be distribuited.
+This MVP will not even have scripting meaning the exported build will most likely just be a static scene.
+
+Here are some of the tasks towards this goal, and beyond.
+
 - Better editor tool
-- Support for multiple graphics APIs
 - Concept of a Runtime
 - Ability to export games
-- Mono Scripting
-- Physics
-- Audio
 - Profiling
 - Multithreaded
 - PBR workflow
-- Concept of Projects
+- Support for multiple graphics APIs
+- Mono Scripting
+- Physics
+- Audio
 
 And many many more.
 
+# Getting Dusk
+
 ## Building Dusk
 
-*Dusk used to compile on both MSVC for Windows and GCC for Linux. However, at he moment, the GCC setup is broken and the project does not compile sucessfully. This will hopefully be fixed in the future.*
+*Dusk used to compile on both MSVC for Windows and GCC for Linux. However, at the moment, the GCC setup is broken and the project does not compile sucessfully. This will hopefully be fixed in the future.*
 
 To build Dusk from source, first clone the repository and all of its submodules.
 
@@ -56,9 +79,15 @@ To generate the project files, run premake from the project root directory and c
 
 After these steps the project should compile and run.
 
-## Dependencies
+## Binaries
+
+For the time being, Dusk is only distributed as source code. Once the MVP stage is reached, a build for both Windows and Linux will be available on the [Releases tab](https://github.com/qolisipo/Dusk/releases). 
+
+# Dependencies
 
 Building a game engine is a massive task, and although I am trying to learn as much as possible about every nook and crany, sometimes shortcuts must be taken so I can maximize my time, effort and focus. Therefore I am resorting to popular libraries for certain functionality.
-Some of these libraries will be swapped out in the future for a custom solution, once I feel like its time/the engine is a bit more mature.
+Some of these libraries will be swapped out in the future for a custom solution, once I feel like it is time/the engine is more mature.
 
 [Dependencies List](https://github.com/qolisipo/Dusk/blob/main/DEPENDENCIES.md)
+
+# Resources
