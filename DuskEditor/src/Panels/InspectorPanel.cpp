@@ -229,8 +229,8 @@ namespace DuskEngine
 						{
 							item_current_idx = n;
 							std::string s = shaders[n];
-							meshes[0]->material->SetShader(Shader::Create("res/shaders/" + s, *uuids::uuid::from_string(ResourceManager::GetUUID("res/shaders/" + s + ".meta"))));
-							//create set shader function, keeps material name path and uuid, only shader and uniforms change
+							meshes[0]->material->SetShader(Shader::Create("res/shaders/" + s, ResourceManager::GetUUID("res/shaders/" + s + ".meta")));
+							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 						}
 					}
 
@@ -262,7 +262,7 @@ namespace DuskEngine
 							std::stringstream ss;
 							ss << path;
 							ss << ".meta";
-							texture->m_UUID = *uuids::uuid::from_string(ResourceManager::GetUUID(ss.str()));
+							texture->m_UUID = ResourceManager::GetUUID(ss.str());
 							meshes[0]->material->SetTexture(uniform.Name,texture);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 							free(path);

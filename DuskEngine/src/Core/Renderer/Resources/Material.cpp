@@ -107,9 +107,6 @@ namespace DuskEngine
 
 	void Material::SerializeText(const std::string& path)
 	{
-		// TEMP 
-		m_UUID = *uuids::uuid::from_string(ResourceManager::GetUUID(path + ".meta"));
-
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Material" << YAML::Value << m_Name;
@@ -165,7 +162,7 @@ namespace DuskEngine
 				uniform.Data = MakeRef<glm::vec3>(1.0);
 				break;
 			case UniformType::Texture:
-				uniform.Data = Texture::Create("res/textures/white.png");
+				uniform.Data = Texture::Create("res/textures/white.png", ResourceManager::GetUUID("res/textures/white.png.meta"));
 				break;
 			}
 		}

@@ -96,14 +96,14 @@ namespace DuskEngine
 	{
 	}
 
-	std::string ResourceManager::GetUUID(const std::string& path)
+	uuids::uuid ResourceManager::GetUUID(const std::filesystem::path& path)
 	{
 		std::ifstream infile(path);
 		std::string sLine;
 		if (infile.good())
 		{
 			getline(infile, sLine);
-			return sLine;
+			return *uuids::uuid::from_string(sLine);
 		}
 	}
 

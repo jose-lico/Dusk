@@ -20,7 +20,7 @@ namespace DuskEngine
 		static void CreateUUIDs();
 		static void DeleteUUIDs();
 		
-		static std::string GetUUID(const std::string& path);
+		static uuids::uuid GetUUID(const std::filesystem::path& path);
 
 		static Ref<Material> LoadMaterial(const uuids::uuid& uuid);
 		static Ref<Shader> LoadShader(const uuids::uuid& uuid);
