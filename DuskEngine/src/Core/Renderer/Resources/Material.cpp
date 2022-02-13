@@ -18,6 +18,7 @@ namespace DuskEngine
 			m_Name = name;
 
 		CreateUniforms();
+		LOG("Created Material " + m_Name)
 	}
 
 	Material::Material(Ref<Shader>& shader, const std::filesystem::path& path, const uuids::uuid& uuid)
@@ -28,6 +29,7 @@ namespace DuskEngine
 		m_Name = path.filename().string();
 
 		CreateUniforms();
+		LOG("Created Material " + m_Name)
 	}
 
 	/*Material::Material(Ref<Shader>& shader, const uuids::uuid& uuid)
@@ -47,6 +49,7 @@ namespace DuskEngine
 			m_Name = name;
 
 		CreateUniforms();
+		LOG("Created Material " + m_Name)
 	}
 
 	Material::~Material()
@@ -137,7 +140,7 @@ namespace DuskEngine
 
 	void Material::CreateUniforms()
 	{
-		LOG("Created Material " + m_Name)
+		
 		for (auto uniform : m_Shader->UniformSpecs)
 		{
 			auto u = Uniform(uniform.Name, uniform.Type);
@@ -166,5 +169,14 @@ namespace DuskEngine
 				break;
 			}
 		}
+	}
+
+	void Material::SetShader(Ref<Shader>& shader)
+	{
+		m_Shader = shader;
+
+		m_Uniforms.clear();
+		m_UniformsMap.clear();
+		CreateUniforms();
 	}
 }

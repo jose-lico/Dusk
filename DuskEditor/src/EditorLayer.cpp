@@ -61,6 +61,9 @@ namespace DuskEngine
 		if(ImGui::Button("Save Scene"))
 			SceneSerializer::SerializeText(m_Scene, "res/scenes/scene.yaml");
 
+		/*if (ImGui::Button("Create Light"))
+			m_Scene->CreateEntity("New Light");*/
+
 		ImGui::End();
 
 		m_Dockspace.EndDockspace();

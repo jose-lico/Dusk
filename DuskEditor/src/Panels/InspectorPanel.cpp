@@ -229,7 +229,8 @@ namespace DuskEngine
 						{
 							item_current_idx = n;
 							std::string s = shaders[n];
-							meshes[0]->material = MakeRef<Material>(Shader::Create("res/shaders/" + s));
+							meshes[0]->material->SetShader(Shader::Create("res/shaders/" + s, *uuids::uuid::from_string(ResourceManager::GetUUID("res/shaders/" + s + ".meta"))));
+							//create set shader function, keeps material name path and uuid, only shader and uniforms change
 						}
 					}
 
@@ -253,7 +254,7 @@ namespace DuskEngine
 					if (ImGui::ImageButton((void*)std::static_pointer_cast<Texture>(uniform.Data)->GetRendererID(), ImVec2{ 40, 40 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
 					{
 						nfdchar_t* path = NULL;
-						nfdresult_t result = NFD_OpenDialog("png;jpg", NULL, &path);
+						nfdresult_t result = NFD_OpenDialog("png,jpg", NULL, &path);
 						if (result == NFD_OKAY)
 						{
 							// very temporary, but works!

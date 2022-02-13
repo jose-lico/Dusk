@@ -42,6 +42,30 @@ namespace DuskEngine
 				entityIndex++;
 			});
 
+		if (ImGui::BeginPopupContextWindow())
+		{
+			if (ImGui::MenuItem("New Light"))
+			{
+				auto light = m_Scene->CreateEntity("New Light");
+				std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
+				m_SelectableStatus.resize(m_Scene->m_Registry.size());
+				light.AddComponent<Light>();
+
+				auto& lightTransform = light.GetComponent<Transform>();
+				lightTransform.position = { -2.0f, 1.0f, 1.0f };
+				lightTransform.scale = { 0.1f, 0.1f, 0.1f };
+				light.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), MakeRef<Material>(Shader::Create("res/shaders/simpleColor.glsl")));
+
+				// select currently created entity
+			}
+
+			if (ImGui::MenuItem("New Model"))
+			{
+			}
+
+			ImGui::EndPopup();
+		}
+
 		ImGui::End();
 	}
 }

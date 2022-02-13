@@ -19,8 +19,12 @@ namespace DuskEngine
 		else
 			m_Name = name;
 
+		m_Path = filepath;
+
 		ShaderProgramSource source = ParseShader();
+
 		m_ID = CreateShader(source.VertexSource, source.FragmentSource);
+		
 		LOG("Created Shader " + m_Name)
 	}
 

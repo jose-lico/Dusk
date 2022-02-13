@@ -12,7 +12,7 @@ namespace DuskEngine
 		LightType type;
 		glm::vec3 color;
 
-		Light() = default;
+		Light() :type(LightType::Directional), color(1.0f) {}
 
 		static std::string LightTypeString(LightType type)
 		{

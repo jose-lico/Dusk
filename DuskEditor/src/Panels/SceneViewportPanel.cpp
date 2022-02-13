@@ -130,7 +130,5 @@ namespace DuskEngine
 
 			transform.rotation += rotInput;
 		}
-
-		
 	}
 }
