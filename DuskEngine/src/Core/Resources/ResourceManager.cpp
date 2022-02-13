@@ -128,8 +128,7 @@ namespace DuskEngine
 				uniform.Data = MakeRef<glm::vec3>(data[uniform.Name].as<glm::vec3>());
 				break;
 			case UniformType::Texture:
-				auto texture = Texture::Create(m_UUIDsMap[data[uniform.Name].as<uuids::uuid>()].string());
-				uniform.Data = texture;
+				uniform.Data = LoadTexture(data[uniform.Name].as<uuids::uuid>());
 				break;
 			}
 		}

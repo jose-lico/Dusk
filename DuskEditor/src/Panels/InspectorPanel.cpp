@@ -263,7 +263,7 @@ namespace DuskEngine
 							ss << path;
 							ss << ".meta";
 							texture->m_UUID = ResourceManager::GetUUID(ss.str());
-							meshes[0]->material->SetTexture(uniform.Name,texture);
+							meshes[0]->material->SetTexture(uniform.Name, texture);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 							free(path);
 						}
