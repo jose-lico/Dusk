@@ -26,6 +26,7 @@ if _ACTION ~= "gmake2" then
 end
 	include "DuskEngine"
 	include "DuskEditor"
+	include "DuskRuntime"
 
 newaction
 {

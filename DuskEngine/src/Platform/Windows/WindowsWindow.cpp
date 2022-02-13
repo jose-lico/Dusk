@@ -3,6 +3,8 @@
 
 #include "Core/Macros/LOG.h"
 
+#include "GL/glew.h"
+
 namespace DuskEngine
 {
 	WindowsWindow::WindowsWindow(const WindowData& data)
@@ -58,6 +60,7 @@ namespace DuskEngine
 
 				WindowResizeEvent event(width, height);
 				data.EventCallback(event);
+				glViewport(0, 0, width, height); // maybe move to context
 			});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
@@ -96,6 +99,8 @@ namespace DuskEngine
 				MouseMovedEvent event((float)xPos, (float)yPos);
 				data.EventCallback(event);
 			});
+
+
 	}
 
 	WindowsWindow::~WindowsWindow()
