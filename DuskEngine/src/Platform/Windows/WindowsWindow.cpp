@@ -22,7 +22,6 @@ namespace DuskEngine
 		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		glfwMaximizeWindow(m_Window);
-		//SetVSync(false);
 
 		// glfw callbacks
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)

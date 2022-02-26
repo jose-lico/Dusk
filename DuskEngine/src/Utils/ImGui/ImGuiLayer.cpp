@@ -7,6 +7,7 @@
 #include <IconsForkAwesome.h>
 
 #include <imgui/imgui.h>
+#include <ImGuizmo.h>
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 #include <../backends/imgui_impl_opengl3.cpp>
@@ -82,6 +83,7 @@ namespace DuskEngine
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End()

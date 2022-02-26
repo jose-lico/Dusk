@@ -32,8 +32,9 @@ namespace DuskEngine
 
 		m_Panels.push_back(new InspectorPanel());
 		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
-		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector));
 		m_Panels.push_back(new SceneViewportPanel(m_FB, *m_Scene->GetMainCamera()));
+		SceneViewportPanel& viewport = *(SceneViewportPanel*)m_Panels.back();
+		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector, viewport));
 		m_Panels.push_back(new ConsolePanel());
 		m_Panels.push_back(new ContentBrowserPanel());
 	}
@@ -60,9 +61,6 @@ namespace DuskEngine
 
 		if(ImGui::Button("Save Scene"))
 			SceneSerializer::SerializeText(m_Scene, "res/scenes/scene.yaml");
-
-		/*if (ImGui::Button("Create Light"))
-			m_Scene->CreateEntity("New Light");*/
 
 		ImGui::End();
 

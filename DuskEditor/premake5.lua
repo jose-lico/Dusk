@@ -8,7 +8,7 @@ project "DuskEditor"
 	files
 	{
 		"src/**.h",
-		"src/**.cpp",
+		"src/**.cpp"
 	}
 
 	links
@@ -32,7 +32,8 @@ project "DuskEditor"
 		dependenciesDir .. "/visit_struct/include",
 		dependenciesDir .. "/stduuid/include",
 		dependenciesDir .. "/stduuid/gsl",
-		dependenciesDir .. "/IconFontCppHeaders"
+		dependenciesDir .. "/IconFontCppHeaders",
+		dependenciesDir .. "/ImGuizmo"
 	}
 
 	defines

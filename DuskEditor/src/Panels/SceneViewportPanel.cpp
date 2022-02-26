@@ -1,6 +1,7 @@
 #include "SceneViewportPanel.h"
 
 #include <imgui/imgui.h>
+#include <ImGuizmo.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <IconsForkAwesome.h>
 
@@ -63,6 +64,27 @@ namespace DuskEngine
 		
 		if(ImGui::IsWindowFocused())
 			EditorCamera();
+
+		if(m_SelectedEntities->size() > 0)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, m_ViewportSize.x, m_ViewportSize.y);
+			
+			auto& camera = m_Camera.GetComponent<Camera>();
+
+			auto& transform = (*m_SelectedEntities)[0]->GetComponent<Transform>();
+			glm::mat4 transformMatrix = transform.GetTransform();
+
+			ImGuizmo::Manipulate(glm::value_ptr(camera.viewMatrix), glm::value_ptr(camera.projectionMatrix),
+				ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::LOCAL, glm::value_ptr(transformMatrix));
+
+			if(ImGuizmo::IsUsing())
+			{
+				transform.position = (glm::vec3)transformMatrix[3];
+			}
+		}
 
 		ImGui::End();
 	}

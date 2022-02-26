@@ -5,11 +5,12 @@
 
 namespace DuskEngine
 {
-	HierarchyPanel::HierarchyPanel(Ref<Scene>& scene, InspectorPanel& inspector)
-		:m_Scene(scene), m_Inspector(&inspector)
+	HierarchyPanel::HierarchyPanel(Ref<Scene>& scene, InspectorPanel& inspector, SceneViewportPanel& viewport)
+		:m_Scene(scene)
 	{
 		m_SelectableStatus.resize(m_Scene->m_Registry.size());
-		m_Inspector->SelectedEntities(m_SelectedEntities);
+		inspector.SelectedEntities(m_SelectedEntities);
+		viewport.SelectedEntities(m_SelectedEntities);
 	}
 
 	HierarchyPanel::~HierarchyPanel()

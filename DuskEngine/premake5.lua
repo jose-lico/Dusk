@@ -13,7 +13,9 @@ project "DuskEngine"
 		"src/**.h",
 		"src/**.cpp",
 		
-		dependenciesDir .. "/stb/stb/stb_image.h"
+		dependenciesDir .. "/stb/stb/stb_image.h",
+		dependenciesDir .. "/ImGuizmo/ImGuizmo.h",
+		dependenciesDir .. "/ImGuizmo/ImGuizmo.cpp"
 	}
 
 	includedirs
@@ -31,7 +33,8 @@ project "DuskEngine"
 		dependenciesDir .. "/visit_struct/include",
 		dependenciesDir .. "/stduuid/include",
 		dependenciesDir .. "/stduuid/gsl",
-		dependenciesDir .. "/IconFontCppHeaders"
+		dependenciesDir .. "/IconFontCppHeaders",
+		dependenciesDir .. "/ImGuizmo"
 	}
 
 	links
@@ -57,6 +60,8 @@ project "DuskEngine"
 		"UUID_SYSTEM_GENERATOR"
 	}
 
+	filter "files:../Dependencies/ImGuizmo/**.cpp"
+	flags { "NoPCH" }
 
 	filter "system:windows"
 		cppdialect "C++17"
