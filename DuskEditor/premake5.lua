@@ -39,7 +39,7 @@ project "DuskEditor"
 		dependenciesDir .. "/stduuid/include",
 		dependenciesDir .. "/stduuid/gsl",
 		dependenciesDir .. "/IconFontCppHeaders",
-		dependenciesDir .. "/ImGuizmo"
+		dependenciesDir .. "/ImGuizmo/include"
 	}
 
 	defines

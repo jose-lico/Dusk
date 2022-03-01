@@ -21,6 +21,7 @@ end
 	include "Dependencies/assimp-1"
 	include "Dependencies/nativefiledialog/build"
 	include "Dependencies/yaml-cpp"
+	include "Dependencies/ImGuizmo"
 if _ACTION ~= "gmake2" then
 	group "Engine"
 end

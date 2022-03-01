@@ -7,7 +7,7 @@
 #include <IconsForkAwesome.h>
 
 #include <imgui/imgui.h>
-#include <ImGuizmo.h>
+#include <ImGuizmo/ImGuizmo.h>
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 #include <../backends/imgui_impl_opengl3.cpp>

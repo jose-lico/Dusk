@@ -40,3 +40,6 @@
 [submodule "Dependencies/IconFontCppHeaders"]
 	path = Dependencies/IconFontCppHeaders
 	url = https://github.com/juliettef/IconFontCppHeaders
+[submodule "Dependencies/ImGuizmo"]
+	path = Dependencies/ImGuizmo
+	url = https://github.com/qolisipo/ImGuizmo
