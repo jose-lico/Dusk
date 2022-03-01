@@ -13,9 +13,7 @@ project "DuskEngine"
 		"src/**.h",
 		"src/**.cpp",
 		
-		dependenciesDir .. "/stb/stb/stb_image.h",
-		dependenciesDir .. "/ImGuizmo/ImGuizmo.h",
-		dependenciesDir .. "/ImGuizmo/ImGuizmo.cpp"
+		dependenciesDir .. "/stb/stb/stb_image.h"
 	}
 
 	includedirs
@@ -34,16 +32,7 @@ project "DuskEngine"
 		dependenciesDir .. "/stduuid/include",
 		dependenciesDir .. "/stduuid/gsl",
 		dependenciesDir .. "/IconFontCppHeaders",
-		dependenciesDir .. "/ImGuizmo"
-	}
-
-	links
-	{
-		"glfw3",
-		"glew",
-		"ImGui",
-		"assimp",
-		"yaml-cpp"
+		dependenciesDir .. "/ImGuizmo/include"
 	}
 
 	defines
@@ -79,11 +68,6 @@ project "DuskEngine"
 			"4003",
 			"4005"
 		}
-
-		-- postbuildcommands
-		-- {
-		-- 	("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/DuskEditor")
-		-- }
 
 	filter "system:linux"
 		cppdialect "C++17"

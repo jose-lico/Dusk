@@ -14,7 +14,13 @@ project "DuskEditor"
 	links
 	{
 		"DuskEngine",
-		"nfd"
+		"nfd",
+		"glfw3",
+		"glew",
+		"ImGui",
+		"assimp",
+		"yaml-cpp",
+		"ImGuizmo"
 	}
 
 	includedirs
