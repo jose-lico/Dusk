@@ -20,7 +20,7 @@
 
 # The Story
 
-If you are interested in reading about the journey that led me to this project, refer [here](https://github.com/qolisipo/Dusk/blob/main/STORY.md).
+If you are interested in reading about the journey that led me to this project, refer [here](https://github.com/qolisipo/Dusk/blob/main/.github/STORY.md).
 
 # Features
 
@@ -88,6 +88,18 @@ For the time being, Dusk is only distributed as source code. Once the MVP stage 
 Building a game engine is a massive task, and although I am trying to learn as much as possible about every nook and crany, sometimes shortcuts must be taken so I can maximize my time, effort and focus. Therefore I am resorting to popular libraries for certain functionality.
 Some of these libraries will be swapped out in the future for a custom solution, once I feel like it is time/the engine is more mature.
 
-[Dependencies List](https://github.com/qolisipo/Dusk/blob/main/DEPENDENCIES.md)
+[Dependencies List](https://github.com/qolisipo/Dusk/blob/main/.github/DEPENDENCIES.md)
 
 # Resources
+
+Building this project has been quite the journey. I could never have made it this far without all the resources out there pointing me in the right direction and providing motivation along the way.<br>
+
+In order to remain as wary and absorb as much information as possible, I try to look at lots of different sources, always cross checking information and making sure to follow it up with the comments on the video or article. I find this last aspect very important, as it can  lead me to new directions and prevent common gotchas.<br>
+
+Interacting, discussing and learning from other devs has also been part of my learning experience, and has helped me push my knowledge and this project even further.
+
+Among all the resources I used, there is one that stands out.<br> 
+[The Cherno](https://www.youtube.com/channel/UCQ-W1KE9EYfdxhL6S4twUNw) is a youtuber who has been developing his own engine called Hazel, recording tutorials and dev-logs of the process. He also as a lot of other videos on topics such as C++, game engines, rendering, and more.<br> 
+Dusk's early development was very inspired by Hazel as I was still riding this bicycle with training wheels, but has since grown a lot, both in terms of implementation and goals.
+
+[Dependencies List](https://github.com/qolisipo/Dusk/blob/main/.github/RESOURCES.md)

@@ -70,12 +70,12 @@ namespace DuskEngine
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, m_ViewportSize.x, m_ViewportSize.y);
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
 			
 			auto& camera = m_Camera.GetComponent<Camera>();
 
 			auto& transform = (*m_SelectedEntities)[0]->GetComponent<Transform>();
-			glm::mat4 transformMatrix = transform.GetTransform();
+			glm::mat4& transformMatrix = transform.GetTransform();
 
 			ImGuizmo::Manipulate(glm::value_ptr(camera.viewMatrix), glm::value_ptr(camera.projectionMatrix),
 				ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::LOCAL, glm::value_ptr(transformMatrix));

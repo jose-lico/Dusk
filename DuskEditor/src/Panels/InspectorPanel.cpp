@@ -2,6 +2,8 @@
 
 #include "DuskEngine.h"
 
+#include "Utils/ImGuiUtils.h"
+
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <nfd/nfd.h>
@@ -109,6 +111,8 @@ namespace DuskEngine
 	{
 		if(transforms.size() == 1)
 		{
+			//ImGuiUtils::DrawVec3("Position", transforms[0]->position);
+			//ImGui::Separator();
 			ImGui::DragFloat3("Position", &(transforms[0]->position[0]), .01f);
 
 			glm::vec3 rotation = glm::degrees(transforms[0]->rotation);
