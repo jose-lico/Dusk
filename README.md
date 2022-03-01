@@ -99,7 +99,7 @@ In order to remain as wary and absorb as much information as possible, I try to 
 Interacting, discussing and learning from other devs has also been part of my learning experience, and has helped me push my knowledge and this project even further.
 
 Among all the resources I used, there is one that stands out.<br> 
-[The Cherno](https://www.youtube.com/channel/UCQ-W1KE9EYfdxhL6S4twUNw) is a youtuber who has been developing his own engine called Hazel, recording tutorials and dev-logs of the process. He also as a lot of other videos on topics such as C++, game engines, rendering, and more.<br> 
+[The Cherno](https://www.youtube.com/channel/UCQ-W1KE9EYfdxhL6S4twUNw) is a youtuber who has been developing his own engine called Hazel, recording tutorials and dev-logs of the process. He also has a lot of other videos on topics such as C++, game engines, rendering, and more.<br> 
 Dusk's early development was very inspired by Hazel as I was still riding this bicycle with training wheels, but has since grown a lot, both in terms of implementation and goals.
 
-[Dependencies List](https://github.com/qolisipo/Dusk/blob/main/.github/RESOURCES.md)
+[Resources List](https://github.com/qolisipo/Dusk/blob/main/.github/RESOURCES.md)
