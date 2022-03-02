@@ -10,7 +10,7 @@ namespace DuskEngine
 		~GameLayer() = default;
 		void OnUpdate() override;
 	private:
-		void GameLayer::Camera();
+		void Camera();
 
 		Entity m_Camera;
 

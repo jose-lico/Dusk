@@ -25,9 +25,9 @@ namespace DuskEngine
         return std::make_unique<T>(std::forward<Args>(args)...);
     }
 
-    template<typename T, typename... Args>
-    inline WeakRef<T> MakeWeak(Args&&... args)
-    {
-        return std::make_weak<T>(std::forward<Args>(args)...);
-    }
+    // template<typename T, typename... Args>
+    // inline WeakRef<T> MakeWeak(Args&&... args)
+    // {
+    //     return std::make_weak<T>(std::forward<Args>(args)...);
+    // }
 }

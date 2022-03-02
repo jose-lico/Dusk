@@ -58,11 +58,6 @@ project "DuskEngine"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
 
-		links
-		{
-			"opengl32"
-		}
-
 		disablewarnings 
 		{ 
 			"4003",
@@ -75,7 +70,6 @@ project "DuskEngine"
 		defines "DUSK_LINUX"
 		links 
 		{
-			"GL",
 			"pthread"
 		}
 

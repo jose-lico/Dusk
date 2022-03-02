@@ -75,7 +75,7 @@ namespace DuskEngine
 			auto& camera = m_Camera.GetComponent<Camera>();
 
 			auto& transform = (*m_SelectedEntities)[0]->GetComponent<Transform>();
-			glm::mat4& transformMatrix = transform.GetTransform();
+			glm::mat4 transformMatrix = transform.GetTransform();
 
 			ImGuizmo::Manipulate(glm::value_ptr(camera.viewMatrix), glm::value_ptr(camera.projectionMatrix),
 				ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::LOCAL, glm::value_ptr(transformMatrix));

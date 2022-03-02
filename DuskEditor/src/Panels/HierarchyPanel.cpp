@@ -55,7 +55,10 @@ namespace DuskEngine
 				auto& lightTransform = light.GetComponent<Transform>();
 				lightTransform.position = { -2.0f, 1.0f, 1.0f };
 				lightTransform.scale = { 0.1f, 0.1f, 0.1f };
-				light.AddComponent<MeshRenderer>(PrimitiveMesh::Cube(), MakeRef<Material>(Shader::Create("res/shaders/simpleColor.glsl")));
+				auto shader = Shader::Create("res/shaders/simpleColor.glsl");
+				auto mesh = PrimitiveMesh::Cube();
+				auto material = MakeRef<Material>(shader);
+				light.AddComponent<MeshRenderer>(mesh, material);
 
 				// select currently created entity
 			}

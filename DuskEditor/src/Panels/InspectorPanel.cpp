@@ -233,7 +233,8 @@ namespace DuskEngine
 						{
 							item_current_idx = n;
 							std::string s = shaders[n];
-							meshes[0]->material->SetShader(Shader::Create("res/shaders/" + s, ResourceManager::GetUUID("res/shaders/" + s + ".meta")));
+							auto shader = Shader::Create("res/shaders/" + s, ResourceManager::GetUUID("res/shaders/" + s + ".meta"));
+							meshes[0]->material->SetShader(shader);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 						}
 					}
@@ -257,6 +258,7 @@ namespace DuskEngine
 					ImGui::Text(uniform.Name.c_str());
 					if (ImGui::ImageButton((void*)std::static_pointer_cast<Texture>(uniform.Data)->GetRendererID(), ImVec2{ 40, 40 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
 					{
+						#ifdef DUSK_WINDOWS
 						nfdchar_t* path = NULL;
 						nfdresult_t result = NFD_OpenDialog("png,jpg", NULL, &path);
 						if (result == NFD_OKAY)
@@ -271,6 +273,7 @@ namespace DuskEngine
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 							free(path);
 						}
+						#endif
 					}
 				}
 			}

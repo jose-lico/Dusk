@@ -72,7 +72,7 @@ namespace DuskEngine
 			auto view = m_Registry.view<Transform, Camera>();
 			for (auto entity : view)
 			{
-				auto& [transform, camera] = view.get<Transform, Camera>(entity);
+				auto [transform, camera] = view.get<Transform, Camera>(entity);
 
 				if(camera.main)
 				{
@@ -94,7 +94,7 @@ namespace DuskEngine
 			auto view = m_Registry.view<Transform, MeshRenderer>();
 			for (auto entity : view)
 			{
-				auto& [transform, mesh] = view.get<Transform, MeshRenderer>(entity);
+				auto [transform, mesh] = view.get<Transform, MeshRenderer>(entity);
 
 				mesh.material->UploadUniforms();
 
@@ -121,7 +121,7 @@ namespace DuskEngine
 
 				for (auto light : lights)
 				{
-					auto& [l, t] = m_Registry.get<Light, Transform>(light);
+					auto [l, t] = m_Registry.get<Light, Transform>(light);
 					glm::vec3 lightColor = l.color;
 					switch(l.type)
 					{

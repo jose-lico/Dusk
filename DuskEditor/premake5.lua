@@ -14,7 +14,6 @@ project "DuskEditor"
 	links
 	{
 		"DuskEngine",
-		"nfd",
 		"glfw3",
 		"glew",
 		"ImGui",
@@ -22,6 +21,8 @@ project "DuskEditor"
 		"yaml-cpp",
 		"ImGuizmo"
 	}
+
+	debugdir "%{wks.location}/DuskEditor"
 
 	includedirs
 	{
@@ -54,10 +55,23 @@ project "DuskEditor"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
 
+		links
+		{
+			"opengl32",
+			"nfd"
+		}
+
 	filter "system:linux"
 		cppdialect "gnu++17"
 		systemversion "latest"
 		defines "DUSK_LINUX"
+		links 
+		{
+			"GL",
+			"pthread",
+			"dl",
+			"uuid"
+		}
 
 	filter "configurations:Debug"
 		runtime "Debug"
