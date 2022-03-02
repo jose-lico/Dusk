@@ -16,6 +16,7 @@
     * [Binaries](#binaries)
   * [Dependencies](#dependencies)
   * [Resources](#resources)
+  * [Screenshots](#screenshots)
   
 
 # The Story
@@ -103,3 +104,11 @@ Among all the resources I used, there is one that stands out.<br>
 Dusk's early development was very inspired by Hazel as I was still riding this bicycle with training wheels, but has since grown a lot, both in terms of implementation and goals.
 
 [Resources List](https://github.com/qolisipo/Dusk/blob/main/.github/RESOURCES.md)
+
+# Screenshots
+
+<p align="center">
+<img src="images/dusk_linux.png">
+</p>
+
+*Dusk running on Linux*
