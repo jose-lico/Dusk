@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
+#include "Core/Macros/LOG.h"
 
 #include "Scene.h"
 
@@ -21,7 +22,10 @@ namespace DuskEngine
 			if (!HasComponent<T>())
 				return m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
 			else
+			{
+				//APP_LOG("Component already present!")
 				return GetComponent<T>();
+			}
 		}
 
 		template<typename T>

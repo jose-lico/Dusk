@@ -1,12 +1,13 @@
 #include "ConsolePanel.h"
 
 #include <imgui/imgui.h>
+#include <IconsForkAwesome.h>
 
 namespace DuskEngine
 {
 	void ConsolePanel::OnImGuiRender()
 	{
-		ImGui::Begin("Console");
+		ImGui::Begin(ICON_FK_TERMINAL "  Console");
         CheckFocus();
 		ImGui::BeginTabBar("MyTabBar");
         if (ImGui::BeginTabItem("Engine"))

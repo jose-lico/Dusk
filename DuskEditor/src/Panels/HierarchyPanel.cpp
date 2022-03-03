@@ -40,12 +40,33 @@ namespace DuskEngine
 						m_SelectedEntities.push_back(new Entity(entityID, m_Scene.get()));
 					}
 				}
+
+				if(ImGui::BeginPopupContextItem())
+				{
+					if (ImGui::MenuItem("Delete Entity"))
+					{
+						m_Scene->DestroyEntity(entityID);
+						std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
+						m_SelectableStatus.resize(m_Scene->m_Registry.size());
+						m_SelectedEntities.resize(0);
+					}
+					ImGui::EndPopup();
+				}
 				entityIndex++;
 			});
 
-		if (ImGui::BeginPopupContextWindow())
+		if (ImGui::BeginPopupContextWindow(0,1,false))
 		{
-			if (ImGui::MenuItem("New Light"))
+			if (ImGui::MenuItem("Create Empty Entity"))
+			{
+				m_Scene->CreateEntity("New Entity");
+				std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
+				m_SelectableStatus.resize(m_Scene->m_Registry.size());
+
+				// select currently created entity
+			}
+
+			if (ImGui::MenuItem("Create Light"))
 			{
 				auto light = m_Scene->CreateEntity("New Light");
 				std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
@@ -61,10 +82,6 @@ namespace DuskEngine
 				light.AddComponent<MeshRenderer>(mesh, material);
 
 				// select currently created entity
-			}
-
-			if (ImGui::MenuItem("New Model"))
-			{
 			}
 
 			ImGui::EndPopup();

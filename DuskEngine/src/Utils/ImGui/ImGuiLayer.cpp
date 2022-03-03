@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ImGuiLayer.h"
 #include "Core/Macros/BIND_EVENT_FN.h"
+#include "Core/Macros/LOG.h"
 
 #include "Utils/Window/Window.h"
 
@@ -42,16 +43,9 @@ namespace DuskEngine
 		ApplyStyle();
 
 		ImGui::GetStyle().WindowMenuButtonPosition = ImGuiDir_None;
-		static const ImWchar icons_ranges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
-		ImFontConfig icons_config; 
-		icons_config.MergeMode = true; 
-		icons_config.PixelSnapH = true;
 
-		#ifdef DUSK_WINDOWS
-		io.Fonts->AddFontFromFileTTF("../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 16.0f, &icons_config, icons_ranges);
-		#elif DUSK_LINUX
-		io.Fonts->AddFontFromFileTTF("../../../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 16.0f, &icons_config, icons_ranges);
-		#endif
+		AddFont("res/editor/fonts/Roboto-Regular.ttf", 16.0f);
+		AddFont("res/editor/fonts/Roboto-Bold.ttf", 16.0f);
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -110,11 +104,25 @@ namespace DuskEngine
 		}
 	}
 
+	void ImGuiLayer::AddFont(const std::string& name, float size)
+	{
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.Fonts->AddFontFromFileTTF(name.c_str(), size);	
+
+		static const ImWchar icons_ranges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
+		ImFontConfig icons_config;
+		icons_config.MergeMode = true;
+		icons_config.PixelSnapH = true;
+#ifdef DUSK_WINDOWS
+		io.Fonts->AddFontFromFileTTF("../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 16.0f, &icons_config, icons_ranges);
+#elif DUSK_LINUX
+		io.Fonts->AddFontFromFileTTF("../../../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 16.0f, &icons_config, icons_ranges);
+#endif
+	}
+
 	void ImGuiLayer::ApplyStyle()
 	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Regular.ttf", 16);
-		ImGui::GetStyle().FrameRounding = 4.0f;
+		//ImGui::GetStyle().FrameRounding = 4.0f;
 		ImGui::GetStyle().GrabRounding = 4.0f;
 
 		ImVec4* colors = ImGui::GetStyle().Colors;

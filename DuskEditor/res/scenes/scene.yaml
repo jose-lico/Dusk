@@ -61,8 +61,8 @@ Entities:
     Meta:
       name: Editor Camera
     Transform:
-      position: [-1.91811717, 1.4900434, 6.88105059]
-      rotation: [-0.210863292, -1.43569732, 0]
+      position: [0.733327746, -1.40412045, 3.36308599]
+      rotation: [0.088960886, -1.07752085, 0]
       scale: [1, 1, 1]
     Camera:
       main: true
@@ -90,3 +90,13 @@ Entities:
         fileID: 0
         uuid: 00000000-0000-0000-0000-000000000000
       material: e5389bcf-ca32-47ae-9cc0-a296c257a3fc
+  - Entity: 12837192831273
+    Meta:
+      name: New Entity
+    Transform:
+      position: [3.05079937, -1.16916072, 0.0260233954]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    Light:
+      type: Point
+      color: [0.0865245908, 0.255751193, 0.455696225]

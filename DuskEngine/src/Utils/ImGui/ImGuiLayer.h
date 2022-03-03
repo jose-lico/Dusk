@@ -19,6 +19,7 @@ namespace DuskEngine
 		void Begin();
 		void End();
 	private:
+		void AddFont(const std::string& name, float size);
 		void ApplyStyle();
 		bool m_ShowDemoWindow = false;
 		bool ActivateDemoWindow(KeyPressedEvent& e);

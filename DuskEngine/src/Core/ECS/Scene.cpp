@@ -28,6 +28,11 @@ namespace DuskEngine
 		return entity;
 	}
 
+	void Scene::DestroyEntity(entt::entity handle)
+	{
+		m_Registry.destroy(handle);
+	}
+
 	Entity* Scene::GetMainCamera()
 	{
 		auto view = m_Registry.view<Camera>();

@@ -31,11 +31,40 @@ namespace DuskEngine
 				ImGui::Text("Only shared components can be edited.");
 				ImGui::Separator();
 			}
+			else
+			{
+				if (ImGui::Button("Add Component"))
+					ImGui::OpenPopup("AddComponent");
 
-			DrawComponent<Transform>(ICON_FK_CUBE " Transform", *m_SelectedEntities, TransformInspector);
-			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA " Camera", *m_SelectedEntities, CameraInspector);
-			DrawComponent<Light>(ICON_FK_LIGHTBULB_O " Light", *m_SelectedEntities, LightInspector);
-			DrawComponent<MeshRenderer>(ICON_FK_PAINT_BRUSH " Mesh Renderer", *m_SelectedEntities, MaterialInspector);
+				if (ImGui::BeginPopup("AddComponent"))
+				{
+					if (ImGui::MenuItem("Camera"))
+					{
+						auto& ent = (*m_SelectedEntities)[0]->AddComponent<Camera>();
+						ent.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (ImGui::MenuItem("Light"))
+					{
+						(*m_SelectedEntities)[0]->AddComponent<Light>();
+						ImGui::CloseCurrentPopup();
+					}
+
+					/*if (ImGui::MenuItem("Mesh Renderer"))
+					{
+						(*m_SelectedEntities)[0]->AddComponent<MeshRenderer>();
+						ImGui::CloseCurrentPopup();
+					}*/
+
+					ImGui::EndPopup();
+				}
+			}
+
+			DrawComponent<Transform>(ICON_FK_CUBE "  Transform", *m_SelectedEntities, TransformInspector);
+			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
+			DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
+			DrawComponent<MeshRenderer>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, MaterialInspector);
 		}
 		ImGui::End();
 	}
@@ -61,9 +90,13 @@ namespace DuskEngine
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
 		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 		
+		ImGuiIO& io = ImGui::GetIO();
+		auto boldFont = io.Fonts->Fonts[1];
+		ImGui::PushFont(boldFont);
 		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name);
-		ImGui::PopStyleVar(
-		);
+		ImGui::PopStyleVar();
+		ImGui::PopFont();
+
 		ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
 		if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
 		{
@@ -111,8 +144,20 @@ namespace DuskEngine
 	{
 		if(transforms.size() == 1)
 		{
-			//ImGuiUtils::DrawVec3("Position", transforms[0]->position);
-			//ImGui::Separator();
+			//static ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_Hideable;
+			////static ImGuiTableFlags flags = ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders;
+			//ImGui::BeginTable("table2", 2, flags);
+
+			//ImGui::TableSetupColumn("AAA", ImGuiTableColumnFlags_WidthStretch);
+			//ImGui::TableSetupColumn("BBB", ImGuiTableColumnFlags_WidthFixed);
+			//
+			//ImGuiUtils::DrawVec3Table("Position", transforms[0]->position);
+			//ImGuiUtils::DrawVec3Table("Scale", transforms[0]->scale);
+			//ImGuiUtils::DrawFloatTable("Rotation", transforms[0]->rotation.x);
+			//ImGuiUtils::DrawTextTable("Property");
+
+			//ImGui::EndTable();
+
 			ImGui::DragFloat3("Position", &(transforms[0]->position[0]), .01f);
 
 			glm::vec3 rotation = glm::degrees(transforms[0]->rotation);
