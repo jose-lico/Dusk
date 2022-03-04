@@ -54,10 +54,12 @@ namespace DuskEngine
 
 			// Should I/Do I need to even calculate Front, Right and Up vectors every frame? probably not
 
-			auto view = m_Registry.view<Transform>();
+			auto view = m_Registry.view<Transform, Meta>();
 			for (auto entity : view)
 			{
-				auto& transform = view.get<Transform>(entity);
+				auto [transform,meta] = view.get<Transform, Meta>(entity);
+
+				if (!meta.enabled) continue;
 
 				glm::vec3 front;
 
@@ -74,10 +76,12 @@ namespace DuskEngine
 		glm::vec3 cameraPos;
 		glm::mat4 VPM;
 		{
-			auto view = m_Registry.view<Transform, Camera>();
+			auto view = m_Registry.view<Transform, Camera, Meta>();
 			for (auto entity : view)
 			{
-				auto [transform, camera] = view.get<Transform, Camera>(entity);
+				auto [transform, camera, meta] = view.get<Transform, Camera, Meta>(entity);
+
+				if (!meta.enabled) continue;
 
 				if(camera.main)
 				{
@@ -96,10 +100,12 @@ namespace DuskEngine
 		RenderCommand::Clear();
 		{
 			// Most of this should maybe be moved to the renderer
-			auto view = m_Registry.view<Transform, MeshRenderer>();
+			auto view = m_Registry.view<Transform, MeshRenderer, Meta>();
 			for (auto entity : view)
 			{
-				auto [transform, mesh] = view.get<Transform, MeshRenderer>(entity);
+				auto [transform, mesh, meta] = view.get<Transform, MeshRenderer, Meta>(entity);
+
+				if (!meta.enabled) continue;
 
 				mesh.material->UploadUniforms();
 
@@ -111,7 +117,7 @@ namespace DuskEngine
 				mesh.material->m_Shader->SetUniformMat4("e_ViewProjection", VPM);
 				mesh.material->m_Shader->SetUniformVec3("e_ViewPosition", cameraPos);
 
-				auto lights = m_Registry.view<Light>();
+				auto lights = m_Registry.view<Light, Meta>();
 
 				int dirLightIndex = 0;
 				int pointLightIndex = 0;
@@ -126,7 +132,10 @@ namespace DuskEngine
 
 				for (auto light : lights)
 				{
-					auto [l, t] = m_Registry.get<Light, Transform>(light);
+					auto [l, t, m] = m_Registry.get<Light, Transform, Meta>(light);
+
+					if (!m.enabled) continue;
+
 					glm::vec3 lightColor = l.color;
 					switch(l.type)
 					{

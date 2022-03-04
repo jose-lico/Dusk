@@ -75,6 +75,8 @@ namespace DuskEngine
 
 				Entity deserializedEntity = scene->CreateEntity(name);
 
+				deserializedEntity.GetComponent<Meta>().enabled = meta["enabled"].as<bool>();;
+
 				auto transform = entity["Transform"];
 				if (transform)
 				{

@@ -24,7 +24,7 @@ namespace DuskEngine
 
 	void ContentBrowserPanel::OnImGuiRender()
 	{
-		ImGui::Begin(ICON_FK_FOLDER_OPEN " Asset Browser");
+		ImGui::Begin(ICON_FK_FOLDER_OPEN "  Asset Browser");
 		CheckFocus();
 
 		if (m_CurrentDirectory != std::filesystem::path(g_RootDirectory))
@@ -62,7 +62,9 @@ namespace DuskEngine
 
 			if (directoryEntry.is_directory())
 			{
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				ImGui::ImageButton((void*)m_FolderIcon->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::PopStyleColor();
 
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 				{

@@ -9,11 +9,12 @@ namespace DuskEngine
 	struct Meta
 	{
 		std::string name;
+		bool enabled;
 
 		Meta() = default;
 		Meta(const std::string& name)
-			:name(name) {}
+			:name(name), enabled(true) {}
 	};
 }
 
-VISITABLE_STRUCT(DuskEngine::Meta, name);
+VISITABLE_STRUCT(DuskEngine::Meta, name, enabled);

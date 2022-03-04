@@ -16,8 +16,9 @@ namespace DuskEngine
 	private:
 		std::vector<Entity*>* m_SelectedEntities = nullptr;
 
-		static void CameraInspector(std::vector<Camera*>& cameras);
+		static void MetaInspector(std::vector<Meta*>& metas);
 		static void TransformInspector(std::vector<Transform*>& transforms);
+		static void CameraInspector(std::vector<Camera*>& cameras);
 		static void LightInspector(std::vector<Light*>& lights);
 		static void MaterialInspector(std::vector<MeshRenderer*>& lights);
 	};

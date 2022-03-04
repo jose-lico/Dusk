@@ -20,7 +20,7 @@ namespace DuskEngine
 
 	void InspectorPanel::OnImGuiRender()
 	{
-		ImGui::Begin(ICON_FK_INFO_CIRCLE " Inspector");
+		ImGui::Begin(ICON_FK_INFO_CIRCLE "  Inspector");
 		CheckFocus();
 
 		if(m_SelectedEntities->size() > 0)
@@ -61,6 +61,7 @@ namespace DuskEngine
 				}
 			}
 
+			DrawComponent<Meta>(ICON_FK_CUBE "  Meta", *m_SelectedEntities, MetaInspector);
 			DrawComponent<Transform>(ICON_FK_CUBE "  Transform", *m_SelectedEntities, TransformInspector);
 			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
 			DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
@@ -98,7 +99,7 @@ namespace DuskEngine
 		ImGui::PopFont();
 
 		ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
-		if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
+		if (ImGui::Button(ICON_FK_COG, ImVec2{ lineHeight, lineHeight }))
 		{
 			ImGui::OpenPopup("ComponentSettings");
 		}
@@ -140,6 +141,25 @@ namespace DuskEngine
 		}
 	}
 	
+	void InspectorPanel::MetaInspector(std::vector<Meta*>& metas)
+	{
+		if (metas.size() == 1)
+		{
+			char buffer[64];
+			sprintf(buffer, metas[0]->name.c_str());
+			if(ImGui::InputText("Name", buffer, IM_ARRAYSIZE(buffer)))
+			{
+				metas[0]->name = buffer;
+			}
+
+			ImGui::Checkbox("Enabled", &metas[0]->enabled);
+		}
+		else
+		{
+
+		}
+	}
+
 	void InspectorPanel::TransformInspector(std::vector<Transform*>& transforms)
 	{
 		if(transforms.size() == 1)

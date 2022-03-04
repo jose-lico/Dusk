@@ -20,7 +20,7 @@ namespace DuskEngine
 
 	void HierarchyPanel::OnImGuiRender()
 	{
-		ImGui::Begin(ICON_FK_TH_LIST " Scene Hierarchy");
+		ImGui::Begin(ICON_FK_TH_LIST "  Scene Hierarchy");
 		CheckFocus();
 
 		int entityIndex = 0;
