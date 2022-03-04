@@ -340,6 +340,24 @@ namespace DuskEngine
 						}
 						#endif
 					}
+
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
+						{
+							// barf emoji
+							const wchar_t* data = (const wchar_t*)payload->Data;
+							std::wstring ws(data);
+							std::string str(ws.begin(), ws.end());
+							std::stringstream ss;
+							ss << str;
+							ss << ".meta";
+							auto texture = Texture::Create(str, ResourceManager::GetUUID(ss.str()));
+							meshes[0]->material->SetTexture(uniform.Name, texture);
+							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
+						}
+						ImGui::EndDragDropTarget();
+					}
 				}
 			}
 		}

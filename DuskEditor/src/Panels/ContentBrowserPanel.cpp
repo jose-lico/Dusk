@@ -78,6 +78,13 @@ namespace DuskEngine
 			{
 				if (ImGui::ImageButton((void*)m_Icons[textureIndex++]->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0)))
 					APP_LOG("This is an image");
+
+				if (ImGui::BeginDragDropSource())
+				{
+					const wchar_t* itemPath = path.c_str();
+					ImGui::SetDragDropPayload("TEXTURE", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t), ImGuiCond_Once);
+					ImGui::EndDragDropSource();
+				}
 			}
 			else
 			{
