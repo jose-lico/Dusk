@@ -78,7 +78,7 @@ vec3 CalcDirLight(DirectionalLight light, vec3 viewDir)
     vec3 lightDir = normalize(-light.Direction);
 
     // Ambient
-	float ambientStrength = 0.1;
+	float ambientStrength = 0.2;
     vec3 ambient = light.Color * vec3(texture(u_Diffuse, TexCoords)) * ambientStrength;
 
     // Diffuse
@@ -87,7 +87,7 @@ vec3 CalcDirLight(DirectionalLight light, vec3 viewDir)
 
     // Specular
     float specularStrength = 0.5;
-	vec3 reflectDir = reflect(-lightDir, Normal);
+	vec3 reflectDir = reflect(-lightDir, normalize(Normal));
 	float spec =  pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = light.Color * spec * vec3(texture(u_Specular, TexCoords));
 
@@ -103,11 +103,11 @@ vec3 CalcPointLight(PointLight light, vec3 viewDir)
     vec3 lightDir = normalize(light.Position - FragPos);
     
     // Diffuse
-    float diff = max(dot(Normal, lightDir), 0.0);
+    float diff = max(dot(normalize(Normal), lightDir), 0.0);
     vec3 diffuse  = light.Color  * diff * vec3(texture(u_Diffuse, TexCoords));
 
     // Specular
-    vec3 reflectDir = reflect(-lightDir, Normal);
+    vec3 reflectDir = reflect(-lightDir, normalize(Normal));
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = light.Color * spec * vec3(texture(u_Specular, TexCoords));
 

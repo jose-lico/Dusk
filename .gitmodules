@@ -19,9 +19,6 @@
 [submodule "Dependencies/assimp-1"]
 	path = Dependencies/assimp-1
 	url = https://github.com/qolisipo/assimp-1
-[submodule "Dependencies/stb/stb"]
-	path = Dependencies/stb/stb
-	url = https://github.com/nothings/stb
 [submodule "Dependencies/glm"]
 	path = Dependencies/glm
 	url = https://github.com/qolisipo/glm
