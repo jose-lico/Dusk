@@ -22,7 +22,7 @@ project "DuskEngine"
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
 		dependenciesDir .. "/glm/include",
-		dependenciesDir .. "/stb",
+		dependenciesDir .. "/stb/include",
 		dependenciesDir .. "/imgui/include",
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/entt/src",
