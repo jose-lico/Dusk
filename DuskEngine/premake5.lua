@@ -26,7 +26,7 @@ project "DuskEngine"
 		dependenciesDir .. "/imgui/include",
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/entt/src",
-		dependenciesDir .. "/assimp-1/include",
+		dependenciesDir .. "/assimp-premake/include",
 		dependenciesDir .. "/yaml-cpp/include",
 		dependenciesDir .. "/visit_struct/include",
 		dependenciesDir .. "/stduuid/include",

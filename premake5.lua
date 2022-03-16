@@ -18,7 +18,7 @@ end
 	include "Dependencies/glew"
 	include "Dependencies/glfw"
 	include "Dependencies/imgui"
-	include "Dependencies/assimp-1"
+	include "Dependencies/assimp-premake"
 	include "Dependencies/nativefiledialog/build"
 	include "Dependencies/yaml-cpp"
 	include "Dependencies/ImGuizmo"
