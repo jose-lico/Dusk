@@ -24,10 +24,13 @@ namespace DuskEngine
 		}
 
 		Entity* GetMainCamera();
+		Entity* FindEntity(const std::string& name);
 
 		void OnUpdate();
 	private:
 		entt::registry m_Registry;
+
+		bool playing = true;
 
 		friend class Entity;
 		friend class HierarchyPanel;

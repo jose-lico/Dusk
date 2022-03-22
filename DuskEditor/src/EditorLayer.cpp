@@ -37,6 +37,10 @@ namespace DuskEngine
 		m_Panels.push_back(new HierarchyPanel(m_Scene, inspector, viewport));
 		m_Panels.push_back(new ConsolePanel());
 		m_Panels.push_back(new ContentBrowserPanel());
+
+		auto ent = m_Scene->FindEntity("Lit Cube");
+
+		ent->AddComponent<TestScript>(ent);
 	}
 
 	void EditorLayer::OnUpdate()

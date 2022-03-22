@@ -47,13 +47,36 @@ namespace DuskEngine
 		return nullptr;
 	}
 
+	Entity* Scene::FindEntity(const std::string& name)
+	{
+		auto view = m_Registry.view<Meta>();
+
+		for (auto entity : view)
+		{
+			auto& ent = view.get<Meta>(entity);
+			if (ent.name == name)
+				return new Entity(entity, this);
+		}
+
+		return nullptr;
+	}
+
 	void Scene::OnUpdate()
 	{
+		if(playing)
+		{
+			auto view = m_Registry.view<Script>();
+			for (auto entity : view)
+			{
+				auto& script = view.get<Script>(entity);
+				script.script->OnUpdate();
+			}
+		}
+
 		{
 			// TODO: for static objects in the future only calculate this once and not every frame
 
 			// Should I/Do I need to even calculate Front, Right and Up vectors every frame? probably not
-
 			auto view = m_Registry.view<Transform, Meta>();
 			for (auto entity : view)
 			{
