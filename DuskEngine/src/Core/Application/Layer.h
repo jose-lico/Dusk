@@ -1,10 +1,10 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include "Core/Events/Event.h"
-
 namespace DuskEngine
 {
+	class Event;
+
 	class DUSK_EXPORT Layer
 	{
 	public:

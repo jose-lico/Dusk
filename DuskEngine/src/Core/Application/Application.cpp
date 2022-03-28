@@ -1,16 +1,18 @@
 #include "pch.h"
 #include "Application.h"
 
+#include "Time.h"
+#include "LayerStack.h"
+
 #include "Core/Macros/BIND_EVENT_FN.h"
 #include "Core/Macros/LOG.h"
 
-#include "Utils/Window/WindowManager.h"
-#include "Core/Renderer/Renderer.h"
-#include "Time.h"
-
 #include "Core/Resources/ResourceManager.h"
-
 #include "Core/Renderer/RenderCommand.h"
+#include "Core/Renderer/RendererContext.h"
+
+#include "Utils/Window/WindowManager.h"
+#include "Utils/ImGui/ImGuiLayer.h"
 
 namespace DuskEngine
 {
@@ -33,7 +35,8 @@ namespace DuskEngine
 		ResourceManager::LoadUUIDs();
 
 		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
-		m_LayerStack.PushOverlay(m_ImGuiLayer);
+		m_LayerStack = new LayerStack();
+		m_LayerStack->PushOverlay(m_ImGuiLayer);
 		m_ImGuiLayer->OnAttach();
 	}
 
@@ -42,24 +45,25 @@ namespace DuskEngine
 		TRACE("##### SHUTDOWN #####");
 
 		delete m_RendererContext;
+		delete m_LayerStack; // Deletes m_ImGuiLayer
 		delete m_WindowManager;
 	}
 
 	void Application::PushLayer(Layer* layer)
 	{
-		m_LayerStack.PushLayer(layer);
+		m_LayerStack->PushLayer(layer);
 		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay)
 	{
-		m_LayerStack.PushLayer(overlay);
+		m_LayerStack->PushLayer(overlay);
 		overlay->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
 	{
-		for (Layer* layer : m_LayerStack)
+		for (Layer* layer : *m_LayerStack)
 		{
 			if (e.Handled)
 				break;
@@ -73,12 +77,12 @@ namespace DuskEngine
 		while (!m_WindowManager->GetWindow()->ShouldClose())
 		{
 			Time::Update();
-			for (Layer* layer : m_LayerStack)
+			for (Layer* layer : *m_LayerStack)
 				if (layer->Enabled)
 					layer->OnUpdate();
 
 			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
+			for (Layer* layer : *m_LayerStack)
 				if (layer->Enabled)
 					layer->OnImGuiRender();
 			m_ImGuiLayer->End();

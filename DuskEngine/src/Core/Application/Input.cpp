@@ -3,7 +3,9 @@
 
 #include "Core/Application/Application.h"
 
-#include <GLFW/glfw3.h>
+#include "Utils/Window/Window.h"
+
+#include "GLFW/glfw3.h"
 
 namespace DuskEngine
 {

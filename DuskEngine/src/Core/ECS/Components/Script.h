@@ -44,7 +44,7 @@ namespace DuskEngine
 		{
 			std::cout << "This is On Update" << std::endl;
 			auto& t = GetComponent<Transform>();
-			t.position.y += 1.0 * Time::GetDeltaTime();
+			t.position.y += 1.0f * Time::GetDeltaTime();
 		}
 	};
 }

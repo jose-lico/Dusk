@@ -1,20 +1,15 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include "Utils/Memory/Memory.h"
-
-#include "Core/Events/Event.h"
-#include "LayerStack.h"
-#include "Core/Renderer/RendererContext.h"
-#include "Utils/ImGui/ImGuiLayer.h"
-#include "Utils/Window/Window.h"
-
 namespace DuskEngine
 {
+	class Layer;
+	class Event;
 	class Window;
+	class LayerStack;
+	class ImGuiLayer;
 	class WindowManager;
 	class RendererContext;
-	class ResourceManager;
 
 	class DUSK_EXPORT Application
 	{
@@ -33,16 +28,13 @@ namespace DuskEngine
 		static Application& Get() { return *s_Instance; }
 	private:
 		static Application* s_Instance;
-		LayerStack m_LayerStack;
-		ImGuiLayer* m_ImGuiLayer; // deleted by layerstack
-		
 
+		// TODO - Probably move these to unique_ptr
+
+		LayerStack* m_LayerStack;
+		ImGuiLayer* m_ImGuiLayer; // Deleted by m_LayerStack
 		WindowManager* m_WindowManager;
 		RendererContext* m_RendererContext;
-
-		/* In the future:
-		* FileManager
-		*/
 	};
 
 	extern Application* CreateApplication();

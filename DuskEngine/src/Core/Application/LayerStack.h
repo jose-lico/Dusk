@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Layer.h"
-
 #include <vector>
 
 namespace DuskEngine
 {
+	class Layer;
+
 	class LayerStack
 	{
 	public:

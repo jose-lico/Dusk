@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "LayerStack.h"
 
+#include "Layer.h"
+
 namespace DuskEngine
 {
 	LayerStack::LayerStack()

@@ -6,7 +6,6 @@ int main()
 {
 	auto app = DuskEngine::CreateApplication();
 
-	// Application loop
 	app->Run();
 
 	delete app;

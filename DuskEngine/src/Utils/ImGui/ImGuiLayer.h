@@ -4,6 +4,7 @@
 namespace DuskEngine
 {
 	class Window;
+	class KeyPressedEvent;
 
 	class ImGuiLayer : public Layer
 	{
