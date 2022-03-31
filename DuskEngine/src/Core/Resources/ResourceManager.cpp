@@ -4,7 +4,8 @@
 #include <iostream>
 #include <iosfwd>
 
-#include "Core/Renderer/Resources/Shader.h"
+#include "Core/Resources/Resources/Shader.h"
+#include "Core/Resources/Resources/Texture.h"
 
 #include "Core/Macros/LOG.h"
 #include "Utils/Serialization/Yaml.h"
@@ -125,10 +126,10 @@ namespace DuskEngine
 			switch (uniform.Type)
 			{
 			case UniformType::Vec3:
-				uniform.Data = MakeRef<glm::vec3>(data[uniform.Name].as<glm::vec3>());
+				uniform.Data = MakeRef<glm::vec3>(data["Uniforms"][uniform.Name].as<glm::vec3>());
 				break;
 			case UniformType::Texture:
-				uniform.Data = LoadTexture(data[uniform.Name].as<uuids::uuid>());
+				uniform.Data = LoadTexture(data["Uniforms"][uniform.Name].as<uuids::uuid>());
 				break;
 			}
 		}

@@ -1,9 +1,9 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include "Utils/Memory/Memory.h"
+#include "Core/Resources/Resources/Mesh.h"
 
-#include "Resources/Mesh.h"
+#include "Utils/Memory/Memory.h"
 
 namespace DuskEngine {
 

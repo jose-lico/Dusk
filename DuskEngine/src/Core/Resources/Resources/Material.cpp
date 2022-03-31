@@ -5,7 +5,11 @@
 #include "Core/Resources/ResourceManager.h"
 #include "Utils/Serialization/Yaml.h"
 
-#include <yaml-cpp/yaml.h>
+#include "Shader.h"
+#include "Texture.h"
+
+//#include "yaml-cpp/yaml.h"
+#include "Utils/Serialization/Yaml.h"
 
 namespace DuskEngine
 {
@@ -31,13 +35,6 @@ namespace DuskEngine
 		CreateUniforms();
 		LOG("Created Material " + m_Name)
 	}
-
-	/*Material::Material(Ref<Shader>& shader, const uuids::uuid& uuid)
-	{
-		m_UUID = uuid;
-		m_Path = path;
-		m_Name = path.filename().string();
-	}*/
 
 	Material::Material(const std::string& shaderPath, const std::string& name)
 	{
@@ -111,19 +108,21 @@ namespace DuskEngine
 		out << YAML::BeginMap;
 		out << YAML::Key << "Material" << YAML::Value << m_Name;
 		out << YAML::Key << "Shader" << YAML::Value << uuids::to_string(m_Shader->GetUUID());
+		out << YAML::Key << "Uniforms" << YAML::Value << m_Uniforms;
 
-		for (auto& uniform : m_Uniforms)
+		/*for (auto& uniform : m_Uniforms)
 		{
 			switch (uniform.Type)
 			{
-			case UniformType::Vec3:
-				out << YAML::Key << uniform.Name << YAML::Value << *std::static_pointer_cast<glm::vec3>(uniform.Data);
-				break;
-			case UniformType::Texture:
-				out << YAML::Key << uniform.Name << YAML::Value << uuids::to_string(std::static_pointer_cast<Texture>(uniform.Data)->GetUUID());
-				break;
+				
+				case UniformType::Vec3:
+					out << YAML::Key << uniform.Name << YAML::Value << *std::static_pointer_cast<glm::vec3>(uniform.Data);
+					break;
+				case UniformType::Texture:
+					out << YAML::Key << uniform.Name << YAML::Value << uuids::to_string(std::static_pointer_cast<Texture>(uniform.Data)->GetUUID());
+					break;
 			}
-		}
+		}*/
 
 		out << YAML::EndMap;
 
@@ -137,7 +136,6 @@ namespace DuskEngine
 
 	void Material::CreateUniforms()
 	{
-		
 		for (auto uniform : m_Shader->UniformSpecs)
 		{
 			auto u = Uniform(uniform.Name, uniform.Type);

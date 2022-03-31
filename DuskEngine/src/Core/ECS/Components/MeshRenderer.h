@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Renderer/Resources/Mesh.h"
-#include "Core/Renderer/Resources/Material.h"
+#include "Core/Resources/Resources/Mesh.h"
+#include "Core/Resources/Resources/Material.h"
 
 #include "visit_struct/visit_struct.hpp"
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "PanelBase.h"
 
-#include "Core/Renderer/Resources/Texture.h"
+#include "Core/Resources/Resources/Texture.h"
 
 #include <imgui/imgui.h>
 

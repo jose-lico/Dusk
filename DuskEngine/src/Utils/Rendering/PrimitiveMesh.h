@@ -3,7 +3,7 @@
 
 #include "Utils/Memory/Memory.h"
 
-#include "Core/Renderer/Resources/Mesh.h"
+#include "Core/Resources/Resources/Mesh.h"
 
 namespace DuskEngine
 {

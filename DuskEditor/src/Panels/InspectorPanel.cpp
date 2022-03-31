@@ -2,6 +2,9 @@
 
 #include "DuskEngine.h"
 
+#include "Core/Resources/Resources/Shader.h"
+#include "Core/Resources/Resources/Texture.h"
+
 #include "Utils/ImGuiUtils.h"
 
 #include "imgui/imgui.h"

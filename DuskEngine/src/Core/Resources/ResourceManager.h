@@ -1,8 +1,8 @@
 #include "Core/ECS/Scene.h"
 #include "Utils/Memory/Memory.h"
 
-#include "Core/Renderer/Resources/Material.h"
-#include "Core/Renderer/Resources/Model.h"
+#include "Core/Resources/Resources/Material.h"
+#include "Core/Resources/Resources/Model.h"
 
 #include <uuid.h>
 

@@ -3,6 +3,8 @@
 #include "Core/ECS/Components/Transform.h"
 #include "Core/ECS/Components/Meta.h"
 
+#include "Core/Resources/Resources/Shader.h"
+
 #include "imgui/imgui.h"
 #include "IconsForkAwesome.h"
 

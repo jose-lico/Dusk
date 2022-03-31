@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Core/Renderer/Resources/Material.h"
+#include "Core/Resources/Resources/Material.h"
+#include "Core/Resources/Resources/Shader.h"
+#include "Core/Resources/Resources/Texture.h"
 #include "Core/ECS/Components/Light.h"
 
 #include <yaml-cpp/yaml.h>
@@ -57,6 +59,29 @@ namespace DuskEngine
 	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Material>& material)
 	{
 		out << YAML::Value << uuids::to_string(material->GetUUID());
+
+		return out;
+	}
+
+	inline
+	YAML::Emitter& operator<<(YAML::Emitter& out, const std::vector<Uniform>& uniforms)
+	{
+		out << YAML::BeginMap;
+
+		for (auto& uniform : uniforms)
+		{
+			switch (uniform.Type)
+			{
+			case UniformType::Vec3:
+				out << YAML::Key << uniform.Name << YAML::Value << *std::static_pointer_cast<glm::vec3>(uniform.Data);
+				break;
+			case UniformType::Texture:
+				out << YAML::Key << uniform.Name << YAML::Value << uuids::to_string(std::static_pointer_cast<Texture>(uniform.Data)->GetUUID());
+				break;
+			}
+		}
+
+		out << YAML::EndMap;
 
 		return out;
 	}

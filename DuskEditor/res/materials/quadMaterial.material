@@ -1,3 +1,4 @@
 Material: quadMaterial.material
 Shader: af58d017-846d-49c1-a32e-48471a69f082
-Texture: 288bb3cb-ec0e-4722-b4b8-2e6802bfab9c
+Uniforms:
+  Texture: 288bb3cb-ec0e-4722-b4b8-2e6802bfab9c

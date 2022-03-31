@@ -42,15 +42,15 @@ namespace DuskEngine
 	class DUSK_EXPORT VertexBufferLayout
 	{
 	public:
-		VertexBufferLayout();
-		~VertexBufferLayout();
+		VertexBufferLayout() :m_Stride(0) {}
+		~VertexBufferLayout() = default;
 		void Push(ShaderDataType type, unsigned int count, bool normalized);
 
-		const std::vector<DuskEngine::VertexBufferElement> GetElements() const;
-		unsigned int GetStride() const;
+		const std::vector<DuskEngine::VertexBufferElement> GetElements() const { return m_Elements; }
+		const unsigned int GetStride() const { return m_Stride; }
 	private:
-		class VblImpl;
-		VblImpl* m_Impl;
+		std::vector<VertexBufferElement> m_Elements;
+		int m_Stride;
 	};
 
 	class DUSK_EXPORT VertexBuffer

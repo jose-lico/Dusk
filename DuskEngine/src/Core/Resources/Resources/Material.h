@@ -4,8 +4,7 @@
 #include "Core/Resources/Resource.h"
 #include "Utils/Memory/Memory.h"
 
-#include "Texture.h"
-#include "Shader.h"
+#include "glm/glm.hpp"
 
 #include <vector>
 #include <string>
@@ -13,6 +12,10 @@
 
 namespace DuskEngine
 {
+	class Shader;
+	class Texture;
+	enum class UniformType;
+
 	struct Uniform
 	{
 		std::string Name;
@@ -22,7 +25,7 @@ namespace DuskEngine
 		Uniform(const std::string& name, UniformType type) : Name(name) , Type(type)
 		{}
 	};
-
+	
 	class DUSK_EXPORT Material : public Resource
 	{
 	public:

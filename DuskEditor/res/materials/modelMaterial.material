@@ -1,5 +1,6 @@
 Material: modelMaterial.material
 Shader: 273a0e85-9157-41a8-a769-8eb00ebc93ee
-Diffuse: 57744d50-1f83-4a6b-8938-2632099bee63
-DiffuseColor: [1, 1, 1]
-Specular: 57744d50-1f83-4a6b-8938-2632099bee63
+Uniforms:
+  Diffuse: 57744d50-1f83-4a6b-8938-2632099bee63
+  DiffuseColor: [1, 1, 1]
+  Specular: 57744d50-1f83-4a6b-8938-2632099bee63

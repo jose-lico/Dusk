@@ -1,8 +1,8 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include "Buffer.h"
-#include "VertexArray.h"
+#include "Core/Renderer/Resources/Buffer.h"
+#include "Core/Renderer/Resources/VertexArray.h"
 #include "Core/Resources/Resource.h"
 
 #include <memory>
