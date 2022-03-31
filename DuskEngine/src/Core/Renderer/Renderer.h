@@ -1,11 +1,12 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include "Core/Resources/Resources/Mesh.h"
-
 #include "Utils/Memory/Memory.h"
 
 namespace DuskEngine {
+	
+	class VertexArray;
+	class Mesh;
 
 	class DUSK_EXPORT Renderer
 	{

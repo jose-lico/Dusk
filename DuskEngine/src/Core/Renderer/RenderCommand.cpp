@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "RenderCommand.h"
 
+#include "RendererAPI.h"
+
 namespace DuskEngine {
 
 	RendererAPI* RenderCommand::s_RendererAPI;

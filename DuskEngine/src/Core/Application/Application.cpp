@@ -13,6 +13,7 @@
 #include "Core/Events/EventBase.h"
 
 #include "Utils/Window/WindowManager.h"
+#include "Utils/Window/Window.h"
 #include "Utils/ImGui/ImGuiLayer.h"
 
 namespace DuskEngine

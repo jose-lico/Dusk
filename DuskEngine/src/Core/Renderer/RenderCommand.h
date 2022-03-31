@@ -1,9 +1,12 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include "RendererAPI.h"
+#include "glm/glm.hpp"
 
 namespace DuskEngine {
+	
+	class VertexArray;
+	class RendererAPI;
 
 	class DUSK_EXPORT RenderCommand
 	{

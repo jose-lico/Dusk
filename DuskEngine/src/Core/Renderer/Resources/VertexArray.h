@@ -1,9 +1,11 @@
 #pragma once
-
-#include "Buffer.h"
+#include "Core/Macros/DUSK_API.h"
 
 namespace DuskEngine
 {
+	class VertexBuffer;
+	class IndexBuffer;
+
 	class DUSK_EXPORT VertexArray
 	{
 	public:

@@ -3,6 +3,7 @@
 #include "Core/Resources/Resources/Material.h"
 #include "Core/Resources/Resources/Shader.h"
 #include "Core/Resources/Resources/Texture.h"
+#include "Core/Resources/Resources/Mesh.h"
 #include "Core/ECS/Components/Light.h"
 
 #include <yaml-cpp/yaml.h>
@@ -59,6 +60,14 @@ namespace DuskEngine
 	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Material>& material)
 	{
 		out << YAML::Value << uuids::to_string(material->GetUUID());
+
+		return out;
+	}
+
+	inline
+	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Shader>& shader)
+	{
+		out << YAML::Value << uuids::to_string(shader->GetUUID());
 
 		return out;
 	}

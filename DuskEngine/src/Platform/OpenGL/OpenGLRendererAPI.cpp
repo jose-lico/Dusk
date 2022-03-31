@@ -1,8 +1,13 @@
 #include "pch.h"
 #include "OpenGLRendererAPI.h"
+
 #include "GLCommon.h"
 
 #include "Core/Macros/LOG.h"
+
+#include "Core/Renderer/Resources/VertexArray.h"
+#include "Core/Renderer/Resources/Buffer.h"
+
 
 namespace DuskEngine {
 

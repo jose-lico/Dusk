@@ -1,9 +1,13 @@
 #include "pch.h"
 #include "Model.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
-#include <glm/glm.hpp>
+#include "Mesh.h"
+
+#include "glm/glm.hpp"
+
+#include "assimp/scene.h"
+#include "assimp/Importer.hpp"
+#include "assimp/postprocess.h"
 
 namespace DuskEngine
 {

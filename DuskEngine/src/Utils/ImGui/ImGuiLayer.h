@@ -25,7 +25,6 @@ namespace DuskEngine
 		bool m_ShowDemoWindow = false;
 		bool ActivateDemoWindow(KeyPressedEvent& e);
 
-		// Owned by WindowManager
 		Window* m_Window;
 	};
 }

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "PrimitiveMesh.h"
 
+#include "Core/Resources/Resources/Mesh.h"
+
 namespace DuskEngine
 {
 	const char* PrimitiveMesh::m_Primitives[] = { "Quad", "Cube" };

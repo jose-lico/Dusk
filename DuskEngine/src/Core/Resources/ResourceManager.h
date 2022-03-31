@@ -1,16 +1,23 @@
 #include "Core/ECS/Scene.h"
 #include "Utils/Memory/Memory.h"
 
-#include "Core/Resources/Resources/Material.h"
-#include "Core/Resources/Resources/Model.h"
-
-#include <uuid.h>
-
 #include <unordered_map>
 #include <filesystem>
 
+namespace uuids
+{
+	class uuid;
+}
+
 namespace DuskEngine
 {
+	class uuids::uuid;
+
+	class Material;
+	class Shader;
+	class Texture;
+	class Mesh;
+
 	class ResourceManager
 	{
 	public:
@@ -27,7 +34,6 @@ namespace DuskEngine
 		static Ref<Texture> LoadTexture(const uuids::uuid& uuid);
 		static Ref<Mesh> LoadModel(const uuids::uuid& uuid);
 	private:
-		//static void CreateUUID();
 		static std::filesystem::path m_RootDirectory;
 		static std::filesystem::path m_CurrentDirectory;
 

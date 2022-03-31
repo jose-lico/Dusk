@@ -5,6 +5,8 @@
 
 namespace DuskEngine {
 
+	class VertexArray;
+
 	class OpenGLRendererAPI : public RendererAPI
 	{
 	public:

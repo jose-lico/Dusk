@@ -1,10 +1,10 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include "Window.h"
-
 namespace DuskEngine
 {
+	class Window;
+
 	class DUSK_EXPORT WindowManager
 	{
 	public:

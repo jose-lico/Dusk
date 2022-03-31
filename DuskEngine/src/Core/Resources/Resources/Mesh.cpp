@@ -3,6 +3,10 @@
 
 #include "Core/Macros/LOG.h"
 
+#include "Core/Renderer/Resources/VertexArray.h"
+#include "Core/Renderer/Resources/Buffer.h"
+
+
 namespace DuskEngine
 {
 	Mesh::Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count, MeshType type)
@@ -29,6 +33,7 @@ namespace DuskEngine
 	}
 
 	Mesh::Mesh(std::vector<Vertex>& vertices, unsigned int* indices, unsigned int count)
+		:m_Type(MeshType::Model)
 	{
 		m_VA.reset(VertexArray::Create());
 		m_VA->Bind();

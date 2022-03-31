@@ -1,14 +1,19 @@
 #pragma once
 #include "Core/Resources/Resource.h"
-#include "Mesh.h"
 
-#include <assimp/scene.h>
+#include "Utils/Memory/Memory.h"
 
 #include <string>
 #include <vector>
 
+struct aiNode;
+struct aiScene;
+struct aiMesh;
+
 namespace DuskEngine
 {
+	class Mesh;
+	
 	class Model : public Resource
 	{
 	public:

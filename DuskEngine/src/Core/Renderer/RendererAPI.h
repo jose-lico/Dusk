@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Resources/VertexArray.h"
-
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 
 namespace DuskEngine {
+
+	class VertexArray;
 
 	class RendererAPI
 	{ 

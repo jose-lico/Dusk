@@ -6,7 +6,7 @@
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
 namespace DuskEngine
-{
+{	
 	VertexArray* VertexArray::Create()
 	{
 		switch (RendererContext::GetAPI())

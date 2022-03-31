@@ -2,8 +2,6 @@
 
 #include <functional>
 
-#include "Core/Renderer/RendererContext.h"
-
 namespace DuskEngine
 {
 	class Event;

@@ -3,10 +3,10 @@
 
 #include "Utils/Memory/Memory.h"
 
-#include "Core/Resources/Resources/Mesh.h"
-
 namespace DuskEngine
 {
+	class Mesh;
+
 	class DUSK_EXPORT PrimitiveMesh
 	{
 	public:

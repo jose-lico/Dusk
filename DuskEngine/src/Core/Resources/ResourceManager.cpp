@@ -1,14 +1,16 @@
 #include "pch.h"
 #include "ResourceManager.h"
 
-#include <iostream>
-#include <iosfwd>
+#include "Core/Macros/LOG.h"
 
 #include "Core/Resources/Resources/Shader.h"
 #include "Core/Resources/Resources/Texture.h"
+#include "Core/Resources/Resources/Material.h"
+#include "Core/Resources/Resources/Model.h"
 
-#include "Core/Macros/LOG.h"
 #include "Utils/Serialization/Yaml.h"
+
+#include "uuid.h"
 
 namespace DuskEngine
 {

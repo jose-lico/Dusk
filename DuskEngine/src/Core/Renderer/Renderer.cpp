@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "Renderer.h"
 
-#include "Core/Macros/LOG.h"
-
 #include "RenderCommand.h"
+
+#include "Core/Macros/LOG.h"
+#include "Core/Resources/Resources/Mesh.h"
+#include "Resources/VertexArray.h"
 
 namespace DuskEngine {
 
