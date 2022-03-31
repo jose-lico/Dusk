@@ -10,6 +10,7 @@
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Renderer/RenderCommand.h"
 #include "Core/Renderer/RendererContext.h"
+#include "Core/Events/EventBase.h"
 
 #include "Utils/Window/WindowManager.h"
 #include "Utils/ImGui/ImGuiLayer.h"

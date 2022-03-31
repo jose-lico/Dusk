@@ -3,7 +3,7 @@
 #include "Core/Renderer/Resources/Mesh.h"
 #include "Core/Renderer/Resources/Material.h"
 
-#include <visit_struct/visit_struct.hpp>
+#include "visit_struct/visit_struct.hpp"
 
 namespace DuskEngine
 {

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Core/ECS/Entity.h"
 #include "Core/Macros/LOG.h"
 #include "Core/Application/Time.h"
@@ -42,7 +44,7 @@ namespace DuskEngine
 
 		virtual void OnUpdate() override
 		{
-			std::cout << "This is On Update" << std::endl;
+			//std::cout << "This is On Update" << std::endl;
 			auto& t = GetComponent<Transform>();
 			t.position.y += 1.0f * Time::GetDeltaTime();
 		}

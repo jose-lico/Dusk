@@ -6,12 +6,13 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/string_cast.hpp>
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/quaternion.hpp"
+#include "glm/gtx/string_cast.hpp"
 
 namespace DuskEngine
 {
+	// maybe reserve ahead of time # of entities present in the base scene
 	Scene::Scene()
 	{
 	}

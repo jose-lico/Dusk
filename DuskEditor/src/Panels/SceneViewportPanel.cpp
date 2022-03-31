@@ -1,9 +1,12 @@
 #include "SceneViewportPanel.h"
 
-#include <imgui/imgui.h>
-#include <ImGuizmo/ImGuizmo.h>
-#include <glm/gtc/type_ptr.hpp>
-#include <IconsForkAwesome.h>
+#include "Core/ECS/Components/Camera.h"
+#include "Core/ECS/Components/Transform.h"
+
+#include "imgui/imgui.h"
+#include "ImGuizmo/ImGuizmo.h"
+#include "glm/gtc/type_ptr.hpp"
+#include "IconsForkAwesome.h"
 
 namespace DuskEngine
 {

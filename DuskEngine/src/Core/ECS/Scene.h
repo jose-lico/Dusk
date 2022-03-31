@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include <entt/entity/registry.hpp>
+#include "entt/entity/registry.hpp"
 
 namespace DuskEngine
 {

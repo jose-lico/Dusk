@@ -40,7 +40,7 @@ namespace DuskEngine
 
 		auto ent = m_Scene->FindEntity("Lit Cube");
 
-		ent->AddComponent<TestScript>(ent);
+		//ent->AddComponent<TestScript>(ent);
 	}
 
 	void EditorLayer::OnUpdate()

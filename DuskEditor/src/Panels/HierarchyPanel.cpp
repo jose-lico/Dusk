@@ -1,7 +1,10 @@
 #include "HierarchyPanel.h"
 
-#include <imgui/imgui.h>
-#include <IconsForkAwesome.h>
+#include "Core/ECS/Components/Transform.h"
+#include "Core/ECS/Components/Meta.h"
+
+#include "imgui/imgui.h"
+#include "IconsForkAwesome.h"
 
 namespace DuskEngine
 {

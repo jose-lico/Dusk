@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
+#include "visit_struct/visit_struct.hpp"
 
-#include <visit_struct/visit_struct.hpp>
+#include <string>
 
 namespace DuskEngine
 {

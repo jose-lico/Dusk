@@ -2,6 +2,7 @@
 #include "PanelBase.h"
 
 #include "DuskEngine.h"
+#include "Core/ECS/Components.h"
 
 namespace DuskEngine
 {

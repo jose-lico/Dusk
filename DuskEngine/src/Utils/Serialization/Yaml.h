@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Renderer/Resources/Material.h"
-#include "Core/ECS/Components.h"
+#include "Core/ECS/Components/Light.h"
 
 #include <yaml-cpp/yaml.h>
 #include <glm/glm.hpp>

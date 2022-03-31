@@ -3,10 +3,11 @@
 #include <functional>
 
 #include "Core/Renderer/RendererContext.h"
-#include "Core/Events/Event.h"
 
 namespace DuskEngine
 {
+	class Event;
+
 	struct WindowData
 	{
 		std::string Title;

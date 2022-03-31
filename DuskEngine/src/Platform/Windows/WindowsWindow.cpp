@@ -2,6 +2,7 @@
 #include "WindowsWindow.h"
 
 #include "Core/Macros/LOG.h"
+#include "Core/Events/Events.h"
 
 #include "GL/glew.h"
 
