@@ -1,10 +1,18 @@
 #pragma once
 #include "PanelBase.h"
 
-#include "DuskEngine.h"
+#include "Core/ECS/Entity.h"
+
+#include "Utils/Memory/Memory.h"
+
+#include "glm/glm.hpp"
+
+#include <vector>
 
 namespace DuskEngine
 {
+	class FrameBuffer;
+	
 	class SceneViewportPanel : public Panel
 	{
 	public:

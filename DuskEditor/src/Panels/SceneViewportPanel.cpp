@@ -2,6 +2,9 @@
 
 #include "Core/ECS/Components/Camera.h"
 #include "Core/ECS/Components/Transform.h"
+#include "Core/Renderer/Resources/Framebuffer.h"
+#include "Core/Application/Time.h"
+#include "Core/Application/Input.h"
 
 #include "imgui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"

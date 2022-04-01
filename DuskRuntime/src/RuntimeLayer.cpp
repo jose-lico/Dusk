@@ -1,8 +1,13 @@
-#include "GameLayer.h"
+#include "RuntimeLayer.h"
+
+#include "Core/Application/Input.h"
+#include "Core/Application/Time.h"
+#include "Core/Serialization/SceneSerializer.h"
+#include "Core/ECS/Components/Transform.h"
 
 namespace DuskEngine
 {
-	GameLayer::GameLayer()
+	RuntimeLayer::RuntimeLayer()
 	{
 		m_Scene = MakeRef<Scene>();
 
@@ -11,14 +16,14 @@ namespace DuskEngine
 		m_Camera = *m_Scene->GetMainCamera();
 	}
 
-	void GameLayer::OnUpdate()
+	void RuntimeLayer::OnUpdate()
 	{
 		m_Scene->OnUpdate();
 
-		GameLayer::Camera();
+		RuntimeLayer::Camera();
 	}
 
-	void GameLayer::Camera()
+	void RuntimeLayer::Camera()
 	{
 		if (!m_IsLeftMousePressed && Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
 		{

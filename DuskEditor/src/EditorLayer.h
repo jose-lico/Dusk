@@ -1,10 +1,17 @@
 #pragma once
-#include "DuskEngine.h"
+#include "Core/Application/Layer.h"
+
+#include "Utils/Memory/Memory.h"
 
 #include "Panels.h"
 
+#include <vector>
+
 namespace DuskEngine
 {
+	class Scene;
+	class FrameBuffer;
+
 	class EditorLayer : public Layer
 	{
 	public:

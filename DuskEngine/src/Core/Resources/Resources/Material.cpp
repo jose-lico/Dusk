@@ -140,7 +140,7 @@ namespace DuskEngine
 			switch (uniform.Type)
 			{
 			case UniformType::Vec3:
-				uniform.Data = MakeRef<glm::vec3>(1.0);
+				uniform.Data = MakeRef<glm::vec3>(1.0f);
 				break;
 			case UniformType::Texture:
 				uniform.Data = Texture::Create("res/textures/white.png", ResourceManager::GetUUID("res/textures/white.png.meta"));

@@ -1,7 +1,10 @@
 #include "EditorLayer.h"
 
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/string_cast.hpp>
+#include "Core/Renderer/Resources/Framebuffer.h"
+#include "Core/Serialization/SceneSerializer.h"
+
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtx/string_cast.hpp"
 
 namespace DuskEngine
 {

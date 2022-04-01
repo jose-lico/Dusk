@@ -1,12 +1,17 @@
 #pragma once
 #include "PanelBase.h"
 
-#include "DuskEngine.h"
-#include "InspectorPanel.h"
-#include "SceneViewportPanel.h"
+#include "Utils/Memory/Memory.h"
+
+#include <vector>
 
 namespace DuskEngine
 {
+	class Scene;
+	class InspectorPanel;
+	class SceneViewportPanel;
+	class Entity;
+
 	class HierarchyPanel : public Panel
 	{
 	public:

@@ -2,6 +2,9 @@
 #include "OpenGLVertexArray.h"
 #include "GLCommon.h"
 
+#include "OpenGLVertexBuffer.h"
+#include "OpenGLIndexBuffer.h"
+
 namespace DuskEngine
 {
 	GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)

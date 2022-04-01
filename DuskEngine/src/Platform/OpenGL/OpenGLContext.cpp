@@ -4,6 +4,8 @@
 
 #include "Core/Macros/LOG.h"
 
+#include "GLFW/glfw3.h"
+
 namespace DuskEngine
 {
 	OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)

@@ -1,14 +1,16 @@
 #pragma once
 #include "PanelBase.h"
 
-#include "Core/Resources/Resources/Texture.h"
+#include "Utils/Memory/Memory.h"
 
-#include <imgui/imgui.h>
+#include "imgui/imgui.h"
 
 #include <filesystem>
 
 namespace DuskEngine
 {
+	class Texture;
+
 	class ContentBrowserPanel : public Panel
 	{
 	public:

@@ -1,8 +1,7 @@
 #pragma once
 #include "Core/Renderer/Resources/VertexArray.h"
 
-#include "OpenGLVertexBuffer.h"
-#include "OpenGLIndexBuffer.h"
+#include "Utils/Memory/Memory.h"
 
 namespace DuskEngine
 {

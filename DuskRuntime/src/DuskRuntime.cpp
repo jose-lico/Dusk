@@ -1,7 +1,7 @@
-#include "DuskEngine.h"
+#include "Core/Application/Application.h"
 #include "EntryPoint.h"
 
-#include "GameLayer.h"
+#include "RuntimeLayer.h"
 
 namespace DuskEngine
 {
@@ -10,7 +10,7 @@ namespace DuskEngine
 	public:
 		Game()
 		{
-			PushLayer(new GameLayer());
+			PushLayer(new RuntimeLayer());
 		}
 
 		~Game()

@@ -1,9 +1,13 @@
 #include "HierarchyPanel.h"
 
+#include "InspectorPanel.h"
+#include "SceneViewportPanel.h"
+
 #include "Core/ECS/Components/Transform.h"
 #include "Core/ECS/Components/Meta.h"
-
 #include "Core/Resources/Resources/Shader.h"
+
+#include "Utils/Rendering/PrimitiveMesh.h"
 
 #include "imgui/imgui.h"
 #include "IconsForkAwesome.h"

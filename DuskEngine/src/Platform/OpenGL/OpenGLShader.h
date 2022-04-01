@@ -1,7 +1,6 @@
 #pragma once
 #include "Core/Resources/Resources/Shader.h"
 
-#include <filesystem>
 #include <unordered_map>
 
 namespace DuskEngine 

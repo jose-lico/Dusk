@@ -1,13 +1,21 @@
 #pragma once
-#include "DuskEngine.h"
+#include "Core/Application/Layer.h"
+
+#include "Core/ECS/Entity.h"
+
+#include "Utils/Memory/Memory.h"
+
+#include "glm/glm.hpp"
 
 namespace DuskEngine
 {
-	class GameLayer : public Layer
+
+
+	class RuntimeLayer : public Layer
 	{
 	public:
-		GameLayer();
-		~GameLayer() = default;
+		RuntimeLayer();
+		~RuntimeLayer() = default;
 		void OnUpdate() override;
 	private:
 		void Camera();

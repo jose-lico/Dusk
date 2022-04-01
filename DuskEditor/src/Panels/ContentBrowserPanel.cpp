@@ -1,9 +1,10 @@
-#include "pch.h"
 #include "ContentBrowserPanel.h"
 
-#include "DuskEngine.h"
+#include "Core/Macros/LOG.h"
+#include "Core/Resources/Resources/Texture.h"
+#include "Core/Resources/ResourceManager.h"
 
-#include <IconsForkAwesome.h>
+#include "IconsForkAwesome.h"
 
 namespace DuskEngine
 {

@@ -1,7 +1,7 @@
 #include "ConsolePanel.h"
 
-#include <imgui/imgui.h>
-#include <IconsForkAwesome.h>
+#include "imgui/imgui.h"
+#include "IconsForkAwesome.h"
 
 namespace DuskEngine
 {

@@ -1,10 +1,10 @@
 #pragma once
 #include "ImGuiUtils.h"
 
-#include "DuskEngine.h"
+#include "Core/Macros/LOG.h"
 
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 
 namespace DuskEngine
 {

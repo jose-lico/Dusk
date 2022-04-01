@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Renderer/RendererContext.h"
 
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
 namespace DuskEngine
 {
