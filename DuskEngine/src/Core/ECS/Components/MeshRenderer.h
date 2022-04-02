@@ -9,11 +9,11 @@ namespace DuskEngine
 {
 	struct MeshRenderer
 	{
-		std::shared_ptr<Mesh> mesh;
-		std::shared_ptr<Material> material;
+		Ref<Mesh> mesh;
+		Ref<Material> material;
 
 		MeshRenderer() = default;
-		MeshRenderer(std::shared_ptr<Mesh>& mesh, std::shared_ptr<Material>& material)
+		MeshRenderer(Ref<Mesh>& mesh, Ref<Material>& material)
 			:mesh(mesh), material(material)
 		{}
 	};

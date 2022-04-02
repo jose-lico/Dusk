@@ -7,7 +7,7 @@
 
 namespace DuskEngine
 {
-	Ref<Shader> Shader::Create(const std::string& filepath, const std::string& name)
+	/*Ref<Shader> Shader::Create(const std::string& filepath, const std::string& name)
 	{
 		switch (RendererContext::GetAPI())
 		{
@@ -16,7 +16,7 @@ namespace DuskEngine
 			case RendererContext::API::D3D11:	return nullptr;
 			default:							return nullptr;
 		}
-	}
+	}*/
 
 	Ref<Shader> Shader::Create(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{

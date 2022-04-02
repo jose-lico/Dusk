@@ -29,11 +29,9 @@ namespace DuskEngine
 	class DUSK_EXPORT Material : public Resource
 	{
 	public:
-		Material() = default;
-		Material(Ref<Shader>& shader, const std::string& name = "");
+		//Material(Ref<Shader>& shader, const std::string& name = ""); not used anymore, keeping just in case
 		Material(Ref<Shader>& shader, const std::filesystem::path& path, const uuids::uuid& uuid);
-		//Material(Ref<Shader>& shader, const uuids::uuid& uuid);
-		Material(const std::string& shaderPath, const std::string& name = "");
+		//Material(const std::string& shaderPath, const std::string& name = ""); not used anymore, keeping just in case
 		~Material();
 		void UploadUniforms();
 

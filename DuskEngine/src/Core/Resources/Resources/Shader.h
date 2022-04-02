@@ -28,7 +28,7 @@ namespace DuskEngine
 	class DUSK_EXPORT Shader : public Resource
 	{
 	public:
-		static Ref<Shader> Create(const std::string& filepath, const std::string& name = "");
+		//static Ref<Shader> Create(const std::string& filepath, const std::string& name = ""); not used anymore, keeping just in case
 		static Ref<Shader> Create(const std::filesystem::path& path, const uuids::uuid& uuid);
 
 		virtual ~Shader() = default;

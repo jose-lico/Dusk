@@ -15,7 +15,7 @@ namespace DuskEngine
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& filepath, const std::string& name = "");
+		//OpenGLShader(const std::string& filepath, const std::string& name = ""); not used anymore, keeping just in case
 		OpenGLShader(const std::filesystem::path& path, const uuids::uuid& uuid);
 		~OpenGLShader();
 

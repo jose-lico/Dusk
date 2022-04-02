@@ -6,6 +6,7 @@
 #include "Core/ECS/Components/Transform.h"
 #include "Core/ECS/Components/Meta.h"
 #include "Core/Resources/Resources/Shader.h"
+#include "Core/Resources/ResourceManager.h"
 
 #include "Utils/Rendering/PrimitiveMesh.h"
 
@@ -85,9 +86,8 @@ namespace DuskEngine
 				auto& lightTransform = light.GetComponent<Transform>();
 				lightTransform.position = { -2.0f, 1.0f, 1.0f };
 				lightTransform.scale = { 0.1f, 0.1f, 0.1f };
-				auto shader = Shader::Create("res/shaders/simpleColor.glsl");
 				auto mesh = PrimitiveMesh::Cube();
-				auto material = MakeRef<Material>(shader);
+				auto material = ResourceManager::LoadMaterial(ResourceManager::GetUUID("res/materials/lightMaterial.material"));
 				light.AddComponent<MeshRenderer>(mesh, material);
 
 				// select currently created entity

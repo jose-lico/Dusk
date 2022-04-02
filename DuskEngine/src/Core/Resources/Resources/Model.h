@@ -17,7 +17,7 @@ namespace DuskEngine
 	class Model : public Resource
 	{
 	public:
-		Model(const std::string& path);
+		//Model(const std::string& path); not used anymore, keeping just in case
 		Model(const std::filesystem::path& path, const uuids::uuid& uuid);
 		~Model();
 

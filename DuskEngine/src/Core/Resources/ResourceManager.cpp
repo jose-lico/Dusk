@@ -147,7 +147,7 @@ namespace DuskEngine
 	//TODO - improve model and mesh api and useflow
 	Ref<Mesh> ResourceManager::LoadModel(const uuids::uuid& uuid)
 	{
-		Model* m = new Model(m_PathsMap[uuid].string());
+		Model* m = new Model(m_PathsMap[uuid].string(), uuid);
 		Ref<Mesh> mesh = m->GetFirstMesh();
 		mesh->m_Type = MeshType::Model;
 		mesh->m_UUID = uuid;

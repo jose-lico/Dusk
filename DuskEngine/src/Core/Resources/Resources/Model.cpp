@@ -11,7 +11,7 @@
 
 namespace DuskEngine
 {
-	Model::Model(const std::string& path)
+	/*Model::Model(const std::string& path)
 	{
 		Assimp::Importer import;
 		const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_FlipWindingOrder);
@@ -22,7 +22,7 @@ namespace DuskEngine
 		}
 
 		ProcessNode(scene->mRootNode, scene);
-	}
+	}*/
 
 	Model::Model(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
