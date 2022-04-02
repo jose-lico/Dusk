@@ -17,7 +17,8 @@ namespace DuskEngine
 	std::filesystem::path ResourceManager::m_RootDirectory = "res";
 	std::filesystem::path ResourceManager::m_CurrentDirectory;
 
-	std::unordered_map<uuids::uuid, std::filesystem::path> ResourceManager::m_UUIDsMap;
+	std::unordered_map<uuids::uuid, std::filesystem::path> ResourceManager::m_PathsMap;
+	std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> ResourceManager::m_UUIDsMap;
 
 	void ResourceManager::Init()
 	{
@@ -40,16 +41,16 @@ namespace DuskEngine
 			{
 				if (directoryEntry.path().extension() == ".meta")
 				{
-					std::ifstream infile(directoryEntry.path());
+					std::ifstream stream(directoryEntry.path());
+					std::stringstream strStream;
+					strStream << stream.rdbuf();
+					
+					YAML::Emitter out;
+					YAML::Node data = YAML::Load(strStream.str());
 
-					// TODO -> This can be cleaned up a lot
-					if (infile.good())
-					{
-						std::string sLine; 
-						getline(infile, sLine);
-						std::string path = m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string();
-						m_UUIDsMap[*uuids::uuid::from_string(sLine)] = path;
-					}
+					std::string path = m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string();
+					m_PathsMap[data["uuid"].as<uuids::uuid>()] = path;
+					m_UUIDsMap[path] = data["uuid"].as<uuids::uuid>();
 				}
 			}
 		}
@@ -86,7 +87,7 @@ namespace DuskEngine
 					myfile << id;
 					myfile.close();
 
-					m_UUIDsMap[id] = directoryEntry.path();
+					m_PathsMap[id] = directoryEntry.path();
 				}
 			}
 		}
@@ -101,18 +102,12 @@ namespace DuskEngine
 
 	uuids::uuid ResourceManager::GetUUID(const std::filesystem::path& path)
 	{
-		std::ifstream infile(path);
-		std::string sLine;
-		if (infile.good())
-		{
-			getline(infile, sLine);
-			return *uuids::uuid::from_string(sLine);
-		}
+		return m_UUIDsMap[path];
 	}
 
 	Ref<Material> ResourceManager::LoadMaterial(const uuids::uuid& uuid)
 	{
-		std::ifstream stream(m_UUIDsMap[uuid]);
+		std::ifstream stream(m_PathsMap[uuid]);
 		std::stringstream strStream;
 
 		strStream << stream.rdbuf();
@@ -121,7 +116,7 @@ namespace DuskEngine
 
 		auto shader = LoadShader(data["Shader"].as<uuids::uuid>());
 
-		Ref<Material> material = MakeRef<Material>(shader, m_UUIDsMap[uuid], uuid);
+		Ref<Material> material = MakeRef<Material>(shader, m_PathsMap[uuid], uuid);
 
 		for (auto& uniform : material->m_Uniforms)
 		{
@@ -141,18 +136,18 @@ namespace DuskEngine
 
 	Ref<Shader> ResourceManager::LoadShader(const uuids::uuid& uuid)
 	{
-		return Shader::Create(m_UUIDsMap[uuid], uuid);
+		return Shader::Create(m_PathsMap[uuid], uuid);
 	}
 
 	Ref<Texture> ResourceManager::LoadTexture(const uuids::uuid& uuid)
 	{
-		return Texture::Create(m_UUIDsMap[uuid], uuid);
+		return Texture::Create(m_PathsMap[uuid], uuid);
 	}
 
 	//TODO - improve model and mesh api and useflow
 	Ref<Mesh> ResourceManager::LoadModel(const uuids::uuid& uuid)
 	{
-		Model* m = new Model(m_UUIDsMap[uuid].string());
+		Model* m = new Model(m_PathsMap[uuid].string());
 		Ref<Mesh> mesh = m->GetFirstMesh();
 		mesh->m_Type = MeshType::Model;
 		mesh->m_UUID = uuid;

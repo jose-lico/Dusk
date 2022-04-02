@@ -143,7 +143,7 @@ namespace DuskEngine
 				uniform.Data = MakeRef<glm::vec3>(1.0f);
 				break;
 			case UniformType::Texture:
-				uniform.Data = Texture::Create("res/textures/white.png", ResourceManager::GetUUID("res/textures/white.png.meta"));
+				uniform.Data = Texture::Create("res/textures/white.png", ResourceManager::GetUUID("res/textures/white.png"));
 				break;
 			}
 		}

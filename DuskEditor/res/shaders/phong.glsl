@@ -33,11 +33,16 @@ out vec4 FragColor;
 
 struct DirectionalLight
 {
+    bool Enabled;
+
     vec3 Direction;
     vec3 Color;
 };
 
-struct PointLight {    
+struct PointLight {
+
+    bool Enabled;
+
     vec3 Color;
     vec3 Position;
     
@@ -75,6 +80,10 @@ void main()
 
 vec3 CalcDirLight(DirectionalLight light, vec3 viewDir)
 {
+    if(!light.Enabled)
+    {
+        return vec3(0.0, 0.0, 0.0);
+    }
     vec3 lightDir = normalize(-light.Direction);
 
     // Ambient
@@ -96,6 +105,10 @@ vec3 CalcDirLight(DirectionalLight light, vec3 viewDir)
 
 vec3 CalcPointLight(PointLight light, vec3 viewDir)
 {
+    if(!light.Enabled)
+    {
+        return vec3(0.0, 0.0, 0.0);
+    }
     light.Constant = 1.0;
     light.Linear = 0.09;
     light.Quadratic = 0.032;

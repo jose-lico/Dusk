@@ -300,7 +300,7 @@ namespace DuskEngine
 						{
 							item_current_idx = n;
 							std::string s = shaders[n];
-							auto shader = Shader::Create("res/shaders/" + s, ResourceManager::GetUUID("res/shaders/" + s + ".meta"));
+							auto shader = Shader::Create("res/shaders/" + s, ResourceManager::GetUUID("res/shaders/" + s));
 							meshes[0]->material->SetShader(shader);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 						}
@@ -322,6 +322,7 @@ namespace DuskEngine
 
 				if (uniform.Type == UniformType::Texture)
 				{
+					// this is broken but whatever, will be replaced in the future
 					ImGui::Text(uniform.Name.c_str());
 					if (ImGui::ImageButton((void*)std::static_pointer_cast<Texture>(uniform.Data)->GetRendererID(), ImVec2{ 40, 40 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
 					{
@@ -332,10 +333,9 @@ namespace DuskEngine
 						{
 							// very temporary, but works!
 							auto texture = Texture::Create(path);
-							std::stringstream ss;
-							ss << path;
-							ss << ".meta";
-							texture->m_UUID = ResourceManager::GetUUID(ss.str());
+							std::string str = path;
+							//std::replace(str.begin(), str.end(), '\\', '/');
+							texture->m_UUID = ResourceManager::GetUUID(str);
 							meshes[0]->material->SetTexture(uniform.Name, texture);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 							free(path);
@@ -350,11 +350,8 @@ namespace DuskEngine
 							// barf emoji
 							const wchar_t* data = (const wchar_t*)payload->Data;
 							std::wstring ws(data);
-							std::string str(ws.begin(), ws.end());
-							std::stringstream ss;
-							ss << str;
-							ss << ".meta";
-							auto texture = Texture::Create(str, ResourceManager::GetUUID(ss.str()));
+							std::string path(ws.begin(), ws.end());
+							auto texture = Texture::Create(path, ResourceManager::GetUUID(ws));
 							meshes[0]->material->SetTexture(uniform.Name, texture);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 						}

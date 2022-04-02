@@ -29,8 +29,6 @@ namespace DuskEngine
 	private:
 		static Application* s_Instance;
 
-		// TODO - Probably move these to unique_ptr
-
 		LayerStack* m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer; // Deleted by m_LayerStack
 		WindowManager* m_WindowManager;

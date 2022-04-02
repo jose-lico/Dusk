@@ -3,7 +3,7 @@
 **Dusk is a WIP 3D Game Engine**. It is a personal project where I am learning more about how a game engine and all of its systems function under the hood. It is aiming to be a simple tool that can create games for multiple platforms.
 
 <p align="center">
-<img src="images/dusk_windows.png">
+<img src=".github/images/dusk_windows.png">
 </p>
 
 # Table of Contents
@@ -108,7 +108,7 @@ Dusk's early development was very inspired by Hazel as I was still riding this b
 # Screenshots
 
 <p align="center">
-<img src="images/dusk_linux.png">
+<img src=".github/images/dusk_linux.png">
 </p>
 
 *Dusk running on Linux*

@@ -3,6 +3,8 @@
 
 #include <unordered_map>
 #include <filesystem>
+#include <string>
+#include <optional>
 
 namespace uuids
 {
@@ -11,12 +13,16 @@ namespace uuids
 
 namespace DuskEngine
 {
-	class uuids::uuid;
-
 	class Material;
 	class Shader;
 	class Texture;
 	class Mesh;
+
+	struct opt_path_hash {
+		std::size_t operator()(const std::optional<std::filesystem::path>& path) const {
+			return path ? hash_value(path.value()) : 0;
+		}
+	};
 
 	class ResourceManager
 	{
@@ -37,6 +43,7 @@ namespace DuskEngine
 		static std::filesystem::path m_RootDirectory;
 		static std::filesystem::path m_CurrentDirectory;
 
-		static std::unordered_map <uuids::uuid, std::filesystem::path> m_UUIDsMap;
+		static std::unordered_map <uuids::uuid, std::filesystem::path> m_PathsMap;
+		static std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> m_UUIDsMap;
 	};
 }
