@@ -14,7 +14,7 @@
 namespace DuskEngine
 {
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const char* name, std::vector<Entity*>& m_SelectedEntities, UIFunction function);
+	static void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, UIFunction function);
 
 	InspectorPanel::InspectorPanel()
 	{
@@ -42,14 +42,14 @@ namespace DuskEngine
 				{
 					if (ImGui::MenuItem("Camera"))
 					{
-						auto& ent = (*m_SelectedEntities)[0]->AddComponent<Camera>();
+						auto& ent = (*m_SelectedEntities)[0].AddComponent<Camera>();
 						ent.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
 						ImGui::CloseCurrentPopup();
 					}
 
 					if (ImGui::MenuItem("Light"))
 					{
-						(*m_SelectedEntities)[0]->AddComponent<Light>();
+						(*m_SelectedEntities)[0].AddComponent<Light>();
 						ImGui::CloseCurrentPopup();
 					}
 
@@ -73,7 +73,7 @@ namespace DuskEngine
 	}
 
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const char* name, std::vector<Entity*>& m_SelectedEntities, UIFunction function)
+	static void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, UIFunction function)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed |
 			ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
@@ -82,10 +82,10 @@ namespace DuskEngine
 
 		for (auto ent : m_SelectedEntities)
 		{
-			if (!ent->HasComponent<T>())
+			if (!ent.HasComponent<T>())
 				return;
 
-			components.push_back(&ent->GetComponent<T>());
+			components.push_back(&ent.GetComponent<T>());
 		}
 
 		ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
@@ -124,7 +124,7 @@ namespace DuskEngine
 		if (removeComponent)
 		{
 			for (auto ent : m_SelectedEntities)
-				ent->RemoveComponent<T>();
+				ent.RemoveComponent<T>();
 		}
 			
 	}

@@ -47,7 +47,7 @@ namespace DuskEngine
 					if(!m_SelectableStatus[entityIndex])
 					{
 						m_SelectableStatus[entityIndex] = true;
-						m_SelectedEntities.push_back(new Entity(entityID, m_Scene.get()));
+						m_SelectedEntities.push_back(Entity(entityID, m_Scene.get()));
 					}
 				}
 

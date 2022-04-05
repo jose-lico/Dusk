@@ -76,7 +76,7 @@ namespace DuskEngine
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
 			m_UniformsMap[name]->Data = MakeRef<float>(f);
 		else
-			LOG("Uniform doesnt exist")
+			WARN("Uniform doesnt exist")
 	}
 
 	void Material::SetVec2(const std::string& name, glm::vec2& v)
@@ -96,7 +96,7 @@ namespace DuskEngine
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
 			m_UniformsMap[name]->Data = texture;
 		else
-			LOG("Texture '" + name + "' doesnt exist")
+			WARN("Texture '" + name + "' doesnt exist")
 	}
 
 	void Material::SerializeText(const std::string& path)

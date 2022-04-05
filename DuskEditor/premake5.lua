@@ -19,7 +19,8 @@ project "DuskEditor"
 		"ImGui",
 		"assimp",
 		"yaml-cpp",
-		"ImGuizmo"
+		"ImGuizmo",
+		"rttr"
 	}
 
 	debugdir "%{wks.location}/DuskEditor"
@@ -40,7 +41,8 @@ project "DuskEditor"
 		dependenciesDir .. "/stduuid/include",
 		dependenciesDir .. "/stduuid/gsl",
 		dependenciesDir .. "/IconFontCppHeaders",
-		dependenciesDir .. "/ImGuizmo/include"
+		dependenciesDir .. "/ImGuizmo/include",
+		dependenciesDir .. "/rttr/include"
 	}
 
 	defines

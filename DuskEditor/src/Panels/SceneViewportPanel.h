@@ -20,11 +20,11 @@ namespace DuskEngine
 		~SceneViewportPanel() = default;
 
 		virtual void OnImGuiRender() override;
-		void SelectedEntities(std::vector<Entity*>& entities) { m_SelectedEntities = &entities; }
+		void SelectedEntities(std::vector<Entity>& entities) { m_SelectedEntities = &entities; }
 	private:
 		void EditorCamera();
 
-		std::vector<Entity*>* m_SelectedEntities = nullptr; // TODO
+		std::vector<Entity>* m_SelectedEntities = nullptr;
 
 		Ref<FrameBuffer> m_FB;
 		glm::vec2 m_ViewportSize;

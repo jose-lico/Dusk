@@ -23,7 +23,7 @@ namespace DuskEngine
 		Ref<Scene> m_Scene;
 
 		std::vector<bool> m_SelectableStatus;
-		std::vector<Entity*> m_SelectedEntities;
+		std::vector<Entity> m_SelectedEntities;
 
 		friend class Scene;
 	};

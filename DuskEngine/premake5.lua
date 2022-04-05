@@ -32,7 +32,8 @@ project "DuskEngine"
 		dependenciesDir .. "/stduuid/include",
 		dependenciesDir .. "/stduuid/gsl",
 		dependenciesDir .. "/IconFontCppHeaders",
-		dependenciesDir .. "/ImGuizmo/include"
+		dependenciesDir .. "/ImGuizmo/include",
+		dependenciesDir .. "/rttr/include"
 	}
 
 	defines

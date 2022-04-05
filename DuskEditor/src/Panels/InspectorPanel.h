@@ -12,9 +12,9 @@ namespace DuskEngine
 		~InspectorPanel() = default;
 
 		virtual void OnImGuiRender() override;
-		void SelectedEntities(std::vector<Entity*>& entities) { m_SelectedEntities = &entities; }
+		void SelectedEntities(std::vector<Entity>& entities) { m_SelectedEntities = &entities; }
 	private:
-		std::vector<Entity*>* m_SelectedEntities = nullptr;
+		std::vector<Entity>* m_SelectedEntities = nullptr;
 
 		static void MetaInspector(std::vector<Meta*>& metas);
 		static void TransformInspector(std::vector<Transform*>& transforms);

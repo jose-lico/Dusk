@@ -1,6 +1,7 @@
 #pragma once
 
 #include "visit_struct/visit_struct.hpp"
+#include "rttr/registration.h"
 
 #include <string>
 
@@ -18,3 +19,10 @@ namespace DuskEngine
 }
 
 VISITABLE_STRUCT(DuskEngine::Meta, name, enabled);
+
+RTTR_REGISTRATION
+{
+	rttr::registration::class_<DuskEngine::Meta>("Mesh").
+		property("name", &DuskEngine::Meta::name).
+		property("enabled", &DuskEngine::Meta::enabled);
+}

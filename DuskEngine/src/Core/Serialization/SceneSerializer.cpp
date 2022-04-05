@@ -46,6 +46,13 @@ namespace DuskEngine
 
         std::ofstream fout(path);
         fout << out.c_str();
+
+		auto ent = scene->GetMainCamera();
+		auto& meta = ent->GetComponent<Meta>();
+
+		rttr::type t = rttr::type::get(meta);
+		for (auto& prop : t.get_properties())
+			std::cout << "name: " << prop.get_name() << std::endl;
     }
 
     void SceneSerializer::SerializeBinary(const Ref<Scene>& scene, const std::string& path)
