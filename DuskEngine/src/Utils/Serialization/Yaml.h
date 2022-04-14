@@ -6,8 +6,9 @@
 #include "Core/Resources/Resources/Mesh.h"
 #include "Core/ECS/Components/Light.h"
 
-#include <yaml-cpp/yaml.h>
-#include <glm/glm.hpp>
+#include "yaml-cpp/yaml.h"
+#include "glm/glm.hpp"
+//#include "rttr/type.h"
 
 namespace DuskEngine
 {
@@ -101,6 +102,16 @@ namespace DuskEngine
 		out << YAML::Value << Light::LightTypeString(type);
 
 		return out;
+	}
+
+	inline
+	YAML::Emitter& operator<<(YAML::Emitter& out, const rttr::variant var)
+	{
+		if(var.can_convert<glm::vec3>())
+		{
+			return out << YAML::Value << var.convert<glm::vec3>();;
+		}
+		return out << YAML::Value << "not glm::vec3";
 	}
 }
 

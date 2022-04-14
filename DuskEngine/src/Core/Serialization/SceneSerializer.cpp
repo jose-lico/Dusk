@@ -47,12 +47,17 @@ namespace DuskEngine
         std::ofstream fout(path);
         fout << out.c_str();
 
-		auto ent = scene->GetMainCamera();
-		auto& meta = ent->GetComponent<Meta>();
-
-		rttr::type t = rttr::type::get(meta);
-		for (auto& prop : t.get_properties())
-			std::cout << "name: " << prop.get_name() << std::endl;
+		for(auto& t : rttr::type::get_types())
+		{
+			if(t.get_metadata(MetaData_Type::COMPONENT))
+			{
+				std::cout << t.get_name().to_string().c_str() << std::endl;
+				for(auto& p : t.get_properties())
+				{
+					std::cout << "\t" << p.get_name() << std::endl;
+				}
+			}
+		}
     }
 
     void SceneSerializer::SerializeBinary(const Ref<Scene>& scene, const std::string& path)
@@ -150,11 +155,17 @@ namespace DuskEngine
 
 			auto& component = entity.GetComponent<T>();
 
+			/*rttr::type type = rttr::type::get(component);
+
+			for (auto& prop : type.get_properties())
+			{
+				out << YAML::Key << prop.get_name().to_string() << YAML::Value << prop.get_value(component);
+			}*/
+
 			visit_struct::for_each(component, [&out](const char* name, const auto& value)
 				{
 					out << YAML::Key << name << YAML::Value << value;
 				});
-
 			out << YAML::EndMap;
 		}
 	}

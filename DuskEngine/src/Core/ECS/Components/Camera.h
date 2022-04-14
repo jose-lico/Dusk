@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glm/glm.hpp"
+#include "rttr/registration.h"
 #include "visit_struct/visit_struct.hpp"
 
 namespace DuskEngine
@@ -16,3 +17,9 @@ namespace DuskEngine
 }
 
 VISITABLE_STRUCT(DuskEngine::Camera, main);
+
+//RTTR_REGISTRATION
+//{
+//	rttr::registration::class_<DuskEngine::Camera>("Camera").
+//		property("main", &DuskEngine::Camera::main);
+//}

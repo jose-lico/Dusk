@@ -66,6 +66,7 @@ namespace DuskEngine
 			case UniformType::Texture:
 				m_Shader->SetUniformInt("u_" + uniform.Name, textSlot);
 				std::static_pointer_cast<Texture>(uniform.Data)->Bind(textSlot++);
+				//((Texture*)(uniform.Data.get()))->Bind(textSlot++); // basically the same?
 				break;
 			}
 		}
