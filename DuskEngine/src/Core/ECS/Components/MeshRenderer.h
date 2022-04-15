@@ -3,8 +3,6 @@
 #include "Core/Resources/Resources/Mesh.h"
 #include "Core/Resources/Resources/Material.h"
 
-#include "visit_struct/visit_struct.hpp"
-
 namespace DuskEngine
 {
 	struct MeshRenderer
@@ -18,6 +16,3 @@ namespace DuskEngine
 		{}
 	};
 }
-
-VISITABLE_STRUCT(DuskEngine::MeshRenderer, mesh, material);
-

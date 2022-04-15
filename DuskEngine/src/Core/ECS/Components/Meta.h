@@ -1,7 +1,5 @@
 #pragma once
 
-#include "visit_struct/visit_struct.hpp"
-
 #include <string>
 
 namespace DuskEngine
@@ -16,5 +14,3 @@ namespace DuskEngine
 			:name(name), enabled(true) {}
 	};
 }
-
-VISITABLE_STRUCT(DuskEngine::Meta, name, enabled);

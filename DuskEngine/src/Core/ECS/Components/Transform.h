@@ -6,8 +6,6 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "visit_struct/visit_struct.hpp"
-
 namespace DuskEngine
 {
 	struct Transform 
@@ -38,5 +36,3 @@ namespace DuskEngine
 		}
 	};	
 }
-
-VISITABLE_STRUCT(DuskEngine::Transform, position, rotation, scale);

@@ -22,9 +22,6 @@
 [submodule "Dependencies/yaml-cpp"]
 	path = Dependencies/yaml-cpp
 	url = https://github.com/qolisipo/yaml-cpp
-[submodule "Dependencies/visit_struct"]
-	path = Dependencies/visit_struct
-	url = https://github.com/garbageslam/visit_struct
 [submodule "Dependencies/stduuid"]
 	path = Dependencies/stduuid
 	url = https://github.com/mariusbancila/stduuid

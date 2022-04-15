@@ -28,7 +28,6 @@ project "DuskEngine"
 		dependenciesDir .. "/entt/src",
 		dependenciesDir .. "/assimp-premake/include",
 		dependenciesDir .. "/yaml-cpp/include",
-		dependenciesDir .. "/visit_struct/include",
 		dependenciesDir .. "/stduuid/include",
 		dependenciesDir .. "/stduuid/gsl",
 		dependenciesDir .. "/IconFontCppHeaders",

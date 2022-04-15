@@ -153,6 +153,7 @@ namespace DuskEngine
 			{
 				out << YAML::Key << prop.get_name().to_string() << YAML::Value << prop.get_value(component);
 			}
+
 			out << YAML::EndMap;
 		}
 	}
