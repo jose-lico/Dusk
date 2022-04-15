@@ -19,7 +19,8 @@ project "DuskRuntime"
 		"ImGui",
 		"assimp",
 		"yaml-cpp",
-		"ImGuizmo"
+		"ImGuizmo",
+		"rttr"
 	}
 
 	debugdir "%{wks.location}/DuskEditor"

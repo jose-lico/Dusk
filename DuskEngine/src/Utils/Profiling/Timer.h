@@ -25,7 +25,7 @@ namespace DuskEngine
 		}
 	private:
 		std::string m_Text;
-		std::chrono::time_point<std::chrono::steady_clock> m_Start;
+		std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
 		std::chrono::duration<float> duration;
 	};
 }

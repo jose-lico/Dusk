@@ -6,6 +6,7 @@
 #include "imgui/imgui.h"
 
 #include <filesystem>
+#include <vector>
 
 namespace DuskEngine
 {
