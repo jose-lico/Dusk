@@ -2,14 +2,14 @@
 #include "SceneSerializer.h"
 
 #include "Core/Macros/LOG.h"
-
 #include "Core/ECS/Entity.h"
 #include "Core/ECS/Components.h"
-
 #include "Core/Resources/ResourceManager.h"
+#include "Core/ECS/ComponentRegistry.cpp"
 
 #include "Utils/Rendering/PrimitiveMesh.h"
 #include "Utils/Serialization/Yaml.h"
+#include "Utils/Profiling/Timer.h"
 
 #include "glm/glm.hpp"
 
@@ -20,15 +20,17 @@ namespace DuskEngine
 	
     void SceneSerializer::SerializeText(const Ref<Scene>& scene, const std::string& path)
     {
-        YAML::Emitter out;
-        out << YAML::BeginMap;
-        out << YAML::Key << "Scene" << YAML::Value << "Untitled";
-        out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
+		Timer timer("Serialize Text");
 
-        scene->m_Registry.each([&](auto entityID)
-            {
-                Entity entity = { entityID, scene.get() };
-                
+		YAML::Emitter out;
+		out << YAML::BeginMap;
+		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
+		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
+
+		scene->m_Registry.each([&](auto entityID)
+			{
+				Entity entity = { entityID, scene.get() };
+
 				out << YAML::BeginMap;
 				out << YAML::Key << "Entity" << YAML::Value << "12837192831273";
 
@@ -39,25 +41,13 @@ namespace DuskEngine
 				SerializeComponentText<Light>("Light", out, entity);
 
 				out << YAML::EndMap;
-				
-            });
-        out << YAML::EndSeq;
-        out << YAML::EndMap;
 
-        std::ofstream fout(path);
-        fout << out.c_str();
+			});
+		out << YAML::EndSeq;
+		out << YAML::EndMap;
 
-		for(auto& t : rttr::type::get_types())
-		{
-			if(t.get_metadata(MetaData_Type::COMPONENT))
-			{
-				std::cout << t.get_name().to_string().c_str() << std::endl;
-				for(auto& p : t.get_properties())
-				{
-					std::cout << "\t" << p.get_name() << std::endl;
-				}
-			}
-		}
+		std::ofstream fout(path);
+		fout << out.c_str();
     }
 
     void SceneSerializer::SerializeBinary(const Ref<Scene>& scene, const std::string& path)
@@ -66,6 +56,8 @@ namespace DuskEngine
 
     bool SceneSerializer::DeserializeText(const Ref<Scene>& scene, const std::string& path)
     {
+		Timer timer("Deserialize Text");
+
 		std::ifstream stream(path);
 		std::stringstream strStream;
 
@@ -155,17 +147,12 @@ namespace DuskEngine
 
 			auto& component = entity.GetComponent<T>();
 
-			/*rttr::type type = rttr::type::get(component);
+			rttr::type type = rttr::type::get(component);
 
 			for (auto& prop : type.get_properties())
 			{
 				out << YAML::Key << prop.get_name().to_string() << YAML::Value << prop.get_value(component);
-			}*/
-
-			visit_struct::for_each(component, [&out](const char* name, const auto& value)
-				{
-					out << YAML::Key << name << YAML::Value << value;
-				});
+			}
 			out << YAML::EndMap;
 		}
 	}

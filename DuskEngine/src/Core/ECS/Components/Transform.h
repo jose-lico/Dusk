@@ -1,4 +1,4 @@
-	#pragma once
+#pragma once
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/quaternion.hpp"
@@ -6,7 +6,6 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "rttr/registration.h"
 #include "visit_struct/visit_struct.hpp"
 
 namespace DuskEngine
@@ -41,11 +40,3 @@ namespace DuskEngine
 }
 
 VISITABLE_STRUCT(DuskEngine::Transform, position, rotation, scale);
-
-//RTTR_REGISTRATION
-//{
-//	rttr::registration::class_<DuskEngine::Transform>("Transform").
-//		property("position", &DuskEngine::Transform::position).
-//		property("rotation", &DuskEngine::Transform::rotation).
-//		property("scale", &DuskEngine::Transform::scale);
-//}

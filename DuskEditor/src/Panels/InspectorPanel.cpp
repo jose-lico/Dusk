@@ -3,6 +3,7 @@
 #include "Core/Resources/Resources/Shader.h"
 #include "Core/Resources/Resources/Texture.h"
 #include "Core/Resources/ResourceManager.h"
+#include "Core/ECS/Entity.h"
 
 #include "Utils/ImGuiUtils.h"
 

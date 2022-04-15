@@ -1,7 +1,6 @@
 #pragma once
 
 #include "glm/glm.hpp"
-#include "rttr/registration.h"
 #include "visit_struct/visit_struct.hpp"
 
 namespace DuskEngine
@@ -38,24 +37,10 @@ namespace DuskEngine
 				return LightType::Point;
 			else if (type == "Spot")
 				return LightType::Spot;
-			else if (type == "Unknown")
+			else
 				return LightType::Directional;
 		}
 	};
 }
 
 VISITABLE_STRUCT(DuskEngine::Light, type, color);
-
-enum class MetaData_Type
-{
-	COMPONENT,
-	OTHER
-};
-
-RTTR_REGISTRATION
-{
-	rttr::registration::class_<DuskEngine::Light>("Light")
-	(rttr::metadata(MetaData_Type::COMPONENT, true)).
-		property("color", &DuskEngine::Light::color).
-		property("type", &DuskEngine::Light::type);
-}

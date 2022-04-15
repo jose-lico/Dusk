@@ -5,6 +5,8 @@
 
 namespace DuskEngine
 {
+	class Entity;
+
 	class InspectorPanel : public Panel
 	{
 	public:

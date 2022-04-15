@@ -8,7 +8,7 @@
 
 #include "yaml-cpp/yaml.h"
 #include "glm/glm.hpp"
-//#include "rttr/type.h"
+#include "rttr/variant.h"
 
 namespace DuskEngine
 {
@@ -109,9 +109,42 @@ namespace DuskEngine
 	{
 		if(var.can_convert<glm::vec3>())
 		{
-			return out << YAML::Value << var.convert<glm::vec3>();;
+			return out << YAML::Value << var.convert<glm::vec3>();
 		}
-		return out << YAML::Value << "not glm::vec3";
+		else if (var.can_convert<glm::vec4>())
+		{
+			return out << YAML::Value << var.convert<glm::vec4>();
+		}
+		else if(var.can_convert<std::string>())
+		{
+			return out << YAML::Value << var.convert<std::string>();
+		}
+		else if (var.can_convert<LightType>()) // enums need to come before bool
+		{
+			return out << YAML::Value << var.convert<LightType>();
+		}
+		else if (var.can_convert<bool>())
+		{
+			return out << YAML::Value << var.convert<bool>();
+		}
+		else if (var.can_convert<Ref<Mesh>>())
+		{
+			return out << YAML::Value << var.convert<Ref<Mesh>>();
+		}
+		else if (var.can_convert<Ref<Material>>())
+		{
+			return out << YAML::Value << var.convert<Ref<Material>>();
+		}
+		else if (var.can_convert<Ref<Shader>>())
+		{
+			return out << YAML::Value << var.convert<Ref<Shader>>();
+		}
+		else if (var.can_convert<std::vector<Uniform>>())
+		{
+			return out << YAML::Value << var.convert<std::vector<Uniform>>();
+		}
+
+		return out << YAML::Value << "Unrecognized type";
 	}
 }
 

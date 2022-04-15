@@ -68,7 +68,7 @@ namespace DuskEngine
 
 	void Scene::OnUpdate()
 	{
-		if(playing)
+		/*if(playing)
 		{
 			auto view = m_Registry.view<Script>();
 			for (auto entity : view)
@@ -76,7 +76,7 @@ namespace DuskEngine
 				auto& script = view.get<Script>(entity);
 				script.script->OnUpdate();
 			}
-		}
+		}*/
 
 		{
 			// TODO: for static objects in the future only calculate this once and not every frame

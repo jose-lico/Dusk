@@ -47,7 +47,8 @@ project "DuskEngine"
 		"GLEW_STATIC",
 		"_CRT_SECURE_NO_WARNINGS",
 		"YAML_CPP_STATIC_DEFINE",
-		"UUID_SYSTEM_GENERATOR"
+		"UUID_SYSTEM_GENERATOR",
+		"NOMINMAX"
 	}
 
 	filter "files:../Dependencies/ImGuizmo/**.cpp"

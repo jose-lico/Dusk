@@ -22,6 +22,8 @@ namespace DuskEngine
 		UniformType Type;
 		std::shared_ptr<void> Data = nullptr;
 
+		Uniform() = default;
+
 		Uniform(const std::string& name, UniformType type) : Name(name) , Type(type)
 		{}
 	};
