@@ -98,4 +98,10 @@ namespace DuskEngine
 
 		ImGui::End();
 	}
+
+	void HierarchyPanel::SetScene(Ref<Scene>& scene)
+	{
+		m_Scene = scene;
+		m_SelectedEntities.resize(0);
+	}
 }

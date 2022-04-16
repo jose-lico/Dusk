@@ -19,6 +19,8 @@ namespace DuskEngine
 		~HierarchyPanel();
 
 		virtual void OnImGuiRender() override;
+
+		void SetScene(Ref<Scene>& scene);
 	private:
 		Ref<Scene> m_Scene;
 

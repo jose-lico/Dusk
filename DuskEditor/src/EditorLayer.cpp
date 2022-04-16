@@ -2,6 +2,7 @@
 
 #include "Core/Renderer/Resources/Framebuffer.h"
 #include "Core/Serialization/SceneSerializer.h"
+#include "Core/ECS/EditorCamera.h"
 
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/string_cast.hpp"
@@ -26,10 +27,16 @@ namespace DuskEngine
 
 	void EditorLayer::OnAttach()
 	{
+		m_EditorCamera = new EditorCamera();
+		m_EditorCamera->transform.position = glm::vec3(-4.0f, 2.0f, 4.0f);
+		m_EditorCamera->transform.rotation = glm::vec3(-0.25f, -0.9f, 0.0f);
+		m_EditorCamera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
+
 		FramebufferSpecification fbSpec;
 		fbSpec.Width = 720;
 		fbSpec.Height = 480;
-		m_FB.reset(FrameBuffer::Create(fbSpec));
+		m_EditorSceneFB.reset(FrameBuffer::Create(fbSpec));
+		m_PlayingSceneFB.reset(FrameBuffer::Create(fbSpec));
 		m_EditingScene = MakeRef<Scene>();
 
 		SceneSerializer::DeserializeText(m_EditingScene, "res/scenes/scene.yaml");
@@ -38,33 +45,53 @@ namespace DuskEngine
 		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
 		m_Panels.push_back(new ConsolePanel());
 		m_Panels.push_back(new ContentBrowserPanel());
-		m_Panels.push_back(new GameViewPortPanel(m_FB, *m_EditingScene->GetMainCamera(), &m_Playing));
-		m_Panels.push_back(new SceneViewportPanel(m_FB, *m_EditingScene->GetMainCamera()));
-		SceneViewportPanel& viewport = *(SceneViewportPanel*)m_Panels.back();
-		m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, viewport));
-
-		auto ent = m_EditingScene->FindEntity("Lit Cube");
+		m_Panels.push_back(new GameViewportPanel(m_PlayingSceneFB, *m_EditingScene->GetMainCamera(), &m_Playing));
+		m_GameViewportPanel = (GameViewportPanel*)m_Panels.back();
+		m_Panels.push_back(new SceneViewportPanel(m_EditorSceneFB, m_EditorCamera));
+		m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
+		m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel));
+		m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
 	}
 
 	void EditorLayer::OnUpdate()
 	{
-		m_FB->Bind();
+		if (!m_Playing)
+		{
+			m_EditorSceneFB->Bind();
+			m_EditingScene->OnUpdateEditor(*m_EditorCamera);
+			m_EditorSceneFB->Unbind();
 
-		m_EditingScene->OnUpdate();
+			m_PlayingSceneFB->Bind();
+			m_EditingScene->OnUpdateRuntime(false);
+			m_PlayingSceneFB->Unbind();
+		}
+		else
+		{
+			m_EditorSceneFB->Bind();
+			m_PlayingScene->OnUpdateEditor(*m_EditorCamera);
+			m_EditorSceneFB->Unbind();
 
-		m_FB->Unbind();
+			m_PlayingSceneFB->Bind();
+			m_PlayingScene->OnUpdateRuntime(true);
+			m_PlayingSceneFB->Unbind();
+		}
 	}
 
 	void EditorLayer::OnImGuiRender()
 	{
 		m_Dockspace.BeginDockspace();
 
+		for (Panel* panel : m_Panels)
+		{
+			panel->OnImGuiRender();
+		}
+
 		ImGui::Begin("Stuff");
 
 		if (ImGui::Button("Save Scene"))
 			SceneSerializer::SerializeText(m_EditingScene, "res/scenes/scene.yaml");
 
-		if (ImGui::Button("Play"))
+		if (ImGui::Button(!m_Playing ? "Play" : "Stop playing"))
 		{
 			if (!m_Playing)
 			{
@@ -72,21 +99,20 @@ namespace DuskEngine
 				m_PlayingScene = MakeRef<Scene>();
 				SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");
 				ImGui::SetWindowFocus("Game");
+				m_GameViewportPanel->SetCamera(m_PlayingScene->GetMainCamera());
+				m_HierarchyPanel->SetScene(m_PlayingScene);
 			}
 			else
 			{
 				m_PlayingScene = MakeRef<Scene>();
 				m_Playing = false;
 				ImGui::SetWindowFocus(ICON_FK_EYE "  Viewport");
+				m_GameViewportPanel->SetCamera(m_EditingScene->GetMainCamera());
+				m_HierarchyPanel->SetScene(m_EditingScene);
 			}
 		}
 
 		ImGui::End();
-
-		for (Panel* panel : m_Panels)
-		{
-			panel->OnImGuiRender();
-		}
 
 		m_Dockspace.EndDockspace();
 	}

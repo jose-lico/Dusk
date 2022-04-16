@@ -2,6 +2,7 @@
 
 #include "Core/ECS/Components/Camera.h"
 #include "Core/ECS/Components/Transform.h"
+#include "Core/ECS/EditorCamera.h"
 #include "Core/Renderer/Resources/Framebuffer.h"
 #include "Core/Application/Time.h"
 #include "Core/Application/Input.h"
@@ -13,8 +14,8 @@
 
 namespace DuskEngine
 {
-	SceneViewportPanel::SceneViewportPanel(Ref<FrameBuffer>& fb, Entity camera)
-	{
+	SceneViewportPanel::SceneViewportPanel(Ref<FrameBuffer>& fb, EditorCamera* camera)
+	{ 
 		m_ViewportSize = glm::vec2(0.0f);
 		m_FB = fb;
 		m_Camera = camera;
@@ -40,7 +41,7 @@ namespace DuskEngine
 		{
 			m_ViewportSize = { viewportSize.x, viewportSize.y };
 			m_FB->Resize(m_ViewportSize);
-			m_Camera.GetComponent<Camera>().projectionMatrix = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f);
+			m_Camera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f);
 		}
 		ImGui::Image((void*)m_FB->GetColorAttachmentID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::PopStyleVar();
@@ -69,7 +70,7 @@ namespace DuskEngine
         }
 		
 		if(ImGui::IsWindowFocused())
-			EditorCamera();
+			MoveEditorCamera();
 
 		if(m_SelectedEntities->size() > 0)
 		{
@@ -78,7 +79,7 @@ namespace DuskEngine
 
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
 			
-			auto& camera = m_Camera.GetComponent<Camera>();
+			auto& camera = m_Camera->camera;
 
 			auto& transform = (*m_SelectedEntities)[0].GetComponent<Transform>();
 			glm::mat4 transformMatrix = transform.GetTransform();
@@ -95,7 +96,7 @@ namespace DuskEngine
 		ImGui::End();
 	}
 
-	void SceneViewportPanel::EditorCamera()
+	void SceneViewportPanel::MoveEditorCamera()
 	{
 		if (!m_IsLeftMousePressed && Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
 		{
@@ -112,7 +113,7 @@ namespace DuskEngine
 
 		if (m_IsLeftMousePressed)
 		{
-			auto& transform = m_Camera.GetComponent<Transform>();
+			auto& transform = m_Camera->transform;
 
 			float moveSpeed = 3.0f;
 			float rotSpeed = 0.5f;

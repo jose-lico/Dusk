@@ -11,6 +11,7 @@ namespace DuskEngine
 {
 	class Scene;
 	class FrameBuffer;
+	class EditorCamera;
 
 	class EditorLayer : public Layer
 	{
@@ -26,8 +27,15 @@ namespace DuskEngine
 
 		Ref<Scene> m_EditingScene;
 		Ref<Scene> m_PlayingScene;
-		Ref<FrameBuffer> m_FB;
+		Ref<FrameBuffer> m_EditorSceneFB;
+		Ref<FrameBuffer> m_PlayingSceneFB;
 
-		bool m_Playing =false;
+		EditorCamera* m_EditorCamera;
+
+		GameViewportPanel* m_GameViewportPanel;
+		SceneViewportPanel* m_SceneViewportPanel;
+		HierarchyPanel* m_HierarchyPanel;
+
+		bool m_Playing = false;
 	};
 }

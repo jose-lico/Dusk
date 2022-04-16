@@ -12,11 +12,12 @@
 namespace DuskEngine
 {
 	class FrameBuffer;
+	class EditorCamera;
 	
 	class SceneViewportPanel : public Panel
 	{
 	public:
-		SceneViewportPanel(Ref<FrameBuffer>& fb, Entity camera);
+		SceneViewportPanel(Ref<FrameBuffer>& fb, EditorCamera* camera);
 		~SceneViewportPanel() = default;
 
 		virtual void OnImGuiRender() override;
@@ -26,9 +27,9 @@ namespace DuskEngine
 
 		Ref<FrameBuffer> m_FB;
 		glm::vec2 m_ViewportSize;
-		Entity m_Camera;
+		EditorCamera* m_Camera;
 
-		void EditorCamera();
+		void MoveEditorCamera();
 		bool m_IsLeftMousePressed = false;
 		bool m_HasFirstMousePosition = false;
 		glm::vec2 m_LastMousePosition;

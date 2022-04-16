@@ -13,13 +13,14 @@ namespace DuskEngine
 {
 	class FrameBuffer;
 
-	class GameViewPortPanel : public Panel
+	class GameViewportPanel : public Panel
 	{
 	public:
-		GameViewPortPanel(Ref<FrameBuffer>& fb, Entity camera, bool* playing);
-		~GameViewPortPanel() = default;
+		GameViewportPanel(Ref<FrameBuffer>& fb, Entity camera, bool* playing);
+		~GameViewportPanel() = default;
 
 		virtual void OnImGuiRender() override;
+		void SetCamera(Entity* targetCamera) { m_Camera = *targetCamera; }
 	private:
 		Ref<FrameBuffer> m_FB;
 		glm::vec2 m_ViewportSize;

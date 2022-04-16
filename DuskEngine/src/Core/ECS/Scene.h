@@ -6,6 +6,7 @@
 namespace DuskEngine
 {
 	class Entity;
+	class EditorCamera;
 
 	class DUSK_EXPORT Scene
 	{
@@ -28,7 +29,8 @@ namespace DuskEngine
 		Entity* GetMainCamera();
 		Entity* FindEntity(const std::string& name);
 
-		void OnUpdate();
+		void OnUpdateEditor(EditorCamera& camera);
+		void OnUpdateRuntime(bool running);
 	private:
 		entt::registry m_Registry;
 
