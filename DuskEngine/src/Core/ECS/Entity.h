@@ -48,5 +48,7 @@ namespace DuskEngine
 	private:
 		entt::entity m_EntityHandle;
 		Scene* m_Scene;
+
+		friend class Scene;
 	};
 }

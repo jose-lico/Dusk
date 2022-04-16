@@ -33,9 +33,20 @@ namespace DuskEngine
 		return entity;
 	}
 
+	Entity Scene::CreateEmptyEntity()
+	{
+		Entity entity = { m_Registry.create(), this };
+		return entity;
+	}
+
 	void Scene::DestroyEntity(entt::entity handle)
 	{
 		m_Registry.destroy(handle);
+	}
+
+	void Scene::DestroyEntity(Entity entity)
+	{
+		m_Registry.destroy(entity.m_EntityHandle);
 	}
 
 	Entity* Scene::GetMainCamera()

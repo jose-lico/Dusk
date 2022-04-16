@@ -105,7 +105,7 @@ namespace DuskEngine
 	}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, const rttr::variant var)
+	YAML::Emitter& operator<<(YAML::Emitter& out, const rttr::variant& var)
 	{
 		if(var.can_convert<glm::vec3>())
 		{

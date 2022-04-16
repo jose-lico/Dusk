@@ -24,7 +24,10 @@ namespace DuskEngine
 		Dockspace m_Dockspace;
 		std::vector<Panel*> m_Panels;
 
-		Ref<Scene> m_Scene;
+		Ref<Scene> m_EditingScene;
+		Ref<Scene> m_PlayingScene;
 		Ref<FrameBuffer> m_FB;
+
+		bool m_Playing =false;
 	};
 }

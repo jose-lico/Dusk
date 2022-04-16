@@ -14,7 +14,9 @@ namespace DuskEngine
 		~Scene();
 
 		Entity CreateEntity(const std::string& name);
+		Entity CreateEmptyEntity();
 		void DestroyEntity(entt::entity handle);
+		void DestroyEntity(Entity entity);
 		
 		template<typename T>
 		Entity* FindEntityOfType()

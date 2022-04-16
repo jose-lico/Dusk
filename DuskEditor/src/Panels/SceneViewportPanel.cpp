@@ -20,14 +20,14 @@ namespace DuskEngine
 		m_Camera = camera;
 	}
 
-	static bool stats = true;
+	static bool stats = false;
 	void SceneViewportPanel::OnImGuiRender()
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBringToFrontOnFocus;
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 		ImGui::Begin(ICON_FK_EYE "  Viewport", nullptr, window_flags);
 		CheckFocus();
-
+ 
 		if (ImGui::BeginMenuBar())
 		{
             ImGui::MenuItem("Stats", "", &stats);
