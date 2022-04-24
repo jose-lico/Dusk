@@ -69,6 +69,7 @@ namespace DuskEngine
 			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
 			DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
 			DrawComponent<MeshRenderer>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, MaterialInspector);
+			//DrawComponent<MeshRenderer>("Script", *m_SelectedEntities, ScriptInspector);
 		}
 		ImGui::End();
 	}
@@ -364,6 +365,13 @@ namespace DuskEngine
 		else
 		{
 			// TODO only same material instance can be edited.
+		}
+	}
+
+	void InspectorPanel::ScriptInspector(std::vector<Script*>& scripts)
+	{
+		if (scripts.size() == 1)
+		{
 		}
 	}
 }

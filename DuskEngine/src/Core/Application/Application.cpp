@@ -11,6 +11,7 @@
 #include "Core/Renderer/RenderCommand.h"
 #include "Core/Renderer/RendererContext.h"
 #include "Core/Events/EventBase.h"
+#include "Core/Scripting/ScriptingEngine.h"
 
 #include "Utils/Window/WindowManager.h"
 #include "Utils/Window/Window.h"
@@ -35,6 +36,7 @@ namespace DuskEngine
 
 		ResourceManager::Init();
 		ResourceManager::LoadUUIDs();
+		ScriptingEngine::Init();
 
 		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
 		m_LayerStack = new LayerStack();
@@ -46,6 +48,7 @@ namespace DuskEngine
 	{
 		TRACE("##### SHUTDOWN #####");
 
+		ScriptingEngine::Shutdown();
 		delete m_RendererContext;
 		delete m_LayerStack; // Deletes m_ImGuiLayer
 		delete m_WindowManager;

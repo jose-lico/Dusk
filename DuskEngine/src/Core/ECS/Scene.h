@@ -16,7 +16,7 @@ namespace DuskEngine
 
 		Entity CreateEntity(const std::string& name);
 		Entity CreateEmptyEntity();
-		void OnAwake();
+		
 		void DestroyEntity(entt::entity handle);
 		void DestroyEntity(Entity entity);
 		
@@ -31,6 +31,7 @@ namespace DuskEngine
 		Entity* FindEntity(const std::string& name);
 
 		void OnUpdateEditor(EditorCamera& camera);
+		void OnAwakeRuntime();
 		void OnUpdateRuntime(bool running);
 	private:
 		entt::registry m_Registry;

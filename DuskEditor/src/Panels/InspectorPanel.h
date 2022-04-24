@@ -22,6 +22,7 @@ namespace DuskEngine
 		static void TransformInspector(std::vector<Transform*>& transforms);
 		static void CameraInspector(std::vector<Camera*>& cameras);
 		static void LightInspector(std::vector<Light*>& lights);
-		static void MaterialInspector(std::vector<MeshRenderer*>& lights);
+		static void MaterialInspector(std::vector<MeshRenderer*>& materials);
+		static void ScriptInspector(std::vector<Script*>& scripts);
 	};
 }

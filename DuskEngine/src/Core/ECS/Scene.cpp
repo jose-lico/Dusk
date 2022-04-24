@@ -8,6 +8,7 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
 #include "Core/Resources/Resources/Shader.h"
+#include "Core/Scripting/ScriptingEngine.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/quaternion.hpp"
@@ -40,10 +41,7 @@ namespace DuskEngine
 		return entity;
 	}
 
-	void Scene::OnAwake()
-	{
-		LOG("On Awake")
-	}
+	
 
 	void Scene::DestroyEntity(entt::entity handle)
 	{
@@ -181,6 +179,16 @@ namespace DuskEngine
 			}
 
 			Renderer::EndScene();
+		}
+	}
+
+	void Scene::OnAwakeRuntime()
+	{
+		auto view = m_Registry.view<Script>();
+		for (auto entity : view)
+		{
+			auto& script = view.get<Script>(entity);
+			ScriptingEngine::OnAwake(script.scripts[0]);
 		}
 	}
 

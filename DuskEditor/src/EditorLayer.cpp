@@ -106,7 +106,7 @@ namespace DuskEngine
 				m_Playing = true;
 				m_PlayingScene = MakeRef<Scene>();
 				SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");
-				m_PlayingScene->OnAwake();
+				m_PlayingScene->OnAwakeRuntime();
 				ImGui::SetWindowFocus("Game");
 				m_GameViewportPanel->SetCamera(m_PlayingScene->GetMainCamera());
 				m_HierarchyPanel->SetScene(m_PlayingScene);
