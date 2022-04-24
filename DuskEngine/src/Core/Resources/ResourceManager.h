@@ -17,6 +17,7 @@ namespace DuskEngine
 	class Shader;
 	class Texture;
 	class Mesh;
+	class LuaScript;
 
 	struct opt_path_hash {
 		std::size_t operator()(const std::optional<std::filesystem::path>& path) const {
@@ -39,6 +40,7 @@ namespace DuskEngine
 		static Ref<Shader> LoadShader(const uuids::uuid& uuid);
 		static Ref<Texture> LoadTexture(const uuids::uuid& uuid);
 		static Ref<Mesh> LoadModel(const uuids::uuid& uuid);
+		static Ref<LuaScript> LoadScript(const uuids::uuid& uuid);
 	private:
 		static std::filesystem::path m_RootDirectory;
 		static std::filesystem::path m_CurrentDirectory;

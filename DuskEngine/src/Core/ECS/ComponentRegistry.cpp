@@ -61,6 +61,15 @@ enum class MetaData_Type
 		property("color", &DuskEngine::Light::color);
 
 // #############################################################
+// SCRIPT
+// #############################################################
+
+#define REGISTER_SCRIPT\
+	rttr::registration::class_<DuskEngine::Script>("Script")\
+		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
+		property("scripts", &DuskEngine::Script::scripts);
+
+// #############################################################
 // RTTR REGISTRATION
 // #############################################################
 
@@ -71,4 +80,5 @@ RTTR_REGISTRATION
 	REGISTER_MESH_RENDERER
 	REGISTER_CAMERA
 	REGISTER_LIGHT
+	REGISTER_SCRIPT
 }

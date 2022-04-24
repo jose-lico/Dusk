@@ -11,8 +11,6 @@ namespace DuskEngine
 		EditorCamera() = default;
 		~EditorCamera() = default;
 
-		void Move() {};
-
 		Transform transform;
 		Camera camera;
 	};

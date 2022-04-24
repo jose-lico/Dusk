@@ -79,13 +79,15 @@ namespace DuskEngine
 					std::string message = "Creating meta file for " + directoryEntry.path().filename().string();
 					LOG(message)
 
-					std::ofstream myfile;
-					std::string metaName = directoryEntry.path().string() + ".meta";
-
-					myfile.open(metaName.c_str(), std::fstream::app);
 					uuids::uuid const id = uuids::uuid_system_generator{}();
-					myfile << id;
-					myfile.close();
+
+					YAML::Emitter out;
+					out << YAML::BeginMap;
+					out << YAML::Key << "uuid" << YAML::Value << id;
+
+					std::string metaName = directoryEntry.path().string() + ".meta";
+					std::ofstream fout(metaName.c_str());
+					fout << out.c_str();
 
 					m_PathsMap[id] = directoryEntry.path();
 				}
@@ -155,5 +157,10 @@ namespace DuskEngine
 		mesh->m_Path = m->GetPath();
 		delete(m);
 		return mesh;
+	}
+
+	Ref<LuaScript> ResourceManager::LoadScript(const uuids::uuid& uuid)
+	{
+		return MakeRef<LuaScript>(m_PathsMap[uuid], uuid);
 	}
 }

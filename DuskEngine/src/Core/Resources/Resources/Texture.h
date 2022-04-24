@@ -11,7 +11,7 @@ namespace DuskEngine
 	class DUSK_EXPORT Texture : public Resource
 	{
 	public:
-		static Ref<Texture> Create(const std::string& filepath, const std::string& name = "");
+		static Ref<Texture> Create(const std::string& path, const std::string& name = "");
 		static Ref<Texture> Create(const std::filesystem::path& path, const uuids::uuid& uuid);
 
 		virtual ~Texture() = default;

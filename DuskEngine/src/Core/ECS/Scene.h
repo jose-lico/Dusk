@@ -16,6 +16,7 @@ namespace DuskEngine
 
 		Entity CreateEntity(const std::string& name);
 		Entity CreateEmptyEntity();
+		void OnAwake();
 		void DestroyEntity(entt::entity handle);
 		void DestroyEntity(Entity entity);
 		

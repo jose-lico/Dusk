@@ -3,6 +3,8 @@
 #include "Core/Renderer/Resources/Framebuffer.h"
 #include "Core/Serialization/SceneSerializer.h"
 #include "Core/ECS/EditorCamera.h"
+#include "Core/Scripting/LuaScript.h"
+#include "Core/Resources/ResourceManager.h"
 
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/string_cast.hpp"
@@ -51,6 +53,12 @@ namespace DuskEngine
 		m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
 		m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel));
 		m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
+
+		/*auto ent = m_EditingScene->FindEntity("Unlit Quad");
+		auto& script = ent->AddComponent<Script>();
+
+		Ref<LuaScript> lua = MakeRef<LuaScript>("res/scripts/print_script.lua", ResourceManager::GetUUID("res/scripts/print_script.lua"));
+		script.scripts.push_back(lua);*/
 	}
 
 	void EditorLayer::OnUpdate()
@@ -98,6 +106,7 @@ namespace DuskEngine
 				m_Playing = true;
 				m_PlayingScene = MakeRef<Scene>();
 				SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");
+				m_PlayingScene->OnAwake();
 				ImGui::SetWindowFocus("Game");
 				m_GameViewportPanel->SetCamera(m_PlayingScene->GetMainCamera());
 				m_HierarchyPanel->SetScene(m_PlayingScene);

@@ -23,6 +23,7 @@ end
 	include "Dependencies/yaml-cpp"
 	include "Dependencies/ImGuizmo"
 	include "Dependencies/rttr"
+	include "Dependencies/lua"
 if _ACTION ~= "gmake2" then
 	group "Engine"
 end

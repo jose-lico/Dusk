@@ -5,6 +5,7 @@
 #include "Core/Resources/Resources/Texture.h"
 #include "Core/Resources/Resources/Mesh.h"
 #include "Core/ECS/Components/Light.h"
+#include "Core/Scripting/LuaScript.h"
 
 #include "yaml-cpp/yaml.h"
 #include "glm/glm.hpp"
@@ -25,6 +26,14 @@ namespace DuskEngine
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << v.z << v.w << YAML::EndSeq;
+		return out;
+	}
+
+	inline
+	YAML::Emitter& operator<<(YAML::Emitter& out, const uuids::uuid& uuid)
+	{
+		out << YAML::Value << uuids::to_string(uuid);
+
 		return out;
 	}
 
@@ -51,7 +60,7 @@ namespace DuskEngine
 			break;
 		}
 
-		out << YAML::Key << "uuid" << YAML::Value << uuids::to_string(mesh->GetUUID());
+		out << YAML::Key << "uuid" << YAML::Value << mesh->GetUUID();
 		out << YAML::EndMap;
 
 		return out;
@@ -60,7 +69,7 @@ namespace DuskEngine
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Material>& material)
 	{
-		out << YAML::Value << uuids::to_string(material->GetUUID());
+		out << YAML::Value << material->GetUUID();
 
 		return out;
 	}
@@ -68,7 +77,7 @@ namespace DuskEngine
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Shader>& shader)
 	{
-		out << YAML::Value << uuids::to_string(shader->GetUUID());
+		out << YAML::Value << shader->GetUUID();
 
 		return out;
 	}
@@ -101,6 +110,20 @@ namespace DuskEngine
 	{
 		out << YAML::Value << Light::LightTypeString(type);
 
+		return out;
+	}
+
+	inline
+	YAML::Emitter& operator<<(YAML::Emitter& out, const std::vector<Ref<LuaScript>>& scripts)
+	{
+		out << YAML::BeginMap;
+
+		for (auto script : scripts)
+		{
+			out << YAML::Key << script->GetName() << YAML::Value << script->GetUUID();
+		}
+
+		out << YAML::EndMap;
 		return out;
 	}
 
@@ -142,6 +165,10 @@ namespace DuskEngine
 		else if (var.can_convert<std::vector<Uniform>>())
 		{
 			return out << YAML::Value << var.convert<std::vector<Uniform>>();
+		}
+		else if (var.can_convert<std::vector<Ref<LuaScript>>>())
+		{
+			return out << YAML::Value << var.convert<std::vector<Ref<LuaScript>>>();
 		}
 
 		return out << YAML::Value << "Unrecognized type";

@@ -39,6 +39,7 @@ namespace DuskEngine
 				SerializeComponentText<Camera>("Camera", out, entity);
 				SerializeComponentText<MeshRenderer>("MeshRenderer", out, entity);
 				SerializeComponentText<Light>("Light", out, entity);
+				SerializeComponentText<Script>("Script", out, entity);
 
 				out << YAML::EndMap;
 
@@ -125,6 +126,17 @@ namespace DuskEngine
 
 					l.color = light["color"].as<glm::vec3>();
 					l.type = Light::LightTypeEnum(light["type"].as<std::string>());
+				}
+
+				auto scriptData = entity["Script"];
+				if(scriptData)
+				{
+					auto& s = deserializedEntity.AddComponent<Script>();
+					auto scripts = scriptData["scripts"];
+					for(auto script : scripts)
+					{
+						s.scripts.push_back(ResourceManager::LoadScript(script.second.as<uuids::uuid>()));
+					}
 				}
 			}
 		}
