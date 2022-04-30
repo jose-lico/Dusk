@@ -21,6 +21,7 @@ namespace DuskEngine
 	std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> ResourceManager::m_UUIDsMap;
 
 	std::vector<Resource*> ResourceManager::ShaderList;
+	std::vector<Resource*> ResourceManager::ModelList;
 
 	void ResourceManager::Init()
 	{
@@ -30,6 +31,9 @@ namespace DuskEngine
 	void ResourceManager::Shutdown()
 	{
 		for (Resource* resource : ShaderList)
+			delete resource;
+
+		for (Resource* resource : ModelList)
 			delete resource;
 	}
 
@@ -113,9 +117,22 @@ namespace DuskEngine
 		Resource* resource = new Resource(path, uuid);
 
 		std::string extension = path.extension().string();
-
+		
+		bool wasAssigned = false;
+		
 		if (extension == ".glsl")
+		{
+			wasAssigned = true;
 			ShaderList.push_back(resource);
+		}
+		else if(extension == ".fbx" || extension == ".obj")
+		{
+			wasAssigned = true;
+			ModelList.push_back(resource);
+		}
+			
+		if (!wasAssigned)
+			delete resource;
 	}
 
 	// If a file is no longer present, delete its meta file

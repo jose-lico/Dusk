@@ -6,6 +6,7 @@
 #include "Core/ECS/Entity.h"
 
 #include "Utils/ImGuiUtils.h"
+#include "Utils/Rendering/PrimitiveMesh.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -286,6 +287,74 @@ namespace DuskEngine
 	{
 		if (meshes.size() == 1)
 		{
+			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
+			std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
+			int modelIndex = 0;
+			uuids::uuid modelID = meshes[0]->mesh->GetUUID();
+
+			for (unsigned int i = 0; i < ResourceManager::ModelList.size(); i++)
+			{
+				modelList.push_back(ResourceManager::ModelList[i]->GetName());
+				if (ResourceManager::ModelList[i]->GetUUID() == modelID)
+					modelIndex = i + 2;
+			}
+
+			if(!modelIndex)
+			{
+				switch (meshes[0]->mesh->GetType())
+				{
+				case MeshType::Quad:
+					modelIndex = 0;
+					break;
+				case MeshType::Cube:
+					modelIndex = 1;
+					break;
+				default:
+					break;
+				}
+			}
+
+			const char* model_label = modelList[modelIndex].c_str();
+			if (ImGui::BeginCombo("Mesh", model_label))
+			{
+				for (int n = 0; n < modelList.size(); n++)
+				{
+					const bool is_selected = (modelIndex == n);
+					if (ImGui::Selectable(modelList[n].c_str(), is_selected))
+					{
+						if (n != modelIndex)
+						{
+							modelIndex = n;
+							if(modelIndex <= 1)
+							{
+								switch (modelIndex)
+								{
+								case 0:
+									meshes[0]->mesh = PrimitiveMesh::Quad();
+									break;
+								case 1:
+									meshes[0]->mesh = PrimitiveMesh::Cube();
+									break;
+								default:
+									break;
+								}
+							}
+							else
+							{
+								auto mesh = ResourceManager::LoadModel(ResourceManager::GetUUID(ResourceManager::ModelList[modelIndex - 2]->GetPath()));
+								meshes[0]->mesh = mesh;
+							}
+						}
+					}
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+
+			ImGui::Separator();
+
 			ImGui::Text(meshes[0]->material->GetName().c_str());
 
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
@@ -300,8 +369,8 @@ namespace DuskEngine
 					shaderIndex = i;
 			}
 
-			const char* combo_label = shaderList[shaderIndex].c_str();
-			if (ImGui::BeginCombo("Shader", combo_label))
+			const char* shader_label = shaderList[shaderIndex].c_str();
+			if (ImGui::BeginCombo("Shader", shader_label))
 			{
 				for (int n = 0; n < shaderList.size(); n++)
 				{
@@ -312,7 +381,7 @@ namespace DuskEngine
 						{
 							shaderIndex = n;
 							std::string s = shaderList[n].c_str();
-							auto shader = Shader::Create("res/shaders/" + s, ResourceManager::GetUUID("res/shaders/" + s));
+							auto shader = ResourceManager::LoadShader(ResourceManager::GetUUID(ResourceManager::ShaderList[shaderIndex]->GetPath()));
 							meshes[0]->material->SetShader(shader);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 						}

@@ -46,6 +46,7 @@ namespace DuskEngine
 
 		// Resource Lists
 		static std::vector<Resource*> ShaderList;
+		static std::vector<Resource*> ModelList;
 	private:
 		static std::filesystem::path m_RootDirectory;
 		static std::filesystem::path m_CurrentDirectory;
@@ -54,6 +55,5 @@ namespace DuskEngine
 		static std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> m_UUIDsMap;
 
 		static void AddToResourceList(const std::filesystem::path& path, const uuids::uuid& uuid);
-		
 	};
 }
