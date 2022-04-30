@@ -13,6 +13,7 @@ namespace uuids
 
 namespace DuskEngine
 {
+	class Resource;
 	class Material;
 	class Shader;
 	class Texture;
@@ -29,6 +30,7 @@ namespace DuskEngine
 	{
 	public:
 		static void Init();
+		static void Shutdown();
 
 		static void LoadUUIDs();
 		static void CreateUUIDs();
@@ -41,11 +43,17 @@ namespace DuskEngine
 		static Ref<Texture> LoadTexture(const uuids::uuid& uuid);
 		static Ref<Mesh> LoadModel(const uuids::uuid& uuid);
 		static Ref<LuaScript> LoadScript(const uuids::uuid& uuid);
+
+		// Resource Lists
+		static std::vector<Resource*> ShaderList;
 	private:
 		static std::filesystem::path m_RootDirectory;
 		static std::filesystem::path m_CurrentDirectory;
 
 		static std::unordered_map <uuids::uuid, std::filesystem::path> m_PathsMap;
 		static std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> m_UUIDsMap;
+
+		static void AddToResourceList(const std::filesystem::path& path, const uuids::uuid& uuid);
+		
 	};
 }

@@ -288,20 +288,30 @@ namespace DuskEngine
 		{
 			ImGui::Text(meshes[0]->material->GetName().c_str());
 
-			const char* shaders[] = { "phong.glsl", "simpleColor.glsl", "simpleTexture.glsl" };
-			static int item_current_idx = 0;
-			const char* combo_label = shaders[item_current_idx];
+			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
+			std::vector<std::string> shaderList;
+			int shaderIndex = 0;
+			uuids::uuid shaderID = meshes[0]->material->GetShaderUUID();
+
+			for (unsigned int i = 0; i < ResourceManager::ShaderList.size(); i++)
+			{
+				shaderList.push_back(ResourceManager::ShaderList[i]->GetName());
+				if (ResourceManager::ShaderList[i]->GetUUID() == shaderID)
+					shaderIndex = i;
+			}
+
+			const char* combo_label = shaderList[shaderIndex].c_str();
 			if (ImGui::BeginCombo("Shader", combo_label))
 			{
-				for (int n = 0; n < IM_ARRAYSIZE(shaders); n++)
+				for (int n = 0; n < shaderList.size(); n++)
 				{
-					const bool is_selected = (item_current_idx == n);
-					if (ImGui::Selectable(shaders[n], is_selected))
+					const bool is_selected = (shaderIndex == n);
+					if (ImGui::Selectable(shaderList[n].c_str(), is_selected))
 					{
-						if (n != item_current_idx)
+						if (n != shaderIndex)
 						{
-							item_current_idx = n;
-							std::string s = shaders[n];
+							shaderIndex = n;
+							std::string s = shaderList[n].c_str();
 							auto shader = Shader::Create("res/shaders/" + s, ResourceManager::GetUUID("res/shaders/" + s));
 							meshes[0]->material->SetShader(shader);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());

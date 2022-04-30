@@ -10,6 +10,17 @@
 
 namespace DuskEngine
 {
+	Material::Material(Ref<Shader>& shader, const std::filesystem::path& path, const uuids::uuid& uuid)
+		:m_Shader(shader)
+	{
+		m_UUID = uuid;
+		m_Path = path;
+		m_Name = path.filename().string();
+
+		CreateUniforms();
+		LOG("Created Material " + m_Name)
+	}
+
 	/*Material::Material(Ref<Shader>& shader, const std::string& name)
 		:m_Shader(shader)
 	{
@@ -21,17 +32,6 @@ namespace DuskEngine
 		CreateUniforms();
 		LOG("Created Material " + m_Name)
 	}*/
-
-	Material::Material(Ref<Shader>& shader, const std::filesystem::path& path, const uuids::uuid& uuid)
-		:m_Shader(shader)
-	{
-		m_UUID = uuid;
-		m_Path = path;
-		m_Name = path.filename().string();
-
-		CreateUniforms();
-		LOG("Created Material " + m_Name)
-	}
 
 	/*Material::Material(const std::string& shaderPath, const std::string& name)
 	{
@@ -72,6 +72,31 @@ namespace DuskEngine
 		}
 	}
 
+	void Material::UniformsDefaultValue()
+	{
+		for (auto& uniform : m_Uniforms)
+		{
+			switch (uniform.Type)
+			{
+			case UniformType::Vec3:
+				uniform.Data = MakeRef<glm::vec3>(1.0f);
+				break;
+			case UniformType::Texture:
+				uniform.Data = Texture::Create("res/textures/white.png", ResourceManager::GetUUID("res/textures/white.png"));
+				break;
+			}
+		}
+	}
+
+	void Material::SetShader(Ref<Shader>& shader)
+	{
+		m_Shader = shader;
+
+		m_Uniforms.clear();
+		m_UniformsMap.clear();
+		CreateUniforms();
+	}
+
 	void Material::SetFloat(const std::string& name, float f)
 	{
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
@@ -100,6 +125,11 @@ namespace DuskEngine
 			WARN("Texture '" + name + "' doesnt exist")
 	}
 
+	const uuids::uuid& Material::GetShaderUUID()
+	{
+		return m_Shader->GetUUID();
+	}
+
 	void Material::SerializeText(const std::string& path)
 	{
 		YAML::Emitter out;
@@ -112,10 +142,6 @@ namespace DuskEngine
 
 		std::ofstream fout(path);
 		fout << out.c_str();
-	}
-
-	void Material::DeserializeText(const std::string& path)
-	{
 	}
 
 	void Material::CreateUniforms()
@@ -132,30 +158,5 @@ namespace DuskEngine
 		}
 
 		UniformsDefaultValue();
-	}
-
-	void Material::UniformsDefaultValue()
-	{
-		for (auto& uniform : m_Uniforms)
-		{
-			switch (uniform.Type)
-			{
-			case UniformType::Vec3:
-				uniform.Data = MakeRef<glm::vec3>(1.0f);
-				break;
-			case UniformType::Texture:
-				uniform.Data = Texture::Create("res/textures/white.png", ResourceManager::GetUUID("res/textures/white.png"));
-				break;
-			}
-		}
-	}
-
-	void Material::SetShader(Ref<Shader>& shader)
-	{
-		m_Shader = shader;
-
-		m_Uniforms.clear();
-		m_UniformsMap.clear();
-		CreateUniforms();
 	}
 }

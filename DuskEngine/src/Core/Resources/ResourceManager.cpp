@@ -20,9 +20,17 @@ namespace DuskEngine
 	std::unordered_map<uuids::uuid, std::filesystem::path> ResourceManager::m_PathsMap;
 	std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> ResourceManager::m_UUIDsMap;
 
+	std::vector<Resource*> ResourceManager::ShaderList;
+
 	void ResourceManager::Init()
 	{
 		m_CurrentDirectory = m_RootDirectory;
+	}
+
+	void ResourceManager::Shutdown()
+	{
+		for (Resource* resource : ShaderList)
+			delete resource;
 	}
 
 	void ResourceManager::LoadUUIDs()
@@ -48,9 +56,12 @@ namespace DuskEngine
 					YAML::Emitter out;
 					YAML::Node data = YAML::Load(strStream.str());
 
-					std::string path = m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string();
-					m_PathsMap[data["uuid"].as<uuids::uuid>()] = path;
-					m_UUIDsMap[path] = data["uuid"].as<uuids::uuid>();
+					std::string path = m_CurrentDirectory.string() + "\\" + directoryEntry.path().stem().string();
+					uuids::uuid uuid = data["uuid"].as<uuids::uuid>();
+					m_PathsMap[uuid] = path;
+					m_UUIDsMap[path] = uuid;
+
+					AddToResourceList(path, uuid);
 				}
 			}
 		}
@@ -95,6 +106,16 @@ namespace DuskEngine
 		}
 
 		m_CurrentDirectory = m_RootDirectory;
+	}
+
+	void ResourceManager::AddToResourceList(const std::filesystem::path& path, const uuids::uuid& uuid)
+	{
+		Resource* resource = new Resource(path, uuid);
+
+		std::string extension = path.extension().string();
+
+		if (extension == ".glsl")
+			ShaderList.push_back(resource);
 	}
 
 	// If a file is no longer present, delete its meta file

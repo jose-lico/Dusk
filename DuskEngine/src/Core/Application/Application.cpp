@@ -49,6 +49,7 @@ namespace DuskEngine
 		TRACE("##### SHUTDOWN #####");
 
 		ScriptingEngine::Shutdown();
+		ResourceManager::Shutdown();
 		delete m_RendererContext;
 		delete m_LayerStack; // Deletes m_ImGuiLayer
 		delete m_WindowManager;

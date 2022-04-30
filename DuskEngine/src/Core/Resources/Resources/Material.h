@@ -31,26 +31,26 @@ namespace DuskEngine
 	class DUSK_EXPORT Material : public Resource
 	{
 	public:
-		//Material(Ref<Shader>& shader, const std::string& name = ""); not used anymore, keeping just in case
 		Material(Ref<Shader>& shader, const std::filesystem::path& path, const uuids::uuid& uuid);
+		//Material(Ref<Shader>& shader, const std::string& name = ""); not used anymore, keeping just in case
 		//Material(const std::string& shaderPath, const std::string& name = ""); not used anymore, keeping just in case
 		~Material();
-		void UploadUniforms();
 
+		void UploadUniforms();
+		void UniformsDefaultValue();
+
+		void SetShader(Ref<Shader>& shader);
+		
 		void SetFloat(const std::string& name, float f);
 		void SetVec2(const std::string& name, glm::vec2& v);
 		void SetVec3(const std::string& name, glm::vec3& v);
 		void SetVec4(const std::string& name, glm::vec4& v);
 		void SetTexture(const std::string& name, Ref<Texture>& texture);
 		
-		const std::string& GetName() const { return m_Name; }
-		void UniformsDefaultValue();
-		void SetShader(Ref<Shader>& shader);
-
+		const uuids::uuid& GetShaderUUID();
+		
 		// Serialization
-
 		void SerializeText(const std::string& path);
-		void DeserializeText(const std::string& path);
 	private:
 		void CreateUniforms();
 		Ref<Shader> m_Shader;
