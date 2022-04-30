@@ -34,6 +34,7 @@ namespace DuskEngine
 
 		static void LoadUUIDs();
 		static void CreateUUIDs();
+		static const uuids::uuid& CreateUUID(const std::filesystem::path& path);
 		static void DeleteUUIDs();
 		
 		static uuids::uuid GetUUID(const std::filesystem::path& path);
@@ -47,6 +48,7 @@ namespace DuskEngine
 		// Resource Lists
 		static std::vector<Resource*> ShaderList;
 		static std::vector<Resource*> ModelList;
+		static std::vector<Resource*> MaterialList;
 	private:
 		static std::filesystem::path m_RootDirectory;
 		static std::filesystem::path m_CurrentDirectory;

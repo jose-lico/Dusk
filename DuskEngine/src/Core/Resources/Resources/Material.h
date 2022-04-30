@@ -51,6 +51,7 @@ namespace DuskEngine
 		
 		// Serialization
 		void SerializeText(const std::string& path);
+		static void CreateDefaultMaterial(const std::filesystem::path& path);
 	private:
 		void CreateUniforms();
 		Ref<Shader> m_Shader;

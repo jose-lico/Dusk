@@ -138,8 +138,6 @@ namespace DuskEngine
 		out << YAML::Key << "Shader" << YAML::Value << m_Shader;
 		out << YAML::Key << "Uniforms" << YAML::Value << m_Uniforms;
 
-		out << YAML::EndMap;
-
 		std::ofstream fout(path);
 		fout << out.c_str();
 	}
@@ -159,4 +157,21 @@ namespace DuskEngine
 
 		UniformsDefaultValue();
 	}
+
+	void Material::CreateDefaultMaterial(const std::filesystem::path& path)
+	{
+		YAML::Emitter out;
+		out << YAML::BeginMap;
+		out << YAML::Key << "Material" << YAML::Value << "newMaterial";
+		out << YAML::Key << "Shader" << YAML::Value << ResourceManager::GetUUID("res/shaders/simpleColor.glsl");
+		out << YAML::Key << "Uniforms";
+		out << YAML::BeginMap;
+		out << YAML::Key << "Color" << YAML::Value << glm::vec3(1.0);
+		out << YAML::EndMap;
+		out << YAML::EndMap;
+
+		std::ofstream material(path);
+		material << out.c_str();
+	}
+
 }

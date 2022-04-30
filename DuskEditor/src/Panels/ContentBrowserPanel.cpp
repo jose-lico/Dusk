@@ -3,6 +3,7 @@
 #include "Core/Macros/LOG.h"
 #include "Core/Resources/Resources/Texture.h"
 #include "Core/Resources/ResourceManager.h"
+#include "Core/Resources/Resources/Material.h"
 
 #include "IconsForkAwesome.h"
 
@@ -111,6 +112,21 @@ namespace DuskEngine
 			ImGui::PopID();
 
 			if (shouldBreak) break; // Only break here to avoid breaking ImGui
+		}
+
+		if (ImGui::BeginPopupContextWindow(0, 1, false))
+		{
+			if (ImGui::MenuItem("Create Material"))
+			{
+				std::string path = m_CurrentDirectory.string() + "/newMaterial.material";
+				Material::CreateDefaultMaterial(path);
+				CreateDirectoryItems();
+				auto id = ResourceManager::CreateUUID(path);
+				ResourceManager::MaterialList.push_back(new Resource(path, id));
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
 		}
 
 		ImGui::End();

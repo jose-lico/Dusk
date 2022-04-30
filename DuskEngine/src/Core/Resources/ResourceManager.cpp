@@ -22,6 +22,7 @@ namespace DuskEngine
 
 	std::vector<Resource*> ResourceManager::ShaderList;
 	std::vector<Resource*> ResourceManager::ModelList;
+	std::vector<Resource*> ResourceManager::MaterialList;
 
 	void ResourceManager::Init()
 	{
@@ -34,6 +35,9 @@ namespace DuskEngine
 			delete resource;
 
 		for (Resource* resource : ModelList)
+			delete resource;
+
+		for (Resource* resource : MaterialList)
 			delete resource;
 	}
 
@@ -112,6 +116,27 @@ namespace DuskEngine
 		m_CurrentDirectory = m_RootDirectory;
 	}
 
+	const uuids::uuid& ResourceManager::CreateUUID(const std::filesystem::path& path)
+	{
+		std::string message = "Creating meta file for " + path.string();
+		LOG(message)
+
+		uuids::uuid const id = uuids::uuid_system_generator{}();
+
+		YAML::Emitter out;
+		out << YAML::BeginMap;
+		out << YAML::Key << "uuid" << YAML::Value << id;
+
+		std::string metaName = path.string() + ".meta";
+		std::ofstream fout(metaName.c_str());
+		fout << out.c_str();
+
+		m_PathsMap[id] = path;
+		m_UUIDsMap[path] = id;
+
+		return id;
+	}
+
 	void ResourceManager::AddToResourceList(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
 		Resource* resource = new Resource(path, uuid);
@@ -129,6 +154,11 @@ namespace DuskEngine
 		{
 			wasAssigned = true;
 			ModelList.push_back(resource);
+		}
+		else if (extension == ".material")
+		{
+			wasAssigned = true;
+			MaterialList.push_back(resource);
 		}
 			
 		if (!wasAssigned)

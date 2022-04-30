@@ -44,14 +44,23 @@ namespace DuskEngine
 				{
 					if (ImGui::MenuItem("Camera"))
 					{
-						auto& ent = (*m_SelectedEntities)[0].AddComponent<Camera>();
-						ent.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
+						auto& camera = (*m_SelectedEntities)[0].AddComponent<Camera>();
+						camera.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
 						ImGui::CloseCurrentPopup();
 					}
 
 					if (ImGui::MenuItem("Light"))
 					{
 						(*m_SelectedEntities)[0].AddComponent<Light>();
+						ImGui::CloseCurrentPopup();
+					}
+
+					if(ImGui::MenuItem("Mesh Renderer"))
+					{
+						auto& mesh = (*m_SelectedEntities)[0].AddComponent<MeshRenderer>();
+						mesh.mesh = PrimitiveMesh::Quad();
+						// This will later be changed to a default material
+						mesh.material = ResourceManager::LoadMaterial(ResourceManager::GetUUID("res/materials/modelMaterial.material"));
 						ImGui::CloseCurrentPopup();
 					}
 
@@ -161,7 +170,10 @@ namespace DuskEngine
 		}
 		else
 		{
-
+			bool enabled = metas[0]->enabled;
+			if(ImGui::Checkbox("Enabled", &enabled))
+				for (auto& m : metas)
+					m->enabled = enabled;
 		}
 	}
 
@@ -247,7 +259,7 @@ namespace DuskEngine
 		else
 		{
 			// TODO - Selecting multiple lights will change both colors and types instantly
-			glm::vec3 color(1.0f);
+			/*glm::vec3 color(1.0f);
 			ImGui::ColorEdit3("Light Color", &color[0]);
 
 			LightType type = LightType::Directional;
@@ -279,7 +291,7 @@ namespace DuskEngine
 			{
 				l->type = type;
 				l->color = color;
-			}
+			}*/
 		}
 	}
 
@@ -353,6 +365,43 @@ namespace DuskEngine
 				ImGui::EndCombo();
 			}
 
+			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
+			std::vector<std::string> materialList; // Later add default materials
+			int materialIndex = 0;
+			uuids::uuid materialID = meshes[0]->material->GetUUID();
+
+			for (unsigned int i = 0; i < ResourceManager::MaterialList.size(); i++)
+			{
+				materialList.push_back(ResourceManager::MaterialList[i]->GetName());
+				if (ResourceManager::MaterialList[i]->GetUUID() == materialID)
+					materialIndex = i;
+			}
+
+			const char* material_label = materialList[materialIndex].c_str();
+			if (ImGui::BeginCombo("Material", material_label))
+			{
+				for (int n = 0; n < materialList.size(); n++)
+				{
+					const bool is_selected = (materialIndex == n);
+					if (ImGui::Selectable(materialList[n].c_str(), is_selected))
+					{
+						if (n != materialIndex)
+						{
+							materialIndex = n;
+							std::string s = materialList[n].c_str();
+							auto material = ResourceManager::LoadMaterial(ResourceManager::GetUUID(ResourceManager::MaterialList[materialIndex]->GetPath()));
+							meshes[0]->material = material;
+						}
+					}
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+
+			ImGui::Separator();
+			ImGui::Separator();
 			ImGui::Separator();
 
 			ImGui::Text(meshes[0]->material->GetName().c_str());
