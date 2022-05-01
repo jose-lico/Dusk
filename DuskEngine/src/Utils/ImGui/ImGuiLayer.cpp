@@ -47,8 +47,8 @@ namespace DuskEngine
 
 		ImGui::GetStyle().WindowMenuButtonPosition = ImGuiDir_None;
 
-		AddFont("res/editor/fonts/Roboto-Regular.ttf", 16.0f);
-		AddFont("res/editor/fonts/Roboto-Bold.ttf", 16.0f);
+		AddFont("res/editor/fonts/Roboto-Regular.ttf", 18.0f);
+		AddFont("res/editor/fonts/Roboto-Bold.ttf", 18.0f);
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -117,9 +117,9 @@ namespace DuskEngine
 		icons_config.MergeMode = true;
 		icons_config.PixelSnapH = true;
 #ifdef DUSK_WINDOWS
-		io.Fonts->AddFontFromFileTTF("../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 16.0f, &icons_config, icons_ranges);
+		io.Fonts->AddFontFromFileTTF("../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 18.0f, &icons_config, icons_ranges);
 #elif DUSK_LINUX
-		io.Fonts->AddFontFromFileTTF("../../../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 16.0f, &icons_config, icons_ranges);
+		io.Fonts->AddFontFromFileTTF("../../../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 18.0f, &icons_config, icons_ranges);
 #endif
 	}
 

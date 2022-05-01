@@ -10,6 +10,9 @@ namespace DuskEngine
 {
 	class DUSK_EXPORT Entity
 	{
+		struct Meta;
+		struct Transform;
+
 	public:
 		Entity() = default;
 		Entity(entt::entity handle, Scene* scene);
@@ -31,7 +34,10 @@ namespace DuskEngine
 		template<typename T>
 		void RemoveComponent()
 		{
-			m_Scene->m_Registry.remove<T>(m_EntityHandle);
+			if(!std::is_same<T, DuskEngine::Meta>() && !std::is_same<T, DuskEngine::Transform>())
+				m_Scene->m_Registry.remove<T>(m_EntityHandle);
+			else
+				APP_LOG("Cant remove Meta or Transform component")
 		}
 
 		template<typename T>

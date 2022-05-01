@@ -8,7 +8,8 @@ namespace DuskEngine
 	class DuskEditor : public Application
 	{
 	public:
-		DuskEditor()
+		DuskEditor(const ApplicationSpecs& specs)
+			: Application(specs)
 		{
 			PushLayer(new EditorLayer());
 		}
@@ -20,6 +21,9 @@ namespace DuskEngine
 
 	Application* CreateApplication()
 	{
-		return new DuskEditor();
+		// doesnt do anything right now
+		ApplicationSpecs spec;
+		spec.Name = "Dusk Editor";
+		return new DuskEditor(spec);
 	}
 }

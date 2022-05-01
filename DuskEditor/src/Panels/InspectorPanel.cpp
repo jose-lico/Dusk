@@ -24,7 +24,7 @@ namespace DuskEngine
 
 	void InspectorPanel::OnImGuiRender()
 	{
-		ImGui::Begin(ICON_FK_INFO_CIRCLE "  Inspector");
+		ImGui::Begin(ICON_FK_INFO "  Inspector");
 		CheckFocus();
 
 		if(m_SelectedEntities->size() > 0)
@@ -74,7 +74,7 @@ namespace DuskEngine
 				}
 			}
 
-			DrawComponent<Meta>(ICON_FK_CUBE "  Meta", *m_SelectedEntities, MetaInspector);
+			DrawComponent<Meta>("Meta", *m_SelectedEntities, MetaInspector);
 			DrawComponent<Transform>(ICON_FK_CUBE "  Transform", *m_SelectedEntities, TransformInspector);
 			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
 			DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);

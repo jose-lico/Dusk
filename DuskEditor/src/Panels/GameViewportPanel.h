@@ -26,11 +26,5 @@ namespace DuskEngine
 		glm::vec2 m_ViewportSize;
 		Entity m_Camera;
 		bool* m_Playing;
-
-
-		//void EditorCamera();
-		//bool m_IsLeftMousePressed = false;
-		//bool m_HasFirstMousePosition = false;
-		//glm::vec2 m_LastMousePosition;
 	};
 }

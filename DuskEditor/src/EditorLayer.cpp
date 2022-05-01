@@ -53,6 +53,7 @@ namespace DuskEngine
 		m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
 		m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel));
 		m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
+		m_Panels.push_back(new Toolbar(&m_Playing));
 
 		/*auto ent = m_EditingScene->FindEntity("Unlit Quad");
 		auto& script = ent->AddComponent<Script>();

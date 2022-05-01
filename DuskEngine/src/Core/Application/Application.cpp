@@ -21,7 +21,8 @@ namespace DuskEngine
 {
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application()
+	Application::Application(const ApplicationSpecs& specs)
+		:m_Specs(specs)
 	{
 		s_Instance = this;
 

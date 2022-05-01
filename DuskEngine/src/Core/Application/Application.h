@@ -1,6 +1,8 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
+#include <string>
+
 namespace DuskEngine
 {
 	class Layer;
@@ -11,10 +13,16 @@ namespace DuskEngine
 	class WindowManager;
 	class RendererContext;
 
+	// Add more stuff later
+	struct ApplicationSpecs
+	{
+		std::string Name = "Dusk Application";
+	};
+
 	class DUSK_EXPORT Application
 	{
 	public:
-		Application();
+		Application(const ApplicationSpecs& specs);
 		virtual ~Application();
 
 		void PushLayer(Layer* layer);
@@ -33,6 +41,8 @@ namespace DuskEngine
 		ImGuiLayer* m_ImGuiLayer; // Deleted by m_LayerStack
 		WindowManager* m_WindowManager;
 		RendererContext* m_RendererContext;
+	
+		ApplicationSpecs m_Specs;
 	};
 
 	extern Application* CreateApplication();

@@ -7,3 +7,4 @@
 #include "Panels/InspectorPanel.h"
 #include "Panels/ConsolePanel.h"
 #include "Panels/ContentBrowserPanel.h"
+#include "Panels/Toolbar.h"
