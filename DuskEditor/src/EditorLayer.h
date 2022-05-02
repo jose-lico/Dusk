@@ -37,5 +37,6 @@ namespace DuskEngine
 		HierarchyPanel* m_HierarchyPanel;
 
 		bool m_Playing = false;
+		bool m_Paused = false;
 	};
 }

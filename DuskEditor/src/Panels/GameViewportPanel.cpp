@@ -5,6 +5,7 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "imgui/imgui.h"
+#include "IconsForkAwesome.h"
 
 namespace DuskEngine
 {
@@ -17,7 +18,7 @@ namespace DuskEngine
 	void GameViewportPanel::OnImGuiRender()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
-		ImGui::Begin("Game", nullptr);
+		ImGui::Begin(ICON_FK_GAMEPAD "  Game", nullptr);
 		CheckFocus();
 		if(*m_Playing)
 		{
@@ -32,7 +33,6 @@ namespace DuskEngine
 		}
 		else
 		{
-			ImGui::Text("Not Playing");
 			ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 			if (m_ViewportSize != *(glm::vec2*)&viewportSize)
 			{

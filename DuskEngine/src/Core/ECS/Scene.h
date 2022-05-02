@@ -32,7 +32,7 @@ namespace DuskEngine
 
 		void OnUpdateEditor(EditorCamera& camera);
 		void OnAwakeRuntime();
-		void OnUpdateRuntime(bool running);
+		void OnUpdateRuntime(bool running, bool paused = false);
 	private:
 		entt::registry m_Registry;
 

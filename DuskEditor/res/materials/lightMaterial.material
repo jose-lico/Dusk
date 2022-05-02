@@ -1,4 +1,4 @@
 Material: lightMaterial.material
 Shader: 278cbf4a-f5d1-4136-a5c6-ea242a6b17e1
 Uniforms:
-  Color: [0.819607854, 0.701960802, 0.701960802]
+  Color: [0, 1, 0.301960796]

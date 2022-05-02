@@ -61,9 +61,9 @@ namespace DuskEngine
             ImGui::SetNextWindowBgAlpha(0.35f);
             if (ImGui::Begin("Example: Simple overlay", &stats, window_flags))
             {
+				// imgui bad stats change later
 				ImGui::Text("Frame time: %.2f ms", 1000.0f / ImGui::GetIO().Framerate);
 				ImGui::Text("FPS: %.1f FPS", ImGui::GetIO().Framerate);
-                ImGui::Text("Simple overlay\n" "in the corner of the screen.\n" "(right-click to change position)");
                 ImGui::Separator();
             }
             ImGui::End();

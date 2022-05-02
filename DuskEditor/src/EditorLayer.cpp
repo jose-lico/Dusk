@@ -53,7 +53,32 @@ namespace DuskEngine
 		m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
 		m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel));
 		m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
-		m_Panels.push_back(new Toolbar(&m_Playing));
+
+
+		auto play = [&]() {
+			m_Playing = true;
+			m_PlayingScene = MakeRef<Scene>();
+			SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");
+			m_PlayingScene->OnAwakeRuntime();
+			ImGui::SetWindowFocus(ICON_FK_GAMEPAD "  Game");
+			m_GameViewportPanel->SetCamera(m_PlayingScene->GetMainCamera());
+			m_HierarchyPanel->SetScene(m_PlayingScene); 
+		};
+
+		auto stop = [&]() {
+			m_PlayingScene = MakeRef<Scene>();
+			m_Playing = false;
+			m_Paused = false;
+			ImGui::SetWindowFocus(ICON_FK_EYE "  Viewport");
+			m_GameViewportPanel->SetCamera(m_EditingScene->GetMainCamera());
+			m_HierarchyPanel->SetScene(m_EditingScene);
+		};
+
+		auto pause = [&]() {
+			m_Paused = !m_Paused;
+		};
+
+		m_Panels.push_back(new Toolbar(&m_Playing, play, stop, pause));
 
 		/*auto ent = m_EditingScene->FindEntity("Unlit Quad");
 		auto& script = ent->AddComponent<Script>();
@@ -81,7 +106,7 @@ namespace DuskEngine
 			m_EditorSceneFB->Unbind();
 
 			m_PlayingSceneFB->Bind();
-			m_PlayingScene->OnUpdateRuntime(true);
+			m_PlayingScene->OnUpdateRuntime(true, m_Paused);
 			m_PlayingSceneFB->Unbind();
 		}
 	}
@@ -99,28 +124,6 @@ namespace DuskEngine
 
 		if (ImGui::Button("Save Scene"))
 			SceneSerializer::SerializeText(m_EditingScene, "res/scenes/scene.yaml");
-
-		if (ImGui::Button(!m_Playing ? "Play" : "Stop playing"))
-		{
-			if (!m_Playing)
-			{
-				m_Playing = true;
-				m_PlayingScene = MakeRef<Scene>();
-				SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");
-				m_PlayingScene->OnAwakeRuntime();
-				ImGui::SetWindowFocus("Game");
-				m_GameViewportPanel->SetCamera(m_PlayingScene->GetMainCamera());
-				m_HierarchyPanel->SetScene(m_PlayingScene);
-			}
-			else
-			{
-				m_PlayingScene = MakeRef<Scene>();
-				m_Playing = false;
-				ImGui::SetWindowFocus(ICON_FK_EYE "  Viewport");
-				m_GameViewportPanel->SetCamera(m_EditingScene->GetMainCamera());
-				m_HierarchyPanel->SetScene(m_EditingScene);
-			}
-		}
 
 		ImGui::End();
 

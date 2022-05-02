@@ -192,7 +192,7 @@ namespace DuskEngine
 		}
 	}
 
-	void Scene::OnUpdateRuntime(bool running)
+	void Scene::OnUpdateRuntime(bool running, bool paused)
 	{
 		/*if(playing)
 		{
@@ -204,9 +204,9 @@ namespace DuskEngine
 			}
 		}*/
 
-		if(running)
+		if(running && !paused)
 		{
-			//LOG("This is the scene playing")
+			LOG("This is the scene playing")
 		}
 
 		{
