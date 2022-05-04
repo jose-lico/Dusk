@@ -31,4 +31,14 @@ namespace DuskEngine {
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
+
+	void OpenGLRendererAPI::UnbindVAO()
+	{
+		glBindVertexArray(0);
+	}
+
+	void OpenGLRendererAPI::DrawArrays(unsigned int start, unsigned int count)
+	{
+		glDrawArrays(GL_TRIANGLES, start, count);
+	}
 }

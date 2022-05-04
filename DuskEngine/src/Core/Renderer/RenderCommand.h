@@ -15,7 +15,9 @@ namespace DuskEngine {
 		static void Shutdown();
 		static void SetClearColor(const glm::vec4& color);
 		static void Clear();
+		static void UnbindVAO();
 		static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray);
+		static void DrawArrays(unsigned int start, unsigned int count);
 	private:
 		static RendererAPI* s_RendererAPI;
 	};

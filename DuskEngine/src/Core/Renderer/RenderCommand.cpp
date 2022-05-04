@@ -28,8 +28,18 @@ namespace DuskEngine {
 		s_RendererAPI->Clear();
 	}
 
+	void RenderCommand::UnbindVAO()
+	{
+		s_RendererAPI->UnbindVAO();
+	}
+
 	void RenderCommand::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 	{
 		s_RendererAPI->DrawIndexed(vertexArray);
+	}
+
+	void RenderCommand::DrawArrays(unsigned int start, unsigned int count)
+	{
+		s_RendererAPI->DrawArrays(start, count);
 	}
 }

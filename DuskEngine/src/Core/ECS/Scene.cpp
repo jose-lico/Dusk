@@ -7,12 +7,15 @@
 
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
+#include "Core/Renderer/Resources/VertexArray.h"
 #include "Core/Resources/Resources/Shader.h"
 #include "Core/Scripting/ScriptingEngine.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/quaternion.hpp"
 #include "glm/gtx/string_cast.hpp"
+
+#include "GL/glew.h"
 
 const unsigned int MAX_LIGHTS = 8;
 
@@ -21,6 +24,7 @@ namespace DuskEngine
 	// maybe reserve ahead of time # of entities present in the base scene
 	Scene::Scene()
 	{
+		m_GridShader = Shader::Create("res/editor/shaders/grid.glsl");
 	}
 
 	Scene::~Scene()
@@ -178,6 +182,18 @@ namespace DuskEngine
 				Renderer::Submit(mesh.mesh);
 			}
 
+
+			glm::mat4 viewMatrix = camera.camera.viewMatrix;
+			glm::mat4 projectionMatrix = camera.camera.projectionMatrix;
+
+			m_GridShader->Bind();
+			m_GridShader->SetUniformMat4("e_ViewProjection", VPM);
+			m_GridShader->SetUniformMat4("e_Projection", projectionMatrix);
+			m_GridShader->SetUniformMat4("e_View", viewMatrix);
+
+			RenderCommand::UnbindVAO();
+			RenderCommand::DrawArrays(0, 6);
+			
 			Renderer::EndScene();
 		}
 	}

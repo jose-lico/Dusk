@@ -15,5 +15,7 @@ namespace DuskEngine {
 		virtual void Clear() override;
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
+		virtual void UnbindVAO() override;
+		virtual void DrawArrays(unsigned int start, unsigned int count) override;
 	};
 }

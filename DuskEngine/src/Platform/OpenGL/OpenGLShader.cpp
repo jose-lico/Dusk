@@ -6,8 +6,9 @@
 
 namespace DuskEngine
 {
-	/*OpenGLShader::OpenGLShader(const std::string& filepath, const std::string& name)
+	OpenGLShader::OpenGLShader(const std::string& filepath, const std::string& name)
 	{
+		// can be nuch better
 		if (name.empty())
 		{
 			std::string::size_type begin = filepath.rfind("/") + 1;
@@ -25,7 +26,7 @@ namespace DuskEngine
 		m_ID = CreateShader(source.VertexSource, source.FragmentSource);
 		
 		LOG("Created Shader " + m_Name)
-	}*/
+	}
 
 	OpenGLShader::OpenGLShader(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{

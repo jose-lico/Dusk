@@ -1,12 +1,15 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
+#include "Utils/Memory/Memory.h"
+
 #include "entt/entity/registry.hpp"
 
 namespace DuskEngine
 {
 	class Entity;
 	class EditorCamera;
+	class Shader;
 
 	class DUSK_EXPORT Scene
 	{
@@ -41,5 +44,7 @@ namespace DuskEngine
 		friend class Entity;
 		friend class HierarchyPanel;
 		friend class SceneSerializer;
+
+		Ref<Shader> m_GridShader;
 	};
 }
