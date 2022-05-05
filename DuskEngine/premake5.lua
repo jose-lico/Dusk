@@ -39,7 +39,6 @@ project "DuskEngine"
 	defines
 	{
 		"DUSK_OPENGL",
-		"DUSK_DEBUG",
 		"DUSK_LIB",
 		--"DUSK_DLL",
 
@@ -78,6 +77,7 @@ project "DuskEngine"
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "On"
+		defines "DUSK_DEBUG"
 	
 	filter "configurations:Release"
 		runtime "Release"

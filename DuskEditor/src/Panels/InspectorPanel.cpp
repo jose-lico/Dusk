@@ -64,11 +64,29 @@ namespace DuskEngine
 						ImGui::CloseCurrentPopup();
 					}
 
-					/*if (ImGui::MenuItem("Mesh Renderer"))
+					if (ImGui::BeginMenu("Scripts"))
 					{
-						(*m_SelectedEntities)[0]->AddComponent<MeshRenderer>();
-						ImGui::CloseCurrentPopup();
-					}*/
+						for (auto scriptFile : ResourceManager::ScriptsList)
+						{
+							if(ImGui::MenuItem(scriptFile->GetName().c_str()))
+							{
+								auto& script = (*m_SelectedEntities)[0].AddComponent<Script>();
+								bool canAdd = true;
+								for(auto presentScript : script.scripts)
+								{
+									if (presentScript->GetUUID() == scriptFile->GetUUID())
+									{
+										APP_LOG("Script already present")
+										canAdd = false;
+									}
+								}
+
+								if (canAdd)
+									script.scripts.push_back(ResourceManager::LoadScript(scriptFile->GetUUID()));
+							}
+						}
+						ImGui::EndMenu();
+					}
 
 					ImGui::EndPopup();
 				}
@@ -79,7 +97,7 @@ namespace DuskEngine
 			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
 			DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
 			DrawComponent<MeshRenderer>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, MaterialInspector);
-			//DrawComponent<MeshRenderer>("Script", *m_SelectedEntities, ScriptInspector);
+			DrawComponent<Script>("Script", *m_SelectedEntities, ScriptInspector);
 		}
 		ImGui::End();
 	}
@@ -500,6 +518,20 @@ namespace DuskEngine
 	{
 		if (scripts.size() == 1)
 		{
+			for (unsigned int i = 0; i < scripts[0]->scripts.size(); i++)
+			{
+				ImGui::Text(scripts[0]->scripts[i]->GetName().c_str());
+				ImGui::SameLine();
+				if (ImGui::Button(("Remove script " + std::to_string(i)).c_str()))
+				{
+					scripts[0]->scripts.erase(scripts[0]->scripts.begin() + i--);
+				}
+			}
+
+			if(scripts[0]->scripts.size() == 0)
+			{
+				// Remove component, but cant be done with current setup. inspector needs rework anyway so w/e
+			}
 		}
 	}
 }

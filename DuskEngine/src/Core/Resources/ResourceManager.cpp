@@ -23,6 +23,7 @@ namespace DuskEngine
 	std::vector<Resource*> ResourceManager::ShaderList;
 	std::vector<Resource*> ResourceManager::ModelList;
 	std::vector<Resource*> ResourceManager::MaterialList;
+	std::vector<Resource*> ResourceManager::ScriptsList;
 
 	void ResourceManager::Init()
 	{
@@ -38,6 +39,9 @@ namespace DuskEngine
 			delete resource;
 
 		for (Resource* resource : MaterialList)
+			delete resource;
+
+		for (Resource* resource : ScriptsList)
 			delete resource;
 	}
 
@@ -64,7 +68,11 @@ namespace DuskEngine
 					YAML::Emitter out;
 					YAML::Node data = YAML::Load(strStream.str());
 
+#ifdef DUSK_WINDOWS
 					std::string path = m_CurrentDirectory.string() + "\\" + directoryEntry.path().stem().string();
+#elif DUSK_LINUX
+					std::string path = m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string();
+#endif
 					uuids::uuid uuid = data["uuid"].as<uuids::uuid>();
 					m_PathsMap[uuid] = path;
 					m_UUIDsMap[path] = uuid;
@@ -159,6 +167,11 @@ namespace DuskEngine
 		{
 			wasAssigned = true;
 			MaterialList.push_back(resource);
+		}
+		else if (extension == ".lua")
+		{
+			wasAssigned = true;
+			ScriptsList.push_back(resource);
 		}
 			
 		if (!wasAssigned)

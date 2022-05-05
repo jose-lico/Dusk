@@ -49,6 +49,7 @@ namespace DuskEngine
 		static std::vector<Resource*> ShaderList;
 		static std::vector<Resource*> ModelList;
 		static std::vector<Resource*> MaterialList;
+		static std::vector<Resource*> ScriptsList;
 	private:
 		static std::filesystem::path m_RootDirectory;
 		static std::filesystem::path m_CurrentDirectory;

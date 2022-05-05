@@ -48,7 +48,6 @@ project "DuskEditor"
 
 	defines
 	{
-		"DUSK_DEBUG",
 		"DUSK_EXE"
 	}
 
@@ -79,6 +78,7 @@ project "DuskEditor"
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "On"
+		defines "DUSK_DEBUG"
 	
 	filter "configurations:Release"
 		runtime "Release"
