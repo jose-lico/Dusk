@@ -2,7 +2,9 @@
 
 #include "Utils/Memory/Memory.h"
 
-class lua_State;
+#include <filesystem>
+
+struct lua_State;
 
 namespace DuskEngine
 {
@@ -14,8 +16,12 @@ namespace DuskEngine
 		static void Init();
 		static void Shutdown();
 
+		static int LoadScript(const std::filesystem::path& path);
+
 		static void OnAwake(Ref<LuaScript>& script);
 	private:
+		static void RegisterFunctions();
+
 		static lua_State* m_LuaState;
 	};
 }

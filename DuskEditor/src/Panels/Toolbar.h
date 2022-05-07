@@ -13,7 +13,7 @@ namespace DuskEngine
 	class Toolbar : public Panel
 	{
 	public:
-		Toolbar(bool* playing, const std::function<void(void)>& playfunc, const std::function<void(void)>& stopfunc, const std::function<void(void)>& pausefunc);
+		Toolbar(bool* playing, bool* paused, const std::function<void(void)>& playfunc, const std::function<void(void)>& stopfunc, const std::function<void(void)>& pausefunc);
 		~Toolbar() = default;
 
 		virtual void OnImGuiRender() override;
@@ -23,6 +23,7 @@ namespace DuskEngine
 		std::function<void(void)> m_PauseFunc;
 
 		bool* m_Playing;
+		bool* m_Paused;
 
 		Ref<Texture> m_Play, m_Pause, m_Stop;
 	};

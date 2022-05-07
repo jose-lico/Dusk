@@ -222,7 +222,7 @@ namespace DuskEngine
 
 		if(running && !paused)
 		{
-			LOG("This is the scene playing")
+			//LOG("This is the scene playing")
 		}
 
 		{

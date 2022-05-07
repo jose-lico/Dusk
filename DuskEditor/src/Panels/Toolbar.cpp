@@ -8,8 +8,8 @@
 
 namespace DuskEngine
 {
-	Toolbar::Toolbar(bool* playing, const std::function<void(void)>& playfunc, const std::function<void(void)>& stopfunc, const std::function<void(void)>& pausefunc)
-		:m_Playing(playing), m_PlayFunc(playfunc), m_StopFunc(stopfunc), m_PauseFunc(pausefunc)
+	Toolbar::Toolbar(bool* playing, bool* paused, const std::function<void(void)>& playfunc, const std::function<void(void)>& stopfunc, const std::function<void(void)>& pausefunc)
+		:m_Playing(playing), m_Paused(paused), m_PlayFunc(playfunc), m_StopFunc(stopfunc), m_PauseFunc(pausefunc)
 	{
 		m_Play  = Texture::Create("res/editor/icons/play.png");
 		m_Stop  = Texture::Create("res/editor/icons/stop.png");
@@ -35,7 +35,7 @@ namespace DuskEngine
 		}
 
 		ImGui::SameLine();
-		if (ImGui::ImageButton((ImTextureID)m_Pause->GetRendererID(), ImVec2(18.0f, 18.0f)))
+		if (ImGui::ImageButton((ImTextureID)(!*m_Paused ? m_Pause->GetRendererID() : m_Play->GetRendererID()), ImVec2(18.0f, 18.0f)))
 		{
 			if (*m_Playing)
 				(m_PauseFunc)();

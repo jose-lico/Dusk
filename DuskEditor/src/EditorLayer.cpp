@@ -78,7 +78,7 @@ namespace DuskEngine
 			m_Paused = !m_Paused;
 		};
 
-		m_Panels.push_back(new Toolbar(&m_Playing, play, stop, pause));
+		m_Panels.push_back(new Toolbar(&m_Playing, &m_Paused, play, stop, pause));
 
 		/*auto ent = m_EditingScene->FindEntity("Unlit Quad");
 		auto& script = ent->AddComponent<Script>();
