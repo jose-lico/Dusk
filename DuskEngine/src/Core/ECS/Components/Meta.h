@@ -1,16 +1,28 @@
 #pragma once
 
+
 #include <string>
+#include <stdio.h>
 
 namespace DuskEngine
 {
 	struct Meta
 	{
-		std::string name;
 		bool enabled;
+		std::string name;
 
-		Meta() = default;
+		// For scripting testing purposes
+		Meta() 
+			:enabled(true) 
+		{ 
+			printf("Default Meta constructor"); 
+		}
 		Meta(const std::string& name)
 			:name(name), enabled(true) {}
+
+		~Meta() 
+		{ 
+		//	printf("Bye bye"); 
+		}
 	};
 }

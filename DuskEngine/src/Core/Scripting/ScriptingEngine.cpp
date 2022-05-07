@@ -8,13 +8,12 @@
 #include "lua/lua.hpp"
 #include "rttr/registration.h"
 
-
-
 namespace DuskEngine
 {
 	lua_State* ScriptingEngine::m_LuaState = nullptr;
 
 	int CallGlobalFromLua(lua_State* l);
+	int CreateUserDatum(lua_State* l);
 
 	void ScriptingEngine::Init()
 	{
@@ -36,7 +35,8 @@ namespace DuskEngine
 		// probably useless, maybe should instead load text into memory as to not open file constantly
 
 		// load script into text when scene is loaded, have a reload button in the editor for runtime editing
-		return luaL_loadfile(m_LuaState, path.string().c_str()); 
+		//return luaL_loadfile(m_LuaState, path.string().c_str());
+		return 0;
 	}
 
 	void ScriptingEngine::OnAwake(Ref<LuaScript>& script)
@@ -71,6 +71,24 @@ namespace DuskEngine
 			std::string msg = "Registered method " + method.get_name().to_string();
 			LOG(msg.c_str())
 		}
+
+		for(auto& classToRegister : rttr::type::get_types())
+		{
+			//if(classToRegister.get_name().to_string() == "MyTestType")
+			if(classToRegister.is_class())
+			{
+				LOG(classToRegister.get_name().to_string())
+
+				lua_newtable(m_LuaState);
+				lua_pushvalue(m_LuaState, -1);
+				lua_setglobal(m_LuaState, classToRegister.get_name().to_string().c_str());
+				
+				lua_pushstring(m_LuaState, classToRegister.get_name().to_string().c_str());
+				lua_pushcclosure(m_LuaState, DuskEngine::CreateUserDatum, 1);
+				lua_setfield(m_LuaState, -2, "new");
+			}
+		}
+
 	}
 
 	int CallGlobalFromLua(lua_State* l)
@@ -78,7 +96,7 @@ namespace DuskEngine
 		rttr::method& method = *(rttr::method*)(lua_touserdata(l, lua_upvalueindex(1)));
 		
 		int numLuaArgs = lua_gettop(l);
-		int numNativeArgs = method.get_parameter_infos().size();
+		size_t numNativeArgs = method.get_parameter_infos().size();
 
 		union PassByValue
 		{
@@ -168,6 +186,22 @@ namespace DuskEngine
 		}
 		return numberOfReturnValues;
 	}
+
+	int CreateUserDatum(lua_State* l)
+	{
+		LOG("Creating native type");
+
+		const char* typeName = (const char*)lua_tostring(l, lua_upvalueindex(1));
+		rttr::type typeToCreate = rttr::type::get_by_name(typeName);
+
+		void* ud = lua_newuserdata(l, sizeof(rttr::variant));
+		new (ud) rttr::variant(typeToCreate.create());
+
+		lua_newtable(l);
+		lua_setuservalue(l, 1);
+
+		return 1;	//return the userdatum
+	}
 }
 
 
@@ -180,8 +214,6 @@ void Log(const rttr::variant& var)
 {
 	if (var.can_convert<float>())
 		LOG(var.convert<float>())
-	if(var.can_convert<int>())
-		LOG(var.convert<int>())
 	else if(var.can_convert<char*>())
 		LOG(var.convert<char*>())
 	else
@@ -193,9 +225,31 @@ int Return5()
 	return 5;
 }
 
+struct MyTestType
+{
+	bool enabled;
+	int age;
+	//std::string string;
+
+	MyTestType()
+		:enabled(true), age(5)
+	{
+		printf("MyTestType Constructed\n"); 
+	};
+
+	~MyTestType()
+	{
+		printf("MyTestType is Dead\n");
+	};
+};
+
 RTTR_REGISTRATION
 {
 	rttr::registration::method("HelloWorld", &HelloWorld);
 	rttr::registration::method("Log", &Log);
 	rttr::registration::method("Return5", &Return5);
+
+	rttr::registration::class_<MyTestType>("MyTestType").constructor().
+		property("enabled", &MyTestType::enabled).
+		property("age", &MyTestType::age);
 }

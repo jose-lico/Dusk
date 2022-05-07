@@ -17,6 +17,7 @@ enum class MetaData_Type
 #define REGISTER_META\
 	rttr::registration::class_<DuskEngine::Meta>("Meta")\
 		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
+		constructor().\
 		property("name", &DuskEngine::Meta::name).\
 		property("enabled", &DuskEngine::Meta::enabled);
 
