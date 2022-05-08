@@ -15,14 +15,14 @@ namespace DuskEngine
 		Meta() 
 			:enabled(true) 
 		{ 
-			printf("Default Meta constructor"); 
+			printf("Default Meta constructor\n"); 
 		}
 		Meta(const std::string& name)
 			:name(name), enabled(true) {}
 
 		~Meta() 
 		{ 
-		//	printf("Bye bye"); 
+		//	printf("Bye bye\n"); 
 		}
 	};
 }

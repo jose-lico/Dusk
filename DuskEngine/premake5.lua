@@ -33,7 +33,8 @@ project "DuskEngine"
 		dependenciesDir .. "/IconFontCppHeaders",
 		dependenciesDir .. "/ImGuizmo/include",
 		dependenciesDir .. "/rttr/include",
-		dependenciesDir .. "/lua/include"
+		dependenciesDir .. "/lua/include/lua",
+		dependenciesDir .. "/sol2/include"
 	}
 
 	defines
@@ -47,7 +48,8 @@ project "DuskEngine"
 		"_CRT_SECURE_NO_WARNINGS",
 		"YAML_CPP_STATIC_DEFINE",
 		"UUID_SYSTEM_GENERATOR",
-		"NOMINMAX"
+		"NOMINMAX",
+		"SOL_PRINT_ERRORS"
 	}
 
 	filter "files:../Dependencies/ImGuizmo/**.cpp"

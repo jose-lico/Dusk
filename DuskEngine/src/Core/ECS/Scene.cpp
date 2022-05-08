@@ -328,8 +328,10 @@ namespace DuskEngine
 						{
 							case LightType::Directional:
 								mesh.material->m_Shader->SetUniformInt(("e_DirectionalLights[" + std::to_string(dirLightIndex++) + "].Enabled"), 0);
+								break;
 							case LightType::Point:
 								mesh.material->m_Shader->SetUniformInt(("e_PointLights[" + std::to_string(pointLightIndex++) + "].Enabled"), 0);
+								break;
 							case LightType::Spot:
 								break;
 						}
@@ -344,6 +346,11 @@ namespace DuskEngine
 
 			Renderer::EndScene();
 		}
+	}
+
+	void Scene::OnShutdownRuntime()
+	{
+		
 	}
 }
 

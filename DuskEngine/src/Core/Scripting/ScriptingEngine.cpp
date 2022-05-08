@@ -4,30 +4,55 @@
 #include "LuaScript.h"
 
 #include "Core/Macros/LOG.h"
+#include "Utils/Profiling/Timer.h"
 
-#include "lua/lua.hpp"
+#include "lua.hpp"
 #include "rttr/registration.h"
+
+void HelloWorld();
+void Log(const rttr::variant& var);
+int Return5();
+
+struct MyTestType
+{
+	int age;
+	bool enabled;
+	//std::string string;
+
+	MyTestType()
+		:enabled(true), age(5)
+	{
+		printf("MyTestType Constructed\n");
+	};
+
+	~MyTestType()
+	{
+		printf("MyTestType is Dead\n");
+	};
+};
 
 namespace DuskEngine
 {
-	lua_State* ScriptingEngine::m_LuaState = nullptr;
+	//lua_State* ScriptingEngine::m_LuaState = nullptr;
+	sol::state ScriptingEngine::m_State = sol::state();
 
 	int CallGlobalFromLua(lua_State* l);
 	int CreateUserDatum(lua_State* l);
+	int DestroyUserDatum(lua_State* l); 
+	std::string MetaTableName(const rttr::type& t);
 
 	void ScriptingEngine::Init()
 	{
-		m_LuaState = luaL_newstate();
-		
+		//m_LuaState = luaL_newstate();
 		// Use Dusk to do pretty much everything, from maths to logging
-		luaL_openlibs(m_LuaState); 
-
+		//luaL_openlibs(m_LuaState);
+		m_State.open_libraries(sol::lib::base);
 		RegisterFunctions();
 	}
 
 	void ScriptingEngine::Shutdown()
 	{
-		lua_close(m_LuaState);
+		//lua_close(m_LuaState);
 	}
 
 	int ScriptingEngine::LoadScript(const std::filesystem::path& path)
@@ -41,54 +66,73 @@ namespace DuskEngine
 
 	void ScriptingEngine::OnAwake(Ref<LuaScript>& script)
 	{
-		int r = luaL_dofile(m_LuaState, script->GetPath().string().c_str());
+		m_State.script_file(script->GetPath().string().c_str());
+		//int r = luaL_dofile(m_LuaState, script->GetPath().string().c_str());
 
-		if (r == LUA_OK)
-		{
-			//lua_getglobal(L, "sprite");
-		}
-		else
-		{
-			std::string error = lua_tostring(m_LuaState, -1);
-			std::cout << error << std::endl;
-		}
+		//if (r == LUA_OK)
+		//{
+		//	//lua_getglobal(L, "sprite");
+		//}
+		//else
+		//{
+		//	std::string error = lua_tostring(m_LuaState, -1);
+		//	std::cout << error << std::endl;
+		//}
 	}
 
 	void ScriptingEngine::RegisterFunctions()
 	{
+		Timer timer("Register Funcs");
 		// Set globals
-		lua_newtable(m_LuaState);
+		/*lua_newtable(m_LuaState);
 		lua_pushvalue(m_LuaState, -1);
 		lua_setglobal(m_LuaState, "Dusk");
+		lua_pushvalue(m_LuaState, -1);*/
 
-		lua_pushvalue(m_LuaState, -1);
-		for(auto& method : rttr::type::get_global_methods())
-		{
-			lua_pushstring(m_LuaState, method.get_name().to_string().c_str());
-			lua_pushlightuserdata(m_LuaState, (void*)&method);
-			lua_pushcclosure(m_LuaState, DuskEngine::CallGlobalFromLua, 1);
-			lua_settable(m_LuaState, -3);
-			std::string msg = "Registered method " + method.get_name().to_string();
-			LOG(msg.c_str())
-		}
+		m_State.set_function("Log", &Log);
+		m_State.set_function("HelloWorld", &HelloWorld);
+		m_State.set_function("Return5", &Return5);
+		m_State.new_usertype<MyTestType>("MyTestType", 
+			sol::constructors<MyTestType()>(),
+			"age", &MyTestType::age, 
+			"enabled", &MyTestType::enabled);
 
-		for(auto& classToRegister : rttr::type::get_types())
-		{
-			//if(classToRegister.get_name().to_string() == "MyTestType")
-			if(classToRegister.is_class())
-			{
-				LOG(classToRegister.get_name().to_string())
+		//for(auto& method : rttr::type::get_global_methods())
+		//{
+		//	/*lua_pushstring(m_LuaState, method.get_name().to_string().c_str());
+		//	lua_pushlightuserdata(m_LuaState, (void*)&method);
+		//	lua_pushcclosure(m_LuaState, DuskEngine::CallGlobalFromLua, 1);
+		//	lua_settable(m_LuaState, -3);*/
+		//	m_State.set_function(method.get_name().to_string().c_str(), &method);
+		//	std::string msg = "Registered method " + method.get_name().to_string();
+		//	LOG(msg.c_str())
+		//}
 
-				lua_newtable(m_LuaState);
-				lua_pushvalue(m_LuaState, -1);
-				lua_setglobal(m_LuaState, classToRegister.get_name().to_string().c_str());
-				
-				lua_pushstring(m_LuaState, classToRegister.get_name().to_string().c_str());
-				lua_pushcclosure(m_LuaState, DuskEngine::CreateUserDatum, 1);
-				lua_setfield(m_LuaState, -2, "new");
-			}
-		}
+		//for(auto& classToRegister : rttr::type::get_types())
+		//{
+		//	if(classToRegister.get_name().to_string() == "MyTestType")
+		//	//if(classToRegister.is_class())
+		//	{
+		//		LOG(classToRegister.get_name().to_string())
 
+		//		lua_newtable(m_LuaState);
+		//		lua_pushvalue(m_LuaState, -1);
+		//		lua_setglobal(m_LuaState, classToRegister.get_name().to_string().c_str());
+		//		lua_pushvalue(m_LuaState, -1);
+
+		//		lua_pushstring(m_LuaState, classToRegister.get_name().to_string().c_str());
+		//		lua_pushcclosure(m_LuaState, DuskEngine::CreateUserDatum, 1);
+		//		lua_setfield(m_LuaState, -2, "new");
+
+		//		// destructor
+		//		std::string metaTableName = "_mt_" + classToRegister.get_name().to_string();
+		//		//LOG(metaTableName.c_str())
+		//		luaL_newmetatable(m_LuaState, metaTableName.c_str());
+		//		lua_pushstring(m_LuaState, "__gc");
+		//		lua_pushcclosure(m_LuaState, DuskEngine::DestroyUserDatum, 0);
+		//		lua_settable(m_LuaState, -3);
+		//	}
+		//}
 	}
 
 	int CallGlobalFromLua(lua_State* l)
@@ -197,10 +241,39 @@ namespace DuskEngine
 		void* ud = lua_newuserdata(l, sizeof(rttr::variant));
 		new (ud) rttr::variant(typeToCreate.create());
 
+		std::string metaTableName = "_mt_";
+		metaTableName.append(typeName);
+		LOG(metaTableName.c_str())
+		luaL_getmetatable(l, metaTableName.c_str());
+		lua_setmetatable(l, 1);
+
 		lua_newtable(l);
 		lua_setuservalue(l, 1);
 
 		return 1;	//return the userdatum
+	}
+
+	int DestroyUserDatum(lua_State* l)
+	{
+		LOG("Destroying native type")
+		rttr::variant* ud = (rttr::variant*)lua_touserdata(l, -1);
+		ud->~variant();
+		return 0;
+	}
+
+	std::string MetaTableName(const rttr::type& t)
+	{
+		std::string metaTableName;
+		if (t.is_pointer())
+		{
+			metaTableName = t.get_raw_type().get_name().to_string();
+		}
+		else
+		{
+			metaTableName = t.get_name().to_string();
+		}
+		metaTableName.append("_MT_");
+		return metaTableName;
 	}
 }
 
@@ -224,24 +297,6 @@ int Return5()
 {
 	return 5;
 }
-
-struct MyTestType
-{
-	bool enabled;
-	int age;
-	//std::string string;
-
-	MyTestType()
-		:enabled(true), age(5)
-	{
-		printf("MyTestType Constructed\n"); 
-	};
-
-	~MyTestType()
-	{
-		printf("MyTestType is Dead\n");
-	};
-};
 
 RTTR_REGISTRATION
 {

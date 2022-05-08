@@ -2,6 +2,8 @@
 
 #include "Utils/Memory/Memory.h"
 
+#include "sol/sol.hpp"
+
 #include <filesystem>
 
 struct lua_State;
@@ -22,6 +24,7 @@ namespace DuskEngine
 	private:
 		static void RegisterFunctions();
 
-		static lua_State* m_LuaState;
+		static sol::state m_State;
+		//static lua_State* m_LuaState;
 	};
 }

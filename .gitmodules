@@ -46,3 +46,6 @@
 [submodule "Dependencies/lua"]
 	path = Dependencies/lua
 	url = https://github.com/qolisipo/lua
+[submodule "Dependencies/sol2"]
+	path = Dependencies/sol2
+	url = https://github.com/ThePhD/sol2

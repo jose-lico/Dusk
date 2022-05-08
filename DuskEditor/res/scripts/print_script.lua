@@ -1,15 +1,22 @@
 number = 69
-print("Heeeeeeeeeeeeeeeey")
+--print("Heeeeeeeeeeeeeeeey")
 
-Dusk.HelloWorld()
-x = Dusk.Return5()
+HelloWorld()
+print("hey")
+print(Return5())
+local x = Return5()
 x = x * 2 - 1
-dt = Dusk.DeltaTime()
-Dusk.Log(x)
-Dusk.Log(dt)
-Dusk.Log("This is a string")
+print(x)
+
+--dt = DeltaTime()
+--print(dt)
+--Log(x)
+--Log(dt)
+--Log("This is a string")
 
 local teste = MyTestType.new()
+print(teste.age)
+--print(teste.age)
 --local meta = Meta.new()
 
 function OnAwake()

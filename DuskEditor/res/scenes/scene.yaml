@@ -13,6 +13,9 @@ Entities:
         fileID: 0
         uuid: 00000000-0000-0000-0000-000000000000
       material: e5389bcf-ca32-47ae-9cc0-a296c257a3fc
+    Script:
+      scripts:
+        print_script.lua: c0033a79-90a6-4e91-8c87-63f67f3ea143
   - Entity: 12837192831273
     Meta:
       name: Lit Cube
@@ -110,6 +113,3 @@ Entities:
         fileID: 0
         uuid: 00000000-0000-0000-0000-000000000000
       material: b5699746-b707-4ba1-8a65-eef8ee4b92c1
-    Script:
-      scripts:
-        print_script.lua: c0033a79-90a6-4e91-8c87-63f67f3ea143

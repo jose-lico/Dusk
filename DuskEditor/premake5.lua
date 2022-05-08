@@ -43,7 +43,8 @@ project "DuskEditor"
 		dependenciesDir .. "/IconFontCppHeaders",
 		dependenciesDir .. "/ImGuizmo/include",
 		dependenciesDir .. "/rttr/include",
-		dependenciesDir .. "/lua/include"
+		dependenciesDir .. "/lua/include/lua",
+		dependenciesDir .. "/sol2/include"
 	}
 
 	defines
