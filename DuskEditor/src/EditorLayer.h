@@ -21,6 +21,7 @@ namespace DuskEngine
 		void OnAttach() override;
 		void OnUpdate() override;
 		void OnImGuiRender() override;
+		void OnEvent(Event& event) override;
 	private:
 		Dockspace m_Dockspace;
 		std::vector<Panel*> m_Panels;

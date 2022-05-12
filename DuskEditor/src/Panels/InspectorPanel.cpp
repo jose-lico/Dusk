@@ -499,6 +499,7 @@ namespace DuskEngine
 							const wchar_t* data = (const wchar_t*)payload->Data;
 							std::wstring ws(data);
 							std::string path(ws.begin(), ws.end());
+
 							auto texture = Texture::Create(path, ResourceManager::GetUUID(ws));
 							meshes[0]->material->SetTexture(uniform.Name, texture);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());

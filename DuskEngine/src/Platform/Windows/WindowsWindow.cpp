@@ -3,12 +3,17 @@
 
 #include "Core/Macros/LOG.h"
 #include "Core/Events/Events.h"
+#include "Core/Resources/ResourceManager.h"
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
+#include <filesystem>
+
 namespace DuskEngine
 {
+	extern void DropCallback(GLFWwindow* window, int count, const char** paths);
+
 	WindowsWindow::WindowsWindow(const WindowData& data)
 	{
 		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL);
@@ -101,7 +106,27 @@ namespace DuskEngine
 				data.EventCallback(event);
 			});
 
+		glfwSetDropCallback(m_Window, DropCallback);
 
+//		glfwSetDropCallback(m_Window, [](GLFWwindow* window, int count, const char** paths)
+//			{
+//				// should be implemented in editor tbh
+//				for (unsigned int i = 0; i < count; i++)
+//				{
+//					//LOG(paths[i])
+//					std::filesystem::path path = paths[i];
+//#ifdef DUSK_WINDOWS
+//					std::string targetPath = ResourceManager::m_CurrentDirectory.string() + "\\" + path.filename().string();
+//#elif DUSK_LINUX
+//					std::string targetPath = ResourceManager::m_CurrentDirectory.string() + "/" + path.filename().string();
+//#endif
+//
+//					std::string s = ResourceManager::m_CurrentDirectory.string() + path.filename().string();
+//					LOG(targetPath)
+//					//if(std::filesystem::exists())
+//					//std::filesystem::copy(paths[i], ResourceManager::m_CurrentDirectory);*/
+//				}
+//			});
 	}
 
 	WindowsWindow::~WindowsWindow()

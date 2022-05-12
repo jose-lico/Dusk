@@ -130,4 +130,12 @@ namespace DuskEngine
 
 		m_Dockspace.EndDockspace();
 	}
+
+	void EditorLayer::OnEvent(Event& event)
+	{
+		for (Panel* panel : m_Panels)
+		{
+			panel->OnEvent(event);
+		}
+	}
 }

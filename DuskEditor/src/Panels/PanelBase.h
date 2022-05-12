@@ -2,6 +2,8 @@
 
 namespace DuskEngine
 {
+	class Event;
+
 	class Panel
 	{
 	public:
@@ -9,6 +11,7 @@ namespace DuskEngine
 		virtual ~Panel() = default;
 
 		virtual void OnImGuiRender() = 0;
+		virtual void OnEvent(Event& event) {}
 	protected:
 		void CheckFocus();
 	};

@@ -182,7 +182,6 @@ namespace DuskEngine
 				Renderer::Submit(mesh.mesh);
 			}
 
-
 			glm::mat4 viewMatrix = camera.camera.viewMatrix;
 			glm::mat4 projectionMatrix = camera.camera.projectionMatrix;
 
@@ -193,7 +192,7 @@ namespace DuskEngine
 
 			RenderCommand::UnbindVAO();
 			RenderCommand::DrawArrays(0, 6);
-			
+
 			Renderer::EndScene();
 		}
 	}

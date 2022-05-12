@@ -124,12 +124,13 @@ namespace DuskEngine
 		m_CurrentDirectory = m_RootDirectory;
 	}
 
-	const uuids::uuid& ResourceManager::CreateUUID(const std::filesystem::path& path)
+	uuids::uuid ResourceManager::CreateResource(const std::filesystem::path& path)
 	{
 		std::string message = "Creating meta file for " + path.string();
 		LOG(message)
 
 		uuids::uuid const id = uuids::uuid_system_generator{}();
+		LOG(uuids::to_string(id))
 
 		YAML::Emitter out;
 		out << YAML::BeginMap;
@@ -141,6 +142,8 @@ namespace DuskEngine
 
 		m_PathsMap[id] = path;
 		m_UUIDsMap[path] = id;
+
+		AddToResourceList(path, id);
 
 		return id;
 	}

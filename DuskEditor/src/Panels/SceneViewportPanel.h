@@ -9,10 +9,16 @@
 
 #include <vector>
 
+namespace ImGuizmo
+{
+	enum OPERATION;
+}
+
 namespace DuskEngine
 {
 	class FrameBuffer;
 	class EditorCamera;
+	class KeyPressedEvent;
 	
 	class SceneViewportPanel : public Panel
 	{
@@ -21,7 +27,10 @@ namespace DuskEngine
 		~SceneViewportPanel() = default;
 
 		virtual void OnImGuiRender() override;
+		virtual void OnEvent(Event& event) override;
+
 		void SelectedEntities(std::vector<Entity>& entities) { m_SelectedEntities = &entities; }
+		bool Test(KeyPressedEvent& e);
 	private:
 		std::vector<Entity>* m_SelectedEntities = nullptr;
 
@@ -33,5 +42,6 @@ namespace DuskEngine
 		bool m_IsLeftMousePressed = false;
 		bool m_HasFirstMousePosition = false;
 		glm::vec2 m_LastMousePosition;
+		ImGuizmo::OPERATION m_ImGuizmoOperation;
 	};
 }

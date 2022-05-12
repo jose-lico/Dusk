@@ -25,7 +25,7 @@ namespace DuskEngine
 		ImGui::Begin("##Toolbar", nullptr, window_flags);
 		CheckFocus();
 
-		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - ((26.0f * 2 + 8.0f) * 0.5f));
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - ((26.0f * 2) * 0.5f));
 		if (ImGui::ImageButton((ImTextureID)(!*m_Playing ? m_Play->GetRendererID() : m_Stop->GetRendererID()), ImVec2(18.0f,18.0f)))
 		{
 			if (!*m_Playing)

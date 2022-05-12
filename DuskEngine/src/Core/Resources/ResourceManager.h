@@ -3,7 +3,6 @@
 
 #include <unordered_map>
 #include <filesystem>
-#include <string>
 #include <optional>
 
 namespace uuids
@@ -34,7 +33,7 @@ namespace DuskEngine
 
 		static void LoadUUIDs();
 		static void CreateUUIDs();
-		static const uuids::uuid& CreateUUID(const std::filesystem::path& path);
+		static uuids::uuid CreateResource(const std::filesystem::path& path);
 		static void DeleteUUIDs();
 		
 		static uuids::uuid GetUUID(const std::filesystem::path& path);
@@ -58,5 +57,7 @@ namespace DuskEngine
 		static std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> m_UUIDsMap;
 
 		static void AddToResourceList(const std::filesystem::path& path, const uuids::uuid& uuid);
+
+		friend class WindowsWindow;
 	};
 }

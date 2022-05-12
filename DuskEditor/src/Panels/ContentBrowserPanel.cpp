@@ -7,12 +7,16 @@
 
 #include "IconsForkAwesome.h"
 
+#include <GLFW/glfw3.h>
+
 namespace DuskEngine
 {
 	const std::filesystem::path g_RootDirectory = "res";
+	std::filesystem::path* g_currentDir;
 
 	ContentBrowserPanel::ContentBrowserPanel()
 	{
+		g_currentDir = &m_CurrentDirectory;
 		m_CurrentDirectory = g_RootDirectory; 
 		m_FolderIcon = Texture::Create("res/editor/icons/folder.png");
 		m_UnknownIcon = Texture::Create("res/editor/icons/question-mark.png");
@@ -121,8 +125,7 @@ namespace DuskEngine
 				std::string path = m_CurrentDirectory.string() + "/newMaterial.material";
 				Material::CreateDefaultMaterial(path);
 				CreateDirectoryItems();
-				auto id = ResourceManager::CreateUUID(path);
-				ResourceManager::MaterialList.push_back(new Resource(path, id));
+				ResourceManager::CreateResource(path);
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -154,6 +157,31 @@ namespace DuskEngine
 			{
 				m_Icons.push_back(Texture::Create(directoryEntry.path().string()));
 			}
+		}
+	}
+
+	void DropCallback(GLFWwindow* window, int count, const char** paths)
+	{
+		for (unsigned int i = 0; i < count; i++)
+		{
+			//APP_LOG(paths[i])
+			std::filesystem::path path = paths[i];
+#ifdef DUSK_WINDOWS
+			std::string targetPath =  (*g_currentDir).string() + "\\" + path.filename().string();
+#elif DUSK_LINUX
+			std::string targetPath = (*g_currentDir).string() + "/" + path.filename().string();
+#endif
+
+			if(!std::filesystem::exists(targetPath))
+			{
+				std::filesystem::copy(paths[i], *g_currentDir);
+				ResourceManager::CreateResource(targetPath);
+			}
+			else
+			{
+				std::filesystem::remove(targetPath);
+				std::filesystem::copy(paths[i], *g_currentDir);
+			}			
 		}
 	}
 }

@@ -6,6 +6,9 @@
 #include "Core/Renderer/Resources/Framebuffer.h"
 #include "Core/Application/Time.h"
 #include "Core/Application/Input.h"
+#include "Core/Macros/LOG.h"
+#include "Core/Events/KeyEvent.h"
+#include "Core/Macros/BIND_EVENT_FN.h"
 
 #include "imgui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"
@@ -19,22 +22,26 @@ namespace DuskEngine
 		m_ViewportSize = glm::vec2(0.0f);
 		m_FB = fb;
 		m_Camera = camera;
+
+		m_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 	}
 
 	static bool stats = false;
 	void SceneViewportPanel::OnImGuiRender()
 	{
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBringToFrontOnFocus;
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
-		ImGui::Begin(ICON_FK_EYE "  Viewport", nullptr, window_flags);
+		ImGui::Begin(ICON_FK_EYE "  Viewport", nullptr);
 		CheckFocus();
- 
-		if (ImGui::BeginMenuBar())
-		{
-            ImGui::MenuItem("Stats", "", &stats);
-
-			ImGui::EndMenuBar();
-		}
+	
+		/*ImGui::Indent();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+		if (ImGui::Button("Hey"))
+			stats = !stats;
+		ImGui::SameLine();
+		ImGui::Button("Hey2");
+		ImGui::PopStyleColor();
+		ImGui::Unindent();*/
+		
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		if (m_ViewportSize != *(glm::vec2*)&viewportSize)
@@ -43,31 +50,38 @@ namespace DuskEngine
 			m_FB->Resize(m_ViewportSize);
 			m_Camera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f);
 		}
-		ImGui::Image((void*)m_FB->GetColorAttachmentID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::Image((ImTextureID)m_FB->GetColorAttachmentID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::PopStyleVar();
         ImVec2 work_pos = ImGui::GetWindowPos();
         auto viewportID = ImGui::GetWindowViewport()->ID;
 
-        if (stats && !ImGui::IsWindowCollapsed())
-        {
-            ImGuiIO& io = ImGui::GetIO();
-            ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoSavedSettings 
-                | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove;
-    
-            ImVec2 window_pos = { work_pos.x + 10 , work_pos.y + 50 };
-            ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, ImVec2());
+		/*if (ImGui::BeginMenuBar())
+		{
+			ImGui::MenuItem("Stats", "", &stats);
 
-			ImGui::SetNextWindowViewport(viewportID);
-            ImGui::SetNextWindowBgAlpha(0.35f);
-            if (ImGui::Begin("Example: Simple overlay", &stats, window_flags))
-            {
-				// imgui bad stats change later
-				ImGui::Text("Frame time: %.2f ms", 1000.0f / ImGui::GetIO().Framerate);
-				ImGui::Text("FPS: %.1f FPS", ImGui::GetIO().Framerate);
-                ImGui::Separator();
-            }
-            ImGui::End();
-        }
+			ImGui::EndMenuBar();
+		}*/
+
+   //     if (stats && !ImGui::IsWindowCollapsed())
+   //     {
+   //         ImGuiIO& io = ImGui::GetIO();
+   //         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoSavedSettings 
+   //             | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove;
+   // 
+   //         ImVec2 window_pos = { work_pos.x + 10 , work_pos.y + 50 };
+   //         ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, ImVec2());
+
+			//ImGui::SetNextWindowViewport(viewportID);
+   //         ImGui::SetNextWindowBgAlpha(0.35f);
+   //         if (ImGui::Begin("Example: Simple overlay", &stats, window_flags))
+   //         {
+			//	// imgui bad stats change later
+			//	ImGui::Text("Frame time: %.2f ms", 1000.0f / ImGui::GetIO().Framerate);
+			//	ImGui::Text("FPS: %.1f FPS", ImGui::GetIO().Framerate);
+   //             ImGui::Separator();
+   //         }
+   //         ImGui::End();
+   //     }
 		
 		if(ImGui::IsWindowFocused())
 			MoveEditorCamera();
@@ -85,15 +99,62 @@ namespace DuskEngine
 			glm::mat4 transformMatrix = transform.GetTransform();
 
 			ImGuizmo::Manipulate(glm::value_ptr(camera.viewMatrix), glm::value_ptr(camera.projectionMatrix),
-				ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::LOCAL, glm::value_ptr(transformMatrix));
+				m_ImGuizmoOperation, ImGuizmo::LOCAL, glm::value_ptr(transformMatrix));
 
 			if(ImGuizmo::IsUsing())
 			{
-				transform.position = (glm::vec3)transformMatrix[3];
+				switch (m_ImGuizmoOperation)
+				{
+				case ImGuizmo::TRANSLATE:
+					transform.position = (glm::vec3)transformMatrix[3];
+					break;
+				case ImGuizmo::ROTATE:
+					break;
+				case ImGuizmo::SCALE:
+					break;
+				case ImGuizmo::SCALEU:
+					break;
+				case ImGuizmo::UNIVERSAL:
+					break;
+				default:
+					break;
+				}
 			}
 		}
 
 		ImGui::End();
+	}
+
+	void SceneViewportPanel::OnEvent(Event& event)
+	{
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(SceneViewportPanel::Test));
+	}
+
+	bool SceneViewportPanel::Test(KeyPressedEvent& e)
+	{
+		if (!m_IsLeftMousePressed) {
+			switch (e.GetKeyCode())
+			{
+			case Key::Q:
+				m_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			case Key::W:
+				m_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			case Key::E:
+				m_ImGuizmoOperation = ImGuizmo::OPERATION::ROTATE;
+				break;
+			case Key::R:
+				m_ImGuizmoOperation = ImGuizmo::OPERATION::SCALE;
+				break;
+			case Key::T:
+				m_ImGuizmoOperation = ImGuizmo::OPERATION::UNIVERSAL;
+				break;
+			}
+		}
+
+		return true;
 	}
 
 	void SceneViewportPanel::MoveEditorCamera()
