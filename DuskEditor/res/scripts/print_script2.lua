@@ -5,6 +5,7 @@ local teste = MyTestType.new(2) -- will get garbage collected
 
 function OnAwake()
     print("2 is alive")
+    print(Time.GetDeltaTime())
 end
 
 function OnUpdate()

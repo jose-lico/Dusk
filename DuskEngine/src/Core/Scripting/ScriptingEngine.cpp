@@ -5,6 +5,7 @@
 
 #include "Core/Macros/LOG.h"
 #include "Core/Application/Input.h"
+#include "Core/Application/Time.h"
 
 #include "Utils/Profiling/Timer.h"
 
@@ -72,6 +73,7 @@ namespace DuskEngine
 
 
         RegisterInput();
+        RegisterTime();
 	}
 
 	void ScriptingEngine::RegisterInput()
@@ -202,8 +204,14 @@ namespace DuskEngine
 
         m_State.new_enum<MouseCode>("MouseCode", mouseCodes);
 	}
-}
 
+    void ScriptingEngine::RegisterTime()
+    {
+        sol::table time = m_State["Time"].get_or_create<sol::table>();
+
+        time.set_function("GetDeltaTime", &Time::GetDeltaTime);
+    }
+}
 
 void HelloWorld()
 {

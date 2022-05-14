@@ -22,6 +22,7 @@ namespace DuskEngine
 		void RegisterFunctions();
 
 		void RegisterInput();
+		void RegisterTime();
 
 		sol::state m_State;
 	};

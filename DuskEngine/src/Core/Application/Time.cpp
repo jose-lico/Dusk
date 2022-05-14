@@ -2,7 +2,6 @@
 #include "Time.h"
 
 #include "GLFW/glfw3.h"
-#include "rttr/registration.h"
 
 namespace DuskEngine
 {
@@ -16,14 +15,4 @@ namespace DuskEngine
 		m_DeltaTime = currentFrame - m_LastFrame;
 		m_LastFrame = currentFrame;
 	}
-
-	/*float Time::GetDeltaTime()
-	{
-		return m_DeltaTime;
-	}*/
-}
-
-RTTR_REGISTRATION
-{
-	rttr::registration::method("DeltaTime", &DuskEngine::Time::GetDeltaTime);
 }
