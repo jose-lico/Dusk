@@ -66,6 +66,7 @@ namespace DuskEngine
 		};
 
 		auto stop = [&]() {
+			m_PlayingScene->OnShutdownRuntime();
 			m_PlayingScene = MakeRef<Scene>();
 			m_Playing = false;
 			m_Paused = false;

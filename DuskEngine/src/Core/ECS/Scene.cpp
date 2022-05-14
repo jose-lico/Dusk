@@ -25,10 +25,13 @@ namespace DuskEngine
 	Scene::Scene()
 	{
 		m_GridShader = Shader::Create("res/editor/shaders/grid.glsl");
+
+		m_ScriptingEngine = new ScriptingEngine();
 	}
 
 	Scene::~Scene()
 	{
+		delete(m_ScriptingEngine);
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -44,8 +47,6 @@ namespace DuskEngine
 		Entity entity = { m_Registry.create(), this };
 		return entity;
 	}
-
-	
 
 	void Scene::DestroyEntity(entt::entity handle)
 	{
@@ -203,25 +204,21 @@ namespace DuskEngine
 		for (auto entity : view)
 		{
 			auto& script = view.get<Script>(entity);
-			ScriptingEngine::OnAwake(script.scripts[0]);
+			m_ScriptingEngine->LoadScript(script.scripts[0]);
+			m_ScriptingEngine->OnAwake(script.scripts[0]);
 		}
 	}
 
 	void Scene::OnUpdateRuntime(bool running, bool paused)
 	{
-		/*if(playing)
+		if(running && !paused)
 		{
 			auto view = m_Registry.view<Script>();
 			for (auto entity : view)
 			{
 				auto& script = view.get<Script>(entity);
-				script.script->OnUpdate();
+				m_ScriptingEngine->OnUpdate(script.scripts[0]);
 			}
-		}*/
-
-		if(running && !paused)
-		{
-			//LOG("This is the scene playing")
 		}
 
 		{
@@ -349,7 +346,12 @@ namespace DuskEngine
 
 	void Scene::OnShutdownRuntime()
 	{
-		
+		auto view = m_Registry.view<Script>();
+		for (auto entity : view)
+		{
+			auto& script = view.get<Script>(entity);
+			m_ScriptingEngine->OnShutdown(script.scripts[0]);
+		}
 	}
 }
 

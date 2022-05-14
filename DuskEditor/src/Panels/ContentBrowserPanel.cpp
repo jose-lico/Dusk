@@ -164,7 +164,6 @@ namespace DuskEngine
 	{
 		for (unsigned int i = 0; i < count; i++)
 		{
-			//APP_LOG(paths[i])
 			std::filesystem::path path = paths[i];
 #ifdef DUSK_WINDOWS
 			std::string targetPath =  (*g_currentDir).string() + "\\" + path.filename().string();

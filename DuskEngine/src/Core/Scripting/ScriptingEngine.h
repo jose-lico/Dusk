@@ -4,10 +4,6 @@
 
 #include "sol/sol.hpp"
 
-#include <filesystem>
-
-struct lua_State;
-
 namespace DuskEngine
 {
 	class LuaScript;
@@ -15,16 +11,17 @@ namespace DuskEngine
 	class ScriptingEngine
 	{
 	public:
-		static void Init();
-		static void Shutdown();
+		ScriptingEngine();
+		~ScriptingEngine();
 
-		static int LoadScript(const std::filesystem::path& path);
+		void LoadScript(Ref<LuaScript>& script);
 
-		static void OnAwake(Ref<LuaScript>& script);
+		void OnAwake(Ref<LuaScript>& script);
+		void OnUpdate(Ref<LuaScript>& script);
+		void OnShutdown(Ref<LuaScript>& script);
 	private:
-		static void RegisterFunctions();
+		void RegisterFunctions();
 
-		static sol::state m_State;
-		//static lua_State* m_LuaState;
+		sol::state m_State;
 	};
 }

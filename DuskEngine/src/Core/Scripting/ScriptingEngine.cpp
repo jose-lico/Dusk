@@ -6,7 +6,6 @@
 #include "Core/Macros/LOG.h"
 #include "Utils/Profiling/Timer.h"
 
-#include "lua.hpp"
 #include "rttr/registration.h"
 
 void HelloWorld();
@@ -19,81 +18,70 @@ struct MyTestType
 	bool enabled;
 	//std::string string;
 
-	MyTestType()
-		:enabled(true), age(5)
+	int id;
+
+	MyTestType(int i)
+		:enabled(true), age(5), id(i)
 	{
 		printf("MyTestType Constructed\n");
 	};
 
 	~MyTestType()
 	{
-		printf("MyTestType is Dead\n");
+		printf("MyTestType is Dead:%i\n", id);
 	};
 };
 
 namespace DuskEngine
 {
-	//lua_State* ScriptingEngine::m_LuaState = nullptr;
-	sol::state ScriptingEngine::m_State = sol::state();
+	ScriptingEngine::ScriptingEngine()
+	{
+		//m_State = sol::state();
+		//m_State = new sol::state();
+		m_State.open_libraries(sol::lib::base);
+		RegisterFunctions();
+	}
+
+	ScriptingEngine::~ScriptingEngine()
+	{
+		//delete(m_State);
+	}
+
 
 	int CallGlobalFromLua(lua_State* l);
 	int CreateUserDatum(lua_State* l);
 	int DestroyUserDatum(lua_State* l); 
 	std::string MetaTableName(const rttr::type& t);
 
-	void ScriptingEngine::Init()
+	void ScriptingEngine::LoadScript(Ref<LuaScript>& script)
 	{
-		//m_LuaState = luaL_newstate();
-		// Use Dusk to do pretty much everything, from maths to logging
-		//luaL_openlibs(m_LuaState);
-		m_State.open_libraries(sol::lib::base);
-		RegisterFunctions();
-	}
-
-	void ScriptingEngine::Shutdown()
-	{
-		//lua_close(m_LuaState);
-	}
-
-	int ScriptingEngine::LoadScript(const std::filesystem::path& path)
-	{
-		// probably useless, maybe should instead load text into memory as to not open file constantly
-
-		// load script into text when scene is loaded, have a reload button in the editor for runtime editing
-		//return luaL_loadfile(m_LuaState, path.string().c_str());
-		return 0;
+		script->LoadScript(m_State);
 	}
 
 	void ScriptingEngine::OnAwake(Ref<LuaScript>& script)
 	{
-		m_State.script_file(script->GetPath().string().c_str());
-		//int r = luaL_dofile(m_LuaState, script->GetPath().string().c_str());
+		script->OnAwake();
+	}
 
-		//if (r == LUA_OK)
-		//{
-		//	//lua_getglobal(L, "sprite");
-		//}
-		//else
-		//{
-		//	std::string error = lua_tostring(m_LuaState, -1);
-		//	std::cout << error << std::endl;
-		//}
+	void ScriptingEngine::OnUpdate(Ref<LuaScript>& script)
+	{
+		script->OnUpdate();
+	}
+
+	void ScriptingEngine::OnShutdown(Ref<LuaScript>& script)
+	{
+		script->OnShutdown();
 	}
 
 	void ScriptingEngine::RegisterFunctions()
 	{
 		Timer timer("Register Funcs");
-		// Set globals
-		/*lua_newtable(m_LuaState);
-		lua_pushvalue(m_LuaState, -1);
-		lua_setglobal(m_LuaState, "Dusk");
-		lua_pushvalue(m_LuaState, -1);*/
 
 		m_State.set_function("Log", &Log);
 		m_State.set_function("HelloWorld", &HelloWorld);
 		m_State.set_function("Return5", &Return5);
-		m_State.new_usertype<MyTestType>("MyTestType", 
-			sol::constructors<MyTestType()>(),
+		m_State.new_usertype<MyTestType>("MyTestType",
+			sol::constructors<MyTestType(int)>(),
 			"age", &MyTestType::age, 
 			"enabled", &MyTestType::enabled);
 
@@ -298,13 +286,13 @@ int Return5()
 	return 5;
 }
 
-RTTR_REGISTRATION
-{
-	rttr::registration::method("HelloWorld", &HelloWorld);
-	rttr::registration::method("Log", &Log);
-	rttr::registration::method("Return5", &Return5);
-
-	rttr::registration::class_<MyTestType>("MyTestType").constructor().
-		property("enabled", &MyTestType::enabled).
-		property("age", &MyTestType::age);
-}
+//RTTR_REGISTRATION
+//{
+//	rttr::registration::method("HelloWorld", &HelloWorld);
+//	rttr::registration::method("Log", &Log);
+//	rttr::registration::method("Return5", &Return5);
+//
+//	rttr::registration::class_<MyTestType>("MyTestType").constructor().
+//		property("enabled", &MyTestType::enabled).
+//		property("age", &MyTestType::age);
+//}

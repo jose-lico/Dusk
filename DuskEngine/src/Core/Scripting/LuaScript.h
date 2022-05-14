@@ -2,6 +2,8 @@
 
 #include "Core/Resources/Resource.h"
 
+#include "sol/sol.hpp"
+
 namespace DuskEngine
 {
 	class LuaScript : public Resource
@@ -10,8 +12,16 @@ namespace DuskEngine
 		LuaScript(const std::filesystem::path& path, const uuids::uuid& uuid);
 		~LuaScript();
 
-		int GetScriptingID() const { return m_LuaID; }
+		void LoadScript(sol::state& state);
+
+		void OnAwake();
+		void OnUpdate();
+		void OnShutdown();
 	private:
-		int m_LuaID;
+		sol::environment m_Env;
+
+		sol::protected_function m_AwakeFunc;
+		sol::protected_function m_UpdateFunc;
+		sol::protected_function m_ShutdownFunc;
 	};
 }

@@ -10,6 +10,7 @@ namespace DuskEngine
 	class Entity;
 	class EditorCamera;
 	class Shader;
+	class ScriptingEngine;
 
 	class DUSK_EXPORT Scene
 	{
@@ -47,5 +48,6 @@ namespace DuskEngine
 		friend class SceneSerializer;
 
 		Ref<Shader> m_GridShader;
+		ScriptingEngine* m_ScriptingEngine;
 	};
 }

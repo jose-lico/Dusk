@@ -1,28 +1,18 @@
-number = 69
---print("Heeeeeeeeeeeeeeeey")
-
-HelloWorld()
-print("hey")
-print(Return5())
+print("hey print_script")
 local x = Return5()
-x = x * 2 - 1
-print(x)
+local teste = MyTestType.new(1)
 
---dt = DeltaTime()
---print(dt)
---Log(x)
---Log(dt)
---Log("This is a string")
-
-local teste = MyTestType.new()
-print(teste.age)
---print(teste.age)
---local meta = Meta.new()
-
-function OnAwake()
-    print("I am alive")
-end
+-- function OnAwake()
+--     print("1 is alive")
+-- end
 
 function OnUpdate()
-    print(number)
+    teste.age = teste.age + 1
+    x = x + 1
+    print("Updating")
+end
+
+function OnShutdown()
+    print("x in print_script " .. x)
+    print("teste.age in print_script " .. teste.age)
 end

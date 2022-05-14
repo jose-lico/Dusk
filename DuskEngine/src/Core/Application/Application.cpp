@@ -37,7 +37,6 @@ namespace DuskEngine
 
 		ResourceManager::Init();
 		ResourceManager::LoadUUIDs();
-		ScriptingEngine::Init();
 
 		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
 		m_LayerStack = new LayerStack();
@@ -49,7 +48,6 @@ namespace DuskEngine
 	{
 		TRACE("##### SHUTDOWN #####");
 
-		ScriptingEngine::Shutdown();
 		ResourceManager::Shutdown();
 		delete m_RendererContext;
 		delete m_LayerStack; // Deletes m_ImGuiLayer

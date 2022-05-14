@@ -13,6 +13,9 @@ Entities:
         fileID: 0
         uuid: 00000000-0000-0000-0000-000000000000
       material: b5699746-b707-4ba1-8a65-eef8ee4b92c1
+    Script:
+      scripts:
+        print_script2.lua: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f
   - Entity: 12837192831273
     Meta:
       name: Model
