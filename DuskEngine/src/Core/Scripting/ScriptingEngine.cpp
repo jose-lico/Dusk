@@ -4,19 +4,17 @@
 #include "LuaScript.h"
 
 #include "Core/Macros/LOG.h"
+#include "Core/Application/Input.h"
+
 #include "Utils/Profiling/Timer.h"
 
-#include "rttr/registration.h"
-
 void HelloWorld();
-void Log(const rttr::variant& var);
 int Return5();
 
 struct MyTestType
 {
 	int age;
 	bool enabled;
-	//std::string string;
 
 	int id;
 
@@ -28,7 +26,7 @@ struct MyTestType
 
 	~MyTestType()
 	{
-		printf("MyTestType is Dead:%i\n", id);
+		printf("MyTestType is Dead: %i\n", id);
 	};
 };
 
@@ -36,22 +34,9 @@ namespace DuskEngine
 {
 	ScriptingEngine::ScriptingEngine()
 	{
-		//m_State = sol::state();
-		//m_State = new sol::state();
 		m_State.open_libraries(sol::lib::base);
 		RegisterFunctions();
 	}
-
-	ScriptingEngine::~ScriptingEngine()
-	{
-		//delete(m_State);
-	}
-
-
-	int CallGlobalFromLua(lua_State* l);
-	int CreateUserDatum(lua_State* l);
-	int DestroyUserDatum(lua_State* l); 
-	std::string MetaTableName(const rttr::type& t);
 
 	void ScriptingEngine::LoadScript(Ref<LuaScript>& script)
 	{
@@ -75,193 +60,147 @@ namespace DuskEngine
 
 	void ScriptingEngine::RegisterFunctions()
 	{
-		Timer timer("Register Funcs");
+		Timer timer("Register Functions");
 
-		m_State.set_function("Log", &Log);
 		m_State.set_function("HelloWorld", &HelloWorld);
 		m_State.set_function("Return5", &Return5);
+
 		m_State.new_usertype<MyTestType>("MyTestType",
 			sol::constructors<MyTestType(int)>(),
 			"age", &MyTestType::age, 
 			"enabled", &MyTestType::enabled);
 
-		//for(auto& method : rttr::type::get_global_methods())
-		//{
-		//	/*lua_pushstring(m_LuaState, method.get_name().to_string().c_str());
-		//	lua_pushlightuserdata(m_LuaState, (void*)&method);
-		//	lua_pushcclosure(m_LuaState, DuskEngine::CallGlobalFromLua, 1);
-		//	lua_settable(m_LuaState, -3);*/
-		//	m_State.set_function(method.get_name().to_string().c_str(), &method);
-		//	std::string msg = "Registered method " + method.get_name().to_string();
-		//	LOG(msg.c_str())
-		//}
 
-		//for(auto& classToRegister : rttr::type::get_types())
-		//{
-		//	if(classToRegister.get_name().to_string() == "MyTestType")
-		//	//if(classToRegister.is_class())
-		//	{
-		//		LOG(classToRegister.get_name().to_string())
-
-		//		lua_newtable(m_LuaState);
-		//		lua_pushvalue(m_LuaState, -1);
-		//		lua_setglobal(m_LuaState, classToRegister.get_name().to_string().c_str());
-		//		lua_pushvalue(m_LuaState, -1);
-
-		//		lua_pushstring(m_LuaState, classToRegister.get_name().to_string().c_str());
-		//		lua_pushcclosure(m_LuaState, DuskEngine::CreateUserDatum, 1);
-		//		lua_setfield(m_LuaState, -2, "new");
-
-		//		// destructor
-		//		std::string metaTableName = "_mt_" + classToRegister.get_name().to_string();
-		//		//LOG(metaTableName.c_str())
-		//		luaL_newmetatable(m_LuaState, metaTableName.c_str());
-		//		lua_pushstring(m_LuaState, "__gc");
-		//		lua_pushcclosure(m_LuaState, DuskEngine::DestroyUserDatum, 0);
-		//		lua_settable(m_LuaState, -3);
-		//	}
-		//}
+        RegisterInput();
 	}
 
-	int CallGlobalFromLua(lua_State* l)
+	void ScriptingEngine::RegisterInput()
 	{
-		rttr::method& method = *(rttr::method*)(lua_touserdata(l, lua_upvalueindex(1)));
-		
-		int numLuaArgs = lua_gettop(l);
-		size_t numNativeArgs = method.get_parameter_infos().size();
+		sol::table input = m_State["Input"].get_or_create<sol::table>();
 
-		union PassByValue
-		{
-			int intValue;
-			float floatValue;
-			std::string stringValue;
-			rttr::variant variantValue;
-			
-			PassByValue() { new(&variantValue) rttr::variant(); }
-			~PassByValue() {}
-		};
+        input.set_function("IsKeyPressed", &Input::IsKeyPressed);
+        input.set_function("IsMouseButtonPressed", &Input::IsMouseButtonPressed);
 
-		if (numLuaArgs != numNativeArgs)
-		{
-			std::string message = "Wrong number of arguments. \
-				Function Dusk." + method.get_name().to_string() + " takes " + std::to_string(numNativeArgs) + ", not " + std::to_string(numLuaArgs);
-			ERROR(message.c_str())
-		}
+        std::initializer_list<std::pair<sol::string_view, KeyCode>> keyCodes = {
+            { "UNKOWN", Key::UNKNOWN},
+            { "Space", Key::SPACE },
+            { "Apostrophe", Key::APOSTROPHE},
+            { "Comma", Key::COMMA},
+            { "Minus", Key::MINUS},
+            { "Period", Key::PERIOD},
+            { "Slash", Key::SLASH},
+            { "D0", Key::D0},
+            { "D1", Key::D1},
+            { "D2", Key::D2},
+            { "D3", Key::D3},
+            { "D4", Key::D4},
+            { "D5", Key::D5},
+            { "D6", Key::D6},
+            { "D7", Key::D7},
+            { "D8", Key::D8},
+            { "D9", Key::D9},
+            { "Semicolon", Key::SEMICOLON},
+            { "Equal", Key::EQUAL},
+            { "A", Key::A },
+            { "B", Key::B },
+            { "C", Key::C },
+            { "D", Key::D },
+            { "E", Key::E },
+            { "F", Key::F },
+            { "H", Key::G },
+            { "G", Key::H },
+            { "I", Key::I },
+            { "J", Key::J },
+            { "K", Key::K },
+            { "L", Key::L },
+            { "M", Key::M },
+            { "N", Key::N },
+            { "O", Key::O },
+            { "P", Key::P },
+            { "Q", Key::Q },
+            { "R", Key::R },
+            { "S", Key::S },
+            { "T", Key::T },
+            { "U", Key::U },
+            { "V", Key::V },
+            { "W", Key::W },
+            { "X", Key::X },
+            { "Y", Key::Y },
+            { "Z", Key::Z },
+            { "LeftBracket", Key::LEFT_BRACKET },
+            { "Backslash", Key::BACKSLASH },
+            { "RightBracket", Key::RIGHT_BRACKET },
+            { "GraveAccent", Key::GRAVE_ACCENT },
+            { "World_1", Key::WORLD_1 },
+            { "World_2", Key::WORLD_2 },
+            { "Escape", Key::ESCAPE },
+            { "Enter", Key::ENTER },
+            { "Tab", Key::TAB },
+            { "Backspace", Key::BACKSPACE },
+            { "Insert", Key::INSERT },
+            //{ "Delete", Key::DELETE },
+            { "Right", Key::RIGHT },
+            { "Left", Key::LEFT },
+            { "Down", Key::DOWN },
+            { "Up", Key::UP },
+            { "PageUp", Key::PAGE_UP },
+            { "PageDown", Key::PAGE_DOWN },
+            { "Home",Key::HOME },
+            { "End", Key::END },
+            { "CapsLock", Key::CAPS_LOCK },
+            { "ScrollLock", Key::SCROLL_LOCK },
+            { "NumLock", Key::NUM_LOCK},
+            { "PrintScreen", Key::PRINT_SCREEN },
+            { "Pause", Key::PAUSE },
+            { "F1", Key::F1 },
+            { "F2", Key::F2 },
+            { "F3", Key::F3 },
+            { "F4", Key::F4 },
+            { "F5", Key::F5 },
+            { "F6", Key::F6 },
+            { "F7", Key::F7 },
+            { "F8", Key::F8 },
+            { "F9", Key::F9 },
+            { "F10", Key::F10 },
+            { "F11", Key::F11 },
+            { "F12", Key::F12 },
+            { "Keypad0", Key::KP_0 },
+            { "Keypad1", Key::KP_1 },
+            { "Keypad2", Key::KP_2 },
+            { "Keypad3", Key::KP_3 },
+            { "Keypad4", Key::KP_4 },
+            { "Keypad5", Key::KP_5 },
+            { "Keypad6", Key::KP_6 },
+            { "Keypad7", Key::KP_7 },
+            { "Keypad8", Key::KP_8 },
+            { "Keypad9", Key::KP_9 },
+            { "KeypadDecimal", Key::KP_DECIMAL },
+            { "KeypadDivide", Key::KP_DIVIDE },
+            { "KeypadMultiply", Key::KP_MULTIPLY },
+            { "KeypadSubtract", Key::KP_SUBTRACT },
+            { "KeypadAdd", Key::KP_ADD },
+            { "KeypadEnter", Key::KP_ENTER },
+            { "KeypadEqual", Key::KP_EQUAL },
+            { "LeftShift", Key::LEFT_SHIFT },
+            { "LeftControl", Key::LEFT_CONTROL },
+            { "LeftAlt", Key::LEFT_ALT },
+            { "LeftSuper", Key::LEFT_SUPER },
+            { "RightShift", Key::RIGHT_SHIFT },
+            { "RightControl", Key::RIGHT_CONTROL },
+            { "RightAlt", Key::RIGHT_ALT },
+            { "RightSuper", Key::RIGHT_SUPER },
+            { "Menu", Key::MENU }
+        };
 
-		std::vector<PassByValue> pbv(numNativeArgs);
-		std::vector<rttr::argument> args(numNativeArgs);
-		auto nativeAgrsIt = method.get_parameter_infos().begin();
+		m_State.new_enum<KeyCode>("KeyCode", keyCodes);
 
-		for (int i = 0; i < numNativeArgs; i++, nativeAgrsIt++)
-		{
-			const rttr::type nativeType = nativeAgrsIt->get_type();
+        std::initializer_list<std::pair<sol::string_view, MouseCode>> mouseCodes = {
+            { "Left", Mouse::MOUSE_BUTTON_1 },
+            { "Right", Mouse::MOUSE_BUTTON_2 },
+            { "Middle", Mouse::MOUSE_BUTTON_3 },
+        };
 
-			int luaArg = i + 1;
-			int luaType = lua_type(l, luaArg);
-			
-			switch (luaType)
-			{
-			case LUA_TNUMBER:
-				if (nativeType == rttr::type::get<int>())
-				{
-					pbv[i].intValue = (int)lua_tonumber(l, luaArg);
-					args[i] = pbv[i].intValue;
-				}
-				if (nativeType == rttr::type::get<float>())
-				{
-					pbv[i].floatValue = (float)lua_tonumber(l, luaArg);
-					args[i] = pbv[i].floatValue;
-				}
-				if (nativeType == rttr::type::get<rttr::variant>())
-				{
-					pbv[i].variantValue = (rttr::variant)lua_tonumber(l, luaArg);
-					args[i] = pbv[i].variantValue;
-				}
-				break;
-			case LUA_TSTRING:
-				if (nativeType == rttr::type::get<std::string>())
-				{
-					pbv[i].stringValue = (std::string)lua_tostring(l, luaArg);
-					args[i] = pbv[i].stringValue;
-				}
-				if (nativeType == rttr::type::get<rttr::variant>())
-				{
-					pbv[i].variantValue = (rttr::variant)lua_tostring(l, luaArg);
-					args[i] = pbv[i].variantValue;
-				}
-				break;
-			default:
-				LOG("Receiving unknown type from lua")
-					break;
-			}			
-		}
-
-		rttr::variant nativeResult = method.invoke_variadic({}, args);
-		int numberOfReturnValues = 0;
-		if (!nativeResult.is_valid())
-		{
-			std::string s = "Unable to invoke " + method.get_name().to_string();
-			LOG(s.c_str())
-		}
-		else if (!nativeResult.is_type<void>())
-		{
-			if (nativeResult.is_type<int>())
-			{
-				lua_pushnumber(l, nativeResult.get_value<int>());
-				numberOfReturnValues++;
-			}
-			if (nativeResult.is_type<float>())
-			{
-				lua_pushnumber(l, nativeResult.get_value<float>());
-				numberOfReturnValues++;
-			}
-		}
-		return numberOfReturnValues;
-	}
-
-	int CreateUserDatum(lua_State* l)
-	{
-		LOG("Creating native type");
-
-		const char* typeName = (const char*)lua_tostring(l, lua_upvalueindex(1));
-		rttr::type typeToCreate = rttr::type::get_by_name(typeName);
-
-		void* ud = lua_newuserdata(l, sizeof(rttr::variant));
-		new (ud) rttr::variant(typeToCreate.create());
-
-		std::string metaTableName = "_mt_";
-		metaTableName.append(typeName);
-		LOG(metaTableName.c_str())
-		luaL_getmetatable(l, metaTableName.c_str());
-		lua_setmetatable(l, 1);
-
-		lua_newtable(l);
-		lua_setuservalue(l, 1);
-
-		return 1;	//return the userdatum
-	}
-
-	int DestroyUserDatum(lua_State* l)
-	{
-		LOG("Destroying native type")
-		rttr::variant* ud = (rttr::variant*)lua_touserdata(l, -1);
-		ud->~variant();
-		return 0;
-	}
-
-	std::string MetaTableName(const rttr::type& t)
-	{
-		std::string metaTableName;
-		if (t.is_pointer())
-		{
-			metaTableName = t.get_raw_type().get_name().to_string();
-		}
-		else
-		{
-			metaTableName = t.get_name().to_string();
-		}
-		metaTableName.append("_MT_");
-		return metaTableName;
+        m_State.new_enum<MouseCode>("MouseCode", mouseCodes);
 	}
 }
 
@@ -271,28 +210,7 @@ void HelloWorld()
 	LOG("Hello from cpp");
 }
 
-void Log(const rttr::variant& var)
-{
-	if (var.can_convert<float>())
-		LOG(var.convert<float>())
-	else if(var.can_convert<char*>())
-		LOG(var.convert<char*>())
-	else
-		LOG("Cant convert type");
-}
-
 int Return5()
 {
 	return 5;
 }
-
-//RTTR_REGISTRATION
-//{
-//	rttr::registration::method("HelloWorld", &HelloWorld);
-//	rttr::registration::method("Log", &Log);
-//	rttr::registration::method("Return5", &Return5);
-//
-//	rttr::registration::class_<MyTestType>("MyTestType").constructor().
-//		property("enabled", &MyTestType::enabled).
-//		property("age", &MyTestType::age);
-//}

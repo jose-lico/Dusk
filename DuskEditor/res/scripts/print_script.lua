@@ -9,7 +9,10 @@ local teste = MyTestType.new(1)
 function OnUpdate()
     teste.age = teste.age + 1
     x = x + 1
-    print("Updating")
+
+    if(Input.IsMouseButtonPressed(MouseCode.Left)) then
+        print("left mouse pressed")
+    end
 end
 
 function OnShutdown()

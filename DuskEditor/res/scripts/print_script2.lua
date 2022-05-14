@@ -1,6 +1,6 @@
 print("hey print_script_2")
 local x = Return5()
-local teste = MyTestType.new(2)
+local teste = MyTestType.new(2) -- will get garbage collected
 
 
 function OnAwake()
@@ -8,11 +8,13 @@ function OnAwake()
 end
 
 function OnUpdate()
-    --teste.age = teste.age + 2
     x = x + 2
+
+    if(Input.IsKeyPressed(KeyCode.W)) then
+        print("w pressed")
+    end
 end
 
 function OnShutdown()
     print("x in print_script_2 " .. x)
-    --print("teste.age in print_script_2 " .. teste.age)
 end

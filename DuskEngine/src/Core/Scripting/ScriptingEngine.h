@@ -12,7 +12,6 @@ namespace DuskEngine
 	{
 	public:
 		ScriptingEngine();
-		~ScriptingEngine();
 
 		void LoadScript(Ref<LuaScript>& script);
 
@@ -21,6 +20,8 @@ namespace DuskEngine
 		void OnShutdown(Ref<LuaScript>& script);
 	private:
 		void RegisterFunctions();
+
+		void RegisterInput();
 
 		sol::state m_State;
 	};
