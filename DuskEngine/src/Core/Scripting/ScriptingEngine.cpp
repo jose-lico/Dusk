@@ -6,38 +6,70 @@
 #include "Core/Macros/LOG.h"
 #include "Core/Application/Input.h"
 #include "Core/Application/Time.h"
+#include "Core/ECS/Components.h"
+#include "Core/ECS/Entity.h"
 
 #include "Utils/Profiling/Timer.h"
+
+#include "glm/glm.hpp"
+#include "entt/entt.hpp"
 
 void HelloWorld();
 int Return5();
 
-struct MyTestType
-{
-	int age;
-	bool enabled;
-
-	int id;
-
-	MyTestType(int i)
-		:enabled(true), age(5), id(i)
-	{
-		printf("MyTestType Constructed\n");
-	};
-
-	~MyTestType()
-	{
-		printf("MyTestType is Dead: %i\n", id);
-	};
-};
-
 namespace DuskEngine
 {
+    struct MyTestType
+    {
+    public:
+        int age;
+        bool enabled;
+
+        int id;
+
+        MyTestType(int i)
+            :enabled(true), age(10), id(i)
+        {
+            printf("MyTestType Constructed\n");
+        };
+
+        ~MyTestType()
+        {
+            printf("MyTestType is Dead: %i\n", id);
+        };
+
+        void Func()
+        {
+            age++;
+        }
+    };
+
+
 	ScriptingEngine::ScriptingEngine()
 	{
 		m_State.open_libraries(sol::lib::base);
 		RegisterFunctions();
 	}
+
+    void ScriptingEngine::RegisterFunctions()
+    {
+        Timer timer("Register Functions");
+
+        m_State.set_function("HelloWorld", &HelloWorld);
+        m_State.set_function("Return5", &Return5);
+
+        sol::usertype<DuskEngine::MyTestType> teste = m_State.new_usertype<DuskEngine::MyTestType>("MyTestType",
+            sol::constructors<DuskEngine::MyTestType(int)>(),
+            "age", &DuskEngine::MyTestType::age,
+            "enabled", &DuskEngine::MyTestType::enabled);
+
+        teste["Func"] = &DuskEngine::MyTestType::Func;
+
+        RegisterInput();
+        RegisterTime();
+        RegisterMath();
+        RegisterECS();
+    }
 
 	void ScriptingEngine::LoadScript(Ref<LuaScript>& script)
 	{
@@ -59,22 +91,7 @@ namespace DuskEngine
 		script->OnShutdown();
 	}
 
-	void ScriptingEngine::RegisterFunctions()
-	{
-		Timer timer("Register Functions");
-
-		m_State.set_function("HelloWorld", &HelloWorld);
-		m_State.set_function("Return5", &Return5);
-
-		m_State.new_usertype<MyTestType>("MyTestType",
-			sol::constructors<MyTestType(int)>(),
-			"age", &MyTestType::age, 
-			"enabled", &MyTestType::enabled);
-
-
-        RegisterInput();
-        RegisterTime();
-	}
+	
 
 	void ScriptingEngine::RegisterInput()
 	{
@@ -210,6 +227,69 @@ namespace DuskEngine
         sol::table time = m_State["Time"].get_or_create<sol::table>();
 
         time.set_function("GetDeltaTime", &Time::GetDeltaTime);
+    }
+
+    void ScriptingEngine::RegisterMath()
+    {
+        m_State.new_usertype<glm::vec2>(
+            "Vector2",
+            sol::constructors<glm::vec2(float, float)>(),
+            "x", &glm::vec2::x,
+            "y", &glm::vec2::y,
+            sol::meta_function::addition, [](const glm::vec2& a, const glm::vec2& b)
+            { return a + b; },
+            sol::meta_function::multiplication, [](const glm::vec2& a, const glm::vec2& b)
+            { return a * b; },
+            sol::meta_function::subtraction, [](const glm::vec2& a, const glm::vec2& b)
+            { return a - b; },
+            sol::meta_function::division, [](const glm::vec2& a, const glm::vec2& b)
+            { return a / b; },
+            sol::meta_function::equal_to, [](const glm::vec2& a, const glm::vec2& b)
+            { return a == b; });
+
+        auto mult_overloads = sol::overload(
+            [](const glm::vec3& v1, const glm::vec3& v2) -> glm::vec3
+            { return v1 * v2; },
+            [](const glm::vec3& v1, float f) -> glm::vec3
+            { return v1 * f; },
+            [](float f, const glm::vec3& v1) -> glm::vec3
+            { return f * v1; });
+
+        m_State.new_usertype<glm::vec3>(
+            "Vector3",
+            sol::constructors<sol::types<>, sol::types<float, float, float>>(),
+            "x", &glm::vec3::x,
+            "y", &glm::vec3::y,
+            "z", &glm::vec3::z,
+            "Length", &glm::vec3::length,
+            sol::meta_function::addition, [](const glm::vec3& a, const glm::vec3& b)
+            { return a + b; },
+            sol::meta_function::multiplication, mult_overloads,
+            sol::meta_function::subtraction, [](const glm::vec3& a, const glm::vec3& b)
+            { return a - b; },
+            sol::meta_function::unary_minus, [](glm::vec3& v) -> glm::vec3
+            { return -v; },
+            sol::meta_function::division, [](const glm::vec3& a, const glm::vec3& b)
+            { return a / b; },
+            sol::meta_function::equal_to, [](const glm::vec3& a, const glm::vec3& b)
+            { return a == b; },
+            "Normalize", [](glm::vec3& v)
+            { return glm::normalize(v); });
+    }
+    
+    void ScriptingEngine::RegisterECS()
+    {
+        m_State.new_usertype<Transform>("Transform",
+            sol::constructors<Transform()>(),
+            "position", &Transform::position);
+
+        sol::usertype<LuaScript> scriptType = m_State.new_usertype<LuaScript>("LuaScript",
+            sol::constructors<sol::types<std::filesystem::path&, const uuids::uuid&>>());
+       
+        scriptType.set_function("GetEntity", &LuaScript::GetEntity);
+
+        sol::usertype<Entity> entityType = m_State.new_usertype<Entity>("Entity", sol::constructors<sol::types<entt::entity, Scene*>>());
+        entityType.set_function("GetTransform" , &Entity::GetComponent<Transform>);
     }
 }
 

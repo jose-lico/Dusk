@@ -11,7 +11,6 @@
 #include "Core/Renderer/RenderCommand.h"
 #include "Core/Renderer/RendererContext.h"
 #include "Core/Events/EventBase.h"
-#include "Core/Scripting/ScriptingEngine.h"
 
 #include "Utils/Window/WindowManager.h"
 #include "Utils/Window/Window.h"

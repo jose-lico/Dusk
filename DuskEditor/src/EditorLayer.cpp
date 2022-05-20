@@ -73,7 +73,6 @@ namespace DuskEngine
 			ImGui::SetWindowFocus(ICON_FK_EYE "  Viewport");
 			m_GameViewportPanel->SetCamera(m_EditingScene->GetMainCamera());
 			m_HierarchyPanel->SetScene(m_EditingScene);
-			m_PlayingScene->OnShutdownRuntime();
 		};
 
 		auto pause = [&]() {

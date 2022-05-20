@@ -12,5 +12,7 @@ namespace DuskEngine
 		std::vector<Ref<LuaScript>> scripts;
 
 		Script() = default;
+
+		Entity ent;
 	};
 }

@@ -132,10 +132,12 @@ namespace DuskEngine
 				if(scriptData)
 				{
 					auto& s = deserializedEntity.AddComponent<Script>();
+					s.ent = deserializedEntity;
 					auto scripts = scriptData["scripts"];
 					for(auto script : scripts)
 					{
 						s.scripts.push_back(ResourceManager::LoadScript(script.second.as<uuids::uuid>()));
+						s.scripts.back()->m_Ent = deserializedEntity;
 					}
 				}
 			}

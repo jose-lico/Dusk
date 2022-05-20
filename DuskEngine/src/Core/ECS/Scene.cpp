@@ -24,6 +24,7 @@ namespace DuskEngine
 	// maybe reserve ahead of time # of entities present in the base scene
 	Scene::Scene()
 	{
+		LOG("Creating new scene")
 		m_GridShader = Shader::Create("res/editor/shaders/grid.glsl");
 
 		m_ScriptingEngine = new ScriptingEngine();
@@ -31,6 +32,12 @@ namespace DuskEngine
 
 	Scene::~Scene()
 	{
+		auto view = m_Registry.view<Script>();
+		for (auto entity : view)
+		{
+			auto& script = view.get<Script>(entity);
+			script.scripts.resize(0);
+		}
 		delete(m_ScriptingEngine);
 	}
 

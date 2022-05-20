@@ -1,5 +1,5 @@
 print("hey print_script")
-local x = Return5()
+--local x = Return5()
 local teste = MyTestType.new(1)
 
 -- function OnAwake()
@@ -7,15 +7,15 @@ local teste = MyTestType.new(1)
 -- end
 
 function OnUpdate()
-    teste.age = teste.age + 1
-    x = x + 1
+    --teste.age = teste.age + 1
+    --x = x + 1
 
-    if(Input.IsMouseButtonPressed(MouseCode.Left)) then
-        print("left mouse pressed")
-    end
+    --if(Input.IsMouseButtonPressed(MouseCode.Left)) then
+    --    print("left mouse pressed")
+    --end
 end
 
 function OnShutdown()
-    print("x in print_script " .. x)
-    print("teste.age in print_script " .. teste.age)
+    --print("x in print_script " .. x)
+    --print("teste.age in print_script " .. teste.age)
 end

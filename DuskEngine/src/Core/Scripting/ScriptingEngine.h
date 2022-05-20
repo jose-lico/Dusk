@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Utils/Memory/Memory.h"
-
 #include "sol/sol.hpp"
 
 namespace DuskEngine
@@ -12,6 +11,7 @@ namespace DuskEngine
 	{
 	public:
 		ScriptingEngine();
+		~ScriptingEngine() = default;
 
 		void LoadScript(Ref<LuaScript>& script);
 
@@ -23,6 +23,8 @@ namespace DuskEngine
 
 		void RegisterInput();
 		void RegisterTime();
+		void RegisterMath();
+		void RegisterECS();
 
 		sol::state m_State;
 	};

@@ -13,9 +13,6 @@ Entities:
         fileID: 0
         uuid: 00000000-0000-0000-0000-000000000000
       material: b5699746-b707-4ba1-8a65-eef8ee4b92c1
-    Script:
-      scripts:
-        print_script2.lua: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f
   - Entity: 12837192831273
     Meta:
       name: Model
@@ -29,6 +26,9 @@ Entities:
         fileID: 2
         uuid: 24b41d57-d4b0-41a5-a473-803306755fe4
       material: 2fbf0300-2732-492a-8672-032e010d8e72
+    Script:
+      scripts:
+        move_script.lua: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f
   - Entity: 12837192831273
     Meta:
       name: Directional Light
@@ -82,8 +82,8 @@ Entities:
       name: Main Camera
       enabled: true
     Transform:
-      position: [-3.39936185, 1.37443852, 3.71903539]
-      rotation: [-0.248529553, -0.896788836, 0]
+      position: [1.99699998, 2.5940001, 6.57999992]
+      rotation: [-0.34906584, -1.57079637, 0]
       scale: [1, 1, 1]
     Camera:
       main: true
@@ -113,6 +113,3 @@ Entities:
         fileID: 0
         uuid: 00000000-0000-0000-0000-000000000000
       material: e5389bcf-ca32-47ae-9cc0-a296c257a3fc
-    Script:
-      scripts:
-        print_script.lua: c0033a79-90a6-4e91-8c87-63f67f3ea143
