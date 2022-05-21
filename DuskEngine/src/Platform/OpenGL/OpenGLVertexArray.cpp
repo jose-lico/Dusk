@@ -26,7 +26,6 @@ namespace DuskEngine
 		return 0;
 	}
 
-
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
 		glGenVertexArrays(1, &m_ID);
@@ -62,7 +61,8 @@ namespace DuskEngine
 		unsigned int offset = 0;
 		for (unsigned int i = 0; i < elements.size(); i++) {
 			const auto& element = elements[i];
-			glVertexAttribPointer(i, element.count, ShaderDataTypeToOpenGLBaseType(element.type), element.normalized, vb->GetLayout()->GetStride(), (const void*)offset);
+			glVertexAttribPointer(i, element.count, ShaderDataTypeToOpenGLBaseType(element.type), element.normalized, 
+				vb->GetLayout()->GetStride(), (void*)(size_t)offset);
 			offset += element.count * ShaderDataTypeSize(element.type);
 			glEnableVertexAttribArray(i);
 		}

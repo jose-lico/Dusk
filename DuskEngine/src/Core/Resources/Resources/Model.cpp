@@ -99,6 +99,6 @@ namespace DuskEngine
 				indices.push_back(face.mIndices[j]);
 		}
 
-		return MakeRef<Mesh>(vertices, &indices[0], indices.size());
+		return MakeRef<Mesh>(vertices, &indices[0], (unsigned int)indices.size());
 	}
 }

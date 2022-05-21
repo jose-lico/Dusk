@@ -10,6 +10,7 @@
 #include "Core/Renderer/Resources/VertexArray.h"
 #include "Core/Resources/Resources/Shader.h"
 #include "Core/Scripting/ScriptingEngine.h"
+#include "Core/Resources/AssetHandler.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/quaternion.hpp"
@@ -28,6 +29,7 @@ namespace DuskEngine
 		m_GridShader = Shader::Create("res/editor/shaders/grid.glsl");
 
 		m_ScriptingEngine = new ScriptingEngine();
+		m_AssetHandler = MakeUnique<AssetHandler>();
 	}
 
 	Scene::~Scene()
@@ -187,7 +189,7 @@ namespace DuskEngine
 				mesh.material->m_Shader->SetUniformInt("e_DirectionalLightsCount", dirLightIndex);
 				mesh.material->m_Shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
 
-				Renderer::Submit(mesh.mesh);
+				Renderer::Submit(m_AssetHandler->MeshPool(mesh.mesh));
 			}
 
 			glm::mat4 viewMatrix = camera.camera.viewMatrix;
@@ -344,7 +346,8 @@ namespace DuskEngine
 				mesh.material->m_Shader->SetUniformInt("e_DirectionalLightsCount", dirLightIndex);
 				mesh.material->m_Shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
 
-				Renderer::Submit(mesh.mesh);
+				//Renderer::Submit(mesh.mesh);
+				Renderer::Submit(m_AssetHandler->MeshPool(mesh.mesh));
 			}
 
 			Renderer::EndScene();

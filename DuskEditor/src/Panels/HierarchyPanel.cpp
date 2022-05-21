@@ -88,7 +88,7 @@ namespace DuskEngine
 				lightTransform.scale = { 0.1f, 0.1f, 0.1f };
 				auto mesh = PrimitiveMesh::Cube();
 				auto material = ResourceManager::LoadMaterial(ResourceManager::GetUUID("res/materials/lightMaterial.material"));
-				light.AddComponent<MeshRenderer>(mesh, material);
+				//light.AddComponent<MeshRenderer>(mesh, material);
 
 				// select currently created entity
 			}

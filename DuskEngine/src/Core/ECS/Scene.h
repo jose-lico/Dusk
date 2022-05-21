@@ -11,6 +11,7 @@ namespace DuskEngine
 	class EditorCamera;
 	class Shader;
 	class ScriptingEngine;
+	class AssetHandler;
 
 	class DUSK_EXPORT Scene
 	{
@@ -49,5 +50,7 @@ namespace DuskEngine
 
 		Ref<Shader> m_GridShader;
 		ScriptingEngine* m_ScriptingEngine;
+
+		UniqueRef<AssetHandler> m_AssetHandler;
 	};
 }

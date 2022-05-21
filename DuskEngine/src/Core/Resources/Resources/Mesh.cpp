@@ -39,7 +39,7 @@ namespace DuskEngine
 		m_VA->Bind();
 
 		std::shared_ptr<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(&vertices[0], vertices.size() * sizeof(Vertex)));
+		vertexBuffer.reset(VertexBuffer::Create(&vertices[0], (unsigned int)vertices.size() * sizeof(Vertex)));
 
 		std::shared_ptr<IndexBuffer> indexBuffer;
 		indexBuffer.reset(IndexBuffer::Create(indices, count));

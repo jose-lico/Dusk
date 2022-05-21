@@ -55,14 +55,14 @@ namespace DuskEngine
 						ImGui::CloseCurrentPopup();
 					}
 
-					if(ImGui::MenuItem("Mesh Renderer"))
-					{
-						auto& mesh = (*m_SelectedEntities)[0].AddComponent<MeshRenderer>();
-						mesh.mesh = PrimitiveMesh::Quad();
-						// This will later be changed to a default material
-						mesh.material = ResourceManager::LoadMaterial(ResourceManager::GetUUID("res/materials/modelMaterial.material"));
-						ImGui::CloseCurrentPopup();
-					}
+					//if(ImGui::MenuItem("Mesh Renderer"))
+					//{
+					//	auto& mesh = (*m_SelectedEntities)[0].AddComponent<MeshRenderer>();
+					//	mesh.mesh = PrimitiveMesh::Quad();
+					//	// This will later be changed to a default material
+					//	mesh.material = ResourceManager::LoadMaterial(ResourceManager::GetUUID("res/materials/modelMaterial.material"));
+					//	ImGui::CloseCurrentPopup();
+					//}
 
 					if (ImGui::BeginMenu("Scripts"))
 					{
@@ -317,71 +317,71 @@ namespace DuskEngine
 	{
 		if (meshes.size() == 1)
 		{
-			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
-			std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
-			int modelIndex = 0;
-			uuids::uuid modelID = meshes[0]->mesh->GetUUID();
+			//// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
+			//std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
+			//int modelIndex = 0;
+			//uuids::uuid modelID = meshes[0]->mesh;
 
-			for (unsigned int i = 0; i < ResourceManager::ModelList.size(); i++)
-			{
-				modelList.push_back(ResourceManager::ModelList[i]->GetName());
-				if (ResourceManager::ModelList[i]->GetUUID() == modelID)
-					modelIndex = i + 2;
-			}
+			//for (unsigned int i = 0; i < ResourceManager::ModelList.size(); i++)
+			//{
+			//	modelList.push_back(ResourceManager::ModelList[i]->GetName());
+			//	if (ResourceManager::ModelList[i]->GetUUID() == modelID)
+			//		modelIndex = i + 2;
+			//}
 
-			if(!modelIndex)
-			{
-				switch (meshes[0]->mesh->GetType())
-				{
-				case MeshType::Quad:
-					modelIndex = 0;
-					break;
-				case MeshType::Cube:
-					modelIndex = 1;
-					break;
-				default:
-					break;
-				}
-			}
+			//if(!modelIndex)
+			//{
+			//	switch (meshes[0]->mesh->GetType())
+			//	{
+			//	case MeshType::Quad:
+			//		modelIndex = 0;
+			//		break;
+			//	case MeshType::Cube:
+			//		modelIndex = 1;
+			//		break;
+			//	default:
+			//		break;
+			//	}
+			//}
 
-			const char* model_label = modelList[modelIndex].c_str();
-			if (ImGui::BeginCombo("Mesh", model_label))
-			{
-				for (int n = 0; n < modelList.size(); n++)
-				{
-					const bool is_selected = (modelIndex == n);
-					if (ImGui::Selectable(modelList[n].c_str(), is_selected))
-					{
-						if (n != modelIndex)
-						{
-							modelIndex = n;
-							if(modelIndex <= 1)
-							{
-								switch (modelIndex)
-								{
-								case 0:
-									meshes[0]->mesh = PrimitiveMesh::Quad();
-									break;
-								case 1:
-									meshes[0]->mesh = PrimitiveMesh::Cube();
-									break;
-								default:
-									break;
-								}
-							}
-							else
-							{
-								auto mesh = ResourceManager::LoadModel(ResourceManager::GetUUID(ResourceManager::ModelList[modelIndex - 2]->GetPath()));
-								meshes[0]->mesh = mesh;
-							}
-						}
-					}
+			//const char* model_label = modelList[modelIndex].c_str();
+			//if (ImGui::BeginCombo("Mesh", model_label))
+			//{
+			//	for (int n = 0; n < modelList.size(); n++)
+			//	{
+			//		const bool is_selected = (modelIndex == n);
+			//		if (ImGui::Selectable(modelList[n].c_str(), is_selected))
+			//		{
+			//			if (n != modelIndex)
+			//			{
+			//				modelIndex = n;
+			//				if(modelIndex <= 1)
+			//				{
+			//					switch (modelIndex)
+			//					{
+			//					case 0:
+			//						meshes[0]->mesh = PrimitiveMesh::Quad();
+			//						break;
+			//					case 1:
+			//						meshes[0]->mesh = PrimitiveMesh::Cube();
+			//						break;
+			//					default:
+			//						break;
+			//					}
+			//				}
+			//				else
+			//				{
+			//					auto mesh = ResourceManager::LoadModel(ResourceManager::GetUUID(ResourceManager::ModelList[modelIndex - 2]->GetPath()));
+			//					meshes[0]->mesh = mesh;
+			//				}
+			//			}
+			//		}
 
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();
-				}
-				ImGui::EndCombo();
-			}
+			//		if (is_selected)
+			//			ImGui::SetItemDefaultFocus();
+			//	}
+			//	ImGui::EndCombo();
+			//}
 
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> materialList; // Later add default materials

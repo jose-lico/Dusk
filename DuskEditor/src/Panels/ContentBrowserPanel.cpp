@@ -122,7 +122,7 @@ namespace DuskEngine
 		{
 			if (ImGui::MenuItem("Create Material"))
 			{
-				std::string path = m_CurrentDirectory.string() + "/newMaterial.material";
+				std::string path = m_CurrentDirectory.string() + "/newMaterial2.material";
 				Material::CreateDefaultMaterial(path);
 				CreateDirectoryItems();
 				ResourceManager::CreateResource(path);

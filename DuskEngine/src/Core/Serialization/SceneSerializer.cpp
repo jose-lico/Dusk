@@ -6,6 +6,7 @@
 #include "Core/ECS/Components.h"
 #include "Core/Resources/ResourceManager.h"
 #include "Core/ECS/ComponentRegistry.cpp"
+#include "Core/Resources/AssetHandler.h"
 
 #include "Utils/Rendering/PrimitiveMesh.h"
 #include "Utils/Serialization/Yaml.h"
@@ -112,11 +113,28 @@ namespace DuskEngine
 					int type = mesh["fileID"].as<int>();
 
 					if(type == 0)
-						mr.mesh = PrimitiveMesh::Quad();
+					{
+						// temp
+						auto str = "47183823-2574-4bfd-b411-99ed177d3e43";
+						uuids::uuid id = uuids::uuid::from_string(str).value();
+						scene->m_AssetHandler->AddToMeshPool(id, PrimitiveMesh::Quad());
+
+						mr.mesh = id;
+					}
 					if (type == 1)
-						mr.mesh = PrimitiveMesh::Cube();
+					{
+						// temp
+						auto str = "47183823-2574-4bfd-b411-99ed177d3e44";
+						uuids::uuid id = uuids::uuid::from_string(str).value();
+						scene->m_AssetHandler->AddToMeshPool(id, PrimitiveMesh::Cube());
+
+						mr.mesh = id;
+					}
 					if (type == 2)
-						mr.mesh = ResourceManager::LoadModel(mesh["uuid"].as<uuids::uuid>());
+					{
+						mr.mesh = mesh["uuid"].as<uuids::uuid>();
+						scene->m_AssetHandler->AddToMeshPool(mesh["uuid"].as<uuids::uuid>());
+					}
 				}
 
 				auto light = entity["Light"];
