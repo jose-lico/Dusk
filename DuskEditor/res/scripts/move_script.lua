@@ -12,12 +12,13 @@ function OnAwake()
     print(object.age) 
     object:Func()
     print(object.age)
-
+    
     transform = LuaComponent:GetEntity():GetTransform();
 end
 
 function OnUpdate()
     local input = Vector2.new(0,0)
+    
     if (Input.IsKeyPressed(KeyCode.D)) then input.x = 1
     elseif (Input.IsKeyPressed(KeyCode.A)) then input.x = -1 end
 
@@ -25,9 +26,8 @@ function OnUpdate()
     elseif (Input.IsKeyPressed(KeyCode.S)) then input.y = -1 end
 
     local movement = Vector3.new(input.x, 0, input.y)
-
-    transform.position = transform.position + movement * speed * Time.GetDeltaTime()
     
+    transform.position = transform.position + movement * speed * Time.GetDeltaTime()
 end
 
 function OnShutdown()

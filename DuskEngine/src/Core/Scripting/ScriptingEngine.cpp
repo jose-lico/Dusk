@@ -226,7 +226,7 @@ namespace DuskEngine
     {
         sol::table time = m_State["Time"].get_or_create<sol::table>();
 
-        time.set_function("GetDeltaTime", &Time::GetDeltaTime);
+        time.set("GetDeltaTime", sol::property(&Time::GetDeltaTime));
     }
 
     void ScriptingEngine::RegisterMath()

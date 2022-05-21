@@ -3,16 +3,21 @@
 
 #include "GLFW/glfw3.h"
 
-namespace DuskEngine
+namespace DuskEngine::Time
 {
-	float Time::m_Time = 0.0f;
-	float Time::m_DeltaTime = 0.0f;
-	float Time::m_LastFrame = 0.0f;
+	float DeltaTime = 0;
+	float Time = 0;
+	float LastFrame = 0;
 
 	void Time::Update()
 	{
 		float currentFrame = (float)glfwGetTime();
-		m_DeltaTime = currentFrame - m_LastFrame;
-		m_LastFrame = currentFrame;
+		DeltaTime = currentFrame - LastFrame;
+		LastFrame = currentFrame;
+	}
+
+	float GetDeltaTime()
+	{
+		return DeltaTime;
 	}
 }
