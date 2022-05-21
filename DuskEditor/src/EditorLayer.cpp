@@ -4,7 +4,7 @@
 #include "Core/Serialization/SceneSerializer.h"
 #include "Core/ECS/EditorCamera.h"
 #include "Core/Scripting/LuaScript.h"
-#include "Core/Resources/ResourceManager.h"
+#include "Core/Assets/AssetManager.h"
 
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/string_cast.hpp"

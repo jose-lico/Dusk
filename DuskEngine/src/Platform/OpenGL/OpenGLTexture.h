@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Resources/Resources/Texture.h"
+#include "Core/Assets/Assets/Texture.h"
 
 namespace DuskEngine
 {

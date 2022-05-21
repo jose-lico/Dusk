@@ -7,7 +7,7 @@
 #include "Core/Macros/BIND_EVENT_FN.h"
 #include "Core/Macros/LOG.h"
 
-#include "Core/Resources/ResourceManager.h"
+#include "Core/Assets/AssetManager.h"
 #include "Core/Renderer/RenderCommand.h"
 #include "Core/Renderer/RendererContext.h"
 #include "Core/Events/EventBase.h"
@@ -34,8 +34,8 @@ namespace DuskEngine
 		
 		RenderCommand::Init();
 
-		ResourceManager::Init();
-		ResourceManager::LoadUUIDs();
+		AssetManager::Init();
+		AssetManager::LoadUUIDs();
 
 		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
 		m_LayerStack = new LayerStack();
@@ -47,7 +47,7 @@ namespace DuskEngine
 	{
 		TRACE("##### SHUTDOWN #####");
 
-		ResourceManager::Shutdown();
+		AssetManager::Shutdown();
 		delete m_RendererContext;
 		delete m_LayerStack; // Deletes m_ImGuiLayer
 		delete m_WindowManager;

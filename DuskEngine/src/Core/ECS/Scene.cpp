@@ -8,9 +8,9 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
 #include "Core/Renderer/Resources/VertexArray.h"
-#include "Core/Resources/Resources/Shader.h"
+#include "Core/Assets/Assets/Shader.h"
 #include "Core/Scripting/ScriptingEngine.h"
-#include "Core/Resources/AssetHandler.h"
+#include "Core/Assets/AssetHandler.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/quaternion.hpp"

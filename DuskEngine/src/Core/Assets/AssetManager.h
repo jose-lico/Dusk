@@ -12,7 +12,7 @@ namespace uuids
 
 namespace DuskEngine
 {
-	class Resource;
+	class Asset;
 	class Material;
 	class Shader;
 	class Texture;
@@ -25,7 +25,7 @@ namespace DuskEngine
 		}
 	};
 
-	class ResourceManager
+	class AssetManager
 	{
 	public:
 		static void Init();
@@ -45,10 +45,10 @@ namespace DuskEngine
 		static Ref<LuaScript> LoadScript(const uuids::uuid& uuid);
 
 		// Resource Lists
-		static std::vector<Resource*> ShaderList;
-		static std::vector<Resource*> ModelList;
-		static std::vector<Resource*> MaterialList;
-		static std::vector<Resource*> ScriptsList;
+		static std::vector<Asset*> ShaderList;
+		static std::vector<Asset*> ModelList;
+		static std::vector<Asset*> MaterialList;
+		static std::vector<Asset*> ScriptsList;
 	private:
 		static std::filesystem::path m_RootDirectory;
 		static std::filesystem::path m_CurrentDirectory;

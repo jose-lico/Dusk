@@ -1,14 +1,14 @@
 #pragma once
 #include "Core/Macros/DUSK_API.h"
 
-#include "Core/Resources/Resource.h"
+#include "Core/Assets/Asset.h"
 #include "Utils/Memory/Memory.h"
 
 #include <string>
 
 namespace DuskEngine
 {
-	class DUSK_EXPORT Texture : public Resource
+	class DUSK_EXPORT Texture : public Asset
 	{
 	public:
 		static Ref<Texture> Create(const std::string& path, const std::string& name = "");
@@ -21,7 +21,7 @@ namespace DuskEngine
 
 		virtual void Bind(unsigned int slot = 0) const = 0;
 
-		friend class ResourceManager;
+		friend class AssetManager;
 		friend class InspectorPanel;
 	};
 }

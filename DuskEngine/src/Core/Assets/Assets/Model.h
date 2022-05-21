@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Resources/Resource.h"
+#include "Core/Assets/Asset.h"
 
 #include "Utils/Memory/Memory.h"
 
@@ -14,7 +14,7 @@ namespace DuskEngine
 {
 	class Mesh;
 	
-	class Model : public Resource
+	class Model : public Asset
 	{
 	public:
 		//Model(const std::string& path); not used anymore, keeping just in case

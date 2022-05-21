@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Core/Resources/Resource.h"
+#include "Core/Assets/Asset.h"
 #include "Core/ECS/Entity.h"
 
 #include "sol/sol.hpp"
 
 namespace DuskEngine
 {
-	class LuaScript : public Resource
+	class LuaScript : public Asset
 	{
 	public:
 		LuaScript(const std::filesystem::path& path, const uuids::uuid& uuid);

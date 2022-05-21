@@ -5,7 +5,7 @@
 #include "Shader.h"
 
 #include "Core/Macros/LOG.h"
-#include "Core/Resources/ResourceManager.h"
+#include "Core/Assets/AssetManager.h"
 #include "Utils/Serialization/Yaml.h"
 
 namespace DuskEngine
@@ -82,7 +82,7 @@ namespace DuskEngine
 				uniform.Data = MakeRef<glm::vec3>(1.0f);
 				break;
 			case UniformType::Texture:
-				uniform.Data = Texture::Create("res/textures/white.png", ResourceManager::GetUUID("res/textures/white.png"));
+				uniform.Data = Texture::Create("res/textures/white.png", AssetManager::GetUUID("res/textures/white.png"));
 				break;
 			}
 		}
@@ -163,7 +163,7 @@ namespace DuskEngine
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Material" << YAML::Value << "newMaterial";
-		out << YAML::Key << "Shader" << YAML::Value << ResourceManager::GetUUID("res/shaders/simpleColor.glsl");
+		out << YAML::Key << "Shader" << YAML::Value << AssetManager::GetUUID("res/shaders/simpleColor.glsl");
 		out << YAML::Key << "Uniforms";
 		out << YAML::BeginMap;
 		out << YAML::Key << "Color" << YAML::Value << glm::vec3(1.0);

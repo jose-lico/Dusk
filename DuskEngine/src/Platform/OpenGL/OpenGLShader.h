@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Resources/Resources/Shader.h"
+#include "Core/Assets/Assets/Shader.h"
 
 #include <unordered_map>
 

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "PrimitiveMesh.h"
 
-#include "Core/Resources/Resources/Mesh.h"
+#include "Core/Assets/Assets/Mesh.h"
 
 namespace DuskEngine
 {

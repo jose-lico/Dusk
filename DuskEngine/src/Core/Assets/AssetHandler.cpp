@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "AssetHandler.h"
 
-#include "ResourceManager.h"
+#include "AssetManager.h"
 
 namespace DuskEngine
 {
@@ -12,7 +12,7 @@ namespace DuskEngine
 
 	void AssetHandler::AddToMeshPool(const uuids::uuid& uuid)
 	{
-		m_MeshPool.insert({ uuid, ResourceManager::LoadModel(uuid) });
+		m_MeshPool.insert({ uuid, AssetManager::LoadModel(uuid) });
 	}
 
 	void AssetHandler::AddToMeshPool(const uuids::uuid& uuid, Ref<Mesh>& mesh)

@@ -1,9 +1,9 @@
 #include "ContentBrowserPanel.h"
 
 #include "Core/Macros/LOG.h"
-#include "Core/Resources/Resources/Texture.h"
-#include "Core/Resources/ResourceManager.h"
-#include "Core/Resources/Resources/Material.h"
+#include "Core/Assets/Assets/Texture.h"
+#include "Core/Assets/Assets/Material.h"
+#include "Core/Assets/AssetManager.h"
 
 #include "IconsForkAwesome.h"
 
@@ -125,7 +125,7 @@ namespace DuskEngine
 				std::string path = m_CurrentDirectory.string() + "/newMaterial2.material";
 				Material::CreateDefaultMaterial(path);
 				CreateDirectoryItems();
-				ResourceManager::CreateResource(path);
+				AssetManager::CreateResource(path);
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -147,7 +147,7 @@ namespace DuskEngine
 
 	void ContentBrowserPanel::CreateDirectoryResources()
 	{
-		ResourceManager::CreateUUIDs(); // Will be reworked later...
+		AssetManager::CreateUUIDs(); // Will be reworked later...
 		m_Icons.resize(0);
 
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
@@ -174,7 +174,7 @@ namespace DuskEngine
 			if(!std::filesystem::exists(targetPath))
 			{
 				std::filesystem::copy(paths[i], *g_currentDir);
-				ResourceManager::CreateResource(targetPath);
+				AssetManager::CreateResource(targetPath);
 			}
 			else
 			{

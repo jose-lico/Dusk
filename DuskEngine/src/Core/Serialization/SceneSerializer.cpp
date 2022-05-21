@@ -4,9 +4,9 @@
 #include "Core/Macros/LOG.h"
 #include "Core/ECS/Entity.h"
 #include "Core/ECS/Components.h"
-#include "Core/Resources/ResourceManager.h"
+#include "Core/Assets/AssetManager.h"
 #include "Core/ECS/ComponentRegistry.cpp"
-#include "Core/Resources/AssetHandler.h"
+#include "Core/Assets/AssetHandler.h"
 
 #include "Utils/Rendering/PrimitiveMesh.h"
 #include "Utils/Serialization/Yaml.h"
@@ -106,7 +106,7 @@ namespace DuskEngine
 				{
 					auto& mr = deserializedEntity.AddComponent<MeshRenderer>();
 
-					mr.material = ResourceManager::LoadMaterial(meshRenderer["material"].as<uuids::uuid>());
+					mr.material = AssetManager::LoadMaterial(meshRenderer["material"].as<uuids::uuid>());
 
 					auto mesh = meshRenderer["mesh"];
 
@@ -154,7 +154,7 @@ namespace DuskEngine
 					auto scripts = scriptData["scripts"];
 					for(auto script : scripts)
 					{
-						s.scripts.push_back(ResourceManager::LoadScript(script.second.as<uuids::uuid>()));
+						s.scripts.push_back(AssetManager::LoadScript(script.second.as<uuids::uuid>()));
 						s.scripts.back()->m_Ent = deserializedEntity;
 					}
 				}

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Toolbar.h"
 
-#include "Core/Resources/Resources/Texture.h"
+#include "Core/Assets/Assets/Texture.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"

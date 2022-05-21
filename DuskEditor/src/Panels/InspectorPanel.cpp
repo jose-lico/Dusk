@@ -1,8 +1,8 @@
 #include "InspectorPanel.h"
 
-#include "Core/Resources/Resources/Shader.h"
-#include "Core/Resources/Resources/Texture.h"
-#include "Core/Resources/ResourceManager.h"
+#include "Core/Assets/Assets/Shader.h"
+#include "Core/Assets/Assets/Texture.h"
+#include "Core/Assets/AssetManager.h"
 #include "Core/ECS/Entity.h"
 
 #include "Utils/ImGuiUtils.h"
@@ -66,7 +66,7 @@ namespace DuskEngine
 
 					if (ImGui::BeginMenu("Scripts"))
 					{
-						for (auto scriptFile : ResourceManager::ScriptsList)
+						for (auto scriptFile : AssetManager::ScriptsList)
 						{
 							if(ImGui::MenuItem(scriptFile->GetName().c_str()))
 							{
@@ -82,7 +82,7 @@ namespace DuskEngine
 								}
 
 								if (canAdd)
-									script.scripts.push_back(ResourceManager::LoadScript(scriptFile->GetUUID()));
+									script.scripts.push_back(AssetManager::LoadScript(scriptFile->GetUUID()));
 							}
 						}
 						ImGui::EndMenu();
@@ -388,10 +388,10 @@ namespace DuskEngine
 			int materialIndex = 0;
 			uuids::uuid materialID = meshes[0]->material->GetUUID();
 
-			for (unsigned int i = 0; i < ResourceManager::MaterialList.size(); i++)
+			for (unsigned int i = 0; i < AssetManager::MaterialList.size(); i++)
 			{
-				materialList.push_back(ResourceManager::MaterialList[i]->GetName());
-				if (ResourceManager::MaterialList[i]->GetUUID() == materialID)
+				materialList.push_back(AssetManager::MaterialList[i]->GetName());
+				if (AssetManager::MaterialList[i]->GetUUID() == materialID)
 					materialIndex = i;
 			}
 
@@ -407,7 +407,7 @@ namespace DuskEngine
 						{
 							materialIndex = n;
 							std::string s = materialList[n].c_str();
-							auto material = ResourceManager::LoadMaterial(ResourceManager::GetUUID(ResourceManager::MaterialList[materialIndex]->GetPath()));
+							auto material = AssetManager::LoadMaterial(AssetManager::GetUUID(AssetManager::MaterialList[materialIndex]->GetPath()));
 							meshes[0]->material = material;
 						}
 					}
@@ -429,10 +429,10 @@ namespace DuskEngine
 			int shaderIndex = 0;
 			uuids::uuid shaderID = meshes[0]->material->GetShaderUUID();
 
-			for (unsigned int i = 0; i < ResourceManager::ShaderList.size(); i++)
+			for (unsigned int i = 0; i < AssetManager::ShaderList.size(); i++)
 			{
-				shaderList.push_back(ResourceManager::ShaderList[i]->GetName());
-				if (ResourceManager::ShaderList[i]->GetUUID() == shaderID)
+				shaderList.push_back(AssetManager::ShaderList[i]->GetName());
+				if (AssetManager::ShaderList[i]->GetUUID() == shaderID)
 					shaderIndex = i;
 			}
 
@@ -448,7 +448,7 @@ namespace DuskEngine
 						{
 							shaderIndex = n;
 							std::string s = shaderList[n].c_str();
-							auto shader = ResourceManager::LoadShader(ResourceManager::GetUUID(ResourceManager::ShaderList[shaderIndex]->GetPath()));
+							auto shader = AssetManager::LoadShader(AssetManager::GetUUID(AssetManager::ShaderList[shaderIndex]->GetPath()));
 							meshes[0]->material->SetShader(shader);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 						}
@@ -483,7 +483,7 @@ namespace DuskEngine
 							auto texture = Texture::Create(path);
 							std::string str = path;
 							//std::replace(str.begin(), str.end(), '\\', '/');
-							texture->m_UUID = ResourceManager::GetUUID(str);
+							texture->m_UUID = AssetManager::GetUUID(str);
 							meshes[0]->material->SetTexture(uniform.Name, texture);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 							free(path);
@@ -500,7 +500,7 @@ namespace DuskEngine
 							std::wstring ws(data);
 							std::string path(ws.begin(), ws.end());
 
-							auto texture = Texture::Create(path, ResourceManager::GetUUID(ws));
+							auto texture = Texture::Create(path, AssetManager::GetUUID(ws));
 							meshes[0]->material->SetTexture(uniform.Name, texture);
 							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
 						}

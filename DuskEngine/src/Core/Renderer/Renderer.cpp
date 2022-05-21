@@ -4,7 +4,7 @@
 #include "RenderCommand.h"
 
 #include "Core/Macros/LOG.h"
-#include "Core/Resources/Resources/Mesh.h"
+#include "Core/Assets/Assets/Mesh.h"
 #include "Resources/VertexArray.h"
 
 namespace DuskEngine {

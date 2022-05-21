@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Core/Resources/Resources/Material.h"
-#include "Core/Resources/Resources/Shader.h"
-#include "Core/Resources/Resources/Texture.h"
-#include "Core/Resources/Resources/Mesh.h"
+#include "Core/Assets/Assets/Material.h"
+#include "Core/Assets/Assets/Shader.h"
+#include "Core/Assets/Assets/Texture.h"
+#include "Core/Assets/Assets/Mesh.h"
 #include "Core/ECS/Components/Light.h"
 #include "Core/Scripting/LuaScript.h"
 

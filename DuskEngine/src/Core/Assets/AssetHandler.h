@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Resources/Mesh.h"
+#include "Assets/Mesh.h"
 
 #include <unordered_map>
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Resources/Resources/Mesh.h"
-#include "Core/Resources/Resources/Material.h"
+#include "Core/Assets/Assets/Mesh.h"
+#include "Core/Assets/Assets/Material.h"
 #include "uuid.h"
 
 namespace DuskEngine
