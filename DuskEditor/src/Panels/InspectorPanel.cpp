@@ -3,6 +3,7 @@
 #include "Core/Assets/Assets/Shader.h"
 #include "Core/Assets/Assets/Texture.h"
 #include "Core/Assets/AssetManager.h"
+#include "Core/Assets/AssetHandler.h"
 #include "Core/ECS/Entity.h"
 
 #include "Utils/ImGuiUtils.h"
@@ -18,7 +19,8 @@ namespace DuskEngine
 	template<typename T, typename UIFunction>
 	static void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, UIFunction function);
 
-	InspectorPanel::InspectorPanel()
+	InspectorPanel::InspectorPanel(Ref<AssetHandler>& assetHandler)
+		:m_AssetHandler(assetHandler)
 	{
 	}
 
@@ -96,7 +98,7 @@ namespace DuskEngine
 			DrawComponent<Transform>(ICON_FK_CUBE "  Transform", *m_SelectedEntities, TransformInspector);
 			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
 			DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
-			DrawComponent<MeshRenderer>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, MaterialInspector);
+			//DrawComponent<MeshRenderer>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, &MaterialInspector);
 			DrawComponent<Script>("Script", *m_SelectedEntities, ScriptInspector);
 		}
 		ImGui::End();
@@ -383,131 +385,138 @@ namespace DuskEngine
 			//	ImGui::EndCombo();
 			//}
 
-			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
-			std::vector<std::string> materialList; // Later add default materials
-			int materialIndex = 0;
-			uuids::uuid materialID = meshes[0]->material->GetUUID();
+			//// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
+			//std::vector<std::string> materialList; // Later add default materials
+			//int materialIndex = 0;
+			//uuids::uuid materialID = meshes[0]->materialHandle;
 
-			for (unsigned int i = 0; i < AssetManager::MaterialList.size(); i++)
-			{
-				materialList.push_back(AssetManager::MaterialList[i]->GetName());
-				if (AssetManager::MaterialList[i]->GetUUID() == materialID)
-					materialIndex = i;
-			}
+			//for (unsigned int i = 0; i < AssetManager::MaterialList.size(); i++)
+			//{
+			//	materialList.push_back(AssetManager::MaterialList[i]->GetName());
+			//	if (AssetManager::MaterialList[i]->GetUUID() == materialID)
+			//		materialIndex = i;
+			//}
 
-			const char* material_label = materialList[materialIndex].c_str();
-			if (ImGui::BeginCombo("Material", material_label))
-			{
-				for (int n = 0; n < materialList.size(); n++)
-				{
-					const bool is_selected = (materialIndex == n);
-					if (ImGui::Selectable(materialList[n].c_str(), is_selected))
-					{
-						if (n != materialIndex)
-						{
-							materialIndex = n;
-							std::string s = materialList[n].c_str();
-							auto material = AssetManager::LoadMaterial(AssetManager::GetUUID(AssetManager::MaterialList[materialIndex]->GetPath()));
-							meshes[0]->material = material;
-						}
-					}
+			//const char* material_label = materialList[materialIndex].c_str();
+			//if (ImGui::BeginCombo("Material", material_label))
+			//{
+			//	for (int n = 0; n < materialList.size(); n++)
+			//	{
+			//		const bool is_selected = (materialIndex == n);
+			//		if (ImGui::Selectable(materialList[n].c_str(), is_selected))
+			//		{
+			//			if (n != materialIndex)
+			//			{
+			//				materialIndex = n;
+			//				std::string s = materialList[n].c_str();
+			//				auto material = AssetManager::LoadMaterial(AssetManager::GetUUID(AssetManager::MaterialList[materialIndex]->GetPath()));
+			//				meshes[0]->material = material;
+			//			}
+			//		}
 
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();
-				}
-				ImGui::EndCombo();
-			}
+			//		if (is_selected)
+			//			ImGui::SetItemDefaultFocus();
+			//	}
+			//	ImGui::EndCombo();
+			//}
 
-			ImGui::Separator();
-			ImGui::Separator();
-			ImGui::Separator();
+			//ImGui::Separator();
+			//ImGui::Separator();
+			//ImGui::Separator();
 
-			ImGui::Text(meshes[0]->material->GetName().c_str());
+			//ImGui::Text(meshes[0]->material->GetName().c_str());
 
-			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
-			std::vector<std::string> shaderList;
-			int shaderIndex = 0;
-			uuids::uuid shaderID = meshes[0]->material->GetShaderUUID();
+			//// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
+			//std::vector<std::string> shaderList;
+			//int shaderIndex = 0;
+			//uuids::uuid shaderID = meshes[0]->material->GetShaderUUID();
 
-			for (unsigned int i = 0; i < AssetManager::ShaderList.size(); i++)
-			{
-				shaderList.push_back(AssetManager::ShaderList[i]->GetName());
-				if (AssetManager::ShaderList[i]->GetUUID() == shaderID)
-					shaderIndex = i;
-			}
+			//for (unsigned int i = 0; i < AssetManager::ShaderList.size(); i++)
+			//{
+			//	shaderList.push_back(AssetManager::ShaderList[i]->GetName());
+			//	if (AssetManager::ShaderList[i]->GetUUID() == shaderID)
+			//		shaderIndex = i;
+			//}
 
-			const char* shader_label = shaderList[shaderIndex].c_str();
-			if (ImGui::BeginCombo("Shader", shader_label))
-			{
-				for (int n = 0; n < shaderList.size(); n++)
-				{
-					const bool is_selected = (shaderIndex == n);
-					if (ImGui::Selectable(shaderList[n].c_str(), is_selected))
-					{
-						if (n != shaderIndex)
-						{
-							shaderIndex = n;
-							std::string s = shaderList[n].c_str();
-							auto shader = AssetManager::LoadShader(AssetManager::GetUUID(AssetManager::ShaderList[shaderIndex]->GetPath()));
-							meshes[0]->material->SetShader(shader);
-							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
-						}
-					}
+			//const char* shader_label = shaderList[shaderIndex].c_str();
+			//if (ImGui::BeginCombo("Shader", shader_label))
+			//{
+			//	for (int n = 0; n < shaderList.size(); n++)
+			//	{
+			//		const bool is_selected = (shaderIndex == n);
+			//		if (ImGui::Selectable(shaderList[n].c_str(), is_selected))
+			//		{
+			//			if (n != shaderIndex)
+			//			{
+			//				shaderIndex = n;
+			//				std::string s = shaderList[n].c_str();
+			//				auto shader = AssetManager::LoadShader(AssetManager::GetUUID(AssetManager::ShaderList[shaderIndex]->GetPath()));
+			//				meshes[0]->material->SetShader(shader);
+			//				meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
+			//			}
+			//		}
 
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();
-				}
-				ImGui::EndCombo();
-			}
+			//		if (is_selected)
+			//			ImGui::SetItemDefaultFocus();
+			//	}
+			//	ImGui::EndCombo();
+			//}
 
-			for (auto uniform : meshes[0]->material->m_Uniforms)
-			{
-				if (uniform.Type == UniformType::Vec3)
-				{
-					if (ImGui::ColorEdit3(uniform.Name.c_str(), std::static_pointer_cast<float>(uniform.Data).get())) 
-						meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
-				}
+			//auto handler = m_AssetHandler.lock();
 
-				if (uniform.Type == UniformType::Texture)
-				{
-					// this is broken but whatever, will be replaced in the future
-					ImGui::Text(uniform.Name.c_str());
-					if (ImGui::ImageButton((void*)std::static_pointer_cast<Texture>(uniform.Data)->GetRendererID(), ImVec2{ 40, 40 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
-					{
-						#ifdef DUSK_WINDOWS
-						nfdchar_t* path = NULL;
-						nfdresult_t result = NFD_OpenDialog("png,jpg", NULL, &path);
-						if (result == NFD_OKAY)
-						{
-							// very temporary, but works!
-							auto texture = Texture::Create(path);
-							std::string str = path;
-							//std::replace(str.begin(), str.end(), '\\', '/');
-							texture->m_UUID = AssetManager::GetUUID(str);
-							meshes[0]->material->SetTexture(uniform.Name, texture);
-							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
-							free(path);
-						}
-						#endif
-					}
+			//// if in editing mode ->					propagate
+			//// if accessing from asset browser ->		propagate
+			//// if playing and accessing from scene ->	do not propagate
 
-					if (ImGui::BeginDragDropTarget())
-					{
-						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
-						{
-							// barf emoji
-							const wchar_t* data = (const wchar_t*)payload->Data;
-							std::wstring ws(data);
-							std::string path(ws.begin(), ws.end());
+			//for (auto uniform : meshes[0]->material->m_Uniforms)
+			//{
+			//	if (uniform.Type == UniformType::Vec3)
+			//	{
+			//		if (ImGui::ColorEdit3(uniform.Name.c_str(), &uniform.Data.vec3[0]))
+			//			meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string(), true);
+			//	}
 
-							auto texture = Texture::Create(path, AssetManager::GetUUID(ws));
-							meshes[0]->material->SetTexture(uniform.Name, texture);
-							meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
-						}
-						ImGui::EndDragDropTarget();
-					}
-				}
-			}
+			//	if (uniform.Type == UniformType::Texture)
+			//	{
+			//		// this is broken but whatever, will be replaced in the future
+			//		ImGui::Text(uniform.Name.c_str());
+			//		if (ImGui::ImageButton((ImTextureID)handler->TexturePool(uniform.Data.dataHandle)->GetRendererID(),
+			//			ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
+			//		{
+			//			#ifdef DUSK_WINDOWS
+			//			nfdchar_t* path = NULL;
+			//			nfdresult_t result = NFD_OpenDialog("png,jpg", NULL, &path);
+			//			if (result == NFD_OKAY)
+			//			{
+			//				// very temporary, but works!
+			//				auto texture = Texture::Create(path);
+			//				std::string str = path;
+			//				//std::replace(str.begin(), str.end(), '\\', '/');
+			//				texture->m_UUID = AssetManager::GetUUID(str);
+			//				meshes[0]->material->SetTexture(uniform.Name, texture);
+			//				meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string(), true);
+			//				free(path);
+			//			}
+			//			#endif
+			//		}
+
+			//		if (ImGui::BeginDragDropTarget())
+			//		{
+			//			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
+			//			{
+			//				// barf emoji
+			//				const wchar_t* data = (const wchar_t*)payload->Data;
+			//				std::wstring ws(data);
+			//				std::string path(ws.begin(), ws.end());
+
+			//				auto texture = Texture::Create(path, AssetManager::GetUUID(ws));
+			//				meshes[0]->material->SetTexture(uniform.Name, texture);
+			//				meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string(), true);
+			//			}
+			//			ImGui::EndDragDropTarget();
+			//		}
+			//	}
+			//}
 		}
 		else
 		{

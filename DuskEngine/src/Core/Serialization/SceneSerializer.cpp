@@ -106,7 +106,8 @@ namespace DuskEngine
 				{
 					auto& mr = deserializedEntity.AddComponent<MeshRenderer>();
 
-					mr.material = AssetManager::LoadMaterial(meshRenderer["material"].as<uuids::uuid>());
+					mr.materialHandle = meshRenderer["material"].as<uuids::uuid>();
+					scene->m_AssetHandler->AddToMaterialPool(mr.materialHandle);
 
 					auto mesh = meshRenderer["mesh"];
 
@@ -114,25 +115,25 @@ namespace DuskEngine
 
 					if(type == 0)
 					{
-						// temp
+						// temp - do same as white texture
 						auto str = "47183823-2574-4bfd-b411-99ed177d3e43";
 						uuids::uuid id = uuids::uuid::from_string(str).value();
 						scene->m_AssetHandler->AddToMeshPool(id, PrimitiveMesh::Quad());
 
-						mr.mesh = id;
+						mr.meshHandle = id;
 					}
 					if (type == 1)
 					{
-						// temp
+						// temp - do same as white texture
 						auto str = "47183823-2574-4bfd-b411-99ed177d3e44";
 						uuids::uuid id = uuids::uuid::from_string(str).value();
 						scene->m_AssetHandler->AddToMeshPool(id, PrimitiveMesh::Cube());
 
-						mr.mesh = id;
+						mr.meshHandle = id;
 					}
 					if (type == 2)
 					{
-						mr.mesh = mesh["uuid"].as<uuids::uuid>();
+						mr.meshHandle = mesh["uuid"].as<uuids::uuid>();
 						scene->m_AssetHandler->AddToMeshPool(mesh["uuid"].as<uuids::uuid>());
 					}
 				}

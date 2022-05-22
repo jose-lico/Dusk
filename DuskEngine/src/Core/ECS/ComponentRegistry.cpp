@@ -38,8 +38,8 @@ enum class MetaData_Type
 #define REGISTER_MESH_RENDERER\
 	rttr::registration::class_<DuskEngine::MeshRenderer>("MeshRenderer")\
 		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
-		property("mesh", &DuskEngine::MeshRenderer::mesh).\
-		property("material", &DuskEngine::MeshRenderer::material);\
+		property("mesh", &DuskEngine::MeshRenderer::meshHandle).\
+		property("material", &DuskEngine::MeshRenderer::materialHandle);\
 
 // #############################################################
 // CAMERA

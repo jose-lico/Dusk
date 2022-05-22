@@ -37,6 +37,8 @@ namespace DuskEngine
 		SceneViewportPanel* m_SceneViewportPanel;
 		HierarchyPanel* m_HierarchyPanel;
 
+		Ref<AssetHandler> m_AssetHandler;
+
 		bool m_Playing = false;
 		bool m_Paused = false;
 	};

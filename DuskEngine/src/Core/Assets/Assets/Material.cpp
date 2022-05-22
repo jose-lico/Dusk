@@ -5,6 +5,7 @@
 #include "Shader.h"
 
 #include "Core/Macros/LOG.h"
+#include "Core/Assets/AssetHandler.h"
 #include "Core/Assets/AssetManager.h"
 #include "Utils/Serialization/Yaml.h"
 
@@ -51,7 +52,7 @@ namespace DuskEngine
 		LOG("Deleted Material " + m_Name)
 	}
 
-	void Material::UploadUniforms()
+	void Material::UploadUniforms(AssetHandler& assetHandler)
 	{
 		m_Shader->Bind();
 		unsigned int textSlot = 0;
@@ -61,12 +62,12 @@ namespace DuskEngine
 			switch(uniform.Type)
 			{
 			case UniformType::Vec3:
-				m_Shader->SetUniformVec3("u_" + uniform.Name, *std::static_pointer_cast<glm::vec3>(uniform.Data)); // u_ + dodgy
+				m_Shader->SetUniformVec3("u_" + uniform.Name, uniform.Data.vec3);
 				break;
 			case UniformType::Texture:
 				m_Shader->SetUniformInt("u_" + uniform.Name, textSlot);
-				std::static_pointer_cast<Texture>(uniform.Data)->Bind(textSlot++);
-				//((Texture*)(uniform.Data.get()))->Bind(textSlot++); // basically the same?
+				auto& texture = assetHandler.TexturePool(uniform.Data.dataHandle);
+				texture->Bind(textSlot++);
 				break;
 			}
 		}
@@ -79,10 +80,12 @@ namespace DuskEngine
 			switch (uniform.Type)
 			{
 			case UniformType::Vec3:
-				uniform.Data = MakeRef<glm::vec3>(1.0f);
+				
+				uniform.Data.vec3 = glm::vec3(1.0f);
+				
 				break;
 			case UniformType::Texture:
-				uniform.Data = Texture::Create("res/textures/white.png", AssetManager::GetUUID("res/textures/white.png"));
+				uniform.Data.dataHandle = AssetManager::GetUUID("res/textures/white.png");				
 				break;
 			}
 		}
@@ -100,7 +103,7 @@ namespace DuskEngine
 	void Material::SetFloat(const std::string& name, float f)
 	{
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
-			m_UniformsMap[name]->Data = MakeRef<float>(f);
+			m_UniformsMap[name]->Data.fValue = f;
 		else
 			WARN("Uniform doesnt exist")
 	}
@@ -120,7 +123,7 @@ namespace DuskEngine
 	void Material::SetTexture(const std::string& name, Ref<Texture>& texture)
 	{
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
-			m_UniformsMap[name]->Data = texture;
+			m_UniformsMap[name]->Data.dataHandle = texture->GetUUID();
 		else
 			WARN("Texture '" + name + "' doesnt exist")
 	}
@@ -130,7 +133,7 @@ namespace DuskEngine
 		return m_Shader->GetUUID();
 	}
 
-	void Material::SerializeText(const std::string& path)
+	void Material::SerializeText(const std::string& path, bool propagate)
 	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
@@ -140,6 +143,11 @@ namespace DuskEngine
 
 		std::ofstream fout(path);
 		fout << out.c_str();
+
+		if(propagate)
+		{
+			AssetHandler::PropagateMaterialChange(this);
+		}
 	}
 
 	void Material::CreateUniforms()

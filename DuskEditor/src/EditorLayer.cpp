@@ -5,6 +5,7 @@
 #include "Core/ECS/EditorCamera.h"
 #include "Core/Scripting/LuaScript.h"
 #include "Core/Assets/AssetManager.h"
+#include "Core/Assets/AssetHandler.h"
 
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/string_cast.hpp"
@@ -29,6 +30,8 @@ namespace DuskEngine
 
 	void EditorLayer::OnAttach()
 	{
+		m_AssetHandler = MakeRef<AssetHandler>("EditorHandler");
+
 		m_EditorCamera = new EditorCamera();
 		m_EditorCamera->transform.position = glm::vec3(-4.0f, 2.0f, 4.0f);
 		m_EditorCamera->transform.rotation = glm::vec3(-0.25f, -0.9f, 0.0f);
@@ -43,7 +46,7 @@ namespace DuskEngine
 
 		SceneSerializer::DeserializeText(m_EditingScene, "res/scenes/scene.yaml");
 
-		m_Panels.push_back(new InspectorPanel());
+		m_Panels.push_back(new InspectorPanel(m_AssetHandler));
 		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
 		m_Panels.push_back(new ConsolePanel());
 		m_Panels.push_back(new ContentBrowserPanel());
@@ -80,12 +83,6 @@ namespace DuskEngine
 		};
 
 		m_Panels.push_back(new Toolbar(&m_Playing, &m_Paused, play, stop, pause));
-
-		/*auto ent = m_EditingScene->FindEntity("Unlit Quad");
-		auto& script = ent->AddComponent<Script>();
-
-		Ref<LuaScript> lua = MakeRef<LuaScript>("res/scripts/print_script.lua", ResourceManager::GetUUID("res/scripts/print_script.lua"));
-		script.scripts.push_back(lua);*/
 	}
 
 	void EditorLayer::OnUpdate()

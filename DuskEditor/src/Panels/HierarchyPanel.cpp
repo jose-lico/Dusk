@@ -76,22 +76,22 @@ namespace DuskEngine
 				// select currently created entity
 			}
 
-			if (ImGui::MenuItem("Create Light"))
-			{
-				auto light = m_Scene->CreateEntity("New Light");
-				std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
-				m_SelectableStatus.resize(m_Scene->m_Registry.size());
-				light.AddComponent<Light>();
+			//if (ImGui::MenuItem("Create Light"))
+			//{
+			//	auto light = m_Scene->CreateEntity("New Light");
+			//	std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
+			//	m_SelectableStatus.resize(m_Scene->m_Registry.size());
+			//	light.AddComponent<Light>();
 
-				auto& lightTransform = light.GetComponent<Transform>();
-				lightTransform.position = { -2.0f, 1.0f, 1.0f };
-				lightTransform.scale = { 0.1f, 0.1f, 0.1f };
-				auto mesh = PrimitiveMesh::Cube();
-				auto material = AssetManager::LoadMaterial(AssetManager::GetUUID("res/materials/lightMaterial.material"));
-				//light.AddComponent<MeshRenderer>(mesh, material);
+			//	auto& lightTransform = light.GetComponent<Transform>();
+			//	lightTransform.position = { -2.0f, 1.0f, 1.0f };
+			//	lightTransform.scale = { 0.1f, 0.1f, 0.1f };
+			//	auto mesh = PrimitiveMesh::Cube();
+			//	auto material = AssetManager::LoadMaterial(AssetManager::GetUUID("res/materials/lightMaterial.material"));
+			//	//light.AddComponent<MeshRenderer>(mesh, material);
 
-				// select currently created entity
-			}
+			//	// select currently created entity
+			//}
 
 			ImGui::EndPopup();
 		}

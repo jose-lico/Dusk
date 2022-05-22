@@ -7,6 +7,7 @@
 #include "Core/Assets/Assets/Texture.h"
 #include "Core/Assets/Assets/Material.h"
 #include "Core/Assets/Assets/Model.h"
+#include "Core/Assets/AssetHandler.h"
 
 #include "Utils/Serialization/Yaml.h"
 
@@ -191,7 +192,7 @@ namespace DuskEngine
 		return m_UUIDsMap[path];
 	}
 
-	Ref<Material> AssetManager::LoadMaterial(const uuids::uuid& uuid)
+	Ref<Material> AssetManager::LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler)
 	{
 		std::ifstream stream(m_PathsMap[uuid]);
 		std::stringstream strStream;
@@ -209,10 +210,12 @@ namespace DuskEngine
 			switch (uniform.Type)
 			{
 			case UniformType::Vec3:
-				uniform.Data = MakeRef<glm::vec3>(data["Uniforms"][uniform.Name].as<glm::vec3>());
+				uniform.Data.vec3 = data["Uniforms"][uniform.Name].as<glm::vec3>();
 				break;
 			case UniformType::Texture:
-				uniform.Data = LoadTexture(data["Uniforms"][uniform.Name].as<uuids::uuid>());
+				// dumb af
+				handler->AddToTexturePool(data["Uniforms"][uniform.Name].as<uuids::uuid>());
+				uniform.Data.dataHandle = data["Uniforms"][uniform.Name].as<uuids::uuid>();
 				break;
 			}
 		}

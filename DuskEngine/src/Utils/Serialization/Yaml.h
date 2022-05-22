@@ -92,10 +92,10 @@ namespace DuskEngine
 			switch (uniform.Type)
 			{
 			case UniformType::Vec3:
-				out << YAML::Key << uniform.Name << YAML::Value << *std::static_pointer_cast<glm::vec3>(uniform.Data);
+				out << YAML::Key << uniform.Name << YAML::Value << uniform.Data.vec3;
 				break;
 			case UniformType::Texture:
-				out << YAML::Key << uniform.Name << YAML::Value << uuids::to_string(std::static_pointer_cast<Texture>(uniform.Data)->GetUUID());
+				out << YAML::Key << uniform.Name << YAML::Value << uniform.Data.dataHandle;
 				break;
 			}
 		}

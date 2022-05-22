@@ -8,8 +8,8 @@ namespace DuskEngine
 {
 	struct MeshRenderer
 	{
-		uuids::uuid mesh;
-		Ref<Material> material;
+		uuids::uuid meshHandle;
+		uuids::uuid materialHandle;
 
 		MeshRenderer() = default;
 		/*MeshRenderer(Ref<Mesh>& mesh, Ref<Material>& material)

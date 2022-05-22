@@ -29,7 +29,7 @@ namespace DuskEngine
 		m_GridShader = Shader::Create("res/editor/shaders/grid.glsl");
 
 		m_ScriptingEngine = new ScriptingEngine();
-		m_AssetHandler = MakeUnique<AssetHandler>();
+		m_AssetHandler = MakeUnique<AssetHandler>("SceneHandler");
 	}
 
 	Scene::~Scene()
@@ -128,16 +128,18 @@ namespace DuskEngine
 
 				if (!meta.enabled) continue;
 
-				mesh.material->UploadUniforms();
+				auto& material = m_AssetHandler->MaterialPool(mesh.materialHandle);
+
+				material->UploadUniforms(*m_AssetHandler);
 
 				transform.model = glm::translate(glm::mat4(1.0f), transform.position)
 					* glm::toMat4(glm::quat(transform.rotation))
 					* glm::scale(glm::mat4(1.0f), transform.scale);
 
 				// Expected Uniforms
-				mesh.material->m_Shader->SetUniformMat4("e_Model", transform.model);
-				mesh.material->m_Shader->SetUniformMat4("e_ViewProjection", VPM);
-				mesh.material->m_Shader->SetUniformVec3("e_ViewPosition", cameraPos);
+				material->m_Shader->SetUniformMat4("e_Model", transform.model);
+				material->m_Shader->SetUniformMat4("e_ViewProjection", VPM);
+				material->m_Shader->SetUniformVec3("e_ViewPosition", cameraPos);
 
 				auto lights = m_Registry.view<Light, Meta>();
 
@@ -154,14 +156,14 @@ namespace DuskEngine
 						switch (l.type)
 						{
 						case LightType::Directional:
-							mesh.material->m_Shader->SetUniformInt(("e_DirectionalLights[" + std::to_string(dirLightIndex) + "].Enabled"), 1);
-							mesh.material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(dirLightIndex) + "].Color", lightColor);
-							mesh.material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(dirLightIndex++) + "].Direction", t.front);
+							material->m_Shader->SetUniformInt(("e_DirectionalLights[" + std::to_string(dirLightIndex) + "].Enabled"), 1);
+							material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(dirLightIndex) + "].Color", lightColor);
+							material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(dirLightIndex++) + "].Direction", t.front);
 							break;
 						case LightType::Point:
-							mesh.material->m_Shader->SetUniformInt(("e_PointLights[" + std::to_string(pointLightIndex) + "].Enabled"), 1);
-							mesh.material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(pointLightIndex) + "].Color", lightColor);
-							mesh.material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(pointLightIndex++) + "].Position", t.position);
+							material->m_Shader->SetUniformInt(("e_PointLights[" + std::to_string(pointLightIndex) + "].Enabled"), 1);
+							material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(pointLightIndex) + "].Color", lightColor);
+							material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(pointLightIndex++) + "].Position", t.position);
 							break;
 						case LightType::Spot:
 							break;
@@ -173,10 +175,10 @@ namespace DuskEngine
 						switch (l.type)
 						{
 						case LightType::Directional:
-							mesh.material->m_Shader->SetUniformInt(("e_DirectionalLights[" + std::to_string(dirLightIndex++) + "].Enabled"), 0);
+							material->m_Shader->SetUniformInt(("e_DirectionalLights[" + std::to_string(dirLightIndex++) + "].Enabled"), 0);
 							break;
 						case LightType::Point:
-							mesh.material->m_Shader->SetUniformInt(("e_PointLights[" + std::to_string(pointLightIndex++) + "].Enabled"), 0);
+							material->m_Shader->SetUniformInt(("e_PointLights[" + std::to_string(pointLightIndex++) + "].Enabled"), 0);
 							break;
 						case LightType::Spot:
 							break;
@@ -186,10 +188,10 @@ namespace DuskEngine
 					}
 				}
 
-				mesh.material->m_Shader->SetUniformInt("e_DirectionalLightsCount", dirLightIndex);
-				mesh.material->m_Shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
+				material->m_Shader->SetUniformInt("e_DirectionalLightsCount", dirLightIndex);
+				material->m_Shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
 
-				Renderer::Submit(m_AssetHandler->MeshPool(mesh.mesh));
+				Renderer::Submit(m_AssetHandler->MeshPool(mesh.meshHandle));
 			}
 
 			glm::mat4 viewMatrix = camera.camera.viewMatrix;
@@ -287,16 +289,18 @@ namespace DuskEngine
 
 				if (!meta.enabled) continue;
 
-				mesh.material->UploadUniforms();
+				auto& material = m_AssetHandler->MaterialPool(mesh.materialHandle);
+
+				material->UploadUniforms(*m_AssetHandler);
 
 				transform.model = glm::translate(glm::mat4(1.0f), transform.position)
 					* glm::toMat4(glm::quat(transform.rotation))
 					* glm::scale(glm::mat4(1.0f), transform.scale);
 
 				// Expected Uniforms
-				mesh.material->m_Shader->SetUniformMat4("e_Model", transform.model);
-				mesh.material->m_Shader->SetUniformMat4("e_ViewProjection", VPM);
-				mesh.material->m_Shader->SetUniformVec3("e_ViewPosition", cameraPos);
+				material->m_Shader->SetUniformMat4("e_Model", transform.model);
+				material->m_Shader->SetUniformMat4("e_ViewProjection", VPM);
+				material->m_Shader->SetUniformVec3("e_ViewPosition", cameraPos);
 
 				auto lights = m_Registry.view<Light, Meta>();
 
@@ -313,14 +317,14 @@ namespace DuskEngine
 						switch (l.type)
 						{
 							case LightType::Directional:
-								mesh.material->m_Shader->SetUniformInt(("e_DirectionalLights[" + std::to_string(dirLightIndex) + "].Enabled"), 1);
-								mesh.material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(dirLightIndex) + "].Color", lightColor);
-								mesh.material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(dirLightIndex++) + "].Direction", t.front);
+								material->m_Shader->SetUniformInt(("e_DirectionalLights[" + std::to_string(dirLightIndex) + "].Enabled"), 1);
+								material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(dirLightIndex) + "].Color", lightColor);
+								material->m_Shader->SetUniformVec3("e_DirectionalLights[" + std::to_string(dirLightIndex++) + "].Direction", t.front);
 								break;
 							case LightType::Point:
-								mesh.material->m_Shader->SetUniformInt(("e_PointLights[" + std::to_string(pointLightIndex) + "].Enabled"), 1);
-								mesh.material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(pointLightIndex) + "].Color", lightColor);
-								mesh.material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(pointLightIndex++) + "].Position", t.position);
+								material->m_Shader->SetUniformInt(("e_PointLights[" + std::to_string(pointLightIndex) + "].Enabled"), 1);
+								material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(pointLightIndex) + "].Color", lightColor);
+								material->m_Shader->SetUniformVec3("e_PointLights[" + std::to_string(pointLightIndex++) + "].Position", t.position);
 								break;
 							case LightType::Spot:
 								break;
@@ -332,10 +336,10 @@ namespace DuskEngine
 						switch (l.type)
 						{
 							case LightType::Directional:
-								mesh.material->m_Shader->SetUniformInt(("e_DirectionalLights[" + std::to_string(dirLightIndex++) + "].Enabled"), 0);
+								material->m_Shader->SetUniformInt(("e_DirectionalLights[" + std::to_string(dirLightIndex++) + "].Enabled"), 0);
 								break;
 							case LightType::Point:
-								mesh.material->m_Shader->SetUniformInt(("e_PointLights[" + std::to_string(pointLightIndex++) + "].Enabled"), 0);
+								material->m_Shader->SetUniformInt(("e_PointLights[" + std::to_string(pointLightIndex++) + "].Enabled"), 0);
 								break;
 							case LightType::Spot:
 								break;
@@ -343,11 +347,11 @@ namespace DuskEngine
 					}
 				}
 
-				mesh.material->m_Shader->SetUniformInt("e_DirectionalLightsCount", dirLightIndex);
-				mesh.material->m_Shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
+				material->m_Shader->SetUniformInt("e_DirectionalLightsCount", dirLightIndex);
+				material->m_Shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
 
 				//Renderer::Submit(mesh.mesh);
-				Renderer::Submit(m_AssetHandler->MeshPool(mesh.mesh));
+				Renderer::Submit(m_AssetHandler->MeshPool(mesh.meshHandle));
 			}
 
 			Renderer::EndScene();
