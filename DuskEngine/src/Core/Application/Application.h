@@ -12,6 +12,7 @@ namespace DuskEngine
 	class ImGuiLayer;
 	class WindowManager;
 	class RendererContext;
+	class Logger;
 
 	// Add more stuff later
 	struct ApplicationSpecs
@@ -43,6 +44,7 @@ namespace DuskEngine
 		RendererContext* m_RendererContext;
 	
 		ApplicationSpecs m_Specs;
+		Logger* m_Logger;
 	};
 
 	extern Application* CreateApplication();

@@ -16,6 +16,8 @@
 #include "Utils/Window/Window.h"
 #include "Utils/ImGui/ImGuiLayer.h"
 
+#include "Core.h"
+
 namespace DuskEngine
 {
 	Application* Application::s_Instance = nullptr;
@@ -24,6 +26,10 @@ namespace DuskEngine
 		:m_Specs(specs)
 	{
 		s_Instance = this;
+
+		m_Logger = new Logger(LOGGER);
+
+		LOG2("Hello from the second logger");
 
 		CREATE_LOGGER // Rework in the future
 		
@@ -51,6 +57,7 @@ namespace DuskEngine
 		delete m_RendererContext;
 		delete m_LayerStack; // Deletes m_ImGuiLayer
 		delete m_WindowManager;
+		delete m_Logger;
 	}
 
 	void Application::PushLayer(Layer* layer)

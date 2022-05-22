@@ -181,5 +181,4 @@ namespace DuskEngine
 		std::ofstream material(path);
 		material << out.c_str();
 	}
-
 }
