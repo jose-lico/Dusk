@@ -26,7 +26,8 @@ namespace DuskEngine
 
 	Logger* Logger::Get(const char* name)
 	{
-		return m_Loggers[name];
+		if (m_Loggers.find(name) != m_Loggers.end())
+			return m_Loggers[name];
 	}
 
 	void Logger::Log(const char* message, LogLevel level, const char* file, unsigned int line)
@@ -38,8 +39,8 @@ namespace DuskEngine
 		log.append(file); // Should remove the whole C blah blah
 		log.append(" Line:");
 		log.append(std::to_string(line));
-		//m = "";
 		log.append(" ");
+		log = "";
 		log.append(message);
 
 		switch (level)

@@ -31,12 +31,14 @@ namespace DuskEngine
 
 	void AssetHandler::AddToMeshPool(const uuids::uuid& uuid)
 	{
-		m_MeshPool.insert({ uuid, AssetManager::LoadModel(uuid) });
+		if (m_MeshPool.find(uuid) == m_MeshPool.end())
+			m_MeshPool.insert({ uuid, AssetManager::LoadModel(uuid) });
 	}
 
 	void AssetHandler::AddToMeshPool(const uuids::uuid& uuid, Ref<Mesh>& mesh)
 	{
-		m_MeshPool.insert({ uuid, mesh });
+		if (m_MeshPool.find(uuid) == m_MeshPool.end())
+			m_MeshPool.insert({ uuid, mesh });
 	}
 
 	Ref<Texture>& AssetHandler::TexturePool(const uuids::uuid& uuid)
@@ -46,7 +48,19 @@ namespace DuskEngine
 
 	void AssetHandler::AddToTexturePool(const uuids::uuid& uuid)
 	{
-		m_TexturePool.insert({ uuid, AssetManager::LoadTexture(uuid) });
+		if (m_TexturePool.find(uuid) == m_TexturePool.end())
+			m_TexturePool.insert({ uuid, AssetManager::LoadTexture(uuid) });
+	}
+
+	Ref<Shader>& AssetHandler::ShaderPool(const uuids::uuid& uuid)
+	{
+		return m_ShaderPool[uuid];
+	}
+
+	void AssetHandler::AddToShaderPool(const uuids::uuid& uuid)
+	{
+		if (m_ShaderPool.find(uuid) == m_ShaderPool.end())
+			m_ShaderPool.insert({ uuid, AssetManager::LoadShader(uuid) });
 	}
 
 	Ref<Material>& AssetHandler::MaterialPool(const uuids::uuid& uuid)
@@ -56,7 +70,8 @@ namespace DuskEngine
 
 	void AssetHandler::AddToMaterialPool(const uuids::uuid& uuid)
 	{
-		m_MaterialPool.insert({ uuid, AssetManager::LoadMaterial(uuid, this) });
+		if (m_MaterialPool.find(uuid) == m_MaterialPool.end())
+			m_MaterialPool.insert({ uuid, AssetManager::LoadMaterial(uuid, this) });
 	}
 
 	void AssetHandler::PropagateMaterialChange(Material* material)

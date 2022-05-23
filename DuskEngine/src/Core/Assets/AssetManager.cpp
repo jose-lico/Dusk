@@ -199,9 +199,10 @@ namespace DuskEngine
 
 		YAML::Node data = YAML::Load(strStream.str());
 
-		auto shader = LoadShader(data["Shader"].as<uuids::uuid>());
+		// dumb af
+		handler->AddToShaderPool(data["Shader"].as<uuids::uuid>());
 
-		Ref<Material> material = MakeRef<Material>(shader, m_PathsMap[uuid], uuid);
+		Ref<Material> material = MakeRef<Material>(handler->ShaderPool(data["Shader"].as<uuids::uuid>()), m_PathsMap[uuid], uuid);
 
 		for (auto& uniform : material->m_Uniforms)
 		{
@@ -211,7 +212,7 @@ namespace DuskEngine
 				uniform.Data.vec3 = data["Uniforms"][uniform.Name].as<glm::vec3>();
 				break;
 			case UniformType::Texture:
-				// dumb af
+				// also dumb af
 				handler->AddToTexturePool(data["Uniforms"][uniform.Name].as<uuids::uuid>());
 				uniform.Data.dataHandle = data["Uniforms"][uniform.Name].as<uuids::uuid>();
 				break;
