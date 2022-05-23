@@ -6,9 +6,7 @@
 #include "Core/Renderer/Resources/Framebuffer.h"
 #include "Core/Application/Time.h"
 #include "Core/Application/Input.h"
-#include "Core/Macros/LOG.h"
 #include "Core/Events/KeyEvent.h"
-#include "Core/Macros/BIND_EVENT_FN.h"
 
 #include "imgui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"

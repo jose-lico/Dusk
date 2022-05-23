@@ -2,8 +2,6 @@
 #include "OpenGLFramebuffer.h"
 #include "GLCommon.h"
 
-#include "Core/Macros/LOG.h"
-
 namespace DuskEngine
 {
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)

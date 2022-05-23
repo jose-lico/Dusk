@@ -1,6 +1,5 @@
 #pragma once
-#include "Core/Macros/DUSK_API.h"
-#include "Core/Macros/LOG.h"
+#include "Core/Application/Core.h"
 
 #include "Scene.h"
 
@@ -26,7 +25,7 @@ namespace DuskEngine
 				return m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
 			else
 			{
-				//APP_LOG("Component already present!")
+				WARN("Component already present!");
 				return GetComponent<T>();
 			}
 		}
@@ -34,10 +33,10 @@ namespace DuskEngine
 		template<typename T>
 		void RemoveComponent()
 		{
-			if(!std::is_same<T, DuskEngine::Meta>() && !std::is_same<T, DuskEngine::Transform>())
+			if (!std::is_same<T, DuskEngine::Meta>() && !std::is_same<T, DuskEngine::Transform>())
 				m_Scene->m_Registry.remove<T>(m_EntityHandle);
 			else
-				APP_LOG("Cant remove Meta or Transform component")
+				WARN("Can not remove Meta or Transform component!");
 		}
 
 		template<typename T>

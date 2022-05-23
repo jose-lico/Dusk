@@ -4,9 +4,6 @@
 #include "Time.h"
 #include "LayerStack.h"
 
-#include "Core/Macros/BIND_EVENT_FN.h"
-#include "Core/Macros/LOG.h"
-
 #include "Core/Assets/AssetManager.h"
 #include "Core/Renderer/RenderCommand.h"
 #include "Core/Renderer/RendererContext.h"
@@ -28,11 +25,8 @@ namespace DuskEngine
 		s_Instance = this;
 
 		m_Logger = new Logger(LOGGER);
+		TRACE("Logger Created");
 
-		LOG2("Hello from the second logger");
-
-		CREATE_LOGGER // Rework in the future
-		
 		m_WindowManager = new WindowManager();
 		m_WindowManager->GetWindow()->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
@@ -51,7 +45,7 @@ namespace DuskEngine
 
 	Application::~Application()
 	{
-		TRACE("##### SHUTDOWN #####");
+		TRACE("########## SHUTDOWN ##########");
 
 		AssetManager::Shutdown();
 		delete m_RendererContext;

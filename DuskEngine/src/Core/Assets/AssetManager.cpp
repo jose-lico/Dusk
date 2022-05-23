@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "AssetManager.h"
 
-#include "Core/Macros/LOG.h"
-
 #include "Core/Assets/Assets/Shader.h"
 #include "Core/Assets/Assets/Texture.h"
 #include "Core/Assets/Assets/Material.h"
@@ -105,7 +103,7 @@ namespace DuskEngine
 				if(!std::filesystem::exists(metaFile) && directoryEntry.path().extension() != ".meta")
 				{
 					std::string message = "Creating meta file for " + directoryEntry.path().filename().string();
-					LOG(message)
+					LOG(message.c_str());
 
 					uuids::uuid const id = uuids::uuid_system_generator{}();
 
@@ -128,10 +126,10 @@ namespace DuskEngine
 	uuids::uuid AssetManager::CreateResource(const std::filesystem::path& path)
 	{
 		std::string message = "Creating meta file for " + path.string();
-		LOG(message)
+		LOG(message.c_str());
 
 		uuids::uuid const id = uuids::uuid_system_generator{}();
-		LOG(uuids::to_string(id))
+		LOG(uuids::to_string(id).c_str());
 
 		YAML::Emitter out;
 		out << YAML::BeginMap;

@@ -1,6 +1,7 @@
 #pragma once
 
-#include <iostream>
+#include "Core/Application/Core.h"
+
 #include <memory>
 #include <functional>
 #include <fstream>

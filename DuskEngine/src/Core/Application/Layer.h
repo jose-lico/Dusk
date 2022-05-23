@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Macros/DUSK_API.h"
+#include "Core.h"
 
 namespace DuskEngine
 {

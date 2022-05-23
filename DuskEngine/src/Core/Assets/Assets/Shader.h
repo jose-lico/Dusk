@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Macros/DUSK_API.h"
+#include "Core/Application/Core.h"
 
 #include "Core/Assets/Asset.h"
 #include "Utils/Memory/Memory.h"

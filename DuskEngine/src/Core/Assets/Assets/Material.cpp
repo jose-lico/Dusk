@@ -4,7 +4,6 @@
 #include "Texture.h"
 #include "Shader.h"
 
-#include "Core/Macros/LOG.h"
 #include "Core/Assets/AssetHandler.h"
 #include "Core/Assets/AssetManager.h"
 #include "Utils/Serialization/Yaml.h"
@@ -19,7 +18,8 @@ namespace DuskEngine
 		m_Name = path.filename().string();
 
 		CreateUniforms();
-		LOG("Created Material " + m_Name)
+		std::string message = "Created Material " + m_Name;
+		LOG(message.c_str());
 	}
 
 	/*Material::Material(Ref<Shader>& shader, const std::string& name)
@@ -49,7 +49,8 @@ namespace DuskEngine
 
 	Material::~Material()
 	{
-		LOG("Deleted Material " + m_Name)
+		std::string message = "Deleted Material " + m_Name;
+		LOG(message.c_str());
 	}
 
 	void Material::UploadUniforms(AssetHandler& assetHandler)
@@ -105,7 +106,7 @@ namespace DuskEngine
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
 			m_UniformsMap[name]->Data.fValue = f;
 		else
-			WARN("Uniform doesnt exist")
+			WARN("Uniform doesnt exist");
 	}
 
 	void Material::SetVec2(const std::string& name, glm::vec2& v)
@@ -125,7 +126,10 @@ namespace DuskEngine
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
 			m_UniformsMap[name]->Data.dataHandle = texture->GetUUID();
 		else
-			WARN("Texture '" + name + "' doesnt exist")
+		{
+			std::string message = "Texture '" + name + "' doesnt exist";
+			WARN(message.c_str());
+		}
 	}
 
 	const uuids::uuid& Material::GetShaderUUID()

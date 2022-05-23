@@ -25,7 +25,7 @@ namespace DuskEngine
 	// maybe reserve ahead of time # of entities present in the base scene
 	Scene::Scene()
 	{
-		LOG("Creating new scene")
+		LOG("Creating new scene");
 		m_GridShader = Shader::Create("res/editor/shaders/grid.glsl");
 
 		m_ScriptingEngine = new ScriptingEngine();

@@ -9,7 +9,7 @@ namespace DuskEngine
 {
 	LayerStack::LayerStack()
 	{
-		LOG2("Layerstack constructed");
+		LOG("Layerstack constructed");
 	}
 
 	LayerStack::~LayerStack()

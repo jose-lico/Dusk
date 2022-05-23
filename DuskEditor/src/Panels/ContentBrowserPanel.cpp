@@ -1,6 +1,5 @@
 #include "ContentBrowserPanel.h"
 
-#include "Core/Macros/LOG.h"
 #include "Core/Assets/Assets/Texture.h"
 #include "Core/Assets/Assets/Material.h"
 #include "Core/Assets/AssetManager.h"
@@ -83,7 +82,7 @@ namespace DuskEngine
 			else if (extension == ".png" || extension == ".jpg")
 			{
 				if (ImGui::ImageButton((void*)m_Icons[textureIndex++]->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0)))
-					APP_LOG("This is an image");
+					LOG("This is an image");
 
 #ifdef DUSK_WINDOWS
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))

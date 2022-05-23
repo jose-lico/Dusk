@@ -78,7 +78,7 @@ namespace DuskEngine
 								{
 									if (presentScript->GetUUID() == scriptFile->GetUUID())
 									{
-										APP_LOG("Script already present")
+										LOG("Script already present");
 										canAdd = false;
 									}
 								}

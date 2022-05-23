@@ -2,8 +2,6 @@
 #include "OpenGLShader.h"
 #include "GLCommon.h"
 
-#include "Core/Macros/LOG.h"
-
 namespace DuskEngine
 {
 	OpenGLShader::OpenGLShader(const std::string& filepath, const std::string& name)
@@ -25,7 +23,8 @@ namespace DuskEngine
 
 		m_ID = CreateShader(source.VertexSource, source.FragmentSource);
 		
-		LOG("Created Shader " + m_Name)
+		std::string message = "Created Shader " + m_Name;
+		LOG(message.c_str());
 	}
 
 	OpenGLShader::OpenGLShader(const std::filesystem::path& path, const uuids::uuid& uuid)
@@ -38,12 +37,14 @@ namespace DuskEngine
 		
 		m_ID = CreateShader(source.VertexSource, source.FragmentSource);
 		
-		LOG("Created Shader " + m_Name)
+		std::string message = "Created Shader " + m_Name;
+		LOG(message.c_str());
 	}
 
 	OpenGLShader::~OpenGLShader()
 	{
-		LOG("Deleted Shader " + m_Name)
+		std::string message = "Deleted Shader " + m_Name;
+		LOG(message.c_str());
 		glDeleteProgram(m_ID);
 	}
 
@@ -87,8 +88,8 @@ namespace DuskEngine
 		if (!success)
 		{
 			glGetShaderInfoLog(id, 512, NULL, infoLog);
-			ERROR("ERROR::SHADER::COMPILATION_FAILED") 
-			ERROR(infoLog);
+			WARN("ERROR::SHADER::COMPILATION_FAILED");
+			WARN(infoLog);
 			glDeleteShader(id);
 			return 0;
 		}

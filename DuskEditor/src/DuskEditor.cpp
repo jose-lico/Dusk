@@ -23,7 +23,7 @@ namespace DuskEngine
 	{
 		// doesnt do anything right now
 		ApplicationSpecs spec;
-		spec.Name = "Dusk Editor";
+		//spec.Name = "Dusk Editor";
 		return new DuskEditor(spec);
 	}
 }

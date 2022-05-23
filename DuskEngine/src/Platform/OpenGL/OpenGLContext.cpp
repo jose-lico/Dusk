@@ -2,8 +2,6 @@
 #include "OpenGLContext.h"
 #include "GLCommon.h"
 
-#include "Core/Macros/LOG.h"
-
 #include "GLFW/glfw3.h"
 
 namespace DuskEngine
@@ -22,12 +20,12 @@ namespace DuskEngine
 		glEnable(GL_CULL_FACE);
 		glFrontFace(GL_CW);
 
-		TRACE("OpenGL Context created and initialized.")
+		TRACE("OpenGL Context created and initialized.");
 	}
 
 	OpenGLContext::~OpenGLContext()
 	{
-		TRACE("OpenGL Context shutdown")
+		TRACE("OpenGL Context shutdown");
 	}
 
 	void OpenGLContext::SwapBuffers()

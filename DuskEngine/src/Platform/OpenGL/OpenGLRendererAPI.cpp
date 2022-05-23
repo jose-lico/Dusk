@@ -3,8 +3,6 @@
 
 #include "GLCommon.h"
 
-#include "Core/Macros/LOG.h"
-
 #include "Core/Renderer/Resources/VertexArray.h"
 #include "Core/Renderer/Resources/Buffer.h"
 
@@ -13,7 +11,7 @@ namespace DuskEngine {
 
 	void OpenGLRendererAPI::Init()
 	{
-		TRACE("OpenGL API Created")
+		TRACE("OpenGL API Created");
 	}
 
 	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)

@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "ImGuiLayer.h"
 
-#include "Core/Macros/BIND_EVENT_FN.h"
-#include "Core/Macros/LOG.h"
-
 #include "Core/Events/Events.h"
 
 #include "Utils/Window/Window.h"

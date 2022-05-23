@@ -3,7 +3,6 @@
 
 #include "LuaScript.h"
 
-#include "Core/Macros/LOG.h"
 #include "Core/Application/Input.h"
 #include "Core/Application/Time.h"
 #include "Core/ECS/Components.h"
@@ -295,7 +294,7 @@ namespace DuskEngine
 
 void HelloWorld()
 {
-	LOG("Hello from cpp");
+	DuskEngine::LOG("Hello from cpp");
 }
 
 int Return5()

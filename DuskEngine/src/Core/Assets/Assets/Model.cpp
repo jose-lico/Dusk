@@ -34,7 +34,9 @@ namespace DuskEngine
 		const aiScene* scene = import.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_FlipWindingOrder);
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
-			std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+			std::string message = "ERROR::ASSIMP::";
+			message.append(import.GetErrorString());
+			WARN(message.c_str());
 			return;
 		}
 

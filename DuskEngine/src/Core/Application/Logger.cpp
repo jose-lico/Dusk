@@ -38,7 +38,7 @@ namespace DuskEngine
 		log.append(file); // Should remove the whole C blah blah
 		log.append(" Line:");
 		log.append(std::to_string(line));
-		//log = "";
+		//m = "";
 		log.append(" ");
 		log.append(message);
 
@@ -48,7 +48,7 @@ namespace DuskEngine
 			m_Logger->trace(log.c_str());
 			break;
 		case LogLevel::LOG:
-			//m_Logger->log(message);
+			m_Logger->debug(log.c_str());
 			break;
 		case LogLevel::WARN:
 			m_Logger->warn(log.c_str());

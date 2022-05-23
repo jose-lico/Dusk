@@ -1,6 +1,5 @@
 #include "pch.h"
 
-#include "Core/Macros/LOG.h"
 #include "LuaScript.h"
 
 #include "ScriptingEngine.h"
@@ -30,7 +29,7 @@ namespace DuskEngine
 		if(!loadScript.valid())
 		{
 			// Error Handling
-			LOG("Error loading script")
+			LOG("Error loading script");
 		}
 
 		m_AwakeFunc = sol::protected_function(m_Env["OnAwake"]);

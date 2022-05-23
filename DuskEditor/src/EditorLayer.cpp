@@ -15,9 +15,10 @@ namespace DuskEngine
 {
 	EditorLayer::EditorLayer()
 	{
-		CREATE_APP_LOGGER
-		APP_TRACE("Tracing from the app")
-		APP_LOG("Logging from the app")
+		m_Logger = new Logger("Editor");
+
+		TRACE("Tracing from the editor");
+		LOG("Logging from the editor");
 	}
 
 	EditorLayer::~EditorLayer()
@@ -26,6 +27,8 @@ namespace DuskEngine
 		{
 			delete panel;
 		}
+
+		delete(m_Logger);
 	}
 
 	void EditorLayer::OnAttach()

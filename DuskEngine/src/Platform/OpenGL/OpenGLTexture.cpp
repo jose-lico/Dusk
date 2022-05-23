@@ -2,8 +2,6 @@
 #include "OpenGLTexture.h"
 #include "GLCommon.h"
 
-#include "Core/Macros/LOG.h"
-
 #include <filesystem>
 #include <stb/stb_image.h>
 
@@ -58,13 +56,15 @@ namespace DuskEngine
         }
         else
         {
-            ERROR("Error loading texture '" + m_Name + "'")
+            std::string message = "Error loading texture '" + m_Name + "'";
+            WARN(message.c_str());
             return;
         }
 
         stbi_image_free(data);
 
-        LOG("Created Texture " + m_Name)
+        std::string message = "Created Texture " + m_Name;
+        LOG(message.c_str());
     }
 
     OpenGLTexture::OpenGLTexture(const std::filesystem::path& path, const uuids::uuid& uuid)
@@ -110,18 +110,21 @@ namespace DuskEngine
         }
         else
         {
-            ERROR("Error loading texture '" + m_Name + "'")
-                return;
+            std::string message = "Error loading texture '" + m_Name + "'";
+            WARN(message.c_str());
+            return;
         }
 
         stbi_image_free(data);
 
-        LOG("Created Texture " + m_Name)
+        std::string message = "Created Texture " + m_Name;
+        LOG(message.c_str());
     }
 
     OpenGLTexture::~OpenGLTexture()
     {
-        LOG("Deleting texture " + m_Name)
+        std::string message = "Deleting Texture " + m_Name;
+        LOG(message.c_str());
         glDeleteTextures(1, &m_ID);
     }
 

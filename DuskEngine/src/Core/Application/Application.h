@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Macros/DUSK_API.h"
+#include "Core.h"
 
 #include <string>
 
@@ -17,7 +17,7 @@ namespace DuskEngine
 	// Add more stuff later
 	struct ApplicationSpecs
 	{
-		std::string Name = "Dusk Application";
+		//std::string Name = "Dusk Application";
 	};
 
 	class DUSK_EXPORT Application

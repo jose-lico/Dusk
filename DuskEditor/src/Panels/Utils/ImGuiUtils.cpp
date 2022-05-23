@@ -1,7 +1,7 @@
 #pragma once
 #include "ImGuiUtils.h"
 
-#include "Core/Macros/LOG.h"
+#include "Core/Application/Core.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -71,12 +71,12 @@ namespace DuskEngine
 		ImGui::TableNextColumn();
 		ImGui::Text(label.c_str());
 		if (ImGui::GetContentRegionAvail().x < 100)
-			APP_LOG("Lock 1")
+			LOG("Lock 1");
 		ImGui::TableNextColumn();
 		auto hide = "##" + label;
 		ImGui::DragFloat3(hide.c_str(), &values[0], .01f);
 		if (ImGui::GetContentRegionAvail().x < 100)
-			APP_LOG("Lock 2")
+			LOG("Lock 2");
 	}
 
 	void ImGuiUtils::DrawFloatTable(const std::string& label, float& value)

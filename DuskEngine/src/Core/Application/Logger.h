@@ -2,7 +2,7 @@
 
 #include "Utils/Memory/Memory.h"
 
-#undef ERROR
+#include <unordered_map>
 
 namespace spdlog
 {

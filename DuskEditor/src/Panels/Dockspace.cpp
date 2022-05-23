@@ -1,6 +1,6 @@
 #include "Dockspace.h"
 
-#include "Core/Macros/LOG.h"
+#include "Core/Application/Core.h"
 
 #include "imgui/imgui.h"
 
@@ -80,7 +80,7 @@ namespace DuskEngine
 			{
 				if(ImGui::MenuItem("Test", "Ctrl + Space"))
 				{
-					APP_LOG("Hello", "Space")
+					LOG("Hello");
 				}
 				ImGui::EndMenu();
 			}

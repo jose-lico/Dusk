@@ -39,6 +39,8 @@ namespace DuskEngine
 
 		Ref<AssetHandler> m_AssetHandler;
 
+		Logger* m_Logger;
+
 		bool m_Playing = false;
 		bool m_Paused = false;
 	};

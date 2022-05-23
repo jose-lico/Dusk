@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "Mesh.h"
 
-#include "Core/Macros/LOG.h"
-
 #include "Core/Renderer/Resources/VertexArray.h"
 #include "Core/Renderer/Resources/Buffer.h"
 
