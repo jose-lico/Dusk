@@ -10,7 +10,7 @@ namespace DuskEngine
 	class InspectorPanel : public Panel
 	{
 	public:
-		InspectorPanel(Ref<AssetHandler>& assetHandler);
+		InspectorPanel(AssetHandler* assetHandler);
 		~InspectorPanel() = default;
 
 		virtual void OnImGuiRender() override;
@@ -18,7 +18,7 @@ namespace DuskEngine
 	private:
 		std::vector<Entity>* m_SelectedEntities = nullptr;
 
-		WeakRef<AssetHandler> m_AssetHandler;
+		AssetHandler* m_AssetHandler;
 
 		static void MetaInspector(std::vector<Meta*>& metas);
 		static void TransformInspector(std::vector<Transform*>& transforms);

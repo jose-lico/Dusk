@@ -17,9 +17,12 @@
 namespace DuskEngine
 {
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, UIFunction function);
+	static void DrawComponentStatic(const char* name, std::vector<Entity>& m_SelectedEntities, UIFunction function);
 
-	InspectorPanel::InspectorPanel(Ref<AssetHandler>& assetHandler)
+	template<typename T, typename TOwner, void(TOwner::* func)(std::vector<MeshRenderer*>& meshes)>
+	void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, TOwner* p);
+
+	InspectorPanel::InspectorPanel(AssetHandler* assetHandler)
 		:m_AssetHandler(assetHandler)
 	{
 	}
@@ -94,18 +97,18 @@ namespace DuskEngine
 				}
 			}
 
-			DrawComponent<Meta>(ICON_FK_CUBE "  Meta", *m_SelectedEntities, MetaInspector);
-			DrawComponent<Transform>(ICON_FK_ARROWS_ALT "  Transform", *m_SelectedEntities, TransformInspector);
-			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
-			DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
-			//DrawComponent<MeshRenderer>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, &MaterialInspector);
-			DrawComponent<Script>(ICON_FK_PENCIL_SQUARE_O "  Lua Script - Script Name", *m_SelectedEntities, ScriptInspector);
+			DrawComponentStatic<Meta>(ICON_FK_CUBE "  Meta", *m_SelectedEntities, MetaInspector);
+			DrawComponentStatic<Transform>(ICON_FK_ARROWS_ALT "  Transform", *m_SelectedEntities, TransformInspector);
+			DrawComponentStatic<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
+			DrawComponentStatic<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
+			DrawComponent<MeshRenderer, InspectorPanel, &InspectorPanel::MaterialInspector>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, this);
+			DrawComponentStatic<Script>(ICON_FK_PENCIL_SQUARE_O "  Lua Script - Script Name", *m_SelectedEntities, ScriptInspector);
 		}
 		ImGui::End();
 	}
 
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, UIFunction function)
+	static void DrawComponentStatic(const char* name, std::vector<Entity>& m_SelectedEntities, UIFunction function)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed |
 			ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
@@ -159,6 +162,63 @@ namespace DuskEngine
 				ent.RemoveComponent<T>();
 		}
 			
+	}
+
+	template<typename T, typename TOwner, void(TOwner::* func)(std::vector<MeshRenderer*>& meshes)>
+	void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, TOwner* p)
+	{
+		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed |
+			ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+
+		std::vector<T*> components;
+
+		for (auto ent : m_SelectedEntities)
+		{
+			if (!ent.HasComponent<T>())
+				return;
+
+			components.push_back(&ent.GetComponent<T>());
+		}
+
+		ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+
+		ImGuiIO& io = ImGui::GetIO();
+		auto boldFont = io.Fonts->Fonts[1];
+		ImGui::PushFont(boldFont);
+		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name);
+		ImGui::PopStyleVar();
+		ImGui::PopFont();
+
+		ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
+		if (ImGui::Button(ICON_FK_COG, ImVec2{ lineHeight, lineHeight }))
+		{
+			ImGui::OpenPopup("ComponentSettings");
+		}
+
+		bool removeComponent = false;
+		if (ImGui::BeginPopup("ComponentSettings"))
+		{
+			if (ImGui::MenuItem("Remove component"))
+				removeComponent = true;
+
+			ImGui::EndPopup();
+		}
+
+		if (open)
+		{
+			(p->*func)(components);
+			ImGui::TreePop();
+		}
+
+		if (removeComponent)
+		{
+			for (auto ent : m_SelectedEntities)
+				ent.RemoveComponent<T>();
+		}
+
 	}
 
 	void InspectorPanel::CameraInspector(std::vector<Camera*>& cameras)
@@ -319,204 +379,212 @@ namespace DuskEngine
 	{
 		if (meshes.size() == 1)
 		{
-			//// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
-			//std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
-			//int modelIndex = 0;
-			//uuids::uuid modelID = meshes[0]->mesh;
+			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
+			std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
+			int modelIndex = 0;
+			uuids::uuid modelID = meshes[0]->meshHandle;
 
-			//for (unsigned int i = 0; i < ResourceManager::ModelList.size(); i++)
-			//{
-			//	modelList.push_back(ResourceManager::ModelList[i]->GetName());
-			//	if (ResourceManager::ModelList[i]->GetUUID() == modelID)
-			//		modelIndex = i + 2;
-			//}
+			for (unsigned int i = 0; i < AssetManager::ModelList.size(); i++)
+			{
+				modelList.push_back(AssetManager::ModelList[i]->GetName());
+				if (AssetManager::ModelList[i]->GetUUID() == modelID)
+					modelIndex = i + 2;
+			}
 
-			//if(!modelIndex)
-			//{
-			//	switch (meshes[0]->mesh->GetType())
-			//	{
-			//	case MeshType::Quad:
-			//		modelIndex = 0;
-			//		break;
-			//	case MeshType::Cube:
-			//		modelIndex = 1;
-			//		break;
-			//	default:
-			//		break;
-			//	}
-			//}
+			if(!modelIndex)
+			{
+				switch (m_AssetHandler->MeshPool(meshes[0]->meshHandle)->GetType())
+				{
+				case MeshType::Quad:
+					modelIndex = 0;
+					break;
+				case MeshType::Cube:
+					modelIndex = 1;
+					break;
+				default:
+					break;
+				}
+			}
 
-			//const char* model_label = modelList[modelIndex].c_str();
-			//if (ImGui::BeginCombo("Mesh", model_label))
-			//{
-			//	for (int n = 0; n < modelList.size(); n++)
-			//	{
-			//		const bool is_selected = (modelIndex == n);
-			//		if (ImGui::Selectable(modelList[n].c_str(), is_selected))
-			//		{
-			//			if (n != modelIndex)
-			//			{
-			//				modelIndex = n;
-			//				if(modelIndex <= 1)
-			//				{
-			//					switch (modelIndex)
-			//					{
-			//					case 0:
-			//						meshes[0]->mesh = PrimitiveMesh::Quad();
-			//						break;
-			//					case 1:
-			//						meshes[0]->mesh = PrimitiveMesh::Cube();
-			//						break;
-			//					default:
-			//						break;
-			//					}
-			//				}
-			//				else
-			//				{
-			//					auto mesh = ResourceManager::LoadModel(ResourceManager::GetUUID(ResourceManager::ModelList[modelIndex - 2]->GetPath()));
-			//					meshes[0]->mesh = mesh;
-			//				}
-			//			}
-			//		}
+			const char* model_label = modelList[modelIndex].c_str();
+			if (ImGui::BeginCombo("Mesh", model_label))
+			{
+				for (int n = 0; n < modelList.size(); n++)
+				{
+					const bool is_selected = (modelIndex == n);
+					if (ImGui::Selectable(modelList[n].c_str(), is_selected))
+					{
+						if (n != modelIndex)
+						{
+							modelIndex = n;
+							if(modelIndex <= 1)
+							{
+								switch (modelIndex)
+								{
+									// shouldnt handle these cases this way but since these meshes are guarenteed for now fuck it
+								case 0:
+									meshes[0]->meshHandle = uuids::uuid::from_string("47183823-2574-4bfd-b411-99ed177d3e43").value();
+									break;
+								case 1:
+									meshes[0]->meshHandle = uuids::uuid::from_string("47183823-2574-4bfd-b411-99ed177d3e44").value();
+									break;
+								default:
+									break;
+								}
+							}
+							else
+							{
+								m_AssetHandler->AddToMeshPool(AssetManager::GetUUID(AssetManager::ModelList[modelIndex - 2]->GetPath()));
+								meshes[0]->meshHandle = AssetManager::GetUUID(AssetManager::ModelList[modelIndex - 2]->GetPath());
+							}
+						}
+					}
 
-			//		if (is_selected)
-			//			ImGui::SetItemDefaultFocus();
-			//	}
-			//	ImGui::EndCombo();
-			//}
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
 
-			//// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
-			//std::vector<std::string> materialList; // Later add default materials
-			//int materialIndex = 0;
-			//uuids::uuid materialID = meshes[0]->materialHandle;
+			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
+			std::vector<std::string> materialList; // Later add default materials
+			int materialIndex = 0;
+			uuids::uuid materialID = meshes[0]->materialHandle;
 
-			//for (unsigned int i = 0; i < AssetManager::MaterialList.size(); i++)
-			//{
-			//	materialList.push_back(AssetManager::MaterialList[i]->GetName());
-			//	if (AssetManager::MaterialList[i]->GetUUID() == materialID)
-			//		materialIndex = i;
-			//}
+			for (unsigned int i = 0; i < AssetManager::MaterialList.size(); i++)
+			{
+				materialList.push_back(AssetManager::MaterialList[i]->GetName());
+				if (AssetManager::MaterialList[i]->GetUUID() == materialID)
+					materialIndex = i;
+			}
 
-			//const char* material_label = materialList[materialIndex].c_str();
-			//if (ImGui::BeginCombo("Material", material_label))
-			//{
-			//	for (int n = 0; n < materialList.size(); n++)
-			//	{
-			//		const bool is_selected = (materialIndex == n);
-			//		if (ImGui::Selectable(materialList[n].c_str(), is_selected))
-			//		{
-			//			if (n != materialIndex)
-			//			{
-			//				materialIndex = n;
-			//				std::string s = materialList[n].c_str();
-			//				auto material = AssetManager::LoadMaterial(AssetManager::GetUUID(AssetManager::MaterialList[materialIndex]->GetPath()));
-			//				meshes[0]->material = material;
-			//			}
-			//		}
+			
+			const char* material_label = materialList[materialIndex].c_str();
+			if (ImGui::BeginCombo("Material", material_label))
+			{
+				for (int n = 0; n < materialList.size(); n++)
+				{
+					const bool is_selected = (materialIndex == n);
+					if (ImGui::Selectable(materialList[n].c_str(), is_selected))
+					{
+						if (n != materialIndex)
+						{
+							materialIndex = n;
+							auto id = AssetManager::GetUUID(AssetManager::MaterialList[materialIndex]->GetPath());
+							m_AssetHandler->AddToMaterialPool(id);
+							meshes[0]->materialHandle = id;
+						}
+					}
 
-			//		if (is_selected)
-			//			ImGui::SetItemDefaultFocus();
-			//	}
-			//	ImGui::EndCombo();
-			//}
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
 
-			//ImGui::Separator();
-			//ImGui::Separator();
-			//ImGui::Separator();
+			ImGui::Separator();
+			ImGui::Separator();
+			ImGui::Separator();
 
-			//ImGui::Text(meshes[0]->material->GetName().c_str());
+			ImGui::Text(m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetName().c_str());
 
-			//// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
-			//std::vector<std::string> shaderList;
-			//int shaderIndex = 0;
-			//uuids::uuid shaderID = meshes[0]->material->GetShaderUUID();
+			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
+			std::vector<std::string> shaderList;
+			int shaderIndex = 0;
+			uuids::uuid shaderID = m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetShaderUUID();
 
-			//for (unsigned int i = 0; i < AssetManager::ShaderList.size(); i++)
-			//{
-			//	shaderList.push_back(AssetManager::ShaderList[i]->GetName());
-			//	if (AssetManager::ShaderList[i]->GetUUID() == shaderID)
-			//		shaderIndex = i;
-			//}
+			for (unsigned int i = 0; i < AssetManager::ShaderList.size(); i++)
+			{
+				shaderList.push_back(AssetManager::ShaderList[i]->GetName());
+				if (AssetManager::ShaderList[i]->GetUUID() == shaderID)
+					shaderIndex = i;
+			}
 
-			//const char* shader_label = shaderList[shaderIndex].c_str();
-			//if (ImGui::BeginCombo("Shader", shader_label))
-			//{
-			//	for (int n = 0; n < shaderList.size(); n++)
-			//	{
-			//		const bool is_selected = (shaderIndex == n);
-			//		if (ImGui::Selectable(shaderList[n].c_str(), is_selected))
-			//		{
-			//			if (n != shaderIndex)
-			//			{
-			//				shaderIndex = n;
-			//				std::string s = shaderList[n].c_str();
-			//				auto shader = AssetManager::LoadShader(AssetManager::GetUUID(AssetManager::ShaderList[shaderIndex]->GetPath()));
-			//				meshes[0]->material->SetShader(shader);
-			//				meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string());
-			//			}
-			//		}
+			const char* shader_label = shaderList[shaderIndex].c_str();
+			if (ImGui::BeginCombo("Shader", shader_label))
+			{
+				for (int n = 0; n < shaderList.size(); n++)
+				{
+					const bool is_selected = (shaderIndex == n);
+					if (ImGui::Selectable(shaderList[n].c_str(), is_selected))
+					{
+						if (n != shaderIndex)
+						{
+							shaderIndex = n;
+							
+							auto id = AssetManager::GetUUID(AssetManager::ShaderList[shaderIndex]->GetPath());
+							m_AssetHandler->AddToShaderPool(id); // this could return
+							auto& shader = m_AssetHandler->ShaderPool(id);
+							m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->SetShader(shader);
+							m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->SerializeText(
+								m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetPath().string());
+						}
+					}
 
-			//		if (is_selected)
-			//			ImGui::SetItemDefaultFocus();
-			//	}
-			//	ImGui::EndCombo();
-			//}
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
 
-			//auto handler = m_AssetHandler.lock();
-
+			// actually this logic is now kinda sus but might be relevant again in the future
+			
 			//// if in editing mode ->					propagate
 			//// if accessing from asset browser ->		propagate
 			//// if playing and accessing from scene ->	do not propagate
 
-			//for (auto uniform : meshes[0]->material->m_Uniforms)
-			//{
-			//	if (uniform.Type == UniformType::Vec3)
-			//	{
-			//		if (ImGui::ColorEdit3(uniform.Name.c_str(), &uniform.Data.vec3[0]))
-			//			meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string(), true);
-			//	}
+			auto& material = m_AssetHandler->MaterialPool(meshes[0]->materialHandle);
 
-			//	if (uniform.Type == UniformType::Texture)
-			//	{
-			//		// this is broken but whatever, will be replaced in the future
-			//		ImGui::Text(uniform.Name.c_str());
-			//		if (ImGui::ImageButton((ImTextureID)handler->TexturePool(uniform.Data.dataHandle)->GetRendererID(),
-			//			ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
-			//		{
-			//			#ifdef DUSK_WINDOWS
-			//			nfdchar_t* path = NULL;
-			//			nfdresult_t result = NFD_OpenDialog("png,jpg", NULL, &path);
-			//			if (result == NFD_OKAY)
-			//			{
-			//				// very temporary, but works!
-			//				auto texture = Texture::Create(path);
-			//				std::string str = path;
-			//				//std::replace(str.begin(), str.end(), '\\', '/');
-			//				texture->m_UUID = AssetManager::GetUUID(str);
-			//				meshes[0]->material->SetTexture(uniform.Name, texture);
-			//				meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string(), true);
-			//				free(path);
-			//			}
-			//			#endif
-			//		}
+			for (auto& uniform : m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->m_Uniforms)
+			{
+				if (uniform.Type == UniformType::Vec3)
+				{
+					if (ImGui::ColorEdit3(uniform.Name.c_str(), &uniform.Data.vec3[0]))
+						material->SerializeText(material->GetPath().string());
+				}
 
-			//		if (ImGui::BeginDragDropTarget())
-			//		{
-			//			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
-			//			{
-			//				// barf emoji
-			//				const wchar_t* data = (const wchar_t*)payload->Data;
-			//				std::wstring ws(data);
-			//				std::string path(ws.begin(), ws.end());
+				if (uniform.Type == UniformType::Texture)
+				{
+					// this is broken but whatever, will be replaced in the future
+					ImGui::Text(uniform.Name.c_str());
+					if (ImGui::ImageButton((ImTextureID)m_AssetHandler->TexturePool(uniform.Data.dataHandle)->GetRendererID(),
+						ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
+					{
+						//#ifdef 0
+						//nfdchar_t* path = NULL;
+						//nfdresult_t result = NFD_OpenDialog("png,jpg", NULL, &path);
+						//if (result == NFD_OKAY)
+						//{
+						//	// very temporary, but works!
+						//	auto texture = Texture::Create(path);
+						//	std::string str = path;
+						//	//std::replace(str.begin(), str.end(), '\\', '/');
+						//	texture->m_UUID = AssetManager::GetUUID(str);
+						//	material->SetTexture(uniform.Name, texture);
+						//	material->SerializeText(material->GetPath().string());
+						//	free(path);
+						//}
+						//#endif
+					}
 
-			//				auto texture = Texture::Create(path, AssetManager::GetUUID(ws));
-			//				meshes[0]->material->SetTexture(uniform.Name, texture);
-			//				meshes[0]->material->SerializeText(meshes[0]->material->GetPath().string(), true);
-			//			}
-			//			ImGui::EndDragDropTarget();
-			//		}
-			//	}
-			//}
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
+						{
+							// barf emoji
+							const wchar_t* data = (const wchar_t*)payload->Data;
+							std::wstring ws(data);
+							std::string path(ws.begin(), ws.end());
+
+							m_AssetHandler->AddToTexturePool(AssetManager::GetUUID(ws));
+							auto& texture = m_AssetHandler->TexturePool(AssetManager::GetUUID(ws));
+							material->SetTexture(uniform.Name, texture);
+							material->SerializeText(material->GetPath().string());
+						}
+						ImGui::EndDragDropTarget();
+					}
+				}
+			}
 		}
 		else
 		{

@@ -49,7 +49,7 @@ namespace DuskEngine
 
 		SceneSerializer::DeserializeText(m_EditingScene, "res/scenes/scene.yaml");
 
-		m_Panels.push_back(new InspectorPanel(m_AssetHandler));
+		m_Panels.push_back(new InspectorPanel(m_EditingScene->m_AssetHandler));
 		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
 		m_Panels.push_back(new ConsolePanel());
 		m_Panels.push_back(new ContentBrowserPanel());

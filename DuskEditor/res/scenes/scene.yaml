@@ -28,7 +28,7 @@ Entities:
   - Entity: 12837192831273
     Meta:
       name: Directional Light
-      enabled: false
+      enabled: true
     Transform:
       position: [-3, 1, 1]
       rotation: [-0.261799395, -0.69813168, 0]
@@ -38,11 +38,11 @@ Entities:
       material: 18d19a86-e2e3-41e4-b980-b5594c4df096
     Light:
       type: Directional
-      color: [0.818565369, 0.701134026, 0.701134026]
+      color: [0.517374516, 0.449456632, 0.449456632]
   - Entity: 12837192831273
     Meta:
       name: Point Light 2
-      enabled: false
+      enabled: true
     Transform:
       position: [2.56091332, 0.840736806, -1.92716432]
       rotation: [0, 0, 0]
@@ -52,7 +52,7 @@ Entities:
       material: 18d19a86-e2e3-41e4-b980-b5594c4df096
     Light:
       type: Point
-      color: [1, 0, 0]
+      color: [0.440154433, 0, 0]
   - Entity: 12837192831273
     Meta:
       name: Point Light
@@ -90,7 +90,7 @@ Entities:
       material: 1e636a00-4ce1-49c2-bdaa-6d93d22c6686
   - Entity: 12837192831273
     Meta:
-      name: Unlit Quad
+      name: Lit Quad
       enabled: true
     Transform:
       position: [0, 0, 0]

@@ -46,8 +46,11 @@ namespace DuskEngine
 		bool playing = true;
 
 		friend class Entity;
-		friend class HierarchyPanel;
 		friend class SceneSerializer;
+
+		// should not befriend classes outside engine lib, fix later
+		friend class HierarchyPanel;
+		friend class EditorLayer;
 
 		Ref<Shader> m_GridShader;
 
