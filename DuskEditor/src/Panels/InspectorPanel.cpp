@@ -94,12 +94,12 @@ namespace DuskEngine
 				}
 			}
 
-			DrawComponent<Meta>("Meta", *m_SelectedEntities, MetaInspector);
-			DrawComponent<Transform>(ICON_FK_CUBE "  Transform", *m_SelectedEntities, TransformInspector);
+			DrawComponent<Meta>(ICON_FK_CUBE "  Meta", *m_SelectedEntities, MetaInspector);
+			DrawComponent<Transform>(ICON_FK_ARROWS_ALT "  Transform", *m_SelectedEntities, TransformInspector);
 			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
 			DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
 			//DrawComponent<MeshRenderer>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, &MaterialInspector);
-			DrawComponent<Script>("Script", *m_SelectedEntities, ScriptInspector);
+			DrawComponent<Script>(ICON_FK_PENCIL_SQUARE_O "  Lua Script - Script Name", *m_SelectedEntities, ScriptInspector);
 		}
 		ImGui::End();
 	}

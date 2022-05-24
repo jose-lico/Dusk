@@ -150,6 +150,10 @@ namespace DuskEngine
 		{
 			return out << YAML::Value << var.convert<bool>();
 		}
+		else if (var.can_convert<uuids::uuid>())
+		{
+			return out << YAML::Value << var.convert<uuids::uuid>();
+		}
 		else if (var.can_convert<Ref<Mesh>>())
 		{
 			return out << YAML::Value << var.convert<Ref<Mesh>>();

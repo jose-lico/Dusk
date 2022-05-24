@@ -7,6 +7,8 @@
 #include "Assets/Texture.h"
 #include "Assets/Material.h"
 
+#include "Utils/Rendering/PrimitiveMesh.h"
+
 namespace DuskEngine
 {
 	std::vector<AssetHandler*> AssetHandler::m_AssetHandlers;
@@ -16,12 +18,22 @@ namespace DuskEngine
 	{
 		m_AssetHandlers.push_back(this);
 
-		AddToTexturePool(AssetManager::GetUUID("res/textures/white.png")); //  default texture every handler should have
+		//  default texture every handler should have
+		AddToTexturePool(AssetManager::GetUUID("res/textures/white.png")); 
+
+		//  default meshes
+		std::string str = "47183823-2574-4bfd-b411-99ed177d3e43";
+		uuids::uuid id = uuids::uuid::from_string(str).value();
+		AddToMeshPool(id, PrimitiveMesh::Quad());
+
+		str = "47183823-2574-4bfd-b411-99ed177d3e44";
+		id = uuids::uuid::from_string(str).value();
+		AddToMeshPool(id, PrimitiveMesh::Cube());
 	}
 
 	AssetHandler::~AssetHandler()
 	{
-		// should somehow deregister the asset handler from the ds, fuck it for now
+		LOG(("Destroying Asset Handler " + m_Name).c_str());
 	}
 
 	Ref<Mesh>& AssetHandler::MeshPool(const uuids::uuid& uuid)

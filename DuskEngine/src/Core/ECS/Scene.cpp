@@ -23,13 +23,15 @@ const unsigned int MAX_LIGHTS = 8;
 namespace DuskEngine
 {
 	// maybe reserve ahead of time # of entities present in the base scene
-	Scene::Scene()
+	Scene::Scene(const std::string& name)
+		:m_Name(name)
 	{
-		LOG("Creating new scene");
+		std::string message = "Creating new scene " + m_Name;
+		LOG(message.c_str());
 		m_GridShader = Shader::Create("res/editor/shaders/grid.glsl");
 
 		m_ScriptingEngine = new ScriptingEngine();
-		m_AssetHandler = MakeUnique<AssetHandler>("SceneHandler");
+		m_AssetHandler = new AssetHandler("SceneHandler");
 	}
 
 	Scene::~Scene()
@@ -41,6 +43,11 @@ namespace DuskEngine
 			script.scripts.resize(0);
 		}
 		delete(m_ScriptingEngine);
+
+		std::string message = "Destroying scene " + m_Name;
+		LOG(message.c_str());
+
+		delete(m_AssetHandler);
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)

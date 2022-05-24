@@ -5,26 +5,22 @@ Entities:
       name: Floor
       enabled: true
     Transform:
-      position: [-0.00228451192, -0.5, 0.0421823338]
-      rotation: [-1.563815, -0.0541052036, 0]
+      position: [0, -0.5, 0]
+      rotation: [-1.57079637, 0, 0]
       scale: [10, 10, 1]
     MeshRenderer:
-      mesh:
-        fileID: 0
-        uuid: 00000000-0000-0000-0000-000000000000
+      mesh: 47183823-2574-4bfd-b411-99ed177d3e43
       material: b5699746-b707-4ba1-8a65-eef8ee4b92c1
   - Entity: 12837192831273
     Meta:
-      name: Model
+      name: Duck
       enabled: true
     Transform:
       position: [3, -0.5, 0]
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
     MeshRenderer:
-      mesh:
-        fileID: 2
-        uuid: 24b41d57-d4b0-41a5-a473-803306755fe4
+      mesh: 24b41d57-d4b0-41a5-a473-803306755fe4
       material: 2fbf0300-2732-492a-8672-032e010d8e72
     Script:
       scripts:
@@ -38,9 +34,7 @@ Entities:
       rotation: [-0.261799395, -0.69813168, 0]
       scale: [0.100000001, 0.100000001, 0.100000001]
     MeshRenderer:
-      mesh:
-        fileID: 1
-        uuid: 00000000-0000-0000-0000-000000000000
+      mesh: 47183823-2574-4bfd-b411-99ed177d3e44
       material: 18d19a86-e2e3-41e4-b980-b5594c4df096
     Light:
       type: Directional
@@ -54,9 +48,7 @@ Entities:
       rotation: [0, 0, 0]
       scale: [0.100000001, 0.100000001, 0.100000001]
     MeshRenderer:
-      mesh:
-        fileID: 1
-        uuid: 00000000-0000-0000-0000-000000000000
+      mesh: 47183823-2574-4bfd-b411-99ed177d3e44
       material: 18d19a86-e2e3-41e4-b980-b5594c4df096
     Light:
       type: Point
@@ -70,9 +62,7 @@ Entities:
       rotation: [0, 0, 0]
       scale: [0.100000001, 0.100000001, 0.100000001]
     MeshRenderer:
-      mesh:
-        fileID: 1
-        uuid: 00000000-0000-0000-0000-000000000000
+      mesh: 47183823-2574-4bfd-b411-99ed177d3e44
       material: 18d19a86-e2e3-41e4-b980-b5594c4df096
     Light:
       type: Point
@@ -82,8 +72,8 @@ Entities:
       name: Main Camera
       enabled: true
     Transform:
-      position: [1.99699998, 2.5940001, 6.57999992]
-      rotation: [-0.34906584, -1.57079637, 0]
+      position: [3.45208287, 2.45458341, -2.99648738]
+      rotation: [-0.532325447, 1.59348559, 0]
       scale: [1, 1, 1]
     Camera:
       main: true
@@ -96,9 +86,7 @@ Entities:
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
     MeshRenderer:
-      mesh:
-        fileID: 1
-        uuid: 00000000-0000-0000-0000-000000000000
+      mesh: 47183823-2574-4bfd-b411-99ed177d3e44
       material: 1e636a00-4ce1-49c2-bdaa-6d93d22c6686
   - Entity: 12837192831273
     Meta:
@@ -109,7 +97,5 @@ Entities:
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
     MeshRenderer:
-      mesh:
-        fileID: 0
-        uuid: 00000000-0000-0000-0000-000000000000
+      mesh: 47183823-2574-4bfd-b411-99ed177d3e43
       material: e5389bcf-ca32-47ae-9cc0-a296c257a3fc

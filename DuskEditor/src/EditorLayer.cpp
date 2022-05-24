@@ -45,7 +45,7 @@ namespace DuskEngine
 		fbSpec.Height = 480;
 		m_EditorSceneFB.reset(FrameBuffer::Create(fbSpec));
 		m_PlayingSceneFB.reset(FrameBuffer::Create(fbSpec));
-		m_EditingScene = MakeRef<Scene>();
+		m_EditingScene = MakeRef<Scene>("Editing Scene");
 
 		SceneSerializer::DeserializeText(m_EditingScene, "res/scenes/scene.yaml");
 
@@ -63,7 +63,7 @@ namespace DuskEngine
 
 		auto play = [&]() {
 			m_Playing = true;
-			m_PlayingScene = MakeRef<Scene>();
+			m_PlayingScene = MakeRef<Scene>("Playing Scene");
 			SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");
 			m_PlayingScene->OnAwakeRuntime();
 			ImGui::SetWindowFocus(ICON_FK_GAMEPAD "  Game");
@@ -73,7 +73,7 @@ namespace DuskEngine
 
 		auto stop = [&]() {
 			m_PlayingScene->OnShutdownRuntime();
-			m_PlayingScene = MakeRef<Scene>();
+			m_PlayingScene.reset();
 			m_Playing = false;
 			m_Paused = false;
 			ImGui::SetWindowFocus(ICON_FK_EYE "  Viewport");

@@ -97,7 +97,7 @@ namespace DuskEngine
 			glm::mat4 transformMatrix = transform.GetTransform();
 
 			ImGuizmo::Manipulate(glm::value_ptr(camera.viewMatrix), glm::value_ptr(camera.projectionMatrix),
-				m_ImGuizmoOperation, ImGuizmo::LOCAL, glm::value_ptr(transformMatrix));
+				m_ImGuizmoOperation, ImGuizmo::WORLD, glm::value_ptr(transformMatrix));
 
 			if(ImGuizmo::IsUsing())
 			{

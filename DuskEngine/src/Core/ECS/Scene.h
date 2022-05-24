@@ -16,7 +16,7 @@ namespace DuskEngine
 	class DUSK_EXPORT Scene
 	{
 	public:
-		Scene();
+		Scene(const std::string& name);
 		~Scene();
 
 		Entity CreateEntity(const std::string& name);
@@ -40,6 +40,7 @@ namespace DuskEngine
 		void OnUpdateRuntime(bool running, bool paused = false);
 		void OnShutdownRuntime();
 	private:
+		std::string m_Name;
 		entt::registry m_Registry;
 
 		bool playing = true;
@@ -49,8 +50,8 @@ namespace DuskEngine
 		friend class SceneSerializer;
 
 		Ref<Shader> m_GridShader;
-		ScriptingEngine* m_ScriptingEngine;
 
-		UniqueRef<AssetHandler> m_AssetHandler;
+		ScriptingEngine* m_ScriptingEngine;
+		AssetHandler* m_AssetHandler;
 	};
 }
