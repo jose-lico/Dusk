@@ -31,6 +31,8 @@ namespace DuskEngine
 		id = uuids::uuid::from_string(str).value();
 		auto cube = PrimitiveMesh::Cube();
 		AddToMeshPool(id, cube);
+
+		AddToMaterialPool(AssetManager::GetUUID("res/editor/materials/defaultMaterial.material"));
 	}
 
 	AssetHandler::~AssetHandler()

@@ -60,14 +60,16 @@ namespace DuskEngine
 						ImGui::CloseCurrentPopup();
 					}
 
-					//if(ImGui::MenuItem("Mesh Renderer"))
-					//{
-					//	auto& mesh = (*m_SelectedEntities)[0].AddComponent<MeshRenderer>();
-					//	mesh.mesh = PrimitiveMesh::Quad();
-					//	// This will later be changed to a default material
-					//	mesh.material = ResourceManager::LoadMaterial(ResourceManager::GetUUID("res/materials/modelMaterial.material"));
-					//	ImGui::CloseCurrentPopup();
-					//}
+					if(ImGui::MenuItem("Mesh Renderer"))
+					{
+						auto& mesh = (*m_SelectedEntities)[0].AddComponent<MeshRenderer>();
+						mesh.meshHandle = uuids::uuid::from_string("47183823-2574-4bfd-b411-99ed177d3e44").value();
+						mesh.materialHandle = AssetManager::GetUUID("res/editor/materials/defaultMaterial.material");
+						//mesh.mesh = PrimitiveMesh::Quad();
+						// This will later be changed to a default material
+						//mesh.material = ResourceManager::LoadMaterial(ResourceManager::GetUUID("res/materials/modelMaterial.material"));
+						ImGui::CloseCurrentPopup();
+					}
 
 					if (ImGui::BeginMenu("Scripts"))
 					{

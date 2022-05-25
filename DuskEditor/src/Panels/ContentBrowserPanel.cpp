@@ -103,6 +103,8 @@ namespace DuskEngine
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 				{
 					LOG("This is an image");
+					m_EditingName = i;
+					m_EditingPath = directoryEntry.path();
 				}
 			}
 

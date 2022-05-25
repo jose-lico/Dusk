@@ -36,6 +36,7 @@ namespace DuskEngine
 		RenderCommand::Init();
 
 		AssetManager::Init();
+		AssetManager::CreateUUIDs();
 		AssetManager::LoadUUIDs();
 
 		m_ImGuiLayer = new ImGuiLayer(&GetWindow());

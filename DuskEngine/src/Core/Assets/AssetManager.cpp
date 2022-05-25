@@ -48,8 +48,8 @@ namespace DuskEngine
 	{
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
-			if (directoryEntry.path().filename() == "editor")
-				continue;
+			/*if (directoryEntry.path().filename() == "editor")
+				continue;*/
 
 			if (directoryEntry.is_directory())
 			{
@@ -73,10 +73,15 @@ namespace DuskEngine
 					std::string path = m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string();
 #endif
 					uuids::uuid uuid = data["uuid"].as<uuids::uuid>();
-					m_PathsMap[uuid] = path;
-					m_UUIDsMap[path] = uuid;
+					
+					//quick fix for name editing (need to remove old entry still)
+					if (m_UUIDsMap.find(path) == m_UUIDsMap.end())
+					{
+						m_PathsMap[uuid] = path;
+						m_UUIDsMap[path] = uuid;
 
-					AddToResourceList(path, uuid);
+						AddToResourceList(path, uuid);
+					}
 				}
 			}
 		}
@@ -88,8 +93,8 @@ namespace DuskEngine
 	{
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
-			if (directoryEntry.path().filename() == "editor")
-				continue;
+			/*if (directoryEntry.path().filename() == "editor")
+				continue;*/
 
 			if(directoryEntry.is_directory())
 			{
