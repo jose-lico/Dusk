@@ -33,10 +33,17 @@ namespace DuskEngine
 		template<typename T>
 		void RemoveComponent()
 		{
+			#ifdef DUSK_WINDOWS
 			if (!std::is_same<T, DuskEngine::Meta>() && !std::is_same<T, DuskEngine::Transform>())
 				m_Scene->m_Registry.remove<T>(m_EntityHandle);
 			else
 				WARN("Can not remove Meta or Transform component!");
+			#elif DUSK_LINUX
+			if (!std::is_same<T, Meta>() && !std::is_same<T, Transform>())
+				m_Scene->m_Registry.remove<T>(m_EntityHandle);
+			else
+				WARN("Can not remove Meta or Transform component!");
+			#endif
 		}
 
 		template<typename T>

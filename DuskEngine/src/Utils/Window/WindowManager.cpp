@@ -3,12 +3,13 @@
 
 #include "Platform/Windows/WindowsWindow.h"
 
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 
 namespace DuskEngine
 {
 	WindowManager::WindowManager()
 	{
+		TRACE("Here");
 		glfwInit();
 
 		// For now both Linux and Windows will use WindowsWindow.h

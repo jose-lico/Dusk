@@ -26,6 +26,7 @@ namespace DuskEngine
 
 		m_Logger = new Logger(LOGGER);
 		TRACE("Engine Logger Created");
+		TRACE("Second Trace");
 
 		m_WindowManager = new WindowManager();
 		m_WindowManager->GetWindow()->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));

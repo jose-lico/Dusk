@@ -9,7 +9,7 @@ namespace DuskEngine::Time
 	float Time = 0;
 	float LastFrame = 0;
 
-	void Time::Update()
+	void Update()
 	{
 		float currentFrame = (float)glfwGetTime();
 		DeltaTime = currentFrame - LastFrame;

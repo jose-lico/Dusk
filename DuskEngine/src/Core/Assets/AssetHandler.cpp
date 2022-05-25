@@ -24,11 +24,13 @@ namespace DuskEngine
 		//  default meshes
 		std::string str = "47183823-2574-4bfd-b411-99ed177d3e43";
 		uuids::uuid id = uuids::uuid::from_string(str).value();
-		AddToMeshPool(id, PrimitiveMesh::Quad());
+		auto quad = PrimitiveMesh::Quad();
+		AddToMeshPool(id, quad);
 
 		str = "47183823-2574-4bfd-b411-99ed177d3e44";
 		id = uuids::uuid::from_string(str).value();
-		AddToMeshPool(id, PrimitiveMesh::Cube());
+		auto cube = PrimitiveMesh::Cube();
+		AddToMeshPool(id, cube);
 	}
 
 	AssetHandler::~AssetHandler()

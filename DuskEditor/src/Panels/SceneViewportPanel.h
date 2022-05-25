@@ -9,10 +9,12 @@
 
 #include <vector>
 
+#ifdef DUSK_WINDOWS
 namespace ImGuizmo
 {
 	enum OPERATION;
 }
+#endif
 
 namespace DuskEngine
 {
@@ -42,6 +44,8 @@ namespace DuskEngine
 		bool m_IsLeftMousePressed = false;
 		bool m_HasFirstMousePosition = false;
 		glm::vec2 m_LastMousePosition;
+		#ifdef DUSK_WINDOWS
 		ImGuizmo::OPERATION m_ImGuizmoOperation;
+		#endif
 	};
 }

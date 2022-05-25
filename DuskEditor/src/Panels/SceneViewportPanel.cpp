@@ -21,7 +21,9 @@ namespace DuskEngine
 		m_FB = fb;
 		m_Camera = camera;
 
+		#ifdef DUSK_WINDOWS
 		m_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+		#endif
 	}
 
 	static bool stats = false;
@@ -84,6 +86,7 @@ namespace DuskEngine
 		if(ImGui::IsWindowFocused())
 			MoveEditorCamera();
 
+#ifdef DUSK_WINDOWS
 		if(m_SelectedEntities->size() > 0)
 		{
 			ImGuizmo::SetOrthographic(false);
@@ -119,7 +122,7 @@ namespace DuskEngine
 				}
 			}
 		}
-
+#endif
 		ImGui::End();
 	}
 
@@ -131,6 +134,7 @@ namespace DuskEngine
 
 	bool SceneViewportPanel::Test(KeyPressedEvent& e)
 	{
+		#ifdef DUSK_WINDOWS
 		if (!m_IsLeftMousePressed) {
 			switch (e.GetKeyCode())
 			{
@@ -151,6 +155,7 @@ namespace DuskEngine
 				break;
 			}
 		}
+		#endif
 
 		return true;
 	}
