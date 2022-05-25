@@ -81,8 +81,12 @@ namespace DuskEngine
 			}
 			else if (extension == ".png" || extension == ".jpg")
 			{
-				if (ImGui::ImageButton((void*)m_Icons[textureIndex++]->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0)))
-					LOG("This is an image");
+				ImGui::ImageButton((void*)m_Icons[textureIndex++]->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
+				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+				{
+					m_EditingName = i;
+					m_EditingPath = directoryEntry.path();
+				}	
 
 #ifdef DUSK_WINDOWS
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
@@ -96,6 +100,10 @@ namespace DuskEngine
 			else
 			{
 				ImGui::ImageButton((void*)m_UnknownIcon->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
+				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+				{
+					LOG("This is an image");
+				}
 			}
 
 			ImGui::PopStyleVar();
@@ -105,7 +113,22 @@ namespace DuskEngine
 
 			ImGui::AlignTextToFramePadding();
 
-			ImGui::Text(filenameString.c_str());
+			if(i == m_EditingName)
+			{
+				char buffer[64];
+				if (ImGui::InputText("##itemName", buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) 
+				{
+					LOG(buffer);
+					LOG(m_EditingPath.string().c_str());
+					LOG(m_CurrentDirectory.string().c_str());
+					std::string targetPath = m_CurrentDirectory.string() + "\\" + buffer + m_EditingPath.extension().string();
+					std::filesystem::rename(m_EditingPath, targetPath);
+					std::filesystem::rename(m_EditingPath.string() + ".meta", targetPath + ".meta");
+					AssetManager::LoadUUIDs();
+				}
+			}
+			else
+				ImGui::Text(filenameString.c_str());
 
 			ImGui::EndGroup();
 
@@ -116,6 +139,9 @@ namespace DuskEngine
 
 			if (shouldBreak) break; // Only break here to avoid breaking ImGui
 		}
+
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+			m_EditingName = -1;
 
 		if (ImGui::BeginPopupContextWindow(0, 1, false))
 		{
