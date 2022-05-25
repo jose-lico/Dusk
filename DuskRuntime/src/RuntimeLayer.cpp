@@ -3,27 +3,52 @@
 #include "Core/Application/Input.h"
 #include "Core/Application/Time.h"
 #include "Core/Serialization/SceneSerializer.h"
-#include "Core/ECS/Components/Transform.h"
+#include "Core/ECS/Components/Camera.h"
+
+#include "GLFW/glfw3.h"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace DuskEngine
 {
 	RuntimeLayer::RuntimeLayer()
 	{
-		m_Scene = MakeRef<Scene>();
+		m_Scene = MakeRef<Scene>("Runtime Scene");
 
 		SceneSerializer::DeserializeText(m_Scene, "res/scenes/scene.yaml");
 
-		m_Camera = *m_Scene->GetMainCamera();
+		m_Scene->OnAwakeRuntime();
+
+		//m_Camera = *m_Scene->GetMainCamera();
+	}
+
+	RuntimeLayer::~RuntimeLayer()
+	{
+		m_Scene->OnShutdownRuntime();
 	}
 
 	void RuntimeLayer::OnUpdate()
 	{
-		m_Scene->OnUpdate();
+		m_Scene->OnUpdateRuntime(true);
 
-		RuntimeLayer::Camera();
+		//RuntimeLayer::Camera();
 	}
 
-	void RuntimeLayer::Camera()
+	void RuntimeLayer::OnEvent(Event& event)
+	{
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(RuntimeLayer::CameraProj));
+	}
+
+	bool RuntimeLayer::CameraProj(WindowResizeEvent& event)
+	{
+		auto camera = m_Scene->GetMainCamera();
+		camera->GetComponent<Camera>().projectionMatrix =
+			glm::perspective(glm::radians(45.0f), (float)(event.GetWidth()/event.GetHeight()), 0.01f, 100.0f);
+
+		return true;
+	}
+
+	/*void RuntimeLayer::Camera()
 	{
 		if (!m_IsLeftMousePressed && Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
 		{
@@ -86,5 +111,10 @@ namespace DuskEngine
 
 			transform.rotation += rotInput;
 		}
+	}*/
+	
+	void DropCallback(GLFWwindow* window, int count, const char** paths)
+	{
+		
 	}
 }

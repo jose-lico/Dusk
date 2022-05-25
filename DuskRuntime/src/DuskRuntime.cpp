@@ -5,21 +5,24 @@
 
 namespace DuskEngine
 {
-	class Game : public Application
+	class DuskRuntime : public Application
 	{
 	public:
-		Game()
+		DuskRuntime(const ApplicationSpecs& specs)
+			: Application(specs)
 		{
 			PushLayer(new RuntimeLayer());
 		}
 
-		~Game()
+		~DuskRuntime()
 		{
 		}
 	};
 
 	Application* CreateApplication()
 	{
-		return new Game();
+		ApplicationSpecs spec;
+
+		return new DuskRuntime(spec);
 	}
 }

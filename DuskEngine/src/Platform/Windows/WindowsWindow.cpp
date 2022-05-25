@@ -27,6 +27,7 @@ namespace DuskEngine
 		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		glfwMaximizeWindow(m_Window);
+		
 
 		// glfw callbacks
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -66,6 +67,20 @@ namespace DuskEngine
 				data.EventCallback(event);
 				glViewport(0, 0, width, height); // maybe move to context
 			});
+
+		//glfwSetWindowMaximizeCallback(m_Window, [](GLFWwindow* window, int maximized)
+		//	{
+		//		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		//		int width, height;
+		//		glfwGetWindowSize(window, &width, &height);
+		//		data.Width = width;
+		//		data.Height = height;
+
+		//		WindowResizeEvent event(width, height);
+		//		data.EventCallback(event);
+		//		glViewport(0, 0, width, height); // maybe move to context
+		//		LOG("Maximized");
+		//	});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
 			{

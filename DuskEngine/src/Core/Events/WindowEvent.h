@@ -1,6 +1,8 @@
 #pragma once
 #include "EventBase.h"
 
+#include <sstream>
+
 namespace DuskEngine
 {
 	class WindowResizeEvent : public Event
