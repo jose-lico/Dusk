@@ -21,9 +21,7 @@ namespace DuskEngine
 		m_FB = fb;
 		m_Camera = camera;
 
-		#ifdef DUSK_WINDOWS
 		m_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
-		#endif
 	}
 
 	static bool stats = false;
@@ -86,7 +84,6 @@ namespace DuskEngine
 		if(ImGui::IsWindowFocused())
 			MoveEditorCamera();
 
-#ifdef DUSK_WINDOWS
 		if(m_SelectedEntities->size() > 0)
 		{
 			ImGuizmo::SetOrthographic(false);
@@ -100,7 +97,7 @@ namespace DuskEngine
 			glm::mat4 transformMatrix = transform.GetTransform();
 
 			ImGuizmo::Manipulate(glm::value_ptr(camera.viewMatrix), glm::value_ptr(camera.projectionMatrix),
-				m_ImGuizmoOperation, ImGuizmo::WORLD, glm::value_ptr(transformMatrix));
+				(ImGuizmo::OPERATION)m_ImGuizmoOperation, ImGuizmo::WORLD, glm::value_ptr(transformMatrix));
 
 			if(ImGuizmo::IsUsing())
 			{
@@ -122,7 +119,6 @@ namespace DuskEngine
 				}
 			}
 		}
-#endif
 		ImGui::End();
 	}
 

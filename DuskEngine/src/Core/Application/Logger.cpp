@@ -26,8 +26,14 @@ namespace DuskEngine
 
 	Logger* Logger::Get(const char* name)
 	{
-		if (m_Loggers.find(name) != m_Loggers.end())
-			return m_Loggers[name];
+		// for some godforsaken reason, unordered_map.find(name) on gcc 
+		// was finding the entry but returning a nullptr, this works :/    
+		for (auto const& pair : m_Loggers) {
+			if (strcmp(name, pair.first) == 0)
+				return pair.second;
+		}
+
+		return nullptr;
 	}
 
 	void Logger::Log(const char* message, LogLevel level, const char* file, unsigned int line)

@@ -9,7 +9,6 @@ namespace DuskEngine
 {
 	WindowManager::WindowManager()
 	{
-		TRACE("Here");
 		glfwInit();
 
 		// For now both Linux and Windows will use WindowsWindow.h
