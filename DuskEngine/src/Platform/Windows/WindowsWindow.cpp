@@ -18,7 +18,7 @@ namespace DuskEngine
 
 		if (!m_Window)
 		{
-			ERROR("Window wasn't created properly, shutting glfw down");
+			ERR("Window wasn't created properly, shutting glfw down");
 			glfwTerminate();
 		}
 
@@ -132,6 +132,11 @@ namespace DuskEngine
 	{
 		m_Data.VSync = vsync;
 		glfwSwapInterval(vsync);
+	}
+
+	void WindowsWindow::SetWindowTitle(const char* name)
+	{
+		glfwSetWindowTitle(m_Window, name);
 	}
 
 	bool WindowsWindow::IsVSync() const

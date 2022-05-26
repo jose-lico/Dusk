@@ -8,16 +8,15 @@ namespace DuskEngine
 	class Layer;
 	class Event;
 	class Window;
-	class LayerStack;
-	class ImGuiLayer;
+	class Logger;
 	class WindowManager;
 	class RendererContext;
-	class Logger;
+	class LayerStack;
+	class ImGuiLayer;
 
-	// Add more stuff later
 	struct ApplicationSpecs
 	{
-		//std::string Name = "Dusk Application";
+		std::string Name = "Dusk Application";
 	};
 
 	class DUSK_EXPORT Application
@@ -26,25 +25,28 @@ namespace DuskEngine
 		Application(const ApplicationSpecs& specs);
 		virtual ~Application();
 
+		void Run();
+		
+		static Application& Get() { return *s_Instance; }
+		
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
-		
 		void OnEvent(Event& e);
-		void Run();
+
+		void SetName(const char* name);
 
 		Window& GetWindow();
-
-		static Application& Get() { return *s_Instance; }
 	private:
 		static Application* s_Instance;
 
-		LayerStack* m_LayerStack;
-		ImGuiLayer* m_ImGuiLayer; // Deleted by m_LayerStack
+		Logger* m_Logger;
 		WindowManager* m_WindowManager;
 		RendererContext* m_RendererContext;
+		
+		LayerStack* m_LayerStack;
+		ImGuiLayer* m_ImGuiLayer; // Deleted by m_LayerStack
 	
 		ApplicationSpecs m_Specs;
-		Logger* m_Logger;
 	};
 
 	extern Application* CreateApplication();

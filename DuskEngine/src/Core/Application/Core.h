@@ -15,7 +15,7 @@
 #define TRACE(...) Logger::Get(LOGGER)->Log(__VA_ARGS__, DuskEngine::LogLevel::TRACE, __FILE__, __LINE__)
 #define LOG(...) Logger::Get(LOGGER)->Log(__VA_ARGS__, DuskEngine::LogLevel::LOG, __FILE__, __LINE__)
 #define WARN(...) Logger::Get(LOGGER)->Log(__VA_ARGS__, DuskEngine::LogLevel::WARN, __FILE__, __LINE__)
-#define ERROR(...) Logger::Get(LOGGER)->Log(__VA_ARGS__, DuskEngine::LogLevel::ERROR, __FILE__, __LINE__)
+#define ERR(...) Logger::Get(LOGGER)->Log(__VA_ARGS__, DuskEngine::LogLevel::ERR, __FILE__, __LINE__)
 #define FATAL(...) Logger::Get(LOGGER)->Log(__VA_ARGS__, DuskEngine::LogLevel::FATAL, __FILE__, __LINE__)
 
 #ifdef DUSK_WINDOWS

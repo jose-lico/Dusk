@@ -17,6 +17,7 @@ namespace DuskEngine
 
 		virtual void SetEventCallback(const std::function<void(Event&)>& callback) override { m_Data.EventCallback = callback; }
 		virtual void SetVSync(bool vsync) override;
+		virtual void SetWindowTitle(const char* name) override;
 
 		virtual bool ShouldClose() const override;
 

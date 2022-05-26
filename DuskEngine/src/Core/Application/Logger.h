@@ -16,7 +16,7 @@ namespace DuskEngine
 		TRACE,
 		LOG,
 		WARN,
-		ERROR,
+		ERR,
 		FATAL
 	};
 

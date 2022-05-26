@@ -22,6 +22,7 @@ namespace DuskEngine
 	Application* CreateApplication()
 	{
 		ApplicationSpecs spec;
+		spec.Name = "Dusk Runtime";
 
 		return new DuskRuntime(spec);
 	}

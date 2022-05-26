@@ -4,8 +4,6 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
-#undef ERROR
-
 namespace DuskEngine
 {
 	std::unordered_map<const char*, Logger*> Logger::m_Loggers;
@@ -60,7 +58,7 @@ namespace DuskEngine
 		case LogLevel::WARN:
 			m_Logger->warn(log.c_str());
 			break;
-		case LogLevel::ERROR:
+		case LogLevel::ERR:
 			m_Logger->error(log.c_str());
 			break;
 		case LogLevel::FATAL:

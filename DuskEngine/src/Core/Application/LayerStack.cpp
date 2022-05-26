@@ -3,13 +3,10 @@
 
 #include "Layer.h"
 
-#include "Core.h"
-
 namespace DuskEngine
 {
 	LayerStack::LayerStack()
 	{
-		LOG("Layerstack constructed");
 	}
 
 	LayerStack::~LayerStack()

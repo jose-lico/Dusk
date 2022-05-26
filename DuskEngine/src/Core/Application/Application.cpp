@@ -13,8 +13,6 @@
 #include "Utils/Window/Window.h"
 #include "Utils/ImGui/ImGuiLayer.h"
 
-#include "Core.h"
-
 namespace DuskEngine
 {
 	Application* Application::s_Instance = nullptr;
@@ -29,6 +27,7 @@ namespace DuskEngine
 
 		m_WindowManager = new WindowManager();
 		m_WindowManager->GetWindow()->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+		m_WindowManager->GetWindow()->SetWindowTitle(m_Specs.Name.c_str());
 
 		m_RendererContext = RendererContext::Create(m_WindowManager->GetWindow()->GetNativeHandle());
 		
@@ -55,6 +54,25 @@ namespace DuskEngine
 		delete m_Logger;
 	}
 
+	void Application::Run()
+	{
+		while (!m_WindowManager->GetWindow()->ShouldClose())
+		{
+			Time::Update();
+			for (Layer* layer : *m_LayerStack)
+				if (layer->Enabled)
+					layer->OnUpdate();
+
+			m_ImGuiLayer->Begin();
+			for (Layer* layer : *m_LayerStack)
+				if (layer->Enabled)
+					layer->OnImGuiRender();
+			m_ImGuiLayer->End();
+
+			m_RendererContext->SwapBuffers();
+		}
+	}
+
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack->PushLayer(layer);
@@ -78,23 +96,10 @@ namespace DuskEngine
 		}
 	}
 
-	void Application::Run()
+	void Application::SetName(const char* name)
 	{
-		while (!m_WindowManager->GetWindow()->ShouldClose())
-		{
-			Time::Update();
-			for (Layer* layer : *m_LayerStack)
-				if (layer->Enabled)
-					layer->OnUpdate();
-
-			m_ImGuiLayer->Begin();
-			for (Layer* layer : *m_LayerStack)
-				if (layer->Enabled)
-					layer->OnImGuiRender();
-			m_ImGuiLayer->End();
-
-			m_RendererContext->SwapBuffers();
-		}
+		m_Specs.Name = name;
+		m_WindowManager->GetWindow()->SetWindowTitle(name);
 	}
 
 	Window& Application::GetWindow()

@@ -32,6 +32,7 @@ namespace DuskEngine
 
 		virtual void SetEventCallback(const std::function<void(Event&)>& callback) = 0;
 		virtual void SetVSync(bool vsync) = 0;
+		virtual void SetWindowTitle(const char* name) = 0;
 
 		virtual bool ShouldClose() const = 0;
 

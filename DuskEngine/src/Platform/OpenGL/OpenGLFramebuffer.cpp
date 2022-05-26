@@ -43,7 +43,7 @@ namespace DuskEngine
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
 
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			ERROR("Error in the Framebuffer");
+			ERR("Error in the Framebuffer");
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
