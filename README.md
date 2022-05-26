@@ -27,35 +27,32 @@ If you are interested in reading about the journey that led me to this project, 
 
 Dusk is very early in development and so its features are barebones.
 
-- Uses a build system for the project and all its dependencies
+- Build system for the project and all its dependencies
 - Logging system
-- Simple 3D Rendering
+- 3D Rendering
 - Ability to import 3D models (.fbx or .obj)
-- Phong Lighting
 - Material System
-- Resource management with UUIDs
-- Resource de/serialization (Scenes, Materials) 
-- ECS using entt
-- Editor tool using imgui
-
+- Asset management with UUIDs
+- ECS
+- Lua Scripting
+- Fully fledged editor
+- Simple Runtime
+  
 # Goals
 
 It is always good to have goals that push you forward and give you a glimpse of what the future might hold.
 
 Dusk's short term goal is to reach the MVP stage of a game engine. For me, this means to be able to create and manipulate scenes and the objects
 that live in it, create assets such as materials, and finally having the concept of a runtime and being able to export a game build which can be distribuited.
-This MVP will not even have scripting meaning the exported build will most likely just be a static scene.
 
 Here are some of the tasks towards this goal, and beyond.
 
 - Better editor tool
-- Concept of a Runtime
-- Ability to export games
+- Proper expor
 - Profiling
 - Multithreaded
 - PBR workflow
 - Support for multiple graphics APIs
-- Mono Scripting
 - Physics
 - Audio
 
@@ -65,7 +62,7 @@ And many many more.
 
 ## Building Dusk
 
-*Dusk used to compile on both MSVC for Windows and GCC for Linux. However, at the moment, the GCC setup is broken and the project does not compile sucessfully. This will hopefully be fixed in the future.*
+*I only test Dusk on Linux every so often so it is possible that the project does not compile with gcc from time to time.*
 
 To build Dusk from source, first clone the repository and all of its submodules.
 
@@ -75,7 +72,7 @@ Dusk uses [premake](https://premake.github.io/) as its build system.<br>
 
 To generate the project files, run premake from the project root directory and choose the targeted environment.
 
-- VS2019 `premake5.exe vs2019`
+- VS2019 `premake5.exe vs2022`
 - GCC &nbsp;&nbsp;&nbsp;&nbsp; `./premake5 gmake2`
 
 After these steps the project should compile and run.
