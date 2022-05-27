@@ -5,7 +5,7 @@
 #include "Shader.h"
 
 #include "Core/Assets/AssetHandler.h"
-#include "Core/Assets/AssetManager.h"
+#include "Core/Assets/AssetDatabase.h"
 #include "Utils/Serialization/Yaml.h"
 
 namespace DuskEngine
@@ -49,7 +49,7 @@ namespace DuskEngine
 
 	Material::~Material()
 	{
-		std::string message = "Deleted Material " + m_Name;
+		std::string message = "Destroyed Material " + m_Name;
 		LOG(message.c_str());
 	}
 
@@ -86,7 +86,7 @@ namespace DuskEngine
 				
 				break;
 			case UniformType::Texture:
-				uniform.Data.dataHandle = AssetManager::GetUUID("res/textures/white.png");				
+				uniform.Data.dataHandle = AssetDatabase::GetUUID("res/textures/white.png");
 				break;
 			}
 		}
@@ -175,7 +175,7 @@ namespace DuskEngine
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Material" << YAML::Value << "newMaterial";
-		out << YAML::Key << "Shader" << YAML::Value << AssetManager::GetUUID("res/shaders/simpleColor.glsl");
+		out << YAML::Key << "Shader" << YAML::Value << AssetDatabase::GetUUID("res/shaders/simpleColor.glsl");
 		out << YAML::Key << "Uniforms";
 		out << YAML::BeginMap;
 		out << YAML::Key << "Color" << YAML::Value << glm::vec3(1.0);

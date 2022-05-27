@@ -82,6 +82,6 @@ namespace DuskEngine
 
 		friend class InspectorPanel;
 		friend class Scene;
-		friend class AssetManager;
+		friend class AssetDatabase;
 	};
 }

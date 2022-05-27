@@ -35,6 +35,6 @@ namespace DuskEngine
 	private:
 		MeshType m_Type;
 
-		friend class AssetManager;
+		friend class AssetDatabase;
 	};
 }

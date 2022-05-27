@@ -1,4 +1,7 @@
+#pragma once
+
 #include "Core/ECS/Scene.h"
+
 #include "Utils/Memory/Memory.h"
 
 #include <unordered_map>
@@ -25,7 +28,7 @@ namespace DuskEngine
 		}
 	};
 
-	class AssetManager
+	class AssetDatabase
 	{
 	public:
 		static void Init();
@@ -45,10 +48,10 @@ namespace DuskEngine
 		static Ref<LuaScript> LoadScript(const uuids::uuid& uuid);
 
 		// Resource Lists
-		static std::vector<Asset*> ShaderList;
-		static std::vector<Asset*> ModelList;
-		static std::vector<Asset*> MaterialList;
-		static std::vector<Asset*> ScriptsList;
+		static std::vector<Asset*> ShaderDatabase;
+		static std::vector<Asset*> ModelDatabase;
+		static std::vector<Asset*> MaterialDatabase;
+		static std::vector<Asset*> ScriptsDatabase;
 	private:
 		static std::filesystem::path m_RootDirectory;
 		static std::filesystem::path m_CurrentDirectory;

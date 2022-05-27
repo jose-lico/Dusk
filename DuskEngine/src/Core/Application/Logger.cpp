@@ -9,17 +9,24 @@ namespace DuskEngine
 	std::unordered_map<const char*, Logger*> Logger::m_Loggers;
 
 	Logger::Logger(const char* name)
+		:m_Name(name)
 	{
 		m_Logger = spdlog::stdout_color_mt(name);
 		m_Logger->set_level(spdlog::level::trace);
 		m_Logger->set_pattern("%^[%T] [%n]: %v%$");
 
 		m_Loggers.insert({ name, this });
+		
+		std::string message = "Created Logger ";
+		message.append(name);
+		LOG(message.c_str());
 	}
 
 	Logger::~Logger()
 	{
-		
+		std::string message = "Destroyed Logger ";
+		message.append(m_Name);
+		LOG(message.c_str());
 	}
 
 	Logger* Logger::Get(const char* name)
@@ -38,12 +45,13 @@ namespace DuskEngine
 	{
 		// construct struct with message and save for later, editor stuff
 
-		// rework this & omit once editor has this information
+		// Omitted for now
 		std::string log = "File: ";
-		log.append(file); // Should remove the whole C blah blah
+		log.append(file);
 		log.append(" Line:");
 		log.append(std::to_string(line));
 		log.append(" ");
+
 		log = "";
 		log.append(message);
 

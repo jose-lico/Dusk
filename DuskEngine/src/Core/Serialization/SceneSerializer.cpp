@@ -3,7 +3,7 @@
 
 #include "Core/ECS/Entity.h"
 #include "Core/ECS/Components.h"
-#include "Core/Assets/AssetManager.h"
+#include "Core/Assets/AssetDatabase.h"
 #include "Core/ECS/ComponentRegistry.cpp"
 #include "Core/Assets/AssetHandler.h"
 
@@ -129,7 +129,7 @@ namespace DuskEngine
 					auto scripts = scriptData["scripts"];
 					for(auto script : scripts)
 					{
-						s.scripts.push_back(AssetManager::LoadScript(script.second.as<uuids::uuid>()));
+						s.scripts.push_back(AssetDatabase::LoadScript(script.second.as<uuids::uuid>()));
 						s.scripts.back()->m_Ent = deserializedEntity;
 					}
 				}

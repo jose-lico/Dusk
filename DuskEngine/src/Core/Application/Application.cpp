@@ -4,7 +4,7 @@
 #include "Time.h"
 #include "LayerStack.h"
 
-#include "Core/Assets/AssetManager.h"
+#include "Core/Assets/AssetDatabase.h"
 #include "Core/Renderer/RenderCommand.h"
 #include "Core/Renderer/RendererContext.h"
 #include "Core/Events/EventBase.h"
@@ -23,7 +23,6 @@ namespace DuskEngine
 		s_Instance = this;
 
 		m_Logger = new Logger(LOGGER);
-		TRACE("Engine Logger Created");
 
 		m_WindowManager = new WindowManager();
 		m_WindowManager->GetWindow()->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
@@ -33,9 +32,9 @@ namespace DuskEngine
 		
 		RenderCommand::Init();
 
-		AssetManager::Init();
-		AssetManager::CreateUUIDs();
-		AssetManager::LoadUUIDs();
+		AssetDatabase::Init();
+		AssetDatabase::CreateUUIDs();
+		AssetDatabase::LoadUUIDs();
 
 		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
 		m_LayerStack = new LayerStack();
@@ -47,7 +46,7 @@ namespace DuskEngine
 	{
 		TRACE("########## SHUTDOWN ##########");
 
-		AssetManager::Shutdown();
+		AssetDatabase::Shutdown();
 		delete m_RendererContext;
 		delete m_LayerStack; // Deletes m_ImGuiLayer
 		delete m_WindowManager;
@@ -102,7 +101,7 @@ namespace DuskEngine
 		m_WindowManager->GetWindow()->SetWindowTitle(name);
 	}
 
-	Window& Application::GetWindow()
+	Window& Application::GetWindow() const
 	{
 		return *m_WindowManager->GetWindow();
 	}

@@ -32,5 +32,6 @@ namespace DuskEngine
 	private:
 		static std::unordered_map<const char*, Logger*> m_Loggers;
 		Ref<spdlog::logger> m_Logger;
+		const char* m_Name;
 	};
 }

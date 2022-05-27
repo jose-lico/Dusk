@@ -1,8 +1,6 @@
 #pragma once
 #include "Core/Application/Core.h"
 
-#include "Utils/Memory/Memory.h"
-
 #include "entt/entity/registry.hpp"
 
 namespace DuskEngine

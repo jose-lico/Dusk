@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "AssetHandler.h"
 
-#include "AssetManager.h"
+#include "AssetDatabase.h"
 
 #include "Assets/Mesh.h"
 #include "Assets/Texture.h"
@@ -19,7 +19,7 @@ namespace DuskEngine
 		m_AssetHandlers.push_back(this);
 
 		//  default texture every handler should have
-		AddToTexturePool(AssetManager::GetUUID("res/textures/white.png")); 
+		AddToTexturePool(AssetDatabase::GetUUID("res/textures/white.png"));
 
 		//  default meshes
 		std::string str = "47183823-2574-4bfd-b411-99ed177d3e43";
@@ -32,7 +32,7 @@ namespace DuskEngine
 		auto cube = PrimitiveMesh::Cube();
 		AddToMeshPool(id, cube);
 
-		AddToMaterialPool(AssetManager::GetUUID("res/editor/materials/defaultMaterial.material"));
+		AddToMaterialPool(AssetDatabase::GetUUID("res/editor/materials/defaultMaterial.material"));
 	}
 
 	AssetHandler::~AssetHandler()
@@ -48,7 +48,7 @@ namespace DuskEngine
 	void AssetHandler::AddToMeshPool(const uuids::uuid& uuid)
 	{
 		if (m_MeshPool.find(uuid) == m_MeshPool.end())
-			m_MeshPool.insert({ uuid, AssetManager::LoadModel(uuid) });
+			m_MeshPool.insert({ uuid, AssetDatabase::LoadModel(uuid) });
 	}
 
 	void AssetHandler::AddToMeshPool(const uuids::uuid& uuid, Ref<Mesh>& mesh)
@@ -65,7 +65,7 @@ namespace DuskEngine
 	void AssetHandler::AddToTexturePool(const uuids::uuid& uuid)
 	{
 		if (m_TexturePool.find(uuid) == m_TexturePool.end())
-			m_TexturePool.insert({ uuid, AssetManager::LoadTexture(uuid) });
+			m_TexturePool.insert({ uuid, AssetDatabase::LoadTexture(uuid) });
 	}
 
 	Ref<Shader>& AssetHandler::ShaderPool(const uuids::uuid& uuid)
@@ -76,7 +76,7 @@ namespace DuskEngine
 	void AssetHandler::AddToShaderPool(const uuids::uuid& uuid)
 	{
 		if (m_ShaderPool.find(uuid) == m_ShaderPool.end())
-			m_ShaderPool.insert({ uuid, AssetManager::LoadShader(uuid) });
+			m_ShaderPool.insert({ uuid, AssetDatabase::LoadShader(uuid) });
 	}
 
 	Ref<Material>& AssetHandler::MaterialPool(const uuids::uuid& uuid)
@@ -87,7 +87,7 @@ namespace DuskEngine
 	void AssetHandler::AddToMaterialPool(const uuids::uuid& uuid)
 	{
 		if (m_MaterialPool.find(uuid) == m_MaterialPool.end())
-			m_MaterialPool.insert({ uuid, AssetManager::LoadMaterial(uuid, this) });
+			m_MaterialPool.insert({ uuid, AssetDatabase::LoadMaterial(uuid, this) });
 	}
 
 	void AssetHandler::PropagateMaterialChange(Material* material)

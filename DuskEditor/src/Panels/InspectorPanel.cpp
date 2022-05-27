@@ -2,7 +2,7 @@
 
 #include "Core/Assets/Assets/Shader.h"
 #include "Core/Assets/Assets/Texture.h"
-#include "Core/Assets/AssetManager.h"
+#include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/AssetHandler.h"
 #include "Core/ECS/Entity.h"
 
@@ -64,7 +64,7 @@ namespace DuskEngine
 					{
 						auto& mesh = (*m_SelectedEntities)[0].AddComponent<MeshRenderer>();
 						mesh.meshHandle = uuids::uuid::from_string("47183823-2574-4bfd-b411-99ed177d3e44").value();
-						mesh.materialHandle = AssetManager::GetUUID("res/editor/materials/defaultMaterial.material");
+						mesh.materialHandle = AssetDatabase::GetUUID("res/editor/materials/defaultMaterial.material");
 						//mesh.mesh = PrimitiveMesh::Quad();
 						// This will later be changed to a default material
 						//mesh.material = ResourceManager::LoadMaterial(ResourceManager::GetUUID("res/materials/modelMaterial.material"));
@@ -73,7 +73,7 @@ namespace DuskEngine
 
 					if (ImGui::BeginMenu("Scripts"))
 					{
-						for (auto scriptFile : AssetManager::ScriptsList)
+						for (auto scriptFile : AssetDatabase::ScriptsDatabase)
 						{
 							if(ImGui::MenuItem(scriptFile->GetName().c_str()))
 							{
@@ -89,7 +89,7 @@ namespace DuskEngine
 								}
 
 								if (canAdd)
-									script.scripts.push_back(AssetManager::LoadScript(scriptFile->GetUUID()));
+									script.scripts.push_back(AssetDatabase::LoadScript(scriptFile->GetUUID()));
 							}
 						}
 						ImGui::EndMenu();
@@ -386,10 +386,10 @@ namespace DuskEngine
 			int modelIndex = 0;
 			uuids::uuid modelID = meshes[0]->meshHandle;
 
-			for (unsigned int i = 0; i < AssetManager::ModelList.size(); i++)
+			for (unsigned int i = 0; i < AssetDatabase::ModelDatabase.size(); i++)
 			{
-				modelList.push_back(AssetManager::ModelList[i]->GetName());
-				if (AssetManager::ModelList[i]->GetUUID() == modelID)
+				modelList.push_back(AssetDatabase::ModelDatabase[i]->GetName());
+				if (AssetDatabase::ModelDatabase[i]->GetUUID() == modelID)
 					modelIndex = i + 2;
 			}
 
@@ -436,8 +436,8 @@ namespace DuskEngine
 							}
 							else
 							{
-								m_AssetHandler->AddToMeshPool(AssetManager::GetUUID(AssetManager::ModelList[modelIndex - 2]->GetPath()));
-								meshes[0]->meshHandle = AssetManager::GetUUID(AssetManager::ModelList[modelIndex - 2]->GetPath());
+								m_AssetHandler->AddToMeshPool(AssetDatabase::GetUUID(AssetDatabase::ModelDatabase[modelIndex - 2]->GetPath()));
+								meshes[0]->meshHandle = AssetDatabase::GetUUID(AssetDatabase::ModelDatabase[modelIndex - 2]->GetPath());
 							}
 						}
 					}
@@ -453,10 +453,10 @@ namespace DuskEngine
 			int materialIndex = 0;
 			uuids::uuid materialID = meshes[0]->materialHandle;
 
-			for (unsigned int i = 0; i < AssetManager::MaterialList.size(); i++)
+			for (unsigned int i = 0; i < AssetDatabase::MaterialDatabase.size(); i++)
 			{
-				materialList.push_back(AssetManager::MaterialList[i]->GetName());
-				if (AssetManager::MaterialList[i]->GetUUID() == materialID)
+				materialList.push_back(AssetDatabase::MaterialDatabase[i]->GetName());
+				if (AssetDatabase::MaterialDatabase[i]->GetUUID() == materialID)
 					materialIndex = i;
 			}
 
@@ -472,7 +472,7 @@ namespace DuskEngine
 						if (n != materialIndex)
 						{
 							materialIndex = n;
-							auto id = AssetManager::GetUUID(AssetManager::MaterialList[materialIndex]->GetPath());
+							auto id = AssetDatabase::GetUUID(AssetDatabase::MaterialDatabase[materialIndex]->GetPath());
 							m_AssetHandler->AddToMaterialPool(id);
 							meshes[0]->materialHandle = id;
 						}
@@ -495,10 +495,10 @@ namespace DuskEngine
 			int shaderIndex = 0;
 			uuids::uuid shaderID = m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetShaderUUID();
 
-			for (unsigned int i = 0; i < AssetManager::ShaderList.size(); i++)
+			for (unsigned int i = 0; i < AssetDatabase::ShaderDatabase.size(); i++)
 			{
-				shaderList.push_back(AssetManager::ShaderList[i]->GetName());
-				if (AssetManager::ShaderList[i]->GetUUID() == shaderID)
+				shaderList.push_back(AssetDatabase::ShaderDatabase[i]->GetName());
+				if (AssetDatabase::ShaderDatabase[i]->GetUUID() == shaderID)
 					shaderIndex = i;
 			}
 
@@ -514,7 +514,7 @@ namespace DuskEngine
 						{
 							shaderIndex = n;
 							
-							auto id = AssetManager::GetUUID(AssetManager::ShaderList[shaderIndex]->GetPath());
+							auto id = AssetDatabase::GetUUID(AssetDatabase::ShaderDatabase[shaderIndex]->GetPath());
 							m_AssetHandler->AddToShaderPool(id); // this could return
 							auto& shader = m_AssetHandler->ShaderPool(id);
 							m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->SetShader(shader);
@@ -578,8 +578,8 @@ namespace DuskEngine
 							std::wstring ws(data);
 							std::string path(ws.begin(), ws.end());
 
-							m_AssetHandler->AddToTexturePool(AssetManager::GetUUID(ws));
-							auto& texture = m_AssetHandler->TexturePool(AssetManager::GetUUID(ws));
+							m_AssetHandler->AddToTexturePool(AssetDatabase::GetUUID(ws));
+							auto& texture = m_AssetHandler->TexturePool(AssetDatabase::GetUUID(ws));
 							material->SetTexture(uniform.Name, texture);
 							material->SerializeText(material->GetPath().string());
 						}

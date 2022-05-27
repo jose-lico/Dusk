@@ -8,7 +8,7 @@
 namespace DuskEngine
 {
     OpenGLTexture::OpenGLTexture(const std::string& filepath, const std::string& name)
-        :m_ID(0), m_Width(0), m_Height(0)
+        :m_ID(0), m_Width(0), m_Height(0), m_Size(0)
     {
         if (name.empty()) 
         {
@@ -30,7 +30,7 @@ namespace DuskEngine
         {
             m_Width = width;
             m_Height = height;
-
+            
             GLenum type = 0;
 
             if (channels == 4)
@@ -68,7 +68,7 @@ namespace DuskEngine
     }
 
     OpenGLTexture::OpenGLTexture(const std::filesystem::path& path, const uuids::uuid& uuid)
-        :m_ID(0), m_Width(0), m_Height(0)
+        :m_ID(0), m_Width(0), m_Height(0), m_Size(0)
     {
         m_UUID = uuid;
         m_Path = path;
@@ -110,7 +110,7 @@ namespace DuskEngine
         }
         else
         {
-            std::string message = "Error loading texture '" + m_Name + "'";
+            std::string message = "Error loading texture " + m_Name;
             WARN(message.c_str());
             return;
         }
@@ -123,9 +123,9 @@ namespace DuskEngine
 
     OpenGLTexture::~OpenGLTexture()
     {
-        std::string message = "Deleting Texture " + m_Name;
-        LOG(message.c_str());
         glDeleteTextures(1, &m_ID);
+        std::string message = "Destroyed Texture " + m_Name;
+        LOG(message.c_str());
     }
 
     void OpenGLTexture::Bind(unsigned int slot) const

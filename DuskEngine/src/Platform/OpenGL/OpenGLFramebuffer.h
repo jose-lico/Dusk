@@ -19,7 +19,6 @@ namespace DuskEngine
 
 		void Resize();
 		void Resize(glm::vec2& viewportSize) override;
-
 	private:
 		FramebufferSpecification m_Spec;
 		unsigned int m_ID;

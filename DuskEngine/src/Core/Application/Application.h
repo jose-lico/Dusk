@@ -35,7 +35,7 @@ namespace DuskEngine
 
 		void SetName(const char* name);
 
-		Window& GetWindow();
+		Window& GetWindow() const;
 	private:
 		static Application* s_Instance;
 
@@ -44,7 +44,7 @@ namespace DuskEngine
 		RendererContext* m_RendererContext;
 		
 		LayerStack* m_LayerStack;
-		ImGuiLayer* m_ImGuiLayer; // Deleted by m_LayerStack
+		ImGuiLayer* m_ImGuiLayer; // Deleted by m_LayerStack | Should consider moving to editor
 	
 		ApplicationSpecs m_Specs;
 	};

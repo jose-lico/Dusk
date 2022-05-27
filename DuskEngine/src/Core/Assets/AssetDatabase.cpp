@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "AssetManager.h"
+#include "AssetDatabase.h"
 
 #include "Core/Assets/Assets/Shader.h"
 #include "Core/Assets/Assets/Texture.h"
@@ -13,38 +13,38 @@
 
 namespace DuskEngine
 {
-	std::filesystem::path AssetManager::m_RootDirectory = "res";
-	std::filesystem::path AssetManager::m_CurrentDirectory;
+	std::filesystem::path AssetDatabase::m_RootDirectory = "res";
+	std::filesystem::path AssetDatabase::m_CurrentDirectory;
 
-	std::unordered_map<uuids::uuid, std::filesystem::path> AssetManager::m_PathsMap;
-	std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> AssetManager::m_UUIDsMap;
+	std::unordered_map<uuids::uuid, std::filesystem::path> AssetDatabase::m_PathsMap;
+	std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> AssetDatabase::m_UUIDsMap;
 
-	std::vector<Asset*> AssetManager::ShaderList;
-	std::vector<Asset*> AssetManager::ModelList;
-	std::vector<Asset*> AssetManager::MaterialList;
-	std::vector<Asset*> AssetManager::ScriptsList;
+	std::vector<Asset*> AssetDatabase::ShaderDatabase;
+	std::vector<Asset*> AssetDatabase::ModelDatabase;
+	std::vector<Asset*> AssetDatabase::MaterialDatabase;
+	std::vector<Asset*> AssetDatabase::ScriptsDatabase;
 
-	void AssetManager::Init()
+	void AssetDatabase::Init()
 	{
 		m_CurrentDirectory = m_RootDirectory;
 	}
 
-	void AssetManager::Shutdown()
+	void AssetDatabase::Shutdown()
 	{
-		for (Asset* resource : ShaderList)
+		for (Asset* resource : ShaderDatabase)
 			delete resource;
 
-		for (Asset* resource : ModelList)
+		for (Asset* resource : ModelDatabase)
 			delete resource;
 
-		for (Asset* resource : MaterialList)
+		for (Asset* resource : MaterialDatabase)
 			delete resource;
 
-		for (Asset* resource : ScriptsList)
+		for (Asset* resource : ScriptsDatabase)
 			delete resource;
 	}
 
-	void AssetManager::LoadUUIDs()
+	void AssetDatabase::LoadUUIDs()
 	{
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
@@ -89,7 +89,7 @@ namespace DuskEngine
 		m_CurrentDirectory = m_RootDirectory;
 	}
 
-	void AssetManager::CreateUUIDs()
+	void AssetDatabase::CreateUUIDs()
 	{
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
@@ -128,7 +128,7 @@ namespace DuskEngine
 		m_CurrentDirectory = m_RootDirectory;
 	}
 
-	uuids::uuid AssetManager::CreateResource(const std::filesystem::path& path)
+	uuids::uuid AssetDatabase::CreateResource(const std::filesystem::path& path)
 	{
 		std::string message = "Creating meta file for " + path.string();
 		LOG(message.c_str());
@@ -152,7 +152,7 @@ namespace DuskEngine
 		return id;
 	}
 
-	void AssetManager::AddToResourceList(const std::filesystem::path& path, const uuids::uuid& uuid)
+	void AssetDatabase::AddToResourceList(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
 		Asset* resource = new Asset(path, uuid);
 
@@ -163,22 +163,22 @@ namespace DuskEngine
 		if (extension == ".glsl")
 		{
 			wasAssigned = true;
-			ShaderList.push_back(resource);
+			ShaderDatabase.push_back(resource);
 		}
 		else if(extension == ".fbx" || extension == ".obj")
 		{
 			wasAssigned = true;
-			ModelList.push_back(resource);
+			ModelDatabase.push_back(resource);
 		}
 		else if (extension == ".material")
 		{
 			wasAssigned = true;
-			MaterialList.push_back(resource);
+			MaterialDatabase.push_back(resource);
 		}
 		else if (extension == ".lua")
 		{
 			wasAssigned = true;
-			ScriptsList.push_back(resource);
+			ScriptsDatabase.push_back(resource);
 		}
 			
 		if (!wasAssigned)
@@ -186,16 +186,16 @@ namespace DuskEngine
 	}
 
 	// If a file is no longer present, delete its meta file
-	void AssetManager::DeleteUUIDs()
+	void AssetDatabase::DeleteUUIDs()
 	{
 	}
 
-	uuids::uuid AssetManager::GetUUID(const std::filesystem::path& path)
+	uuids::uuid AssetDatabase::GetUUID(const std::filesystem::path& path)
 	{
 		return m_UUIDsMap[path];
 	}
 
-	Ref<Material> AssetManager::LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler)
+	Ref<Material> AssetDatabase::LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler)
 	{
 		std::ifstream stream(m_PathsMap[uuid]);
 		std::stringstream strStream;
@@ -227,18 +227,18 @@ namespace DuskEngine
 		return material;
 	}
 
-	Ref<Shader> AssetManager::LoadShader(const uuids::uuid& uuid)
+	Ref<Shader> AssetDatabase::LoadShader(const uuids::uuid& uuid)
 	{
 		return Shader::Create(m_PathsMap[uuid], uuid);
 	}
 
-	Ref<Texture> AssetManager::LoadTexture(const uuids::uuid& uuid)
+	Ref<Texture> AssetDatabase::LoadTexture(const uuids::uuid& uuid)
 	{
 		return Texture::Create(m_PathsMap[uuid], uuid);
 	}
 
 	//TODO - improve model and mesh api and useflow
-	Ref<Mesh> AssetManager::LoadModel(const uuids::uuid& uuid)
+	Ref<Mesh> AssetDatabase::LoadModel(const uuids::uuid& uuid)
 	{
 		Model* m = new Model(m_PathsMap[uuid].string(), uuid);
 		Ref<Mesh> mesh = m->GetFirstMesh();
@@ -250,7 +250,7 @@ namespace DuskEngine
 		return mesh;
 	}
 
-	Ref<LuaScript> AssetManager::LoadScript(const uuids::uuid& uuid)
+	Ref<LuaScript> AssetDatabase::LoadScript(const uuids::uuid& uuid)
 	{
 		return MakeRef<LuaScript>(m_PathsMap[uuid], uuid);
 	}

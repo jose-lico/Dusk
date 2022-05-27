@@ -18,10 +18,11 @@ namespace DuskEngine
 		virtual unsigned int GetRendererID() const = 0;
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;
+		virtual unsigned int GetSize() const = 0;
 
 		virtual void Bind(unsigned int slot = 0) const = 0;
 
-		friend class AssetManager;
+		friend class AssetHandler;
 		friend class InspectorPanel;
 	};
 }

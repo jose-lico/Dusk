@@ -4,4 +4,7 @@ namespace DuskEngine::Time
 {
 	void Update();
 	float GetDeltaTime();
+	float GetTime();
+	float GetUnscaledDeltaTime();
+	float GetUnscaledTime();
 }

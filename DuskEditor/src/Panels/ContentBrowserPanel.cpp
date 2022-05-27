@@ -2,7 +2,7 @@
 
 #include "Core/Assets/Assets/Texture.h"
 #include "Core/Assets/Assets/Material.h"
-#include "Core/Assets/AssetManager.h"
+#include "Core/Assets/AssetDatabase.h"
 
 #include "IconsForkAwesome.h"
 
@@ -126,7 +126,7 @@ namespace DuskEngine
 					std::string targetPath = m_CurrentDirectory.string() + "\\" + buffer + m_EditingPath.extension().string();
 					std::filesystem::rename(m_EditingPath, targetPath);
 					std::filesystem::rename(m_EditingPath.string() + ".meta", targetPath + ".meta");
-					AssetManager::LoadUUIDs();
+					AssetDatabase::LoadUUIDs();
 				}
 			}
 			else
@@ -152,7 +152,7 @@ namespace DuskEngine
 				std::string path = m_CurrentDirectory.string() + "/newMaterial2.material";
 				Material::CreateDefaultMaterial(path);
 				CreateDirectoryItems();
-				AssetManager::CreateResource(path);
+				AssetDatabase::CreateResource(path);
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -174,7 +174,7 @@ namespace DuskEngine
 
 	void ContentBrowserPanel::CreateDirectoryResources()
 	{
-		AssetManager::CreateUUIDs(); // Will be reworked later...
+		AssetDatabase::CreateUUIDs(); // Will be reworked later...
 		m_Icons.resize(0);
 
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
@@ -201,7 +201,7 @@ namespace DuskEngine
 			if(!std::filesystem::exists(targetPath))
 			{
 				std::filesystem::copy(paths[i], *g_currentDir);
-				AssetManager::CreateResource(targetPath);
+				AssetDatabase::CreateResource(targetPath);
 			}
 			else
 			{

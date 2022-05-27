@@ -48,7 +48,7 @@ that live in it, create assets such as materials, and finally having the concept
 Here are some of the tasks towards this goal, and beyond.
 
 - Better editor tool
-- Proper expor
+- Packaging & export of assets
 - Profiling
 - Multithreaded
 - PBR workflow
