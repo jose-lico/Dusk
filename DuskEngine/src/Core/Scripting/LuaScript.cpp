@@ -23,7 +23,7 @@ namespace DuskEngine
 	{
 		m_Env = sol::environment(state, sol::create, state.globals());
 
-		m_Env["LuaComponent"] = this;
+		m_Env["entity"] = m_Ent;
 
 		auto loadScript = state.script_file(m_Path.string(), m_Env);
 		

@@ -18,10 +18,6 @@ namespace DuskEngine
 		void OnAwake();
 		void OnUpdate();
 		void OnShutdown();
-		Entity GetEntity() 
-		{
-			return m_Ent; 
-		}
 	private:
 		Entity m_Ent;
 

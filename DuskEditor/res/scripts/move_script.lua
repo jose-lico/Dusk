@@ -1,22 +1,24 @@
-print("hey print_script_2")
-HelloWorld()
-local x = Return5()
-print(x)
-
-local object = MyTestType.new(1)
 local transform
 local speed = 5
+local slowMode = false
 
 function OnAwake()
     print("Awake")
-    print(object.age) 
-    object:Func()
-    print(object.age)
-    
-    transform = LuaComponent:GetEntity():GetTransform();
+
+    transform = entity:GetTransform();
 end
 
 function OnUpdate()
+    if(Input.IsKeyPressed(KeyCode.P)) then
+        if(slowMode) then
+            Time.SetTimescale(1)
+            slowMode = false
+        else
+            Time.SetTimescale(0.5)
+            slowMode = true
+        end
+    end
+
     local input = Vector2.new(0,0)
     
     if (Input.IsKeyPressed(KeyCode.D)) then input.x = -1

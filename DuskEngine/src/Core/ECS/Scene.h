@@ -18,7 +18,6 @@ namespace DuskEngine
 		~Scene();
 
 		Entity CreateEntity(const std::string& name);
-		Entity CreateEmptyEntity();
 		
 		void DestroyEntity(entt::entity handle);
 		void DestroyEntity(Entity entity);
@@ -34,6 +33,7 @@ namespace DuskEngine
 		Entity* FindEntity(const std::string& name);
 
 		void OnUpdateEditor(EditorCamera& camera);
+
 		void OnAwakeRuntime();
 		void OnUpdateRuntime(bool running, bool paused = false);
 		void OnShutdownRuntime();

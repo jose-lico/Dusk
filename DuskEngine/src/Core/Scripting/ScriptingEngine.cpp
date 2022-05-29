@@ -13,37 +13,8 @@
 #include "glm/glm.hpp"
 #include "entt/entt.hpp"
 
-void HelloWorld();
-int Return5();
-
 namespace DuskEngine
 {
-    struct MyTestType
-    {
-    public:
-        int age;
-        bool enabled;
-
-        int id;
-
-        MyTestType(int i)
-            :enabled(true), age(10), id(i)
-        {
-            printf("MyTestType Constructed\n");
-        };
-
-        ~MyTestType()
-        {
-            printf("MyTestType is Dead: %i\n", id);
-        };
-
-        void Func()
-        {
-            age++;
-        }
-    };
-
-
 	ScriptingEngine::ScriptingEngine()
 	{
 		m_State.open_libraries(sol::lib::base);
@@ -53,16 +24,6 @@ namespace DuskEngine
     void ScriptingEngine::RegisterFunctions()
     {
         Timer timer("Register Functions");
-
-        m_State.set_function("HelloWorld", &HelloWorld);
-        m_State.set_function("Return5", &Return5);
-
-        sol::usertype<DuskEngine::MyTestType> teste = m_State.new_usertype<DuskEngine::MyTestType>("MyTestType",
-            sol::constructors<DuskEngine::MyTestType(int)>(),
-            "age", &DuskEngine::MyTestType::age,
-            "enabled", &DuskEngine::MyTestType::enabled);
-
-        teste["Func"] = &DuskEngine::MyTestType::Func;
 
         RegisterInput();
         RegisterTime();
@@ -89,8 +50,6 @@ namespace DuskEngine
 	{
 		script->OnShutdown();
 	}
-
-	
 
 	void ScriptingEngine::RegisterInput()
 	{
@@ -226,6 +185,11 @@ namespace DuskEngine
         sol::table time = m_State["Time"].get_or_create<sol::table>();
 
         time.set("GetDeltaTime", sol::property(&Time::GetDeltaTime));
+        time.set("GetTime", sol::property(&Time::GetTime));
+        time.set("GetUnscaledDeltaTime", sol::property(&Time::GetUnscaledDeltaTime));
+        time.set("GetUnscaledTime", sol::property(&Time::GetUnscaledTime));
+        time.set("GetTimescale", sol::property(&Time::GetTimescale));
+        time.set("SetTimescale", sol::property(&Time::SetTimescale));
     }
 
     void ScriptingEngine::RegisterMath()
@@ -285,8 +249,6 @@ namespace DuskEngine
         sol::usertype<LuaScript> scriptType = m_State.new_usertype<LuaScript>("LuaScript",
             sol::constructors<sol::types<std::filesystem::path&, const uuids::uuid&>>());
        
-        scriptType.set_function("GetEntity", &LuaScript::GetEntity);
-
         sol::usertype<Entity> entityType = m_State.new_usertype<Entity>("Entity", sol::constructors<sol::types<entt::entity, Scene*>>());
         entityType.set_function("GetTransform" , &Entity::GetComponent<Transform>);
     }

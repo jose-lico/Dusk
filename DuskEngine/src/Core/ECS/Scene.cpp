@@ -7,15 +7,10 @@
 
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
-#include "Core/Renderer/Resources/VertexArray.h"
 #include "Core/Assets/Assets/Shader.h"
 #include "Core/Assets/Assets/Material.h"
-#include "Core/Scripting/ScriptingEngine.h"
 #include "Core/Assets/AssetHandler.h"
-
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtx/quaternion.hpp"
-#include "glm/gtx/string_cast.hpp"
+#include "Core/Scripting/ScriptingEngine.h"
 
 const unsigned int MAX_LIGHTS = 8;
 
@@ -47,12 +42,6 @@ namespace DuskEngine
 		Entity entity = { m_Registry.create(), this };
 		entity.AddComponent<Transform>();
 		entity.AddComponent<Meta>(name);
-		return entity;
-	}
-
-	Entity Scene::CreateEmptyEntity()
-	{
-		Entity entity = { m_Registry.create(), this };
 		return entity;
 	}
 
@@ -373,4 +362,3 @@ namespace DuskEngine
 		}
 	}
 }
-

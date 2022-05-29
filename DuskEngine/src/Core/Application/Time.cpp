@@ -9,16 +9,16 @@ namespace DuskEngine::Time
 	float Time = 0;
 	float UnscaledTime = 0;
 	float LastFrame = 0;
-	float TimeScale = 1;
+	float Timescale = 1;
 
 	void Update()
 	{
 		float currentFrame = (float)glfwGetTime();
 		DeltaTime = currentFrame - LastFrame;
-		DeltaTime *= TimeScale;
+		DeltaTime *= Timescale;
 		Time += DeltaTime;
 		LastFrame = currentFrame;
-		UnscaledTime += DeltaTime/TimeScale;
+		UnscaledTime += DeltaTime/Timescale;
 	}
 
 	float GetDeltaTime()
@@ -33,11 +33,21 @@ namespace DuskEngine::Time
 
 	float GetUnscaledDeltaTime()
 	{
-		return DeltaTime / TimeScale;
+		return DeltaTime / Timescale;
 	}
 
 	float GetUnscaledTime()
 	{
 		return UnscaledTime;
+	}
+
+	float GetTimescale()
+	{
+		return Timescale;
+	}
+
+	float SetTimescale(float timeScale)
+	{
+		return Timescale = timeScale;
 	}
 }
