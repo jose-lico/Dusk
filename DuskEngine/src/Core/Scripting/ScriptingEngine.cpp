@@ -84,8 +84,8 @@ namespace DuskEngine
             { "D", Key::D },
             { "E", Key::E },
             { "F", Key::F },
-            { "H", Key::G },
-            { "G", Key::H },
+            { "H", Key::H },
+            { "G", Key::G },
             { "I", Key::I },
             { "J", Key::J },
             { "K", Key::K },
@@ -242,6 +242,15 @@ namespace DuskEngine
     
     void ScriptingEngine::RegisterECS()
     {
+        sol::usertype<LuaScript> scriptType = m_State.new_usertype<LuaScript>("LuaScript",
+            sol::constructors<sol::types<std::filesystem::path&, const uuids::uuid&>>());
+
+        sol::usertype<Entity> entityType = m_State.new_usertype<Entity>("Entity", sol::constructors<sol::types<entt::entity, Scene*>>());
+        
+        // #############################################################
+        // TRANSFORM
+        // #############################################################
+
         m_State.new_usertype<Transform>("Transform",
             sol::constructors<Transform()>(),
             "position", &Transform::position,
@@ -251,11 +260,26 @@ namespace DuskEngine
             "up", &Transform::up, 
             "right", &Transform::right);
 
-        sol::usertype<LuaScript> scriptType = m_State.new_usertype<LuaScript>("LuaScript",
-            sol::constructors<sol::types<std::filesystem::path&, const uuids::uuid&>>());
-       
-        sol::usertype<Entity> entityType = m_State.new_usertype<Entity>("Entity", sol::constructors<sol::types<entt::entity, Scene*>>());
-        entityType.set_function("GetTransform" , &Entity::GetComponent<Transform>);
+        entityType.set_function("GetTransform", &Entity::GetComponent<Transform>);
+
+        // #############################################################
+        // LIGHT
+        // #############################################################
+
+        m_State.new_usertype<Light>("Light",
+            sol::constructors<Light()>(),
+            "color", &Light::color,
+            "type", &Light::type);
+
+        std::initializer_list<std::pair<sol::string_view, LightType>> lightTypes = {
+            { "Directional", LightType::Directional },
+            { "Point", LightType::Point },
+            { "Spot", LightType::Spot },
+        };
+
+        m_State.new_enum<LightType>("LightType", lightTypes);
+
+        entityType.set_function("GetLight", &Entity::GetComponent<Light>);
     }
 }
 

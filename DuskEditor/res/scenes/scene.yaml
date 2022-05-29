@@ -1,57 +1,48 @@
 Scene: Untitled
 Entities:
-  - Entity: 03e88ebf-2f4c-480d-bbae-0c4aa10e719f
+  - Entity: 91ad70f3-59cf-4988-951c-35b9d2c22b30
     Meta:
-      name: Floor
+      name: Model
       enabled: true
     Transform:
-      position: [0, -0.5, 0]
-      rotation: [-1.57079637, 0, 0]
-      scale: [10, 10, 1]
-    MeshRenderer:
-      mesh: 47183823-2574-4bfd-b411-99ed177d3e43
-      material: b5699746-b707-4ba1-8a65-eef8ee4b92c1
-  - Entity: dddab957-c690-4c38-b396-135c8dabdd9d
-    Meta:
-      name: Duck
-      enabled: true
-    Transform:
-      position: [3, -0.5, 0]
+      position: [0.665028095, -0.5, -3.30663729]
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
     MeshRenderer:
-      mesh: 24b41d57-d4b0-41a5-a473-803306755fe4
-      material: 2fbf0300-2732-492a-8672-032e010d8e72
-    Script:
-      script: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f
-  - Entity: 73d29ecf-a6e0-465f-861d-eed1f1634ddd
+      mesh: 4b6ff6a4-8c23-45c8-b7ab-42b3522f9035
+      material: f1f8651a-34fe-4d9f-ac49-82e40bdb96bb
+  - Entity: 5f5f51ae-acb3-44c1-ad6e-1b243337e3d3
     Meta:
-      name: Directional Light
+      name: Lit Quad
       enabled: true
     Transform:
-      position: [-3, 1, 1]
-      rotation: [0.167551607, -3.89033866, 0]
-      scale: [0.100000001, 0.100000001, 0.100000001]
-    MeshRenderer:
-      mesh: 47183823-2574-4bfd-b411-99ed177d3e44
-      material: 18d19a86-e2e3-41e4-b980-b5594c4df096
-    Light:
-      type: Directional
-      color: [0.633204639, 0.633198321, 0.633198321]
-  - Entity: b03f5af1-64b0-4d6a-85f5-b897686787db
-    Meta:
-      name: Point Light 2
-      enabled: false
-    Transform:
-      position: [2.56091332, 0.840736806, -1.92716432]
+      position: [0, 0, 0]
       rotation: [0, 0, 0]
-      scale: [0.100000001, 0.100000001, 0.100000001]
+      scale: [1, 1, 1]
+    MeshRenderer:
+      mesh: 47183823-2574-4bfd-b411-99ed177d3e43
+      material: e5389bcf-ca32-47ae-9cc0-a296c257a3fc
+  - Entity: ddba8bd2-c1a7-4b63-b508-4e0551dce8ad
+    Meta:
+      name: Lit Cube
+      enabled: true
+    Transform:
+      position: [-2, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
     MeshRenderer:
       mesh: 47183823-2574-4bfd-b411-99ed177d3e44
-      material: 18d19a86-e2e3-41e4-b980-b5594c4df096
-    Light:
-      type: Point
-      color: [0.440154433, 0, 0]
+      material: 1e636a00-4ce1-49c2-bdaa-6d93d22c6686
+  - Entity: 2541c9db-4a07-4507-9136-5d0bd8dc7452
+    Meta:
+      name: Main Camera
+      enabled: true
+    Transform:
+      position: [3.02514315, 2.45458341, -2.99648738]
+      rotation: [0.52359879, 0, 0]
+      scale: [1, 1, 1]
+    Camera:
+      main: true
   - Entity: fa3e4a8d-1559-4632-93bb-72202f32bae7
     Meta:
       name: Point Light
@@ -66,46 +57,57 @@ Entities:
     Light:
       type: Point
       color: [0.999989986, 1, 0.999993086]
-  - Entity: 2541c9db-4a07-4507-9136-5d0bd8dc7452
+  - Entity: b03f5af1-64b0-4d6a-85f5-b897686787db
     Meta:
-      name: Main Camera
-      enabled: true
+      name: Point Light 2
+      enabled: false
     Transform:
-      position: [3.02514315, 2.45458341, -2.99648738]
-      rotation: [0.52359879, 0, 0]
-      scale: [1, 1, 1]
-    Camera:
-      main: true
-  - Entity: ddba8bd2-c1a7-4b63-b508-4e0551dce8ad
-    Meta:
-      name: Lit Cube
-      enabled: true
-    Transform:
-      position: [-2, 0, 0]
+      position: [2.56091332, 0.840736806, -1.92716432]
       rotation: [0, 0, 0]
-      scale: [1, 1, 1]
+      scale: [0.100000001, 0.100000001, 0.100000001]
     MeshRenderer:
       mesh: 47183823-2574-4bfd-b411-99ed177d3e44
-      material: 1e636a00-4ce1-49c2-bdaa-6d93d22c6686
-  - Entity: 5f5f51ae-acb3-44c1-ad6e-1b243337e3d3
+      material: 18d19a86-e2e3-41e4-b980-b5594c4df096
+    Light:
+      type: Point
+      color: [0.440154433, 0, 0]
+  - Entity: 73d29ecf-a6e0-465f-861d-eed1f1634ddd
     Meta:
-      name: Lit Quad
+      name: Directional Light
       enabled: true
     Transform:
-      position: [0, 0, 0]
+      position: [-3, 1, 1]
+      rotation: [0.167551607, -3.89033866, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+    MeshRenderer:
+      mesh: 47183823-2574-4bfd-b411-99ed177d3e44
+      material: 18d19a86-e2e3-41e4-b980-b5594c4df096
+    Light:
+      type: Directional
+      color: [0.633204639, 0.633198321, 0.633198321]
+    Script:
+      script: 744dbb2c-31c7-4931-8728-e448da2386ba
+  - Entity: dddab957-c690-4c38-b396-135c8dabdd9d
+    Meta:
+      name: Duck
+      enabled: true
+    Transform:
+      position: [3, -0.5, 0]
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
+    MeshRenderer:
+      mesh: 24b41d57-d4b0-41a5-a473-803306755fe4
+      material: 2fbf0300-2732-492a-8672-032e010d8e72
+    Script:
+      script: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f
+  - Entity: 03e88ebf-2f4c-480d-bbae-0c4aa10e719f
+    Meta:
+      name: Floor
+      enabled: true
+    Transform:
+      position: [0, -0.5, 0]
+      rotation: [-1.57079637, 0, 0]
+      scale: [10, 10, 1]
     MeshRenderer:
       mesh: 47183823-2574-4bfd-b411-99ed177d3e43
-      material: e5389bcf-ca32-47ae-9cc0-a296c257a3fc
-  - Entity: 91ad70f3-59cf-4988-951c-35b9d2c22b30
-    Meta:
-      name: Model
-      enabled: true
-    Transform:
-      position: [0.665028095, -0.5, -3.30663729]
-      rotation: [0, 0, 0]
-      scale: [1, 1, 1]
-    MeshRenderer:
-      mesh: 4b6ff6a4-8c23-45c8-b7ab-42b3522f9035
-      material: f1f8651a-34fe-4d9f-ac49-82e40bdb96bb
+      material: b5699746-b707-4ba1-8a65-eef8ee4b92c1

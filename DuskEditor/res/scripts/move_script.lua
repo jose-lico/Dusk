@@ -1,5 +1,5 @@
 local transform
-local speed = 1
+local speed = 3
 local slowMode = false
 
 function OnAwake()
@@ -29,7 +29,7 @@ function OnUpdate()
     if (Input.IsKeyPressed(KeyCode.W)) then input.y = 1
     elseif (Input.IsKeyPressed(KeyCode.S)) then input.y = -1 end
 
-    local movement = front
+    local movement = Vector3.new(input.x, 0, input.y)
     
     transform.position = transform.position + movement * speed * Time.GetDeltaTime()
 end
