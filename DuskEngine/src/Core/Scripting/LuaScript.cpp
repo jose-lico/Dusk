@@ -15,7 +15,8 @@ namespace DuskEngine
 
 	LuaScript::~LuaScript()
 	{
-
+		std::string message = "Destroyed Script " + m_Name;
+		LOG(message.c_str());
 	}
 
 	void LuaScript::LoadScript(sol::state& state)

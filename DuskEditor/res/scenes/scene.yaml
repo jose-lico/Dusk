@@ -22,6 +22,8 @@ Entities:
     MeshRenderer:
       mesh: 24b41d57-d4b0-41a5-a473-803306755fe4
       material: 2fbf0300-2732-492a-8672-032e010d8e72
+    Script:
+      script: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f
   - Entity: 73d29ecf-a6e0-465f-861d-eed1f1634ddd
     Meta:
       name: Directional Light
@@ -98,7 +100,7 @@ Entities:
       material: e5389bcf-ca32-47ae-9cc0-a296c257a3fc
   - Entity: 91ad70f3-59cf-4988-951c-35b9d2c22b30
     Meta:
-      name: New Entity
+      name: Model
       enabled: true
     Transform:
       position: [0.665028095, -0.5, -3.30663729]
@@ -107,3 +109,5 @@ Entities:
     MeshRenderer:
       mesh: 4b6ff6a4-8c23-45c8-b7ab-42b3522f9035
       material: f1f8651a-34fe-4d9f-ac49-82e40bdb96bb
+    Script:
+      script: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f

@@ -214,8 +214,10 @@ namespace DuskEngine
 		for (auto entity : view)
 		{
 			auto& script = view.get<Script>(entity);
-			m_ScriptingEngine->LoadScript(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
-			m_ScriptingEngine->OnAwake(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
+			auto ent = Entity(entity, this);
+			auto& handle = ent.GetComponent<Meta>().entityHandle;
+			m_ScriptingEngine->LoadScript(m_AssetHandler->LuaScriptPool(handle));
+			m_ScriptingEngine->OnAwake(m_AssetHandler->LuaScriptPool(handle));
 		}
 	}
 
@@ -227,7 +229,9 @@ namespace DuskEngine
 			for (auto entity : view)
 			{
 				auto& script = view.get<Script>(entity);
-				m_ScriptingEngine->OnUpdate(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
+				auto ent = Entity(entity, this);
+				auto& handle = ent.GetComponent<Meta>().entityHandle;
+				m_ScriptingEngine->OnUpdate(m_AssetHandler->LuaScriptPool(handle));
 			}
 		}
 
@@ -363,7 +367,9 @@ namespace DuskEngine
 		for (auto entity : view)
 		{
 			auto& script = view.get<Script>(entity);
-			m_ScriptingEngine->OnShutdown(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
+			auto ent = Entity(entity, this);
+			auto& handle = ent.GetComponent<Meta>().entityHandle;
+			m_ScriptingEngine->OnShutdown(m_AssetHandler->LuaScriptPool(handle));
 		}
 	}
 }

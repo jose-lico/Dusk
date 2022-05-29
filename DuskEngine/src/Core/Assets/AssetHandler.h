@@ -28,7 +28,7 @@ namespace DuskEngine
 		void AddToTexturePool(const uuids::uuid& uuid);
 
 		Ref<LuaScript>& LuaScriptPool(const uuids::uuid& uuid);
-		void AddToLuaScriptPool(const uuids::uuid& uuid);
+		void AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID);
 
 		Ref<Shader>& ShaderPool(const uuids::uuid& uuid);
 		void AddToShaderPool(const uuids::uuid& uuid);

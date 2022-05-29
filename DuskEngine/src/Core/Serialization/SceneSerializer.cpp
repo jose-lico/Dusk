@@ -122,17 +122,15 @@ namespace DuskEngine
 					l.type = Light::LightTypeEnum(light["type"].as<std::string>());
 				}
 
-				/*auto scriptData = entity["Script"];
+				auto scriptData = entity["Script"];
 				if(scriptData)
 				{
 					auto& s = deserializedEntity.AddComponent<Script>();
-					auto scripts = scriptData["scripts"];
-					for(auto script : scripts)
-					{
-						s.scripts.push_back(AssetDatabase::LoadScript(script.second.as<uuids::uuid>()));
-						s.scripts.back()->m_Ent = deserializedEntity;
-					}
-				}*/
+					auto script = scriptData["script"].as<uuids::uuid>();
+					s.luaScriptHandle = script;
+					scene->m_AssetHandler->AddToLuaScriptPool(entity["Entity"].as<uuids::uuid>(), script);
+					scene->m_AssetHandler->LuaScriptPool(entity["Entity"].as<uuids::uuid>())->m_Ent = deserializedEntity;
+				}
 			}
 		}
 

@@ -6,6 +6,7 @@
 #include "Core/Assets/Assets/Mesh.h"
 #include "Core/Assets/Assets/Material.h"
 #include "Core/Assets/Assets/Texture.h"
+#include "Core/Scripting/LuaScript.h"
 #include "Core/ECS/Entity.h"
 
 #include "Utils/ImGuiUtils.h"
@@ -21,7 +22,7 @@ namespace DuskEngine
 	template<typename T, typename UIFunction>
 	static void DrawComponentStatic(const char* name, std::vector<Entity>& m_SelectedEntities, UIFunction function);
 
-	template<typename T, typename TOwner, void(TOwner::* func)(std::vector<MeshRenderer*>& meshes)>
+	template<typename T, typename Arg, typename TOwner, void(TOwner::* func)(Arg a)>
 	void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, TOwner* p);
 
 	InspectorPanel::InspectorPanel(AssetHandler* assetHandler)
@@ -73,29 +74,19 @@ namespace DuskEngine
 						ImGui::CloseCurrentPopup();
 					}
 
-					/*if (ImGui::BeginMenu("Scripts"))
+					if (ImGui::BeginMenu("Scripts"))
 					{
-						for (auto scriptFile : AssetDatabase::ScriptsDatabase)
+						for (auto scriptAsset : AssetDatabase::ScriptsDatabase)
 						{
-							if(ImGui::MenuItem(scriptFile->GetName().c_str()))
+							if(ImGui::MenuItem(scriptAsset->GetName().c_str()))
 							{
 								auto& script = (*m_SelectedEntities)[0].AddComponent<Script>();
-								bool canAdd = true;
-								for(auto presentScript : script.scripts)
-								{
-									if (presentScript->GetUUID() == scriptFile->GetUUID())
-									{
-										LOG("Script already present");
-										canAdd = false;
-									}
-								}
-
-								if (canAdd)
-									script.scripts.push_back(AssetDatabase::LoadScript(scriptFile->GetUUID()));
+								script.luaScriptHandle = scriptAsset->GetUUID();
+								m_AssetHandler->AddToLuaScriptPool((*m_SelectedEntities)[0].GetComponent<Meta>().entityHandle, script.luaScriptHandle);
 							}
 						}
 						ImGui::EndMenu();
-					}*/
+					}
 
 					ImGui::EndPopup();
 				}
@@ -105,8 +96,12 @@ namespace DuskEngine
 			DrawComponentStatic<Transform>(ICON_FK_ARROWS_ALT "  Transform", *m_SelectedEntities, TransformInspector);
 			DrawComponentStatic<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
 			DrawComponentStatic<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
-			DrawComponent<MeshRenderer, InspectorPanel, &InspectorPanel::MaterialInspector>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, this);
-			DrawComponentStatic<Script>(ICON_FK_PENCIL_SQUARE_O "  Lua Script - Script Name", *m_SelectedEntities, ScriptInspector);
+			DrawComponent<MeshRenderer, std::vector<MeshRenderer*>& ,InspectorPanel, &InspectorPanel::MaterialInspector>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, this);
+
+			/*std::string script = ICON_FK_PENCIL_SQUARE_O "  Lua Script - ";
+			script.append(m_AssetHandler->LuaScriptPool((*m_SelectedEntities)[0].GetComponent<Meta>().entityHandle)->GetName());*/
+			DrawComponent<Script, std::vector<Script*>&, InspectorPanel, &InspectorPanel::ScriptInspector>
+				(ICON_FK_PENCIL_SQUARE_O "  Lua Script", *m_SelectedEntities, this);
 		}
 		ImGui::End();
 	}
@@ -168,7 +163,7 @@ namespace DuskEngine
 			
 	}
 
-	template<typename T, typename TOwner, void(TOwner::* func)(std::vector<MeshRenderer*>& meshes)>
+	template<typename T, typename Arg, typename TOwner, void(TOwner::* func)(Arg a)>
 	void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, TOwner* p)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed |
@@ -599,7 +594,9 @@ namespace DuskEngine
 	void InspectorPanel::ScriptInspector(std::vector<Script*>& scripts)
 	{
 		if (scripts.size() == 1)
-		{
+		{	
+			//ImGui::Text(m_AssetHandler->LuaScriptPool()->GetName().c_str();
+			
 			//for (unsigned int i = 0; i < scripts[0]->scripts.size(); i++)
 			//{
 			//	ImGui::Text(scripts[0]->scripts[i]->GetName().c_str());
