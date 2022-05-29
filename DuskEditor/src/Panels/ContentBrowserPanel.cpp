@@ -42,7 +42,7 @@ namespace DuskEngine
 			}
 		}
 
-		int buttons_count = m_DirEntries.size();
+		int buttons_count = (int)m_DirEntries.size();
 		ImGuiStyle& style = ImGui::GetStyle();
 
 		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
@@ -68,7 +68,7 @@ namespace DuskEngine
 			if (directoryEntry.is_directory())
 			{
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-				ImGui::ImageButton((void*)m_FolderIcon->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::ImageButton((ImTextureID)(size_t)m_FolderIcon->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
 				ImGui::PopStyleColor();
 
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
@@ -81,7 +81,7 @@ namespace DuskEngine
 			}
 			else if (extension == ".png" || extension == ".jpg")
 			{
-				ImGui::ImageButton((void*)m_Icons[textureIndex++]->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::ImageButton((ImTextureID)(size_t)m_Icons[textureIndex++]->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 				{
 					m_EditingName = i;
@@ -99,7 +99,7 @@ namespace DuskEngine
 			}
 			else
 			{
-				ImGui::ImageButton((void*)m_UnknownIcon->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::ImageButton((ImTextureID*)(size_t)m_UnknownIcon->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 				{
 					LOG("This is an image");
@@ -189,7 +189,7 @@ namespace DuskEngine
 
 	void DropCallback(GLFWwindow* window, int count, const char** paths)
 	{
-		for (unsigned int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++)
 		{
 			std::filesystem::path path = paths[i];
 #ifdef DUSK_WINDOWS

@@ -26,7 +26,8 @@ namespace DuskEngine
 		CheckFocus();
 
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - ((26.0f * 2) * 0.5f));
-		if (ImGui::ImageButton((ImTextureID)(!*m_Playing ? m_Play->GetRendererID() : m_Stop->GetRendererID()), ImVec2(18.0f,18.0f)))
+		if (ImGui::ImageButton((ImTextureID)(size_t)
+			(!*m_Playing ? m_Play->GetRendererID() : m_Stop->GetRendererID()), ImVec2(18.0f, 18.0f)))
 		{
 			if (!*m_Playing)
 				(m_PlayFunc)();
@@ -35,7 +36,7 @@ namespace DuskEngine
 		}
 
 		ImGui::SameLine();
-		if (ImGui::ImageButton((ImTextureID)(!*m_Paused ? m_Pause->GetRendererID() : m_Play->GetRendererID()), ImVec2(18.0f, 18.0f)))
+		if (ImGui::ImageButton((ImTextureID)(size_t)(!*m_Paused ? m_Pause->GetRendererID() : m_Play->GetRendererID()), ImVec2(18.0f, 18.0f)))
 		{
 			if (*m_Playing)
 				(m_PauseFunc)();

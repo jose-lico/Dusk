@@ -239,7 +239,7 @@ namespace DuskEngine
 		if (metas.size() == 1)
 		{
 			char buffer[64];
-			sprintf(buffer, metas[0]->name.c_str());
+			sprintf_s(buffer, metas[0]->name.c_str());
 			if(ImGui::InputText("Name", buffer, IM_ARRAYSIZE(buffer)))
 			{
 				metas[0]->name = buffer;
@@ -546,7 +546,8 @@ namespace DuskEngine
 				{
 					// this is broken but whatever, will be replaced in the future
 					ImGui::Text(uniform.Name.c_str());
-					if (ImGui::ImageButton((ImTextureID)m_AssetHandler->TexturePool(uniform.Data.dataHandle)->GetRendererID(),
+					unsigned int textureID = m_AssetHandler->TexturePool(uniform.Data.dataHandle)->GetRendererID();
+					if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->TexturePool(uniform.Data.dataHandle)->GetRendererID(),
 						ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
 					{
 						//#ifdef 0
@@ -570,10 +571,8 @@ namespace DuskEngine
 					{
 						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
 						{
-							// barf emoji
 							const wchar_t* data = (const wchar_t*)payload->Data;
 							std::wstring ws(data);
-							std::string path(ws.begin(), ws.end());
 
 							m_AssetHandler->AddToTexturePool(AssetDatabase::GetUUID(ws));
 							auto& texture = m_AssetHandler->TexturePool(AssetDatabase::GetUUID(ws));

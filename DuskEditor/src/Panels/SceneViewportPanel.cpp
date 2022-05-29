@@ -48,7 +48,7 @@ namespace DuskEngine
 			m_FB->Resize(m_ViewportSize);
 			m_Camera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f);
 		}
-		ImGui::Image((ImTextureID)m_FB->GetColorAttachmentID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::Image((ImTextureID)(size_t)m_FB->GetColorAttachmentID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::PopStyleVar();
         ImVec2 work_pos = ImGui::GetWindowPos();
         auto viewportID = ImGui::GetWindowViewport()->ID;
