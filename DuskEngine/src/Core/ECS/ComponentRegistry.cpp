@@ -19,6 +19,7 @@ enum class MetaData_Type
 		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
 		property("name", &DuskEngine::Meta::name).\
 		property("enabled", &DuskEngine::Meta::enabled);
+		//property("handle", &DuskEngine::Meta::entityHandle);
 
 // #############################################################
 // TRANSFORM
@@ -67,7 +68,7 @@ enum class MetaData_Type
 #define REGISTER_SCRIPT\
 	rttr::registration::class_<DuskEngine::Script>("Script")\
 		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
-		property("scripts", &DuskEngine::Script::scripts);
+		property("script", &DuskEngine::Script::luaScriptHandle);
 
 // #############################################################
 // RTTR REGISTRATION

@@ -59,7 +59,7 @@ namespace DuskEngine
 		static std::unordered_map <uuids::uuid, std::filesystem::path> m_PathsMap;
 		static std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> m_UUIDsMap;
 
-		static void AddToResourceList(const std::filesystem::path& path, const uuids::uuid& uuid);
+		static void AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid);
 
 		friend class WindowsWindow;
 	};

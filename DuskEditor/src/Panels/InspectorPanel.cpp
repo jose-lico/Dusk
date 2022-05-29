@@ -1,9 +1,11 @@
 #include "InspectorPanel.h"
 
-#include "Core/Assets/Assets/Shader.h"
-#include "Core/Assets/Assets/Texture.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/AssetHandler.h"
+#include "Core/Assets/Assets/Shader.h"
+#include "Core/Assets/Assets/Mesh.h"
+#include "Core/Assets/Assets/Material.h"
+#include "Core/Assets/Assets/Texture.h"
 #include "Core/ECS/Entity.h"
 
 #include "Utils/ImGuiUtils.h"
@@ -71,7 +73,7 @@ namespace DuskEngine
 						ImGui::CloseCurrentPopup();
 					}
 
-					if (ImGui::BeginMenu("Scripts"))
+					/*if (ImGui::BeginMenu("Scripts"))
 					{
 						for (auto scriptFile : AssetDatabase::ScriptsDatabase)
 						{
@@ -93,7 +95,7 @@ namespace DuskEngine
 							}
 						}
 						ImGui::EndMenu();
-					}
+					}*/
 
 					ImGui::EndPopup();
 				}
@@ -598,20 +600,20 @@ namespace DuskEngine
 	{
 		if (scripts.size() == 1)
 		{
-			for (unsigned int i = 0; i < scripts[0]->scripts.size(); i++)
-			{
-				ImGui::Text(scripts[0]->scripts[i]->GetName().c_str());
-				ImGui::SameLine();
-				if (ImGui::Button(("Remove script " + std::to_string(i)).c_str()))
-				{
-					scripts[0]->scripts.erase(scripts[0]->scripts.begin() + i--);
-				}
-			}
+			//for (unsigned int i = 0; i < scripts[0]->scripts.size(); i++)
+			//{
+			//	ImGui::Text(scripts[0]->scripts[i]->GetName().c_str());
+			//	ImGui::SameLine();
+			//	if (ImGui::Button(("Remove script " + std::to_string(i)).c_str()))
+			//	{
+			//		scripts[0]->scripts.erase(scripts[0]->scripts.begin() + i--);
+			//	}
+			//}
 
-			if(scripts[0]->scripts.size() == 0)
-			{
-				// Remove component, but cant be done with current setup. inspector needs rework anyway so w/e
-			}
+			//if(scripts[0]->scripts.size() == 0)
+			//{
+			//	// Remove component, but cant be done with current setup. inspector needs rework anyway so w/e
+			//}
 		}
 	}
 }

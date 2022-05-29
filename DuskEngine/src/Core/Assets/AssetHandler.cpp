@@ -68,6 +68,17 @@ namespace DuskEngine
 			m_TexturePool.insert({ uuid, AssetDatabase::LoadTexture(uuid) });
 	}
 
+	Ref<LuaScript>& AssetHandler::LuaScriptPool(const uuids::uuid& uuid)
+	{
+		return m_LuaScriptPool[uuid];
+	}
+
+	void AssetHandler::AddToLuaScriptPool(const uuids::uuid& uuid)
+	{
+		if (m_LuaScriptPool.find(uuid) == m_LuaScriptPool.end())
+			m_LuaScriptPool.insert({ uuid, AssetDatabase::LoadScript(uuid) });
+	}
+
 	Ref<Shader>& AssetHandler::ShaderPool(const uuids::uuid& uuid)
 	{
 		return m_ShaderPool[uuid];

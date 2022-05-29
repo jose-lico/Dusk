@@ -32,7 +32,7 @@ namespace DuskEngine
 				Entity entity = { entityID, scene.get() };
 
 				out << YAML::BeginMap;
-				out << YAML::Key << "Entity" << YAML::Value << "12837192831273";
+				out << YAML::Key << "Entity" << YAML::Value << entity.GetComponent<Meta>().entityHandle;
 
 				SerializeComponentText<Meta>("Meta", out, entity);
 				SerializeComponentText<Transform>("Transform", out, entity);
@@ -81,7 +81,8 @@ namespace DuskEngine
 
 				Entity deserializedEntity = scene->CreateEntity(name);
 
-				deserializedEntity.GetComponent<Meta>().enabled = meta["enabled"].as<bool>();;
+				deserializedEntity.GetComponent<Meta>().enabled = meta["enabled"].as<bool>();
+				deserializedEntity.GetComponent<Meta>().entityHandle = entity["Entity"].as<uuids::uuid>();
 
 				auto transform = entity["Transform"];
 				if (transform)
@@ -121,18 +122,17 @@ namespace DuskEngine
 					l.type = Light::LightTypeEnum(light["type"].as<std::string>());
 				}
 
-				auto scriptData = entity["Script"];
+				/*auto scriptData = entity["Script"];
 				if(scriptData)
 				{
 					auto& s = deserializedEntity.AddComponent<Script>();
-					s.ent = deserializedEntity;
 					auto scripts = scriptData["scripts"];
 					for(auto script : scripts)
 					{
 						s.scripts.push_back(AssetDatabase::LoadScript(script.second.as<uuids::uuid>()));
 						s.scripts.back()->m_Ent = deserializedEntity;
 					}
-				}
+				}*/
 			}
 		}
 

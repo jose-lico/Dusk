@@ -9,14 +9,13 @@
 #include "Core/Renderer/RenderCommand.h"
 #include "Core/Renderer/Resources/VertexArray.h"
 #include "Core/Assets/Assets/Shader.h"
+#include "Core/Assets/Assets/Material.h"
 #include "Core/Scripting/ScriptingEngine.h"
 #include "Core/Assets/AssetHandler.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/quaternion.hpp"
 #include "glm/gtx/string_cast.hpp"
-
-#include "GL/glew.h"
 
 const unsigned int MAX_LIGHTS = 8;
 
@@ -36,18 +35,11 @@ namespace DuskEngine
 
 	Scene::~Scene()
 	{
-		auto view = m_Registry.view<Script>();
-		for (auto entity : view)
-		{
-			auto& script = view.get<Script>(entity);
-			script.scripts.resize(0);
-		}
-		delete(m_ScriptingEngine);
-
 		std::string message = "Destroying scene " + m_Name;
 		LOG(message.c_str());
 
 		delete(m_AssetHandler);
+		delete(m_ScriptingEngine);
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -222,8 +214,8 @@ namespace DuskEngine
 		for (auto entity : view)
 		{
 			auto& script = view.get<Script>(entity);
-			m_ScriptingEngine->LoadScript(script.scripts[0]);
-			m_ScriptingEngine->OnAwake(script.scripts[0]);
+			m_ScriptingEngine->LoadScript(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
+			m_ScriptingEngine->OnAwake(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
 		}
 	}
 
@@ -235,7 +227,7 @@ namespace DuskEngine
 			for (auto entity : view)
 			{
 				auto& script = view.get<Script>(entity);
-				m_ScriptingEngine->OnUpdate(script.scripts[0]);
+				m_ScriptingEngine->OnUpdate(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
 			}
 		}
 
@@ -371,7 +363,7 @@ namespace DuskEngine
 		for (auto entity : view)
 		{
 			auto& script = view.get<Script>(entity);
-			m_ScriptingEngine->OnShutdown(script.scripts[0]);
+			m_ScriptingEngine->OnShutdown(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
 		}
 	}
 }

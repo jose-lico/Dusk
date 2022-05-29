@@ -48,9 +48,6 @@ namespace DuskEngine
 	{
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
-			/*if (directoryEntry.path().filename() == "editor")
-				continue;*/
-
 			if (directoryEntry.is_directory())
 			{
 				m_CurrentDirectory = directoryEntry.path();
@@ -80,7 +77,7 @@ namespace DuskEngine
 						m_PathsMap[uuid] = path;
 						m_UUIDsMap[path] = uuid;
 
-						AddToResourceList(path, uuid);
+						AddToAssetDatabase(path, uuid);
 					}
 				}
 			}
@@ -147,12 +144,12 @@ namespace DuskEngine
 		m_PathsMap[id] = path;
 		m_UUIDsMap[path] = id;
 
-		AddToResourceList(path, id);
+		AddToAssetDatabase(path, id);
 
 		return id;
 	}
 
-	void AssetDatabase::AddToResourceList(const std::filesystem::path& path, const uuids::uuid& uuid)
+	void AssetDatabase::AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
 		Asset* resource = new Asset(path, uuid);
 

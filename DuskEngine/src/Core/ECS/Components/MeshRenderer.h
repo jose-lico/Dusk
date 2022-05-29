@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Core/Assets/Assets/Mesh.h"
-#include "Core/Assets/Assets/Material.h"
 #include "uuid.h"
 
 namespace DuskEngine
@@ -12,8 +10,5 @@ namespace DuskEngine
 		uuids::uuid materialHandle;
 
 		MeshRenderer() = default;
-		/*MeshRenderer(Ref<Mesh>& mesh, Ref<Material>& material)
-			:mesh(mesh), material(material)
-		{}*/
 	};
 }

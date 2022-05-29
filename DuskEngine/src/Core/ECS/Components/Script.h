@@ -1,18 +1,13 @@
 #pragma once
 
-#include "Core/Scripting/LuaScript.h"
-#include "Utils/Memory/Memory.h"
-
-#include <vector>
+#include "uuid.h"
 
 namespace DuskEngine
 {
 	struct Script
 	{
-		std::vector<Ref<LuaScript>> scripts;
+		uuids::uuid luaScriptHandle;
 
 		Script() = default;
-
-		Entity ent;
 	};
 }
