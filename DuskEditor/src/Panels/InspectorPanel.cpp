@@ -281,6 +281,13 @@ namespace DuskEngine
 				transforms[0]->rotation = glm::radians(rotation);
 
 			ImGui::DragFloat3("Scale", &(transforms[0]->scale[0]), .01f);
+			
+			// for debug purposes
+			//ImGui::DragFloat3("Front", &(transforms[0]->front[0]), .01f);
+			/*ImGui::DragFloat4("##Mat1", &(transforms[0]->GetTransform()[0][0]), .01f);
+			ImGui::DragFloat4("##Mat2", &(transforms[0]->GetTransform()[1][0]), .01f);
+			ImGui::DragFloat4("##Mat3", &(transforms[0]->GetTransform()[2][0]), .01f);
+			ImGui::DragFloat4("##Mat4", &(transforms[0]->GetTransform()[3][0]), .01f);*/
 		}
 		else
 		{

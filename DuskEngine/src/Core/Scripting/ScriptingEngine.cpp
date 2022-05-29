@@ -244,7 +244,12 @@ namespace DuskEngine
     {
         m_State.new_usertype<Transform>("Transform",
             sol::constructors<Transform()>(),
-            "position", &Transform::position);
+            "position", &Transform::position,
+            "rotation", &Transform::rotation,
+            "scale", &Transform::scale,
+            "front", &Transform::front,
+            "up", &Transform::up, 
+            "right", &Transform::right);
 
         sol::usertype<LuaScript> scriptType = m_State.new_usertype<LuaScript>("LuaScript",
             sol::constructors<sol::types<std::filesystem::path&, const uuids::uuid&>>());

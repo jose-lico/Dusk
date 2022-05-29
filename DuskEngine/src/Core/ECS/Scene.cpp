@@ -89,9 +89,9 @@ namespace DuskEngine
 
 		glm::vec3 front;
 
-		front.x = cos(transform.rotation.y) * cos(transform.rotation.x);
-		front.y = sin(transform.rotation.x);
-		front.z = sin(transform.rotation.y) * cos(transform.rotation.x);
+		glm::quat quat = glm::quat(transform.rotation);
+
+		front = quat * glm::vec3(0.0f, 0.0f, 1.0f);
 
 		transform.front = glm::normalize(front);
 		transform.right = glm::normalize(glm::cross(transform.front, glm::vec3(0.0f, 1.0f, 0.0f)));
@@ -237,9 +237,9 @@ namespace DuskEngine
 
 				glm::vec3 front;
 
-				front.x = cos(transform.rotation.y) * cos(transform.rotation.x);
-				front.y = sin(transform.rotation.x);
-				front.z = sin(transform.rotation.y) * cos(transform.rotation.x);
+				glm::quat quat = glm::quat(transform.rotation);
+
+				front = quat * glm::vec3(0.0f, 0.0f, 1.0f);
 
 				transform.front = glm::normalize(front);
 				transform.right = glm::normalize(glm::cross(transform.front, glm::vec3(0.0f, 1.0f, 0.0f)));

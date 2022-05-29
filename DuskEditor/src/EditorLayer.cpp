@@ -37,7 +37,7 @@ namespace DuskEngine
 
 		m_EditorCamera = new EditorCamera();
 		m_EditorCamera->transform.position = glm::vec3(-4.0f, 2.0f, 4.0f);
-		m_EditorCamera->transform.rotation = glm::vec3(-0.25f, -0.9f, 0.0f);
+		m_EditorCamera->transform.rotation = glm::vec3(0.25f, 2.5f, 0.0f);
 		m_EditorCamera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
 
 		FramebufferSpecification fbSpec;
