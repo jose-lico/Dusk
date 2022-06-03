@@ -6,7 +6,7 @@ namespace DuskEngine
 {
 	struct Script
 	{
-		uuids::uuid luaScriptHandle;
+		uint32_t luaScriptHandle;
 
 		Script() = default;
 	};

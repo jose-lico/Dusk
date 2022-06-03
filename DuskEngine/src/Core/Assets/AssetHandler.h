@@ -5,6 +5,7 @@
 #include "uuid.h"
 
 #include <unordered_map>
+#include <vector>
 
 namespace DuskEngine
 {
@@ -30,6 +31,9 @@ namespace DuskEngine
 		Ref<LuaScript>& LuaScriptPool(const uuids::uuid& uuid);
 		void AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID);
 
+		Ref<LuaScript>& LuaScriptPool2(const uint32_t handle);
+		uint32_t AddToLuaScriptPool2(const uuids::uuid& uuid, const uuids::uuid& scriptUUID);
+
 		Ref<Shader>& ShaderPool(const uuids::uuid& uuid);
 		void AddToShaderPool(const uuids::uuid& uuid);
 
@@ -44,6 +48,9 @@ namespace DuskEngine
 		std::unordered_map <uuids::uuid, Ref<Shader>> m_ShaderPool;
 		
 		std::unordered_map <uuids::uuid, Ref<LuaScript>> m_LuaScriptPool;
+
+		std::vector<Ref<LuaScript>> m_LuaScriptPool2;
+		std::unordered_map<uuids::uuid, uint32_t> m_HandleMap;
 
 		static std::vector<AssetHandler*> m_AssetHandlers;
 	};

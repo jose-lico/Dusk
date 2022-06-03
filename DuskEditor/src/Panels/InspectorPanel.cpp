@@ -80,9 +80,9 @@ namespace DuskEngine
 						{
 							if(ImGui::MenuItem(scriptAsset->GetName().c_str()))
 							{
-								auto& script = (*m_SelectedEntities)[0].AddComponent<Script>();
-								script.luaScriptHandle = scriptAsset->GetUUID();
-								m_AssetHandler->AddToLuaScriptPool((*m_SelectedEntities)[0].GetComponent<Meta>().entityHandle, script.luaScriptHandle);
+								//auto& script = (*m_SelectedEntities)[0].AddComponent<Script>();
+								//script.luaScriptHandle = scriptAsset->GetUUID();
+								//m_AssetHandler->AddToLuaScriptPool((*m_SelectedEntities)[0].GetComponent<Meta>().entityHandle, script.luaScriptHandle);
 							}
 						}
 						ImGui::EndMenu();
