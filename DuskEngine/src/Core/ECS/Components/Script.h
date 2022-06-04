@@ -1,12 +1,13 @@
 #pragma once
 
-#include "uuid.h"
+#include "Core/Assets/Handle.h"
 
 namespace DuskEngine
 {
 	struct Script
 	{
-		uint32_t luaScriptHandle;
+		class LuaScript;
+		Handle<LuaScript, uint32_t> luaScriptHandle;
 
 		Script() = default;
 	};

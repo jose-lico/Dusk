@@ -65,10 +65,10 @@ enum class MetaData_Type
 // SCRIPT
 // #############################################################
 
-#define REGISTER_SCRIPT\
-	rttr::registration::class_<DuskEngine::Script>("Script")\
-		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
-		property("script", &DuskEngine::Script::luaScriptHandle);
+//#define REGISTER_SCRIPT\
+//	rttr::registration::class_<DuskEngine::Script>("Script")\
+//		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
+//		property("script", &DuskEngine::Script::luaScriptHandle);
 
 // #############################################################
 // RTTR REGISTRATION
@@ -81,5 +81,5 @@ RTTR_REGISTRATION
 	REGISTER_MESH_RENDERER
 	REGISTER_CAMERA
 	REGISTER_LIGHT
-	REGISTER_SCRIPT
+	//REGISTER_SCRIPT
 }
