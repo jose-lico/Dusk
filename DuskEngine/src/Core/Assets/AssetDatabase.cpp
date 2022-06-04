@@ -202,9 +202,9 @@ namespace DuskEngine
 		YAML::Node data = YAML::Load(strStream.str());
 
 		// dumb af
-		handler->AddToShaderPool(data["Shader"].as<uuids::uuid>());
+		auto shaderHandle = handler->AddToShaderPool2(data["Shader"].as<uuids::uuid>());
 
-		Ref<Material> material = MakeRef<Material>(handler->ShaderPool(data["Shader"].as<uuids::uuid>()), m_PathsMap[uuid], uuid);
+		Ref<Material> material = MakeRef<Material>(shaderHandle, handler, m_PathsMap[uuid], uuid);
 
 		for (auto& uniform : material->m_Uniforms)
 		{

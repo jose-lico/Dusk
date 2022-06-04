@@ -497,7 +497,9 @@ namespace DuskEngine
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> shaderList;
 			int shaderIndex = 0;
-			uuids::uuid shaderID = m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetShaderUUID();
+			// bad
+			uuids::uuid shaderID = m_AssetHandler->ShaderPool2(
+				m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetShaderHandle())->GetUUID();
 
 			for (unsigned int i = 0; i < AssetDatabase::ShaderDatabase.size(); i++)
 			{

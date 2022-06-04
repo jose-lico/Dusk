@@ -127,8 +127,8 @@ namespace DuskEngine
 				{
 					auto& s = deserializedEntity.AddComponent<Script>();
 					auto script = scriptData["script"].as<uuids::uuid>();
-					s.luaScriptHandle = scene->m_AssetHandler->AddToLuaScriptPool2(entity["Entity"].as<uuids::uuid>(), script);
-					scene->m_AssetHandler->LuaScriptPool2(s.luaScriptHandle)->m_Ent = deserializedEntity;
+					s.luaScriptHandle = scene->m_AssetHandler->AddToLuaScriptPool(entity["Entity"].as<uuids::uuid>(), script);
+					scene->m_AssetHandler->LuaScriptPool(s.luaScriptHandle)->m_Ent = deserializedEntity;
 				}
 			}
 		}

@@ -2,6 +2,7 @@
 #include "AssetHandler.h"
 
 #include "AssetDatabase.h"
+#include "Handle.h"
 
 #include "Assets/Mesh.h"
 #include "Assets/Texture.h"
@@ -68,29 +69,18 @@ namespace DuskEngine
 			m_TexturePool.insert({ uuid, AssetDatabase::LoadTexture(uuid) });
 	}
 
-	Ref<LuaScript>& AssetHandler::LuaScriptPool(const uuids::uuid& uuid)
+	Ref<LuaScript>& AssetHandler::LuaScriptPool(const uint32_t handle)
 	{
-		return m_LuaScriptPool[uuid];
+		return m_LuaScriptPool[handle];
 	}
 
-	void AssetHandler::AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID)
-	{
-		if (m_LuaScriptPool.find(uuid) == m_LuaScriptPool.end())
-			m_LuaScriptPool.insert({ uuid, AssetDatabase::LoadScript(scriptUUID) });
-	}
-
-	Ref<LuaScript>& AssetHandler::LuaScriptPool2(const uint32_t handle)
-	{
-		return m_LuaScriptPool2[handle];
-	}
-
-	uint32_t AssetHandler::AddToLuaScriptPool2(const uuids::uuid& uuid, const uuids::uuid& scriptUUID)
+	uint32_t AssetHandler::AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID)
 	{
 		if (m_HandleMap.find(uuid) == m_HandleMap.end())
 		{
-			m_LuaScriptPool2.push_back(AssetDatabase::LoadScript(scriptUUID));
-			m_HandleMap[uuid] = m_LuaScriptPool2.size();
-			return m_LuaScriptPool2.size() - 1;
+			m_LuaScriptPool.push_back(AssetDatabase::LoadScript(scriptUUID));
+			m_HandleMap[uuid] = m_LuaScriptPool.size();
+			return m_LuaScriptPool.size() - 1;
 		}
 
 		return m_HandleMap[uuid];
@@ -125,5 +115,15 @@ namespace DuskEngine
 		{
 			handler->m_MaterialPool[material->GetUUID()].reset(material);
 		}
+	}
+
+	Ref<Shader>& AssetHandler::ShaderPool2(const uint32_t handle)
+	{
+		return m_ShaderPool2(handle);
+	}
+
+	uint32_t AssetHandler::AddToShaderPool2(const uuids::uuid& uuid)
+	{
+		return m_ShaderPool2.AddToPool(m_HandleMap, uuid);
 	}
 }

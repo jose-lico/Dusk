@@ -1,8 +1,8 @@
 #pragma once
 
 namespace DuskEngine
-{
-	template <typename Type, typename ValueType>
+{	
+	template <typename Type, typename ValueType = uint32_t>
 	class Handle
 	{
 	public:

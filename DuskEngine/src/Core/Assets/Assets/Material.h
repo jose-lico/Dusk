@@ -3,6 +3,7 @@
 
 #include "Core/Assets/Asset.h"
 #include "Utils/Memory/Memory.h"
+#include "Core/Assets/Handle.h"
 
 #include "glm/glm.hpp"
 
@@ -48,7 +49,7 @@ namespace DuskEngine
 	class DUSK_EXPORT Material : public Asset
 	{
 	public:
-		Material(Ref<Shader>& shader, const std::filesystem::path& path, const uuids::uuid& uuid);
+		Material(uint32_t shaderHandle, AssetHandler* owningHandler, const std::filesystem::path& path, const uuids::uuid& uuid);
 		//Material(Ref<Shader>& shader, const std::string& name = ""); not used anymore, keeping just in case
 		//Material(const std::string& shaderPath, const std::string& name = ""); not used anymore, keeping just in case
 		~Material();
@@ -66,6 +67,7 @@ namespace DuskEngine
 		void SetTexture(const std::string& name, Ref<Texture>& texture);
 		
 		const uuids::uuid& GetShaderUUID();
+		const uint32_t GetShaderHandle() { return m_ShaderHandle; }
 		
 		// Serialization
 		void SerializeText(const std::string& path, bool propagate = false);
@@ -73,6 +75,9 @@ namespace DuskEngine
 	private:
 		void CreateUniforms();
 		Ref<Shader> m_Shader;
+
+		Handle<Shader> m_ShaderHandle;
+		AssetHandler* m_OwningHandler;
 
 		// Map is for direct access to set uniform values
 		std::unordered_map<std::string, Uniform*> m_UniformsMap;

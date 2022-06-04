@@ -10,12 +10,13 @@
 
 namespace DuskEngine
 {
-	Material::Material(Ref<Shader>& shader, const std::filesystem::path& path, const uuids::uuid& uuid)
-		:m_Shader(shader)
+	Material::Material(uint32_t shaderHandle, AssetHandler* owningHandler, const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
 		m_UUID = uuid;
 		m_Path = path;
 		m_Name = path.filename().string();
+		m_ShaderHandle = shaderHandle;
+		m_OwningHandler = owningHandler;
 
 		CreateUniforms();
 		std::string message = "Created Material " + m_Name;
@@ -55,7 +56,9 @@ namespace DuskEngine
 
 	void Material::UploadUniforms(AssetHandler& assetHandler)
 	{
-		m_Shader->Bind();
+		auto shader = m_OwningHandler->ShaderPool2(m_ShaderHandle);
+		shader->Bind();
+		//m_Shader->Bind();
 		unsigned int textSlot = 0;
 		for (auto uniform : m_Uniforms)
 		{
@@ -63,10 +66,10 @@ namespace DuskEngine
 			switch(uniform.Type)
 			{
 			case UniformType::Vec3:
-				m_Shader->SetUniformVec3("u_" + uniform.Name, uniform.Data.vec3);
+				shader->SetUniformVec3("u_" + uniform.Name, uniform.Data.vec3);
 				break;
 			case UniformType::Texture:
-				m_Shader->SetUniformInt("u_" + uniform.Name, textSlot);
+				shader->SetUniformInt("u_" + uniform.Name, textSlot);
 				auto& texture = assetHandler.TexturePool(uniform.Data.dataHandle);
 				texture->Bind(textSlot++);
 				break;
@@ -94,11 +97,11 @@ namespace DuskEngine
 
 	void Material::SetShader(Ref<Shader>& shader)
 	{
-		m_Shader = shader;
+		/*m_Shader = shader;
 
 		m_Uniforms.clear();
 		m_UniformsMap.clear();
-		CreateUniforms();
+		CreateUniforms();*/
 	}
 
 	void Material::SetFloat(const std::string& name, float f)
@@ -142,7 +145,7 @@ namespace DuskEngine
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Material" << YAML::Value << m_Name;
-		out << YAML::Key << "Shader" << YAML::Value << m_Shader;
+		out << YAML::Key << "Shader" << YAML::Value << m_OwningHandler->ShaderPool2(m_ShaderHandle);
 		out << YAML::Key << "Uniforms" << YAML::Value << m_Uniforms;
 
 		std::ofstream fout(path);
@@ -156,7 +159,9 @@ namespace DuskEngine
 
 	void Material::CreateUniforms()
 	{
-		for (auto uniform : m_Shader->UniformSpecs)
+		auto shader = m_OwningHandler->ShaderPool2(m_ShaderHandle);
+
+		for (auto uniform : shader->UniformSpecs)
 		{
 			auto u = Uniform(uniform.Name, uniform.Type);
 			m_Uniforms.push_back(u);

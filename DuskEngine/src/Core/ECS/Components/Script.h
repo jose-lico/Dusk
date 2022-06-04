@@ -7,7 +7,7 @@ namespace DuskEngine
 	struct Script
 	{
 		class LuaScript;
-		Handle<LuaScript, uint32_t> luaScriptHandle;
+		Handle<LuaScript> luaScriptHandle;
 
 		Script() = default;
 	};
