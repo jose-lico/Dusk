@@ -498,7 +498,7 @@ namespace DuskEngine
 			std::vector<std::string> shaderList;
 			int shaderIndex = 0;
 			// bad
-			uuids::uuid shaderID = m_AssetHandler->ShaderPool2(
+			uuids::uuid shaderID = m_AssetHandler->ShaderPool(
 				m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetShaderHandle())->GetUUID();
 
 			for (unsigned int i = 0; i < AssetDatabase::ShaderDatabase.size(); i++)
@@ -521,11 +521,11 @@ namespace DuskEngine
 							shaderIndex = n;
 							
 							auto id = AssetDatabase::GetUUID(AssetDatabase::ShaderDatabase[shaderIndex]->GetPath());
-							m_AssetHandler->AddToShaderPool(id); // this could return
-							auto& shader = m_AssetHandler->ShaderPool(id);
-							m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->SetShader(shader);
+							//m_AssetHandler->AddToShaderPool2(id); // this could return
+							//auto& shader = m_AssetHandler->ShaderPool(id);
+							/*m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->SetShader(shader);
 							m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->SerializeText(
-								m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetPath().string());
+								m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetPath().string());*/
 						}
 					}
 
@@ -583,8 +583,7 @@ namespace DuskEngine
 							const wchar_t* data = (const wchar_t*)payload->Data;
 							std::wstring ws(data);
 
-							m_AssetHandler->AddToTexturePool(AssetDatabase::GetUUID(ws));
-							auto& texture = m_AssetHandler->TexturePool(AssetDatabase::GetUUID(ws));
+							auto& texture = m_AssetHandler->TexturePool(m_AssetHandler->AddToTexturePool(AssetDatabase::GetUUID(ws)));
 							material->SetTexture(uniform.Name, texture);
 							material->SerializeText(material->GetPath().string());
 						}

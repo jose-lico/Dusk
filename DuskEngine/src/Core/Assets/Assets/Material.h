@@ -22,7 +22,7 @@ namespace DuskEngine
 	union UniformData
 	{
 		float fValue;
-		uuids::uuid dataHandle;
+		uint32_t dataHandle;
 		glm::vec2 vec2;
 		glm::vec3 vec3;
 		glm::vec4 vec4;

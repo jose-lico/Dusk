@@ -58,16 +58,7 @@ namespace DuskEngine
 			m_MeshPool.insert({ uuid, mesh });
 	}
 
-	Ref<Texture>& AssetHandler::TexturePool(const uuids::uuid& uuid)
-	{
-		return m_TexturePool[uuid];
-	}
 
-	void AssetHandler::AddToTexturePool(const uuids::uuid& uuid)
-	{
-		if (m_TexturePool.find(uuid) == m_TexturePool.end())
-			m_TexturePool.insert({ uuid, AssetDatabase::LoadTexture(uuid) });
-	}
 
 	Ref<LuaScript>& AssetHandler::LuaScriptPool(const uint32_t handle)
 	{
@@ -84,17 +75,6 @@ namespace DuskEngine
 		}
 
 		return m_HandleMap[uuid];
-	}
-
-	Ref<Shader>& AssetHandler::ShaderPool(const uuids::uuid& uuid)
-	{
-		return m_ShaderPool[uuid];
-	}
-
-	void AssetHandler::AddToShaderPool(const uuids::uuid& uuid)
-	{
-		if (m_ShaderPool.find(uuid) == m_ShaderPool.end())
-			m_ShaderPool.insert({ uuid, AssetDatabase::LoadShader(uuid) });
 	}
 
 	Ref<Material>& AssetHandler::MaterialPool(const uuids::uuid& uuid)
@@ -117,13 +97,23 @@ namespace DuskEngine
 		}
 	}
 
-	Ref<Shader>& AssetHandler::ShaderPool2(const uint32_t handle)
+	Ref<Shader>& AssetHandler::ShaderPool(const uint32_t handle)
 	{
-		return m_ShaderPool2(handle);
+		return m_ShaderPool(handle);
 	}
 
-	uint32_t AssetHandler::AddToShaderPool2(const uuids::uuid& uuid)
+	uint32_t AssetHandler::AddToShaderPool(const uuids::uuid& uuid)
 	{
-		return m_ShaderPool2.AddToPool(m_HandleMap, uuid);
+		return m_ShaderPool.AddToPool(m_HandleMap, uuid);
+	}
+
+	Ref<Texture>& AssetHandler::TexturePool(const uint32_t handle)
+	{
+		return m_TexturePool(handle);
+	}
+
+	uint32_t AssetHandler::AddToTexturePool(const uuids::uuid& uuid)
+	{
+		return m_TexturePool.AddToPool(m_HandleMap, uuid);
 	}
 }
