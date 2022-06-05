@@ -3,6 +3,7 @@
 #include "Utils/Memory/Memory.h"
 
 #include "Assets/Shader.h"
+#include "Handle.h"
 
 #include "uuid.h"
 
@@ -12,11 +13,11 @@
 namespace DuskEngine
 {
 	template<typename T>
-	class AssetPool
+	class _AssetPool
 	{
 	public:
-		AssetPool() = default;
-		~AssetPool() = default;
+		_AssetPool() = default;
+		~_AssetPool() = default;
 
 		uint32_t AddToPool(std::unordered_map<uuids::uuid, uint32_t>& handleMap, const uuids::uuid& uuid)
 		{
@@ -65,23 +66,40 @@ namespace DuskEngine
 		void AddToMaterialPool(const uuids::uuid& uuid);
 		static void PropagateMaterialChange(Material* material);
 
-		Ref<Shader>& ShaderPool(const uint32_t handle);
-		uint32_t AddToShaderPool(const uuids::uuid& uuid);
+		template<typename T>
+		Ref<T>& AssetPool(const Handle<T> handle)
+		{
+			if constexpr (std::is_same<T, Shader>::value)
+				return m_ShaderPool(handle);
+			else if constexpr (std::is_same<T, Texture>::value)
+				return m_TexturePool(handle);
+		}
 
-		Ref<Texture>& TexturePool(const uint32_t handle);
-		uint32_t AddToTexturePool(const uuids::uuid& uuid);
+		template<typename T>
+		Handle<T> AddToAssetPool(const uuids::uuid& uuid)
+		{
+			Handle<T> handle;
+			if constexpr (std::is_same<T, Shader>::value)
+			{
+				return handle.m_Value = m_ShaderPool.AddToPool(m_HandleMap, uuid);
+			}
+			else if constexpr (std::is_same<T, Texture>::value)
+			{
+				return handle.m_Value = m_TexturePool.AddToPool(m_HandleMap, uuid);
+			}
+		}
 	private:
 		std::string m_Name;
-		std::unordered_map <uuids::uuid, Ref<Mesh>> m_MeshPool;
-		//std::unordered_map <uuids::uuid, Ref<Texture>> m_TexturePool;
-		std::unordered_map <uuids::uuid, Ref<Material>> m_MaterialPool;
-		
-		std::vector<Ref<LuaScript>> m_LuaScriptPool;
+
 		std::unordered_map<uuids::uuid, uint32_t> m_HandleMap;
 
+		_AssetPool<Shader> m_ShaderPool;
+		_AssetPool<Texture> m_TexturePool;
+		std::unordered_map <uuids::uuid, Ref<Mesh>> m_MeshPool; // to be replaced
+		std::unordered_map <uuids::uuid, Ref<Material>> m_MaterialPool; // to be replaced
+		
+		std::vector<Ref<LuaScript>> m_LuaScriptPool;
+		
 		static std::vector<AssetHandler*> m_AssetHandlers;
-
-		AssetPool<Shader> m_ShaderPool;
-		AssetPool<Texture> m_TexturePool;
 	};
 }

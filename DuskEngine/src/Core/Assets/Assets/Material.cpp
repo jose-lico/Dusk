@@ -10,7 +10,7 @@
 
 namespace DuskEngine
 {
-	Material::Material(uint32_t shaderHandle, AssetHandler* owningHandler, const std::filesystem::path& path, const uuids::uuid& uuid)
+	Material::Material(Handle<Shader> shaderHandle, AssetHandler* owningHandler, const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
 		m_UUID = uuid;
 		m_Path = path;
@@ -56,7 +56,7 @@ namespace DuskEngine
 
 	void Material::UploadUniforms(AssetHandler& assetHandler)
 	{
-		auto shader = m_OwningHandler->ShaderPool(m_ShaderHandle);
+		auto shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
 		shader->Bind();
 		//m_Shader->Bind();
 		unsigned int textSlot = 0;
@@ -70,7 +70,7 @@ namespace DuskEngine
 				break;
 			case UniformType::Texture:
 				shader->SetUniformInt("u_" + uniform.Name, textSlot);
-				auto& texture = assetHandler.TexturePool(uniform.Data.dataHandle);
+				auto& texture = assetHandler.AssetPool<Texture>(uniform.Data.dataHandle);
 				texture->Bind(textSlot++);
 				break;
 			}
@@ -127,7 +127,7 @@ namespace DuskEngine
 	void Material::SetTexture(const std::string& name, Ref<Texture>& texture)
 	{
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
-			m_UniformsMap[name]->Data.dataHandle = m_OwningHandler->AddToTexturePool(texture->GetUUID());
+			m_UniformsMap[name]->Data.dataHandle = m_OwningHandler->AddToAssetPool<Texture>(texture->GetUUID());
 		else
 		{
 			std::string message = "Texture '" + name + "' doesnt exist";
@@ -145,7 +145,7 @@ namespace DuskEngine
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Material" << YAML::Value << m_Name;
-		out << YAML::Key << "Shader" << YAML::Value << m_OwningHandler->ShaderPool(m_ShaderHandle);
+		out << YAML::Key << "Shader" << YAML::Value << m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
 		//out << YAML::Key << "Uniforms" << YAML::Value << m_Uniforms;
 
 		out << YAML::Key << "Uniforms";
@@ -159,7 +159,7 @@ namespace DuskEngine
 				out << YAML::Key << uniform.Name << YAML::Value << uniform.Data.vec3;
 				break;
 			case UniformType::Texture:
-				out << YAML::Key << uniform.Name << YAML::Value << m_OwningHandler->TexturePool(uniform.Data.dataHandle);
+				out << YAML::Key << uniform.Name << YAML::Value << m_OwningHandler->AssetPool<Texture>(uniform.Data.dataHandle);
 				break;
 			}
 		}
@@ -177,7 +177,7 @@ namespace DuskEngine
 
 	void Material::CreateUniforms()
 	{
-		auto shader = m_OwningHandler->ShaderPool(m_ShaderHandle);
+		auto shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
 
 		for (auto uniform : shader->UniformSpecs)
 		{

@@ -15,5 +15,7 @@ namespace DuskEngine
 		friend bool operator!=(Handle a, Handle b) { return a.m_Value != b.m_Value; }
 	private:
 		ValueType m_Value;
+
+		friend class AssetHandler;
 	};
 }

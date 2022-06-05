@@ -498,7 +498,7 @@ namespace DuskEngine
 			std::vector<std::string> shaderList;
 			int shaderIndex = 0;
 			// bad
-			uuids::uuid shaderID = m_AssetHandler->ShaderPool(
+			uuids::uuid shaderID = m_AssetHandler->AssetPool<Shader>(
 				m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetShaderHandle())->GetUUID();
 
 			for (unsigned int i = 0; i < AssetDatabase::ShaderDatabase.size(); i++)
@@ -555,8 +555,7 @@ namespace DuskEngine
 				{
 					// this is broken but whatever, will be replaced in the future
 					ImGui::Text(uniform.Name.c_str());
-					unsigned int textureID = m_AssetHandler->TexturePool(uniform.Data.dataHandle)->GetRendererID();
-					if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->TexturePool(uniform.Data.dataHandle)->GetRendererID(),
+					if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->AssetPool<Texture>(uniform.Data.dataHandle)->GetRendererID(),
 						ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
 					{
 						//#ifdef 0
@@ -583,7 +582,7 @@ namespace DuskEngine
 							const wchar_t* data = (const wchar_t*)payload->Data;
 							std::wstring ws(data);
 
-							auto& texture = m_AssetHandler->TexturePool(m_AssetHandler->AddToTexturePool(AssetDatabase::GetUUID(ws)));
+							auto& texture = m_AssetHandler->AssetPool<Texture>(m_AssetHandler->AddToAssetPool<Texture>(AssetDatabase::GetUUID(ws)));
 							material->SetTexture(uniform.Name, texture);
 							material->SerializeText(material->GetPath().string());
 						}

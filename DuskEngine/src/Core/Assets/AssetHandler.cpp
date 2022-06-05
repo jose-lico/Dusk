@@ -20,7 +20,7 @@ namespace DuskEngine
 		m_AssetHandlers.push_back(this);
 
 		//  default texture every handler should have
-		AddToTexturePool(AssetDatabase::GetUUID("res/textures/white.png"));
+		AddToAssetPool<Texture>(AssetDatabase::GetUUID("res/textures/white.png"));
 
 		//  default meshes
 		std::string str = "47183823-2574-4bfd-b411-99ed177d3e43";
@@ -95,25 +95,5 @@ namespace DuskEngine
 		{
 			handler->m_MaterialPool[material->GetUUID()].reset(material);
 		}
-	}
-
-	Ref<Shader>& AssetHandler::ShaderPool(const uint32_t handle)
-	{
-		return m_ShaderPool(handle);
-	}
-
-	uint32_t AssetHandler::AddToShaderPool(const uuids::uuid& uuid)
-	{
-		return m_ShaderPool.AddToPool(m_HandleMap, uuid);
-	}
-
-	Ref<Texture>& AssetHandler::TexturePool(const uint32_t handle)
-	{
-		return m_TexturePool(handle);
-	}
-
-	uint32_t AssetHandler::AddToTexturePool(const uuids::uuid& uuid)
-	{
-		return m_TexturePool.AddToPool(m_HandleMap, uuid);
 	}
 }

@@ -49,7 +49,7 @@ namespace DuskEngine
 	class DUSK_EXPORT Material : public Asset
 	{
 	public:
-		Material(uint32_t shaderHandle, AssetHandler* owningHandler, const std::filesystem::path& path, const uuids::uuid& uuid);
+		Material(Handle<Shader> shaderHandle, AssetHandler* owningHandler, const std::filesystem::path& path, const uuids::uuid& uuid);
 		//Material(Ref<Shader>& shader, const std::string& name = ""); not used anymore, keeping just in case
 		//Material(const std::string& shaderPath, const std::string& name = ""); not used anymore, keeping just in case
 		~Material();

@@ -125,7 +125,7 @@ namespace DuskEngine
 					* glm::scale(glm::mat4(1.0f), transform.scale);
 
 				// Expected Uniforms
-				auto shader = m_AssetHandler->ShaderPool(material->m_ShaderHandle);
+				auto shader = m_AssetHandler->AssetPool<Shader>(material->m_ShaderHandle);
 				shader->SetUniformMat4("e_Model", transform.model);
 				shader->SetUniformMat4("e_ViewProjection", VPM);
 				shader->SetUniformVec3("e_ViewPosition", cameraPos);
@@ -286,7 +286,7 @@ namespace DuskEngine
 					* glm::toMat4(glm::quat(transform.rotation))
 					* glm::scale(glm::mat4(1.0f), transform.scale);
 
-				auto shader = m_AssetHandler->ShaderPool(material->m_ShaderHandle);
+				auto shader = m_AssetHandler->AssetPool<Shader>(material->m_ShaderHandle);
 
 				// Expected Uniforms
 				shader->SetUniformMat4("e_Model", transform.model);
