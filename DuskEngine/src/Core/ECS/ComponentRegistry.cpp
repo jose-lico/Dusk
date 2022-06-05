@@ -36,11 +36,11 @@ enum class MetaData_Type
 // MESH RENDERER
 // #############################################################
 
-#define REGISTER_MESH_RENDERER\
-	rttr::registration::class_<DuskEngine::MeshRenderer>("MeshRenderer")\
-		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
-		property("mesh", &DuskEngine::MeshRenderer::meshHandle).\
-		property("material", &DuskEngine::MeshRenderer::materialHandle);\
+//#define REGISTER_MESH_RENDERER\
+//	rttr::registration::class_<DuskEngine::MeshRenderer>("MeshRenderer")\
+//		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
+//		property("mesh", &DuskEngine::MeshRenderer::meshHandle).\
+//		property("material", &DuskEngine::MeshRenderer::materialHandle);\
 
 // #############################################################
 // CAMERA
@@ -78,7 +78,7 @@ RTTR_REGISTRATION
 {
 	REGISTER_META
 	REGISTER_TRANSFORM
-	REGISTER_MESH_RENDERER
+	//REGISTER_MESH_RENDERER
 	REGISTER_CAMERA
 	REGISTER_LIGHT
 	//REGISTER_SCRIPT

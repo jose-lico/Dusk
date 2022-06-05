@@ -1,13 +1,18 @@
 #pragma once
 
+#include "Core/Assets/Handle.h"
+
 #include "uuid.h"
 
 namespace DuskEngine
 {
+	class Mesh;
+	class Material;
+
 	struct MeshRenderer
 	{
-		uuids::uuid meshHandle;
-		uuids::uuid materialHandle;
+		Handle<Mesh> meshHandle;
+		Handle<Material> materialHandle;
 
 		MeshRenderer() = default;
 	};

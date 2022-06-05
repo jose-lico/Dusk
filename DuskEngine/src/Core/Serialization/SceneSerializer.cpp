@@ -106,11 +106,18 @@ namespace DuskEngine
 				{
 					auto& mr = deserializedEntity.AddComponent<MeshRenderer>();
 
-					mr.materialHandle = meshRenderer["material"].as<uuids::uuid>();
-					scene->m_AssetHandler->AddToMaterialPool(mr.materialHandle);
+					mr.materialHandle = scene->m_AssetHandler->AddToAssetPool<Material>(meshRenderer["material"].as<uuids::uuid>());
 
-					mr.meshHandle = meshRenderer["mesh"].as<uuids::uuid>();
-					scene->m_AssetHandler->AddToMeshPool(mr.meshHandle);
+					auto mesh = meshRenderer["mesh"];
+
+					int type = mesh["fileID"].as<int>();
+
+					if (type == 0)
+						mr.meshHandle = 0;
+					if (type == 1)
+						mr.meshHandle = 1;
+					if (type == 2)
+						mr.meshHandle = scene->m_AssetHandler->AddToAssetPool<Mesh>(mesh["uuid"].as<uuids::uuid>());;
 				}
 
 				auto light = entity["Light"];

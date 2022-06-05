@@ -66,8 +66,8 @@ namespace DuskEngine
 					if(ImGui::MenuItem("Mesh Renderer"))
 					{
 						auto& mesh = (*m_SelectedEntities)[0].AddComponent<MeshRenderer>();
-						mesh.meshHandle = uuids::uuid::from_string("47183823-2574-4bfd-b411-99ed177d3e44").value();
-						mesh.materialHandle = AssetDatabase::GetUUID("res/editor/materials/defaultMaterial.material");
+						mesh.meshHandle = 1;
+						mesh.materialHandle = 0;
 						//mesh.mesh = PrimitiveMesh::Quad();
 						// This will later be changed to a default material
 						//mesh.material = ResourceManager::LoadMaterial(ResourceManager::GetUUID("res/materials/modelMaterial.material"));
@@ -388,7 +388,7 @@ namespace DuskEngine
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
 			int modelIndex = 0;
-			uuids::uuid modelID = meshes[0]->meshHandle;
+			uuids::uuid modelID = m_AssetHandler->AssetPool<Mesh>(meshes[0]->meshHandle)->GetUUID();
 
 			for (unsigned int i = 0; i < AssetDatabase::ModelDatabase.size(); i++)
 			{
@@ -399,7 +399,7 @@ namespace DuskEngine
 
 			if(!modelIndex)
 			{
-				switch (m_AssetHandler->MeshPool(meshes[0]->meshHandle)->GetType())
+				switch (m_AssetHandler->AssetPool<Mesh>(meshes[0]->meshHandle)->GetType())
 				{
 				case MeshType::Quad:
 					modelIndex = 0;
@@ -427,21 +427,20 @@ namespace DuskEngine
 							{
 								switch (modelIndex)
 								{
-									// shouldnt handle these cases this way but since these meshes are guarenteed for now fuck it
 								case 0:
-									meshes[0]->meshHandle = uuids::uuid::from_string("47183823-2574-4bfd-b411-99ed177d3e43").value();
+									meshes[0]->meshHandle = 0;
 									break;
 								case 1:
-									meshes[0]->meshHandle = uuids::uuid::from_string("47183823-2574-4bfd-b411-99ed177d3e44").value();
+									meshes[0]->meshHandle = 1;
 									break;
 								default:
 									break;
 								}
 							}
 							else
-							{
-								m_AssetHandler->AddToMeshPool(AssetDatabase::GetUUID(AssetDatabase::ModelDatabase[modelIndex - 2]->GetPath()));
-								meshes[0]->meshHandle = AssetDatabase::GetUUID(AssetDatabase::ModelDatabase[modelIndex - 2]->GetPath());
+							{	
+								meshes[0]->meshHandle = 
+									m_AssetHandler->AddToAssetPool<Mesh>(AssetDatabase::GetUUID(AssetDatabase::ModelDatabase[modelIndex - 2]->GetPath()));
 							}
 						}
 					}
@@ -455,7 +454,8 @@ namespace DuskEngine
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> materialList; // Later add default materials
 			int materialIndex = 0;
-			uuids::uuid materialID = meshes[0]->materialHandle;
+			uuids::uuid materialID = m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->GetUUID();
+				;
 
 			for (unsigned int i = 0; i < AssetDatabase::MaterialDatabase.size(); i++)
 			{
@@ -477,8 +477,7 @@ namespace DuskEngine
 						{
 							materialIndex = n;
 							auto id = AssetDatabase::GetUUID(AssetDatabase::MaterialDatabase[materialIndex]->GetPath());
-							m_AssetHandler->AddToMaterialPool(id);
-							meshes[0]->materialHandle = id;
+							meshes[0]->materialHandle = m_AssetHandler->AddToAssetPool<Material>(id);
 						}
 					}
 
@@ -492,14 +491,14 @@ namespace DuskEngine
 			ImGui::Separator();
 			ImGui::Separator();
 
-			ImGui::Text(m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetName().c_str());
+			ImGui::Text(m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->GetName().c_str());
 
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> shaderList;
 			int shaderIndex = 0;
 			// bad
 			uuids::uuid shaderID = m_AssetHandler->AssetPool<Shader>(
-				m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetShaderHandle())->GetUUID();
+				m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->GetShaderHandle())->GetUUID();
 
 			for (unsigned int i = 0; i < AssetDatabase::ShaderDatabase.size(); i++)
 			{
@@ -521,11 +520,11 @@ namespace DuskEngine
 							shaderIndex = n;
 							
 							auto id = AssetDatabase::GetUUID(AssetDatabase::ShaderDatabase[shaderIndex]->GetPath());
-							//m_AssetHandler->AddToShaderPool2(id); // this could return
-							//auto& shader = m_AssetHandler->ShaderPool(id);
-							/*m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->SetShader(shader);
-							m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->SerializeText(
-								m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->GetPath().string());*/
+							auto shaderHandle = m_AssetHandler->AddToAssetPool<Shader>(id);
+							m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->SetShader(shaderHandle);
+							
+							m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->SerializeText(
+								m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->GetPath().string());
 						}
 					}
 
@@ -541,9 +540,9 @@ namespace DuskEngine
 			//// if accessing from asset browser ->		propagate
 			//// if playing and accessing from scene ->	do not propagate
 
-			auto& material = m_AssetHandler->MaterialPool(meshes[0]->materialHandle);
+			auto& material = m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle);
 
-			for (auto& uniform : m_AssetHandler->MaterialPool(meshes[0]->materialHandle)->m_Uniforms)
+			for (auto& uniform : m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->m_Uniforms)
 			{
 				if (uniform.Type == UniformType::Vec3)
 				{

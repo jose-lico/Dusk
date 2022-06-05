@@ -57,7 +57,7 @@ namespace DuskEngine
 		void UploadUniforms(AssetHandler& assetHandler);
 		void UniformsDefaultValue();
 
-		void SetShader(Ref<Shader>& shader);
+		void SetShader(const Handle<Shader> shader);
 		
 		void SetFloat(const std::string& name, float f);
 		void SetVec2(const std::string& name, glm::vec2& v);
@@ -70,7 +70,7 @@ namespace DuskEngine
 		const uint32_t GetShaderHandle() { return m_ShaderHandle; }
 		
 		// Serialization
-		void SerializeText(const std::string& path, bool propagate = false);
+		void SerializeText(const std::string& path);
 		static void CreateDefaultMaterial(const std::filesystem::path& path);
 	private:
 		void CreateUniforms();

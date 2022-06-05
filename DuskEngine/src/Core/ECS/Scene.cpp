@@ -116,7 +116,7 @@ namespace DuskEngine
 
 				if (!meta.enabled) continue;
 
-				auto& material = m_AssetHandler->MaterialPool(mesh.materialHandle);
+				auto& material = m_AssetHandler->AssetPool<Material>(mesh.materialHandle);
 
 				material->UploadUniforms(*m_AssetHandler);
 
@@ -180,7 +180,7 @@ namespace DuskEngine
 				shader->SetUniformInt("e_DirectionalLightsCount", dirLightIndex);
 				shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
 
-				Renderer::Submit(m_AssetHandler->MeshPool(mesh.meshHandle));
+				Renderer::Submit(m_AssetHandler->AssetPool<Mesh>(mesh.meshHandle));
 			}
 
 			glm::mat4 viewMatrix = camera.camera.viewMatrix;
@@ -278,7 +278,7 @@ namespace DuskEngine
 
 				if (!meta.enabled) continue;
 
-				auto& material = m_AssetHandler->MaterialPool(mesh.materialHandle);
+				auto& material = m_AssetHandler->AssetPool<Material>(mesh.materialHandle);
 
 				material->UploadUniforms(*m_AssetHandler);
 
@@ -342,7 +342,7 @@ namespace DuskEngine
 				shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
 
 				//Renderer::Submit(mesh.mesh);
-				Renderer::Submit(m_AssetHandler->MeshPool(mesh.meshHandle));
+				Renderer::Submit(m_AssetHandler->AssetPool<Mesh>(mesh.meshHandle));
 			}
 
 			Renderer::EndScene();

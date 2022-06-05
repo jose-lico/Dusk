@@ -95,13 +95,9 @@ namespace DuskEngine
 		}
 	}
 
-	void Material::SetShader(Ref<Shader>& shader)
+	void Material::SetShader(const Handle<Shader> shader)
 	{
-		/*m_Shader = shader;
-
-		m_Uniforms.clear();
-		m_UniformsMap.clear();
-		CreateUniforms();*/
+		m_ShaderHandle = shader;
 	}
 
 	void Material::SetFloat(const std::string& name, float f)
@@ -140,7 +136,7 @@ namespace DuskEngine
 		return m_Shader->GetUUID();
 	}
 
-	void Material::SerializeText(const std::string& path, bool propagate)
+	void Material::SerializeText(const std::string& path)
 	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
@@ -168,11 +164,6 @@ namespace DuskEngine
 
 		std::ofstream fout(path);
 		fout << out.c_str();
-
-		if(propagate)
-		{
-			AssetHandler::PropagateMaterialChange(this);
-		}
 	}
 
 	void Material::CreateUniforms()

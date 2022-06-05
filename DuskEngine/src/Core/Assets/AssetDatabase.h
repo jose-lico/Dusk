@@ -47,7 +47,7 @@ namespace DuskEngine
 		static Ref<Mesh> LoadModel(const uuids::uuid& uuid);
 		static Ref<LuaScript> LoadScript(const uuids::uuid& uuid);
 
-		// Resource Lists
+		// Asset Lists
 		static std::vector<Asset*> ShaderDatabase;
 		static std::vector<Asset*> ModelDatabase;
 		static std::vector<Asset*> MaterialDatabase;

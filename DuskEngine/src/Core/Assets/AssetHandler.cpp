@@ -19,46 +19,18 @@ namespace DuskEngine
 	{
 		m_AssetHandlers.push_back(this);
 
-		//  default texture every handler should have
-		AddToAssetPool<Texture>(AssetDatabase::GetUUID("res/textures/white.png"));
+		m_ShaderPool = new _AssetPool<Shader>(this);
+		m_MeshPool = new _AssetPool<Mesh>(this);
+		m_TexturePool = new _AssetPool<Texture>(this);
+		m_MaterialPool = new _AssetPool<Material>(this);
 
-		//  default meshes
-		std::string str = "47183823-2574-4bfd-b411-99ed177d3e43";
-		uuids::uuid id = uuids::uuid::from_string(str).value();
-		auto quad = PrimitiveMesh::Quad();
-		AddToMeshPool(id, quad);
-
-		str = "47183823-2574-4bfd-b411-99ed177d3e44";
-		id = uuids::uuid::from_string(str).value();
-		auto cube = PrimitiveMesh::Cube();
-		AddToMeshPool(id, cube);
-
-		AddToMaterialPool(AssetDatabase::GetUUID("res/editor/materials/defaultMaterial.material"));
+		LOG(("Created Asset Handler " + m_Name).c_str());
 	}
 
 	AssetHandler::~AssetHandler()
 	{
 		LOG(("Destroying Asset Handler " + m_Name).c_str());
 	}
-
-	Ref<Mesh>& AssetHandler::MeshPool(const uuids::uuid& uuid)
-	{
-		return m_MeshPool[uuid];
-	}
-
-	void AssetHandler::AddToMeshPool(const uuids::uuid& uuid)
-	{
-		if (m_MeshPool.find(uuid) == m_MeshPool.end())
-			m_MeshPool.insert({ uuid, AssetDatabase::LoadModel(uuid) });
-	}
-
-	void AssetHandler::AddToMeshPool(const uuids::uuid& uuid, Ref<Mesh>& mesh)
-	{
-		if (m_MeshPool.find(uuid) == m_MeshPool.end())
-			m_MeshPool.insert({ uuid, mesh });
-	}
-
-
 
 	Ref<LuaScript>& AssetHandler::LuaScriptPool(const uint32_t handle)
 	{
@@ -75,25 +47,5 @@ namespace DuskEngine
 		}
 
 		return m_HandleMap[uuid];
-	}
-
-	Ref<Material>& AssetHandler::MaterialPool(const uuids::uuid& uuid)
-	{
-		return m_MaterialPool[uuid];
-	}
-
-	void AssetHandler::AddToMaterialPool(const uuids::uuid& uuid)
-	{
-		if (m_MaterialPool.find(uuid) == m_MaterialPool.end())
-			m_MaterialPool.insert({ uuid, AssetDatabase::LoadMaterial(uuid, this) });
-	}
-
-	void AssetHandler::PropagateMaterialChange(Material* material)
-	{
-		// could be optimized by skipping the propagating pool
-		for(auto handler : m_AssetHandlers)
-		{
-			handler->m_MaterialPool[material->GetUUID()].reset(material);
-		}
 	}
 }
