@@ -10,6 +10,8 @@
 
 #include "Utils/Rendering/PrimitiveMesh.h"
 
+#include <iostream>
+
 namespace DuskEngine
 {
 	std::vector<AssetHandler*> AssetHandler::m_AssetHandlers;
@@ -19,16 +21,26 @@ namespace DuskEngine
 	{
 		m_AssetHandlers.push_back(this);
 
-		m_ShaderPool = new _AssetPool<Shader>(this);
-		m_MeshPool = new _AssetPool<Mesh>(this);
-		m_TexturePool = new _AssetPool<Texture>(this);
-		m_MaterialPool = new _AssetPool<Material>(this);
+		m_ShaderPool.m_AssetHandler = this;
+		m_MeshPool.m_AssetHandler = this;
+		m_TexturePool.m_AssetHandler = this;
+		m_MaterialPool.m_AssetHandler = this;
+
+		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Quad());
+		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Cube());
+
+		m_MaterialPool.m_Pool.push_back(AssetDatabase::LoadMaterial(
+			AssetDatabase::GetUUID("res/editor/materials/defaultMaterial.material"), this));
 
 		LOG(("Created Asset Handler " + m_Name).c_str());
 	}
 
 	AssetHandler::~AssetHandler()
 	{
+		/*delete(m_ShaderPool);
+		delete(m_MeshPool);
+		delete(m_TexturePool);
+		delete(m_MaterialPool);*/
 		LOG(("Destroying Asset Handler " + m_Name).c_str());
 	}
 

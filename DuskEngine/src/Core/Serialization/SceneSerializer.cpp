@@ -105,7 +105,6 @@ namespace DuskEngine
 				if(meshRenderer)
 				{
 					auto& mr = deserializedEntity.AddComponent<MeshRenderer>();
-
 					mr.materialHandle = scene->m_AssetHandler->AddToAssetPool<Material>(meshRenderer["material"].as<uuids::uuid>());
 
 					auto mesh = meshRenderer["mesh"];
