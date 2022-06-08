@@ -3,10 +3,10 @@
 #include "Core/ECS/Components/Camera.h"
 #include "Core/ECS/Components/Transform.h"
 #include "Core/ECS/EditorCamera.h"
-#include "Core/Renderer/Resources/Framebuffer.h"
 #include "Core/Application/Time.h"
 #include "Core/Application/Input.h"
 #include "Core/Events/KeyEvent.h"
+#include "Platform/OpenGL/Framebuffer.h"
 
 #include "imgui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"
@@ -15,7 +15,7 @@
 
 namespace DuskEngine
 {
-	SceneViewportPanel::SceneViewportPanel(Ref<FrameBuffer>& fb, EditorCamera* camera)
+	SceneViewportPanel::SceneViewportPanel(Ref<Framebuffer>& fb, EditorCamera* camera)
 	{ 
 		m_ViewportSize = glm::vec2(0.0f);
 		m_FB = fb;
@@ -40,18 +40,21 @@ namespace DuskEngine
 		ImGui::PopStyleColor();
 		ImGui::Unindent();*/
 		
-
-		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		if (m_ViewportSize != *(glm::vec2*)&viewportSize)
+		if (auto fb = m_FB.lock())
 		{
-			m_ViewportSize = { viewportSize.x, viewportSize.y };
-			m_FB->Resize(m_ViewportSize);
-			m_Camera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f);
+			ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+			if (m_ViewportSize != *(glm::vec2*)&viewportSize)
+			{
+				m_ViewportSize = { viewportSize.x, viewportSize.y };
+
+				fb->Resize(m_ViewportSize);
+				m_Camera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f);
+			}
+			ImGui::Image((ImTextureID)(size_t)fb->GetColorAttachmentID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImGui::PopStyleVar();
+			ImVec2 work_pos = ImGui::GetWindowPos();
+			auto viewportID = ImGui::GetWindowViewport()->ID;
 		}
-		ImGui::Image((ImTextureID)(size_t)m_FB->GetColorAttachmentID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		ImGui::PopStyleVar();
-        ImVec2 work_pos = ImGui::GetWindowPos();
-        auto viewportID = ImGui::GetWindowViewport()->ID;
 
 		/*if (ImGui::BeginMenuBar())
 		{

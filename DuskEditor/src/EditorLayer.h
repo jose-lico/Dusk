@@ -10,7 +10,7 @@
 namespace DuskEngine
 {
 	class Scene;
-	class FrameBuffer;
+	class Framebuffer;
 	class EditorCamera;
 
 	class EditorLayer : public Layer
@@ -28,8 +28,9 @@ namespace DuskEngine
 
 		Ref<Scene> m_EditingScene;
 		Ref<Scene> m_PlayingScene;
-		Ref<FrameBuffer> m_EditorSceneFB;
-		Ref<FrameBuffer> m_PlayingSceneFB;
+
+		Ref<Framebuffer> m_EditorSceneFB;
+		Ref<Framebuffer> m_PlayingSceneFB;
 
 		EditorCamera* m_EditorCamera;
 

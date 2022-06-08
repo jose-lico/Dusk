@@ -1,23 +1,23 @@
 #include "pch.h"
-#include "OpenGLFramebuffer.h"
+#include "Framebuffer.h"
 #include "GLCommon.h"
 
 namespace DuskEngine
 {
-	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
+	Framebuffer::Framebuffer(const FramebufferSpecification& spec)
 		:m_Spec(spec)
 	{
 		Resize();
 	}
 
-	OpenGLFramebuffer::~OpenGLFramebuffer()
+	Framebuffer::~Framebuffer()
 	{
 		glDeleteFramebuffers(1, &m_ID);
 		glDeleteTextures(1, &m_ColorAttachment);
 		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
-	void OpenGLFramebuffer::Resize()
+	void Framebuffer::Resize()
 	{
 		if(m_ID)
 		{
@@ -48,20 +48,20 @@ namespace DuskEngine
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void OpenGLFramebuffer::Resize(glm::vec2& viewportSize)
+	void Framebuffer::Resize(glm::vec2& viewportSize)
 	{
 		m_Spec.Width = (unsigned int)viewportSize.x;
 		m_Spec.Height = (unsigned int)viewportSize.y;
 		Resize();
 	}
 
-	void OpenGLFramebuffer::Bind() const
+	void Framebuffer::Bind() const
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
 		glViewport(0, 0, m_Spec.Width, m_Spec.Height);
 	}
 
-	void OpenGLFramebuffer::Unbind() const
+	void Framebuffer::Unbind() const
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

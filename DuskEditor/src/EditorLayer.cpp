@@ -1,11 +1,11 @@
 #include "EditorLayer.h"
 
-#include "Core/Renderer/Resources/Framebuffer.h"
 #include "Core/Serialization/SceneSerializer.h"
 #include "Core/ECS/EditorCamera.h"
 #include "Core/Scripting/LuaScript.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/AssetHandler.h"
+#include "Platform/OpenGL/Framebuffer.h"
 
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/string_cast.hpp"
@@ -43,8 +43,9 @@ namespace DuskEngine
 		FramebufferSpecification fbSpec;
 		fbSpec.Width = 720;
 		fbSpec.Height = 480;
-		m_EditorSceneFB.reset(FrameBuffer::Create(fbSpec));
-		m_PlayingSceneFB.reset(FrameBuffer::Create(fbSpec));
+		m_EditorSceneFB = MakeRef<Framebuffer>(fbSpec);
+		m_PlayingSceneFB = MakeRef<Framebuffer>(fbSpec);
+
 		m_EditingScene = MakeRef<Scene>("Editing Scene");
 
 		SceneSerializer::DeserializeText(m_EditingScene, "res/scenes/scene.yaml");
