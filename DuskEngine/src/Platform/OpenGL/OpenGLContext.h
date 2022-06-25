@@ -1,17 +1,16 @@
 #pragma once
-#include "Core/Renderer/RendererContext.h"
 
-struct GLFWwindow;
+ struct GLFWwindow;
 
 namespace DuskEngine
 {
-	class OpenGLContext : public RendererContext
+	class OpenGLContext
 	{
 	public:
 		OpenGLContext(GLFWwindow* windowHandle);
 		~OpenGLContext();
 
-		virtual void SwapBuffers() override;
+		void SwapBuffers();
 	private:
 		GLFWwindow* m_WindowHandle;
 	};

@@ -11,7 +11,6 @@ namespace DuskEngine
 		:m_WindowHandle(windowHandle)
 	{
 		glfwMakeContextCurrent(m_WindowHandle);
-		//glfwSwapInterval(0);
 
 		if (glewInit() != GLEW_OK)
 			FATAL("Failed to initialize glew!");

@@ -9,8 +9,7 @@ namespace DuskEngine
 	class Event;
 	class Window;
 	class Logger;
-	class WindowManager;
-	class RendererContext;
+	class Renderer;
 	class LayerStack;
 	class ImGuiLayer;
 
@@ -35,15 +34,16 @@ namespace DuskEngine
 
 		void SetName(const char* name);
 
-		Window& GetWindow() const;
+		Window& GetWindow() const { return *m_Window; }
+		Renderer& GetRenderer() const { return *m_Renderer; }
 	private:
 		static Application* s_Instance;
 
-		Logger* m_Logger;
-		WindowManager* m_WindowManager;
-		RendererContext* m_RendererContext;
-		
 		LayerStack* m_LayerStack;
+		Logger* m_Logger;
+		Window* m_Window;
+		Renderer* m_Renderer;
+		
 		ImGuiLayer* m_ImGuiLayer; // Deleted by m_LayerStack | Should consider moving to editor
 	
 		ApplicationSpecs m_Specs;

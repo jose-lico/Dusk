@@ -5,12 +5,14 @@
 #include "Components.h"
 #include "EditorCamera.h"
 
+#include "Core/Application/Application.h"
+#include "Core/Application/Window.h"
 #include "Core/Renderer/Renderer.h"
-#include "Core/Renderer/RenderCommand.h"
 #include "Core/Assets/Assets/Shader.h"
 #include "Core/Assets/Assets/Material.h"
 #include "Core/Assets/AssetHandler.h"
 #include "Core/Scripting/ScriptingEngine.h"
+#include "Platform/OpenGL/OpenGLAPI.h"
 
 const unsigned int MAX_LIGHTS = 8;
 
@@ -103,10 +105,12 @@ namespace DuskEngine
 		glm::vec3 cameraPos = camera.transform.position;
 		glm::mat4 VPM = camera.camera.viewProjectionMatrix;
 
-		Renderer::BeginScene();
+		auto& renderer = Application::Get().GetRenderer();
 
-		RenderCommand::SetClearColor({ 0.192f, 0.301f, 0.474f, 1.0f });
-		RenderCommand::Clear();
+		renderer.BeginScene();
+
+		OpenGLAPI::SetClearColor({ 0.192f, 0.301f, 0.474f, 1.0f });
+		OpenGLAPI::Clear();
 		{
 			// Most of this should maybe be moved to the renderer
 			auto view = m_Registry.view<Transform, MeshRenderer, Meta>();
@@ -180,7 +184,7 @@ namespace DuskEngine
 				shader->SetUniformInt("e_DirectionalLightsCount", dirLightIndex);
 				shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
 
-				Renderer::Submit(m_AssetHandler->AssetPool<Mesh>(mesh.meshHandle));
+				renderer.Submit(m_AssetHandler->AssetPool<Mesh>(mesh.meshHandle));
 			}
 
 			glm::mat4 viewMatrix = camera.camera.viewMatrix;
@@ -191,10 +195,10 @@ namespace DuskEngine
 			m_GridShader->SetUniformMat4("e_Projection", projectionMatrix);
 			m_GridShader->SetUniformMat4("e_View", viewMatrix);
 
-			RenderCommand::UnbindVAO();
-			RenderCommand::DrawArrays(0, 6);
+			OpenGLAPI::UnbindVAO();
+			OpenGLAPI::DrawArrays(0, 6);
 
-			Renderer::EndScene();
+			renderer.EndScene();
 		}
 	}
 
@@ -265,10 +269,12 @@ namespace DuskEngine
 			}
 		}
 
-		Renderer::BeginScene();
+		auto& renderer = Application::Get().GetRenderer();
 
-		RenderCommand::SetClearColor({ 0.192f, 0.301f, 0.474f, 1.0f });
-		RenderCommand::Clear();
+		renderer.BeginScene();
+
+		OpenGLAPI::SetClearColor({ 0.192f, 0.301f, 0.474f, 1.0f });
+		OpenGLAPI::Clear();
 		{
 			// Most of this should maybe be moved to the renderer
 			auto view = m_Registry.view<Transform, MeshRenderer, Meta>();
@@ -341,11 +347,10 @@ namespace DuskEngine
 				shader->SetUniformInt("e_DirectionalLightsCount", dirLightIndex);
 				shader->SetUniformInt("e_PointLightsCount", pointLightIndex);
 
-				//Renderer::Submit(mesh.mesh);
-				Renderer::Submit(m_AssetHandler->AssetPool<Mesh>(mesh.meshHandle));
+				renderer.Submit(m_AssetHandler->AssetPool<Mesh>(mesh.meshHandle));
 			}
 
-			Renderer::EndScene();
+			renderer.EndScene();
 		}
 	}
 

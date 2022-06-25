@@ -1,19 +1,19 @@
 #include "pch.h"
-#include "WindowsWindow.h"
+#include "Window.h"
 
 #include "Core/Events/Events.h"
 
-#include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include "GL/glew.h"
 
-#include <filesystem>
-
-namespace DuskEngine
+namespace DuskEngine 
 {
 	extern void DropCallback(GLFWwindow* window, int count, const char** paths);
 
-	WindowsWindow::WindowsWindow(const WindowData& data)
+	Window::Window(const WindowData& data)
 	{
+		glfwInit();
+
 		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL);
 
 		if (!m_Window)
@@ -27,7 +27,6 @@ namespace DuskEngine
 		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		glfwMaximizeWindow(m_Window);
-		
 
 		// glfw callbacks
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -122,35 +121,22 @@ namespace DuskEngine
 		glfwSetDropCallback(m_Window, DropCallback);
 	}
 
-	WindowsWindow::~WindowsWindow()
-	{
-		glfwDestroyWindow(m_Window);
-		TRACE("Window destroyed");
-	}
-
-	void WindowsWindow::SetVSync(bool vsync)
+	void Window::SetVSync(bool vsync)
 	{
 		m_Data.VSync = vsync;
 		glfwSwapInterval(vsync);
 	}
 
-	void WindowsWindow::SetWindowTitle(const char* name)
+	void Window::SetWindowTitle(const std::string& title)
 	{
-		glfwSetWindowTitle(m_Window, name);
+		m_Data.Title = title;
+		glfwSetWindowTitle(m_Window, title.c_str());
 	}
 
-	bool WindowsWindow::IsVSync() const
-	{
-		return m_Data.VSync;
-	}
-
-	bool WindowsWindow::ShouldClose() const
+	bool Window::ShouldClose() const
 	{
 		return glfwWindowShouldClose(m_Window);
 	}
 
-	void* WindowsWindow::GetNativeHandle() const
-	{
-		return m_Window;
-	}
+	
 }

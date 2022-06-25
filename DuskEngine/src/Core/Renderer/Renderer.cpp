@@ -1,12 +1,22 @@
 #include "pch.h"
 #include "Renderer.h"
 
-#include "RenderCommand.h"
-
 #include "Core/Assets/Assets/Mesh.h"
 #include "Platform/OpenGL/VertexArray.h"
+#include "Platform/OpenGL/OpenGLAPI.h"
+#include "Platform/OpenGL/OpenGLContext.h"
+#include "Core/Application/Window.h"
 
 namespace DuskEngine {
+
+	Renderer::Renderer(const Window& window)
+	{
+		m_Context = MakeUnique<OpenGLContext>(window.GetNativeHandle());
+	}
+
+	Renderer::~Renderer()
+	{
+	}
 
 	void Renderer::BeginScene()
 	{
@@ -19,12 +29,17 @@ namespace DuskEngine {
 	void Renderer::Submit(const UniqueRef<VertexArray>& vertexArray)
 	{
 		vertexArray->Bind();
-		RenderCommand::DrawIndexed(vertexArray);
+		OpenGLAPI::DrawIndexed(vertexArray);
 	}
 
 	void Renderer::Submit(const Ref<Mesh>& mesh)
 	{
 		mesh->m_VA->Bind();
-		RenderCommand::DrawIndexed(mesh->m_VA);
+		OpenGLAPI::DrawIndexed(mesh->m_VA);;
+	}
+
+	void Renderer::SwapBuffers()
+	{
+		m_Context->SwapBuffers();
 	}
 }

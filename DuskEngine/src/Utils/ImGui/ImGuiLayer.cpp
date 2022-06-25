@@ -3,7 +3,7 @@
 
 #include "Core/Events/Events.h"
 
-#include "Utils/Window/Window.h"
+#include "Core/Application/Window.h"
 
 #include "IconsForkAwesome.h"
 
@@ -37,7 +37,7 @@ namespace DuskEngine
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-		ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)m_Window->GetNativeHandle(), true);
+		ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeHandle(), true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 
 		ApplyStyle();

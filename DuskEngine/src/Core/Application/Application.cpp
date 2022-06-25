@@ -3,14 +3,12 @@
 
 #include "Time.h"
 #include "LayerStack.h"
+#include "Window.h"
 
 #include "Core/Assets/AssetDatabase.h"
-#include "Core/Renderer/RenderCommand.h"
-#include "Core/Renderer/RendererContext.h"
 #include "Core/Events/EventBase.h"
+#include "Core/Renderer/Renderer.h"
 
-#include "Utils/Window/WindowManager.h"
-#include "Utils/Window/Window.h"
 #include "Utils/ImGui/ImGuiLayer.h"
 
 namespace DuskEngine
@@ -24,13 +22,11 @@ namespace DuskEngine
 
 		m_Logger = new Logger(LOGGER);
 
-		m_WindowManager = new WindowManager();
-		m_WindowManager->GetWindow()->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
-		m_WindowManager->GetWindow()->SetWindowTitle(m_Specs.Name.c_str());
+		m_Window = new Window();
+		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+		m_Window->SetWindowTitle(m_Specs.Name.c_str());
 
-		m_RendererContext = RendererContext::Create(m_WindowManager->GetWindow()->GetNativeHandle());
-		
-		RenderCommand::Init();
+		m_Renderer = new Renderer(*m_Window);
 
 		AssetDatabase::Init();
 		AssetDatabase::CreateUUIDs();
@@ -47,15 +43,15 @@ namespace DuskEngine
 		TRACE("########## SHUTDOWN ##########");
 
 		AssetDatabase::Shutdown();
-		delete m_RendererContext;
+		delete m_Renderer;
 		delete m_LayerStack; // Deletes m_ImGuiLayer
-		delete m_WindowManager;
+		delete m_Window;
 		delete m_Logger;
 	}
 
 	void Application::Run()
 	{
-		while (!m_WindowManager->GetWindow()->ShouldClose())
+		while (!m_Window->ShouldClose())
 		{
 			Time::Update();
 			for (Layer* layer : *m_LayerStack)
@@ -68,7 +64,7 @@ namespace DuskEngine
 					layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
-			m_RendererContext->SwapBuffers();
+			m_Renderer->SwapBuffers();
 		}
 	}
 
@@ -98,11 +94,6 @@ namespace DuskEngine
 	void Application::SetName(const char* name)
 	{
 		m_Specs.Name = name;
-		m_WindowManager->GetWindow()->SetWindowTitle(name);
-	}
-
-	Window& Application::GetWindow() const
-	{
-		return *m_WindowManager->GetWindow();
+		m_Window->SetWindowTitle(name);
 	}
 }

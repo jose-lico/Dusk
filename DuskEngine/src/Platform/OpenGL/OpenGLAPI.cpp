@@ -1,40 +1,39 @@
 #include "pch.h"
-#include "OpenGLRendererAPI.h"
+#include "OpenGLAPI.h"
 
 #include "GLCommon.h"
-
 #include "VertexArray.h"
 #include "Buffer.h"
 
+namespace DuskEngine :: OpenGLAPI 
+{
 
-namespace DuskEngine {
-
-	void OpenGLRendererAPI::Init()
+	void Init()
 	{
 		TRACE("OpenGL API Created");
 	}
 
-	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
+	void SetClearColor(const glm::vec4& color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
-	void OpenGLRendererAPI::Clear()
+	void Clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLRendererAPI::UnbindVAO()
+	void UnbindVAO()
 	{
 		glBindVertexArray(0);
 	}
 
-	void OpenGLRendererAPI::DrawIndexed(const UniqueRef<VertexArray>& vertexArray)
+	void DrawIndexed(const UniqueRef<DuskEngine::VertexArray>& vertexArray)
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
-	void OpenGLRendererAPI::DrawArrays(unsigned int start, unsigned int count)
+	void DrawArrays(unsigned int start, unsigned int count)
 	{
 		glDrawArrays(GL_TRIANGLES, start, count);
 	}

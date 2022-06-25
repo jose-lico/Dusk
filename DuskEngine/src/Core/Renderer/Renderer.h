@@ -3,18 +3,27 @@
 
 #include "Utils/Memory/Memory.h"
 
-namespace DuskEngine {
-	
+namespace DuskEngine 
+{
+	class OpenGLContext;
 	class VertexArray;
 	class Mesh;
+	class Window;
 
 	class DUSK_EXPORT Renderer
 	{
 	public:
-		static void BeginScene();
-		static void EndScene();
+		Renderer(const Window& window);
+		~Renderer();
 
-		static void Submit(const UniqueRef<VertexArray>& vertexArray);
-		static void Submit(const Ref<Mesh>& mesh);
+		void BeginScene();
+		void EndScene();
+
+		void Submit(const UniqueRef<VertexArray>& vertexArray);
+		void Submit(const Ref<Mesh>& mesh);
+
+		void SwapBuffers();
+	private:
+		UniqueRef<OpenGLContext> m_Context;
 	};
 }
