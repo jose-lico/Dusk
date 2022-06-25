@@ -5,7 +5,7 @@
 #include "Handle.h"
 
 #include "Assets/Mesh.h"
-#include "Assets/Texture.h"
+#include "Platform/OpenGL/Texture.h"
 #include "Assets/Material.h"
 
 #include "Utils/Rendering/PrimitiveMesh.h"

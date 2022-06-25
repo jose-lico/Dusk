@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Material.h"
 
-#include "Texture.h"
-#include "Shader.h"
+#include "Platform/OpenGL/Shader.h"
+#include "Platform/OpenGL/Texture.h"
 
 #include "Core/Assets/AssetHandler.h"
 #include "Core/Assets/AssetDatabase.h"

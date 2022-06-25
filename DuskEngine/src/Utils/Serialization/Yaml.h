@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core/Assets/Assets/Material.h"
-#include "Core/Assets/Assets/Shader.h"
-#include "Core/Assets/Assets/Texture.h"
+#include "Platform/OpenGL/Shader.h"
+#include "Platform/OpenGL/Texture.h"
 #include "Core/Assets/Assets/Mesh.h"
 #include "Core/ECS/Components/Light.h"
 #include "Core/Scripting/LuaScript.h"

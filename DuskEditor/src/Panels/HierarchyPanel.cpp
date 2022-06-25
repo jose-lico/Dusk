@@ -5,7 +5,7 @@
 
 #include "Core/ECS/Components/Transform.h"
 #include "Core/ECS/Components/Meta.h"
-#include "Core/Assets/Assets/Shader.h"
+#include "Platform/OpenGL/Shader.h"
 #include "Core/Assets/AssetDatabase.h"
 
 #include "Utils/Rendering/PrimitiveMesh.h"

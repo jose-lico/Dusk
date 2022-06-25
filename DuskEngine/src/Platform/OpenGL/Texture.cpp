@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "OpenGLTexture.h"
+#include "Texture.h"
 
 #include "GLCommon.h"
 
@@ -9,7 +9,7 @@
 
 namespace DuskEngine
 {
-    OpenGLTexture::OpenGLTexture(const std::string& filepath, const std::string& name)
+    Texture::Texture(const std::string& filepath, const std::string& name)
         :m_ID(0), m_Width(0), m_Height(0), m_Size(0)
     {
         if (name.empty()) 
@@ -69,7 +69,7 @@ namespace DuskEngine
         LOG(message.c_str());
     }
 
-    OpenGLTexture::OpenGLTexture(const std::filesystem::path& path, const uuids::uuid& uuid)
+    Texture::Texture(const std::filesystem::path& path, const uuids::uuid& uuid)
         :m_ID(0), m_Width(0), m_Height(0), m_Size(0)
     {
         m_UUID = uuid;
@@ -123,14 +123,14 @@ namespace DuskEngine
         LOG(message.c_str());
     }
 
-    OpenGLTexture::~OpenGLTexture()
+    Texture::~Texture()
     {
         glDeleteTextures(1, &m_ID);
         std::string message = "Destroyed Texture " + m_Name;
         LOG(message.c_str());
     }
 
-    void OpenGLTexture::Bind(unsigned int slot) const
+    void Texture::Bind(unsigned int slot) const
     {
         glBindTextureUnit(slot, m_ID);
     }

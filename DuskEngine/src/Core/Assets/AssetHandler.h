@@ -2,7 +2,7 @@
 
 #include "Utils/Memory/Memory.h"
 
-#include "Assets/Shader.h"
+#include "Platform/OpenGL/Shader.h"
 #include "Handle.h"
 #include "AssetPool.h"
 

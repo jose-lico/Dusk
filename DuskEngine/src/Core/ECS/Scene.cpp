@@ -8,7 +8,7 @@
 #include "Core/Application/Application.h"
 #include "Core/Application/Window.h"
 #include "Core/Renderer/Renderer.h"
-#include "Core/Assets/Assets/Shader.h"
+#include "Platform/OpenGL/Shader.h"
 #include "Core/Assets/Assets/Material.h"
 #include "Core/Assets/AssetHandler.h"
 #include "Core/Scripting/ScriptingEngine.h"
@@ -24,7 +24,7 @@ namespace DuskEngine
 	{
 		std::string message = "Creating new scene " + m_Name;
 		LOG(message.c_str());
-		m_GridShader = Shader::Create("res/editor/shaders/grid.glsl");
+		m_GridShader = MakeRef<Shader>("res/editor/shaders/grid.glsl");
 
 		m_ScriptingEngine = new ScriptingEngine();
 		m_AssetHandler = new AssetHandler("SceneHandler");

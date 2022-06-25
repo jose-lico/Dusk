@@ -1,6 +1,6 @@
 #include "ContentBrowserPanel.h"
 
-#include "Core/Assets/Assets/Texture.h"
+#include "Platform/OpenGL/Texture.h"
 #include "Core/Assets/Assets/Material.h"
 #include "Core/Assets/AssetDatabase.h"
 
@@ -17,8 +17,8 @@ namespace DuskEngine
 	{
 		g_currentDir = &m_CurrentDirectory;
 		m_CurrentDirectory = g_RootDirectory; 
-		m_FolderIcon = Texture::Create("res/editor/icons/folder.png");
-		m_UnknownIcon = Texture::Create("res/editor/icons/question-mark.png");
+		m_FolderIcon = MakeRef<Texture>("res/editor/icons/folder.png");
+		m_UnknownIcon = MakeRef<Texture>("res/editor/icons/question-mark.png");
 		CreateDirectoryItems();
 		CreateDirectoryResources();
 	}
@@ -182,7 +182,7 @@ namespace DuskEngine
 			auto extension = directoryEntry.path().extension();
 			if(extension == ".png" || extension == ".jpg")
 			{
-				m_Icons.push_back(Texture::Create(directoryEntry.path().string()));
+				m_Icons.push_back(MakeRef<Texture>(directoryEntry.path().string()));
 			}
 		}
 	}

@@ -2,10 +2,10 @@
 
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/AssetHandler.h"
-#include "Core/Assets/Assets/Shader.h"
+#include "Platform/OpenGL/Shader.h"
 #include "Core/Assets/Assets/Mesh.h"
 #include "Core/Assets/Assets/Material.h"
-#include "Core/Assets/Assets/Texture.h"
+#include "Platform/OpenGL/Texture.h"
 #include "Core/Scripting/LuaScript.h"
 #include "Core/ECS/Entity.h"
 

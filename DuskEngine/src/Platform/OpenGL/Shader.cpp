@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "OpenGLShader.h"
+#include "Shader.h"
 
 #include "GLCommon.h"
 
 namespace DuskEngine
 {
-	OpenGLShader::OpenGLShader(const std::string& filepath, const std::string& name)
+	Shader::Shader(const std::string& filepath, const std::string& name)
 	{
 		// can be nuch better
 		if (name.empty())
@@ -28,7 +28,7 @@ namespace DuskEngine
 		LOG(message.c_str());
 	}
 
-	OpenGLShader::OpenGLShader(const std::filesystem::path& path, const uuids::uuid& uuid)
+	Shader::Shader(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
 		m_UUID = uuid;
 		m_Path = path;
@@ -42,24 +42,24 @@ namespace DuskEngine
 		LOG(message.c_str());
 	}
 
-	OpenGLShader::~OpenGLShader()
+	Shader::~Shader()
 	{
 		glDeleteProgram(m_ID);
 		std::string message = "Deleted Shader " + m_Name;
 		LOG(message.c_str());
 	}
 
-	void OpenGLShader::Bind() const
+	void Shader::Bind() const
 	{
 		glUseProgram(m_ID);
 	}
 
-	void OpenGLShader::Unbind() const
+	void Shader::Unbind() const
 	{
 		glUseProgram(0);
 	}
 
-	unsigned int OpenGLShader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+	unsigned int Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
 	{
 		unsigned int program = glCreateProgram();
 		unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
@@ -76,7 +76,7 @@ namespace DuskEngine
 		return program;
 	}
 
-	unsigned int OpenGLShader::CompileShader(unsigned int type, const std::string& source)
+	unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 	{
 		unsigned int id = glCreateShader(type);
 		const char* src = source.c_str();
@@ -98,7 +98,7 @@ namespace DuskEngine
 		return id;
 	}
 
-	ShaderProgramSource OpenGLShader::ParseShader()
+	ShaderProgramSource Shader::ParseShader()
 	{
 		std::ifstream stream(m_Path);
 
@@ -146,7 +146,7 @@ namespace DuskEngine
 		return { ss[0].str(), ss[1].str() };
 	}
 	
-	UniformType OpenGLShader::GetType(const std::string& type)
+	UniformType Shader::GetType(const std::string& type)
 	{
 		if (type == "vec3")
 			return UniformType::Vec3;
@@ -156,7 +156,7 @@ namespace DuskEngine
 		return UniformType::Unknown;
 	}
 
-	int OpenGLShader::GetUniformLocation(const std::string& name)
+	int Shader::GetUniformLocation(const std::string& name)
 	{
 		if (m_uniformLocations.find(name) != m_uniformLocations.end())
 			return m_uniformLocations[name];
@@ -168,37 +168,37 @@ namespace DuskEngine
 		return location;
 	}
 
-	void OpenGLShader::SetUniformInt(const std::string& name, int i)
+	void Shader::SetUniformInt(const std::string& name, int i)
 	{
 		glUniform1i(GetUniformLocation(name), i);
 	}
 
-	void OpenGLShader::SetUniformFloat(const std::string& name, float f)
+	void Shader::SetUniformFloat(const std::string& name, float f)
 	{
 		glUniform1f(GetUniformLocation(name), f);
 	}
 
-	void OpenGLShader::SetUniformVec2(const std::string& name, const glm::vec2& v)
+	void Shader::SetUniformVec2(const std::string& name, const glm::vec2& v)
 	{
 		glUniform2f(GetUniformLocation(name), v.x, v.y);
 	}
 
-	void OpenGLShader::SetUniformVec3(const std::string& name, const glm::vec3& v)
+	void Shader::SetUniformVec3(const std::string& name, const glm::vec3& v)
 	{
 		glUniform3f(GetUniformLocation(name), v.x, v.y, v.z);
 	}
 
-	void OpenGLShader::SetUniformVec4(const std::string& name, const glm::vec4& v)
+	void Shader::SetUniformVec4(const std::string& name, const glm::vec4& v)
 	{
 		glUniform4f(GetUniformLocation(name), v.x, v.y, v.z, v.w);
 	}
 
-	void OpenGLShader::SetUniformMat3(const std::string& name, const glm::mat3& m)
+	void Shader::SetUniformMat3(const std::string& name, const glm::mat3& m)
 	{
 		glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, &m[0][0]);
 	}
 
-	void OpenGLShader::SetUniformMat4(const std::string& name, const glm::mat4& m)
+	void Shader::SetUniformMat4(const std::string& name, const glm::mat4& m)
 	{
 		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &m[0][0]);
 	}

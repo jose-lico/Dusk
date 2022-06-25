@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Toolbar.h"
 
-#include "Core/Assets/Assets/Texture.h"
+#include "Platform/OpenGL/Texture.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -11,9 +11,9 @@ namespace DuskEngine
 	Toolbar::Toolbar(bool* playing, bool* paused, const std::function<void(void)>& playfunc, const std::function<void(void)>& stopfunc, const std::function<void(void)>& pausefunc)
 		:m_Playing(playing), m_Paused(paused), m_PlayFunc(playfunc), m_StopFunc(stopfunc), m_PauseFunc(pausefunc)
 	{
-		m_Play  = Texture::Create("res/editor/icons/play.png");
-		m_Stop  = Texture::Create("res/editor/icons/stop.png");
-		m_Pause = Texture::Create("res/editor/icons/pause.png");
+		m_Play  = MakeRef<Texture>("res/editor/icons/play.png");
+		m_Stop  = MakeRef<Texture>("res/editor/icons/stop.png");
+		m_Pause = MakeRef<Texture>("res/editor/icons/pause.png");
 	}
 
 	void Toolbar::OnImGuiRender()

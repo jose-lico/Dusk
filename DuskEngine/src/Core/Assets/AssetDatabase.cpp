@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "AssetDatabase.h"
 
-#include "Core/Assets/Assets/Shader.h"
-#include "Core/Assets/Assets/Texture.h"
+#include "Platform/OpenGL/Shader.h"
+#include "Platform/OpenGL/Texture.h"
 #include "Core/Assets/Assets/Material.h"
 #include "Core/Assets/Assets/Model.h"
 #include "Core/Assets/AssetHandler.h"
@@ -224,12 +224,12 @@ namespace DuskEngine
 
 	Ref<Shader> AssetDatabase::LoadShader(const uuids::uuid& uuid)
 	{
-		return Shader::Create(m_PathsMap[uuid], uuid);
+		return MakeRef<Shader>(m_PathsMap[uuid], uuid);
 	}
 
 	Ref<Texture> AssetDatabase::LoadTexture(const uuids::uuid& uuid)
 	{
-		return Texture::Create(m_PathsMap[uuid], uuid);
+		return MakeRef<Texture>(m_PathsMap[uuid], uuid);
 	}
 
 	//TODO - improve model and mesh api and useflow
