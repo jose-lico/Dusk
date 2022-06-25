@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "OpenGLTexture.h"
+
 #include "GLCommon.h"
 
+#include "stb/stb_image.h"
+
 #include <filesystem>
-#include <stb/stb_image.h>
 
 namespace DuskEngine
 {

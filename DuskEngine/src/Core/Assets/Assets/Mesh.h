@@ -30,7 +30,7 @@ namespace DuskEngine
 		Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count, MeshType type);
 		Mesh(std::vector<Vertex>& vertices, unsigned int* indices, unsigned int count);
 		~Mesh();
-		Ref<VertexArray> m_VA; // TODO remove
+		UniqueRef<VertexArray> m_VA; // TODO remove
 		MeshType GetType() { return m_Type; }
 	private:
 		MeshType m_Type;

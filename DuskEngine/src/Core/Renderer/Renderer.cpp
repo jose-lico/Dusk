@@ -4,7 +4,7 @@
 #include "RenderCommand.h"
 
 #include "Core/Assets/Assets/Mesh.h"
-#include "Resources/VertexArray.h"
+#include "Platform/OpenGL/VertexArray.h"
 
 namespace DuskEngine {
 
@@ -16,7 +16,7 @@ namespace DuskEngine {
 	{
 	}
 
-	void Renderer::Submit(const Ref<VertexArray>& vertexArray)
+	void Renderer::Submit(const UniqueRef<VertexArray>& vertexArray)
 	{
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);

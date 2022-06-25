@@ -14,7 +14,7 @@ namespace DuskEngine {
 		static void BeginScene();
 		static void EndScene();
 
-		static void Submit(const Ref<VertexArray>& vertexArray);
+		static void Submit(const UniqueRef<VertexArray>& vertexArray);
 		static void Submit(const Ref<Mesh>& mesh);
 	};
 }

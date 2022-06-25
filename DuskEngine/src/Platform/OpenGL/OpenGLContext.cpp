@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "OpenGLContext.h"
+
 #include "GLCommon.h"
 
 #include "GLFW/glfw3.h"

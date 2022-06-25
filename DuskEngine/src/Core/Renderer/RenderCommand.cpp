@@ -33,7 +33,7 @@ namespace DuskEngine {
 		s_RendererAPI->UnbindVAO();
 	}
 
-	void RenderCommand::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+	void RenderCommand::DrawIndexed(const UniqueRef<VertexArray>& vertexArray)
 	{
 		s_RendererAPI->DrawIndexed(vertexArray);
 	}

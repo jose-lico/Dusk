@@ -3,8 +3,8 @@
 
 #include "GLCommon.h"
 
-#include "Core/Renderer/Resources/VertexArray.h"
-#include "Core/Renderer/Resources/Buffer.h"
+#include "VertexArray.h"
+#include "Buffer.h"
 
 
 namespace DuskEngine {
@@ -29,7 +29,7 @@ namespace DuskEngine {
 		glBindVertexArray(0);
 	}
 
-	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray)
+	void OpenGLRendererAPI::DrawIndexed(const UniqueRef<VertexArray>& vertexArray)
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
