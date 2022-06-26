@@ -9,6 +9,7 @@
 #include "Assets/Material.h"
 
 #include "Utils/Rendering/PrimitiveMesh.h"
+#include "Core/Scripting/LuaScript.h"
 
 #include <iostream>
 
@@ -44,7 +45,7 @@ namespace DuskEngine
 		LOG(("Destroying Asset Handler " + m_Name).c_str());
 	}
 
-	Ref<LuaScript>& AssetHandler::LuaScriptPool(const uint32_t handle)
+	UniqueRef<LuaScript>& AssetHandler::LuaScriptPool(const uint32_t handle)
 	{
 		return m_LuaScriptPool[handle];
 	}

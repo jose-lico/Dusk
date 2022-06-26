@@ -21,10 +21,10 @@ namespace DuskEngine
 		Model(const std::filesystem::path& path, const uuids::uuid& uuid);
 		~Model();
 
-		Ref<Mesh> GetFirstMesh() { return m_Meshes[0]; } // TODO -> temporary fix while Model/Mesh api isnt better
+		UniqueRef<Mesh>& GetFirstMesh() { return m_Meshes[0]; } // TODO -> temporary fix while Model/Mesh api isnt better
 	private:
-		std::vector<Ref<Mesh>> m_Meshes;
+		std::vector<UniqueRef<Mesh>> m_Meshes;
 		void ProcessNode(aiNode* node, const aiScene* scene);
-		Ref<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene);
+		UniqueRef<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	};
 }

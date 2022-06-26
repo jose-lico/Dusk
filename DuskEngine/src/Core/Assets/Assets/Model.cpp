@@ -61,7 +61,7 @@ namespace DuskEngine
 		}
 	}
 
-	Ref<Mesh> Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+	UniqueRef<Mesh> Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
@@ -101,6 +101,6 @@ namespace DuskEngine
 				indices.push_back(face.mIndices[j]);
 		}
 
-		return MakeRef<Mesh>(vertices, &indices[0], (unsigned int)indices.size());
+		return MakeUnique<Mesh>(vertices, &indices[0], (unsigned int)indices.size());
 	}
 }

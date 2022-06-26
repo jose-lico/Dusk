@@ -41,11 +41,11 @@ namespace DuskEngine
 		
 		static uuids::uuid GetUUID(const std::filesystem::path& path);
 
-		static Ref<Material> LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler);
-		static Ref<Shader> LoadShader(const uuids::uuid& uuid);
-		static Ref<Texture> LoadTexture(const uuids::uuid& uuid);
-		static Ref<Mesh> LoadModel(const uuids::uuid& uuid);
-		static Ref<LuaScript> LoadScript(const uuids::uuid& uuid);
+		static UniqueRef<Material> LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler);
+		static UniqueRef<Shader> LoadShader(const uuids::uuid& uuid);
+		static UniqueRef<Texture> LoadTexture(const uuids::uuid& uuid);
+		static UniqueRef<Mesh> LoadModel(const uuids::uuid& uuid);
+		static UniqueRef<LuaScript> LoadScript(const uuids::uuid& uuid);
 
 		// Asset Lists
 		static std::vector<Asset*> ShaderDatabase;

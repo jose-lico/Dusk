@@ -7,7 +7,7 @@ namespace DuskEngine
 {
 	const char* PrimitiveMesh::m_Primitives[] = { "Quad", "Cube" };
 
-    Ref<Mesh> PrimitiveMesh::Quad()
+    UniqueRef<Mesh> PrimitiveMesh::Quad()
     {
 		float vertices[] =
 		{
@@ -24,7 +24,7 @@ namespace DuskEngine
 			1, 2, 3    // second triangle
 		};
 
-		Ref<Mesh> mesh = MakeRef<Mesh>(vertices, (unsigned int)sizeof(vertices),
+		UniqueRef<Mesh> mesh = MakeUnique<Mesh>(vertices, (unsigned int)sizeof(vertices),
 			indices, (unsigned int)(sizeof(indices) / sizeof(unsigned int)), MeshType::Quad);
 
         return mesh;
@@ -32,7 +32,7 @@ namespace DuskEngine
 
 	// This is terrible, redo in the future
 
-	Ref<Mesh> PrimitiveMesh::Cube()
+	UniqueRef<Mesh> PrimitiveMesh::Cube()
 	{
 		float vertices[] =
 		{
@@ -92,7 +92,7 @@ namespace DuskEngine
 			23,22,21
 		};
 
-		Ref<Mesh> mesh = MakeRef<Mesh>(vertices, (unsigned int)sizeof(vertices),
+		UniqueRef<Mesh> mesh = MakeUnique<Mesh>(vertices, (unsigned int)sizeof(vertices),
 			indices, (unsigned int)(sizeof(indices) / sizeof(unsigned int)), MeshType::Cube);
 
 		return mesh;

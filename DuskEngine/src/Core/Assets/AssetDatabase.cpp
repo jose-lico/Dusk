@@ -192,7 +192,7 @@ namespace DuskEngine
 		return m_UUIDsMap[path];
 	}
 
-	Ref<Material> AssetDatabase::LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler)
+	UniqueRef<Material> AssetDatabase::LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler)
 	{
 		std::ifstream stream(m_PathsMap[uuid]);
 		std::stringstream strStream;
@@ -204,7 +204,7 @@ namespace DuskEngine
 		// dumb af
 		auto shaderHandle = handler->AddToAssetPool<Shader>(data["Shader"].as<uuids::uuid>());
 
-		Ref<Material> material = MakeRef<Material>(shaderHandle, handler, m_PathsMap[uuid], uuid);
+		UniqueRef<Material> material = MakeUnique<Material>(shaderHandle, handler, m_PathsMap[uuid], uuid);
 
 		for (auto& uniform : material->m_Uniforms)
 		{
@@ -222,21 +222,21 @@ namespace DuskEngine
 		return material;
 	}
 
-	Ref<Shader> AssetDatabase::LoadShader(const uuids::uuid& uuid)
+	UniqueRef<Shader> AssetDatabase::LoadShader(const uuids::uuid& uuid)
 	{
-		return MakeRef<Shader>(m_PathsMap[uuid], uuid);
+		return MakeUnique<Shader>(m_PathsMap[uuid], uuid);
 	}
 
-	Ref<Texture> AssetDatabase::LoadTexture(const uuids::uuid& uuid)
+	UniqueRef<Texture> AssetDatabase::LoadTexture(const uuids::uuid& uuid)
 	{
-		return MakeRef<Texture>(m_PathsMap[uuid], uuid);
+		return MakeUnique<Texture>(m_PathsMap[uuid], uuid);
 	}
 
 	//TODO - improve model and mesh api and useflow
-	Ref<Mesh> AssetDatabase::LoadModel(const uuids::uuid& uuid)
+	UniqueRef<Mesh> AssetDatabase::LoadModel(const uuids::uuid& uuid)
 	{
 		Model* m = new Model(m_PathsMap[uuid].string(), uuid);
-		Ref<Mesh> mesh = m->GetFirstMesh();
+		UniqueRef<Mesh> mesh = std::move(m->GetFirstMesh());
 		mesh->m_Type = MeshType::Model;
 		mesh->m_UUID = uuid;
 		mesh->m_Name = m->GetName();
@@ -245,8 +245,8 @@ namespace DuskEngine
 		return mesh;
 	}
 
-	Ref<LuaScript> AssetDatabase::LoadScript(const uuids::uuid& uuid)
+	UniqueRef<LuaScript> AssetDatabase::LoadScript(const uuids::uuid& uuid)
 	{
-		return MakeRef<LuaScript>(m_PathsMap[uuid], uuid);
+		return MakeUnique<LuaScript>(m_PathsMap[uuid], uuid);
 	}
 }

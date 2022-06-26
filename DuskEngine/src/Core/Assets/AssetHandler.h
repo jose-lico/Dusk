@@ -25,11 +25,11 @@ namespace DuskEngine
 		AssetHandler(const std::string& name);
 		~AssetHandler();
 
-		Ref<LuaScript>& LuaScriptPool(const uint32_t handle);
+		UniqueRef<LuaScript>& LuaScriptPool(const uint32_t handle);
 		uint32_t AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID);
 
 		template<typename T>
-		Ref<T>& AssetPool(const Handle<T> handle)
+		UniqueRef<T>& AssetPool(const Handle<T> handle)
 		{
 			if constexpr (std::is_same<T, Shader>::value)
 				return m_ShaderPool(handle);
@@ -64,7 +64,7 @@ namespace DuskEngine
 		_AssetPool<Material> m_MaterialPool;
 		_AssetPool<Mesh> m_MeshPool;
 		
-		std::vector<Ref<LuaScript>> m_LuaScriptPool;
+		std::vector<UniqueRef<LuaScript>> m_LuaScriptPool;
 		
 		static std::vector<AssetHandler*> m_AssetHandlers;
 	};

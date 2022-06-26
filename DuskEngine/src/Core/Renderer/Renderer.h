@@ -20,7 +20,7 @@ namespace DuskEngine
 		void EndScene();
 
 		void Submit(const UniqueRef<VertexArray>& vertexArray);
-		void Submit(const Ref<Mesh>& mesh);
+		void Submit(const UniqueRef<Mesh>& mesh);
 
 		void SwapBuffers();
 	private:

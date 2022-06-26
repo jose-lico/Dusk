@@ -43,13 +43,13 @@ namespace DuskEngine
 			return handleMap[uuid];
 		};
 
-		Ref<T>& operator()(uint32_t handle)
+		UniqueRef<T>& operator()(uint32_t handle)
 		{
 			return m_Pool[handle];
 		}
 
 	private:
-		std::vector<Ref<T>> m_Pool;
+		std::vector<UniqueRef<T>> m_Pool;
 
 		AssetHandler* m_AssetHandler = nullptr;
 		friend class AssetHandler;

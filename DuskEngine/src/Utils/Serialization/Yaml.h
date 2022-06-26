@@ -38,7 +38,7 @@ namespace DuskEngine
 	}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Mesh>& mesh)
+	YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<Mesh>& mesh)
 	{
 		out << YAML::BeginMap;
 
@@ -67,7 +67,7 @@ namespace DuskEngine
 	}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Material>& material)
+	YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<Material>& material)
 	{
 		out << YAML::Value << material->GetUUID();
 
@@ -75,7 +75,7 @@ namespace DuskEngine
 	}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Shader>& shader)
+	YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<Shader>& shader)
 	{
 		out << YAML::Value << shader->GetUUID();
 
@@ -83,7 +83,7 @@ namespace DuskEngine
 	}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, const Ref<Texture>& texture)
+	YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<Texture>& texture)
 	{
 		out << YAML::Value << texture->GetUUID();
 
@@ -122,11 +122,11 @@ namespace DuskEngine
 	}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, const std::vector<Ref<LuaScript>>& scripts)
+	YAML::Emitter& operator<<(YAML::Emitter& out, std::vector<UniqueRef<LuaScript>>& scripts)
 	{
 		out << YAML::BeginMap;
 
-		for (auto script : scripts)
+		for (auto& script : scripts)
 		{
 			out << YAML::Key << script->GetName() << YAML::Value << script->GetUUID();
 		}
@@ -138,50 +138,50 @@ namespace DuskEngine
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, const rttr::variant& var)
 	{
-		if(var.can_convert<glm::vec3>())
-		{
-			return out << YAML::Value << var.convert<glm::vec3>();
-		}
-		else if (var.can_convert<glm::vec4>())
-		{
-			return out << YAML::Value << var.convert<glm::vec4>();
-		}
-		else if(var.can_convert<std::string>())
-		{
-			return out << YAML::Value << var.convert<std::string>();
-		}
-		else if (var.can_convert<LightType>()) // enums need to come before bool
-		{
-			return out << YAML::Value << var.convert<LightType>();
-		}
-		else if (var.can_convert<bool>())
-		{
-			return out << YAML::Value << var.convert<bool>();
-		}
-		else if (var.can_convert<uuids::uuid>())
-		{
-			return out << YAML::Value << var.convert<uuids::uuid>();
-		}
-		else if (var.can_convert<Ref<Mesh>>())
-		{
-			return out << YAML::Value << var.convert<Ref<Mesh>>();
-		}
-		else if (var.can_convert<Ref<Material>>())
-		{
-			return out << YAML::Value << var.convert<Ref<Material>>();
-		}
-		else if (var.can_convert<Ref<Shader>>())
-		{
-			return out << YAML::Value << var.convert<Ref<Shader>>();
-		}
-		else if (var.can_convert<std::vector<Uniform>>())
-		{
-			return out << YAML::Value << var.convert<std::vector<Uniform>>();
-		}
-		else if (var.can_convert<std::vector<Ref<LuaScript>>>())
-		{
-			return out << YAML::Value << var.convert<std::vector<Ref<LuaScript>>>();
-		}
+		//if(var.can_convert<glm::vec3>())
+		//{
+		//	return out << YAML::Value << var.convert<glm::vec3>();
+		//}
+		//else if (var.can_convert<glm::vec4>())
+		//{
+		//	return out << YAML::Value << var.convert<glm::vec4>();
+		//}
+		//else if(var.can_convert<std::string>())
+		//{
+		//	return out << YAML::Value << var.convert<std::string>();
+		//}
+		//else if (var.can_convert<LightType>()) // enums need to come before bool
+		//{
+		//	return out << YAML::Value << var.convert<LightType>();
+		//}
+		//else if (var.can_convert<bool>())
+		//{
+		//	return out << YAML::Value << var.convert<bool>();
+		//}
+		//else if (var.can_convert<uuids::uuid>())
+		//{
+		//	return out << YAML::Value << var.convert<uuids::uuid>();
+		//}
+		//else if (var.can_convert<UniqueRef<Mesh>>())
+		//{
+		//	return out << YAML::Value << var.convert<UniqueRef<Mesh>>();
+		//}
+		//else if (var.can_convert<UniqueRef<Material>>())
+		//{
+		//	return out << YAML::Value << var.convert<UniqueRef<Material>>();
+		//}
+		//else if (var.can_convert<UniqueRef<Shader>>())
+		//{
+		//	return out << YAML::Value << var.convert<UniqueRef<Shader>>();
+		//}
+		//else if (var.can_convert<std::vector<Uniform>>())
+		//{
+		//	return out << YAML::Value << var.convert<std::vector<Uniform>>();
+		//}
+		//else if (var.can_convert<std::vector<UniqueRef<LuaScript>>>())
+		//{
+		//	return out << YAML::Value << var.convert<std::vector<UniqueRef<LuaScript>>>();
+		//}
 
 		return out << YAML::Value << "Unrecognized type";
 	}

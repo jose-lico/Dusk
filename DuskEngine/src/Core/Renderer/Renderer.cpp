@@ -32,7 +32,7 @@ namespace DuskEngine {
 		OpenGLAPI::DrawIndexed(vertexArray);
 	}
 
-	void Renderer::Submit(const Ref<Mesh>& mesh)
+	void Renderer::Submit(const UniqueRef<Mesh>& mesh)
 	{
 		mesh->m_VA->Bind();
 		OpenGLAPI::DrawIndexed(mesh->m_VA);;

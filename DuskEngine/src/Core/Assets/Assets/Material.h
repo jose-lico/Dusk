@@ -64,7 +64,7 @@ namespace DuskEngine
 		void SetVec3(const std::string& name, glm::vec3& v);
 		void SetVec4(const std::string& name, glm::vec4& v);
 		// change to pass handle only
-		void SetTexture(const std::string& name, Ref<Texture>& texture);
+		void SetTexture(const std::string& name, UniqueRef<Texture>& texture);
 		
 		const uuids::uuid& GetShaderUUID();
 		const uint32_t GetShaderHandle() { return m_ShaderHandle; }

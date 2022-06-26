@@ -56,7 +56,7 @@ namespace DuskEngine
 
 	void Material::UploadUniforms(AssetHandler& assetHandler)
 	{
-		auto shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
+		auto& shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
 		shader->Bind();
 		//m_Shader->Bind();
 		unsigned int textSlot = 0;
@@ -120,7 +120,7 @@ namespace DuskEngine
 	{
 	}
 
-	void Material::SetTexture(const std::string& name, Ref<Texture>& texture)
+	void Material::SetTexture(const std::string& name, UniqueRef<Texture>& texture)
 	{
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
 			m_UniformsMap[name]->Data.dataHandle = m_OwningHandler->AddToAssetPool<Texture>(texture->GetUUID());
@@ -168,7 +168,7 @@ namespace DuskEngine
 
 	void Material::CreateUniforms()
 	{
-		auto shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
+		auto& shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
 
 		for (auto uniform : shader->UniformSpecs)
 		{
