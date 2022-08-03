@@ -55,6 +55,8 @@ namespace DuskEngine
 
 		//style.WindowMinSize.x = minWinSizeX;
 
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.05f, 0.0f, 0.03f, 1.0f));
+
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("Options"))
@@ -87,6 +89,8 @@ namespace DuskEngine
 
 			ImGui::EndMenuBar();
 		}
+
+		ImGui::PopStyleColor();
 	}
 
 	void Dockspace::EndDockspace()

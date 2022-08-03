@@ -22,6 +22,7 @@ namespace DuskEngine
 		window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar | ImGuiDockNodeFlags_NoResizeFlagsMask_;
 		ImGui::SetNextWindowClass(&window_class);
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration;
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.12f, 0.12f, 0.12f, 1.0f));
 		ImGui::Begin("##Toolbar", nullptr, window_flags);
 		CheckFocus();
 
@@ -43,5 +44,6 @@ namespace DuskEngine
 		}
 
 		ImGui::End();
+		ImGui::PopStyleColor();
 	}
 }

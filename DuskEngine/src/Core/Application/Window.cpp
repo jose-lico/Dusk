@@ -14,6 +14,8 @@ namespace DuskEngine
 	{
 		glfwInit();
 
+		glfwWindowHint(GLFW_SAMPLES, 4);
+
 		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL);
 
 		if (!m_Window)
@@ -24,7 +26,6 @@ namespace DuskEngine
 
 		TRACE("Window created");
 
-		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		glfwMaximizeWindow(m_Window);
 
