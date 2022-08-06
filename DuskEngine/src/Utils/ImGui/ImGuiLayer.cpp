@@ -44,9 +44,9 @@ namespace DuskEngine
 
 		ImGui::GetStyle().WindowMenuButtonPosition = ImGuiDir_None;
 
-		AddFont("C:/Windows/Fonts/segoeui.ttf", 16.12f);
-		AddFont("C:/Windows/Fonts/seguivar.ttf", 20.0f);
-		//AddFont("res/editor/fonts/Roboto-Bold.ttf", 18.0f);
+		//AddFont("res/editor/fonts/RobotoMono-Regular.ttf", 18.0f);
+		AddFont("res/editor/fonts/Roboto-Regular.ttf", 18.0f);
+		AddFont("res/editor/fonts/Roboto-Regular.ttf", 18.0f);
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -108,19 +108,13 @@ namespace DuskEngine
 	void ImGuiLayer::AddFont(const std::string& name, float size)
 	{
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-		ImFontConfig icons_config;
-		icons_config.PixelSnapH = true;
-		icons_config.OversampleH = 2;
-		icons_config.RasterizerMultiply = 1.1f;
-
-		io.Fonts->AddFontFromFileTTF(name.c_str(), size, &icons_config);
+		io.Fonts->AddFontFromFileTTF(name.c_str(), size);
 
 		static const ImWchar icons_ranges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 		
+		ImFontConfig icons_config;
+		icons_config.PixelSnapH = true;
 		icons_config.MergeMode = true;
-		icons_config.RasterizerMultiply = 1.0f;
-
 
 #ifdef DUSK_WINDOWS
 		io.Fonts->AddFontFromFileTTF("../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 18.0f, &icons_config, icons_ranges);
@@ -136,14 +130,15 @@ namespace DuskEngine
 		ImVec4 grey2(0.2, 0.2, 0.2, 1.0f);
 		ImVec4 grey3(0.25f, 0.25f, 0.25f, 1.0f);
 		ImVec4 grey4(0.41f, 0.5f, 0.52f, 1.0f);
-		ImVec4 white(0.93f, 0.93f, 0.93f, 1.0f);
+		ImVec4 white(0.87f, 0.87f, 0.87f, 1.0f);
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
 		style.Colors[ImGuiCol_Text] = white;
 		style.Colors[ImGuiCol_TextDisabled] = white;
 
-		style.Colors[ImGuiCol_MenuBarBg] = ImVec4 (1.0f, 1.03f, 1.0f, 1.0f);
+		style.Colors[ImGuiCol_MenuBarBg] = dark;
+		style.Colors[ImGuiCol_Border] = dark;
 		style.Colors[ImGuiCol_Separator] = dark;
 		style.Colors[ImGuiCol_SeparatorHovered] = dark;
 		style.Colors[ImGuiCol_SeparatorActive] = dark;
@@ -161,9 +156,13 @@ namespace DuskEngine
 		style.Colors[ImGuiCol_TabUnfocused] = grey1;
 		style.Colors[ImGuiCol_TabUnfocusedActive] = grey2;
 
+		style.Colors[ImGuiCol_HeaderHovered] = dark;
+
+		//style.Colors[ImGuiCol_Header] = dark;
+		//style.Colors[ImGuiCol_NavHighlight] = dark;
+		
 		/*style.Colors[ImGuiCol_ChildBg] = dark;
 		style.Colors[ImGuiCol_PopupBg] = dark;
-		style.Colors[ImGuiCol_Border] = dark;
 		style.Colors[ImGuiCol_BorderShadow] = dark;
 
 		style.Colors[ImGuiCol_FrameBgHovered] = dark;
@@ -181,7 +180,7 @@ namespace DuskEngine
 		style.Colors[ImGuiCol_Button] = grey3;
 		style.Colors[ImGuiCol_ButtonHovered] = grey3;
 		style.Colors[ImGuiCol_ButtonActive] = grey3;
-		style.Colors[ImGuiCol_Header] = dark;
+		
 		style.Colors[ImGuiCol_HeaderHovered] = dark;
 		style.Colors[ImGuiCol_HeaderActive] = dark;
 		

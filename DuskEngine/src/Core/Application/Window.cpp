@@ -27,6 +27,8 @@ namespace DuskEngine
 		TRACE("Window created");
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
+		
+		glfwSetWindowSizeLimits(m_Window, 600, 600, GLFW_DONT_CARE, GLFW_DONT_CARE);
 		glfwMaximizeWindow(m_Window);
 
 		// glfw callbacks

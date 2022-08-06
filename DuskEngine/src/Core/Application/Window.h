@@ -17,7 +17,7 @@ namespace DuskEngine
 
 		std::function<void(Event&)> EventCallback;
 
-		WindowData(const std::string& title = "Dusk Engine", unsigned int width = 1920, unsigned height = 1017, bool vsync = true)
+		WindowData(const std::string& title = "Dusk Engine", unsigned int width = 1280, unsigned height = 720, bool vsync = true)
 			: Title(title), Width(width), Height(height), VSync(vsync)
 		{
 		}

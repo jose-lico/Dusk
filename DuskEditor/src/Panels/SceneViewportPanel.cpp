@@ -139,24 +139,29 @@ namespace DuskEngine
 			{
 			case Key::Q:
 				m_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+				return true;
 				break;
 			case Key::W:
 				m_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+				return true;
 				break;
 			case Key::E:
 				m_ImGuizmoOperation = ImGuizmo::OPERATION::ROTATE;
+				return true;
 				break;
 			case Key::R:
 				m_ImGuizmoOperation = ImGuizmo::OPERATION::SCALE;
+				return true;
 				break;
 			case Key::T:
 				m_ImGuizmoOperation = ImGuizmo::OPERATION::UNIVERSAL;
+				return true;
 				break;
 			}
 		}
 		#endif
 
-		return true;
+		return false;
 	}
 
 	void SceneViewportPanel::MoveEditorCamera()

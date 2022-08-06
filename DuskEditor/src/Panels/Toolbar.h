@@ -25,6 +25,9 @@ namespace DuskEngine
 		bool* m_Playing;
 		bool* m_Paused;
 
-		Ref<Texture> m_Play, m_Pause, m_Stop;
+		Ref<Texture> m_Play, m_Pause, m_Stop, m_StepForward, m_Reload;
+
+		float m_AlphasButtons[4] = { 0.87f, 0.4f, 0.4f, 0.4f };
+		float m_AlphasMenus[4] = { 0.87f, 0.87f, 0.87f, 0.87f};
 	};
 }
