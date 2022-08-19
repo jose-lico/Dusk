@@ -11,6 +11,7 @@ namespace DuskEngine
 	extern void DropCallback(GLFWwindow* window, int count, const char** paths);
 
 	Window::Window(const WindowData& data)
+		:m_Data(data)
 	{
 		glfwInit();
 
@@ -30,6 +31,7 @@ namespace DuskEngine
 		
 		glfwSetWindowSizeLimits(m_Window, 600, 600, GLFW_DONT_CARE, GLFW_DONT_CARE);
 		glfwMaximizeWindow(m_Window);
+		glfwSwapInterval(m_Data.VSync);
 
 		// glfw callbacks
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)

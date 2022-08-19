@@ -29,5 +29,6 @@ namespace DuskEngine
 
 		float m_AlphasButtons[4] = { 0.87f, 0.4f, 0.4f, 0.4f };
 		float m_AlphasMenus[4] = { 0.87f, 0.87f, 0.87f, 0.87f};
+		bool m_MenusOpen[4] = {false, false, false, false};
 	};
 }

@@ -6,6 +6,7 @@
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/AssetHandler.h"
 #include "Platform/OpenGL/Framebuffer.h"
+#include "Platform/OpenGL/Texture.h"
 
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/string_cast.hpp"
@@ -87,6 +88,8 @@ namespace DuskEngine
 		};
 
 		m_Panels.push_back(new Toolbar(&m_Playing, &m_Paused, play, stop, pause));
+
+		m_TestTexture = MakeUnique<Texture>("res/textures/white.png");
 	}
 
 	void EditorLayer::OnUpdate()
@@ -122,12 +125,30 @@ namespace DuskEngine
 			panel->OnImGuiRender();
 		}
 
-		ImGui::Begin("Stuff");
+		
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
+		//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 0,0 });
+		//ImGui::Begin("Stuff");
 
-		if (ImGui::Button("Save Scene"))
-			SceneSerializer::SerializeText(m_EditingScene, "res/scenes/scene.yaml");
+		////ImGui::Indent();
+		//float height = ImGui::GetContentRegionAvail().y;
+		//ImGui::Image((ImTextureID)m_TestTexture->GetRendererID(), ImVec2{ 10, height }, ImVec2{ 0, 0 }, ImVec2{ 1, 1 }, 
+		//	{ 0.12f, 0.12f, 0.12f, 1.0f });
+		////ImGui::Text("Indented?");
+		////ImGui::Unindent();
+		////ImGui::Text("Nope?");
 
-		ImGui::End();
+		////if (ImGui::Button("Save Scene"))
+		////	SceneSerializer::SerializeText(m_EditingScene, "res/scenes/scene.yaml");
+
+		///*ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.2, 0.2, 0.2, 1.0f });
+		//ImGui::BeginChild("Window inside a window", {0,0}, false);
+		//ImGui::EndChild();
+		//ImGui::PopStyleColor();*/
+		//
+		//ImGui::End();
+		//ImGui::PopStyleVar();
+		//ImGui::PopStyleVar();
 
 		m_Dockspace.EndDockspace();
 	}

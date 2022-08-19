@@ -39,6 +39,8 @@ namespace DuskEngine
 
 			if (ImGui::BeginMenu("File"))
 			{
+				ImGui::PushStyleColor(ImGuiCol_Text, { 0.87f, 0.87f, 0.87f, 1.0f });
+				m_MenusOpen[0] = true;
 				ImGui::MenuItem("New Scene", "Ctrl + N");
 				ImGui::MenuItem("Open Scene", "Ctrl + O");
 				ImGui::Separator();
@@ -47,9 +49,11 @@ namespace DuskEngine
 				ImGui::Separator();
 				ImGui::MenuItem("New Project");
 				ImGui::MenuItem("Open Project");
-
+				ImGui::PopStyleColor();
 				ImGui::EndMenu();
 			}
+			else
+				m_MenusOpen[0] = false;
 			ImGui::PopStyleColor();
 
 			if (ImGui::IsItemHovered())
@@ -57,16 +61,23 @@ namespace DuskEngine
 			else
 				m_AlphasMenus[0] = 0.87f;
 
+			if(m_MenusOpen[0])
+				m_AlphasMenus[0] = 1.0f;
+
 			ImGui::PushStyleColor(ImGuiCol_Text, { m_AlphasMenus[1], m_AlphasMenus[1], m_AlphasMenus[1], 1.0f });
 
 			if (ImGui::BeginMenu("Project"))
 			{
+				ImGui::PushStyleColor(ImGuiCol_Text, { 0.87f, 0.87f, 0.87f, 1.0f });
+				m_MenusOpen[1] = true;
 				ImGui::MenuItem("Project Settings");
 				ImGui::Separator();
 				ImGui::MenuItem("Export");
-
+				ImGui::PopStyleColor();
 				ImGui::EndMenu();
 			}
+			else
+				m_MenusOpen[1] = false;
 			ImGui::PopStyleColor();
 
 			if (ImGui::IsItemHovered())
@@ -74,14 +85,21 @@ namespace DuskEngine
 			else
 				m_AlphasMenus[1] = 0.87f;
 
+			if (m_MenusOpen[1])
+				m_AlphasMenus[1] = 1.0f;
+
 			ImGui::PushStyleColor(ImGuiCol_Text, { m_AlphasMenus[2], m_AlphasMenus[2], m_AlphasMenus[2], 1.0f });
 			if (ImGui::BeginMenu("Editor"))
 			{
+				ImGui::PushStyleColor(ImGuiCol_Text, { 0.87f, 0.87f, 0.87f, 1.0f });
+				m_MenusOpen[2] = true;
 				ImGui::MenuItem("Editor Settings");
 				ImGui::MenuItem("Layout");
-
+				ImGui::PopStyleColor();
 				ImGui::EndMenu();
 			}
+			else
+				m_MenusOpen[2] = false;
 			ImGui::PopStyleColor();
 
 			if (ImGui::IsItemHovered())
@@ -89,19 +107,30 @@ namespace DuskEngine
 			else
 				m_AlphasMenus[2] = 0.87f;
 
+			if (m_MenusOpen[2])
+				m_AlphasMenus[2] = 1.0f;
+
 			ImGui::PushStyleColor(ImGuiCol_Text, { m_AlphasMenus[3], m_AlphasMenus[3], m_AlphasMenus[3], 1.0f });
 			if (ImGui::BeginMenu("About"))
 			{
+				ImGui::PushStyleColor(ImGuiCol_Text, { 0.87f, 0.87f, 0.87f, 1.0f });
+				m_MenusOpen[3] = true;
 				ImGui::MenuItem("Github");
-
+				ImGui::PopStyleColor();
 				ImGui::EndMenu();
 			}
+			else
+				m_MenusOpen[3] = false;
+
 			ImGui::PopStyleColor();
 
 			if (ImGui::IsItemHovered())
 				m_AlphasMenus[3] = 1.0f;
 			else
 				m_AlphasMenus[3] = 0.87f;
+
+			if (m_MenusOpen[3])
+				m_AlphasMenus[3] = 1.0f;
 
 			ImGui::SameLine();
 

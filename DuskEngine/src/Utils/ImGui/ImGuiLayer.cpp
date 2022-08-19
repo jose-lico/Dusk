@@ -125,17 +125,25 @@ namespace DuskEngine
 
 	void ImGuiLayer::ApplyStyle()
 	{
+		ImVec4 darkest(0.086f, 0.086f, 0.086f, 1.0f);
 		ImVec4 dark(0.12f, 0.12f, 0.12f, 1.0f);
 		ImVec4 grey1(0.15, 0.15, 0.15, 1.0f);
 		ImVec4 grey2(0.2, 0.2, 0.2, 1.0f);
 		ImVec4 grey3(0.25f, 0.25f, 0.25f, 1.0f);
 		ImVec4 grey4(0.41f, 0.5f, 0.52f, 1.0f);
 		ImVec4 white(0.87f, 0.87f, 0.87f, 1.0f);
+		
+		ImVec4 red(1.0f, 0.0f, 0.0f, 1.0f);
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
+		style.TabRounding = 0.0f;
+		style.FramePadding = { 5.0f, 4 };
+		//style.TabBorderSize = 10.0f;
+		//TRACE(std::to_string(style.TabBorderSize).c_str());
+		
 		style.Colors[ImGuiCol_Text] = white;
-		style.Colors[ImGuiCol_TextDisabled] = white;
+		style.Colors[ImGuiCol_TextDisabled] = grey3;
 
 		style.Colors[ImGuiCol_MenuBarBg] = dark;
 		style.Colors[ImGuiCol_Border] = dark;
@@ -146,9 +154,10 @@ namespace DuskEngine
 		style.Colors[ImGuiCol_WindowBg] = grey2;
 
 		style.Colors[ImGuiCol_FrameBg] = grey1;
-		style.Colors[ImGuiCol_TitleBg] = grey1;
-		style.Colors[ImGuiCol_TitleBgActive] = grey1;
-		style.Colors[ImGuiCol_TitleBgCollapsed] = grey1;
+		style.Colors[ImGuiCol_TitleBg] = dark;
+		style.Colors[ImGuiCol_TitleBgActive] = dark;
+		style.Colors[ImGuiCol_TitleBgCollapsed] = dark;
+		style.Colors[ImGuiCol_Header] = dark;
 
 		style.Colors[ImGuiCol_Tab] = grey1;
 		style.Colors[ImGuiCol_TabHovered] = grey3;
@@ -157,13 +166,16 @@ namespace DuskEngine
 		style.Colors[ImGuiCol_TabUnfocusedActive] = grey2;
 
 		style.Colors[ImGuiCol_HeaderHovered] = dark;
+		style.Colors[ImGuiCol_PopupBg] = darkest;
+
+		style.Colors[ImGuiCol_BorderShadow] = dark;
 
 		//style.Colors[ImGuiCol_Header] = dark;
 		//style.Colors[ImGuiCol_NavHighlight] = dark;
 		
 		/*style.Colors[ImGuiCol_ChildBg] = dark;
 		style.Colors[ImGuiCol_PopupBg] = dark;
-		style.Colors[ImGuiCol_BorderShadow] = dark;
+		
 
 		style.Colors[ImGuiCol_FrameBgHovered] = dark;
 		style.Colors[ImGuiCol_FrameBgActive] = dark;
