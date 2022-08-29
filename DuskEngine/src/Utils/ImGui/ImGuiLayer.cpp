@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ImGuiLayer.h"
+#include "Style.h"
 
 #include "Core/Events/Events.h"
 
@@ -16,9 +17,12 @@
 
 namespace DuskEngine
 {
+	Style* ImGuiLayer::m_Style;
+
 	ImGuiLayer::ImGuiLayer(Window* window)
 		:m_Window(window)
 	{
+		m_Style = new Style();
 	}
 
 	ImGuiLayer::~ImGuiLayer()
@@ -142,7 +146,7 @@ namespace DuskEngine
 		//style.TabBorderSize = 10.0f;
 		//TRACE(std::to_string(style.TabBorderSize).c_str());
 		
-		style.Colors[ImGuiCol_Text] = white;
+		style.Colors[ImGuiCol_Text] = m_Style->Colors.ImGuiCol_Text;
 		style.Colors[ImGuiCol_TextDisabled] = grey3;
 
 		style.Colors[ImGuiCol_MenuBarBg] = dark;
