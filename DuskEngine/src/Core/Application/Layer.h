@@ -1,11 +1,10 @@
 #pragma once
-#include "Core.h"
 
 namespace DuskEngine
 {
 	class Event;
 
-	class DUSK_EXPORT Layer
+	class Layer
 	{
 	public:
 		Layer():Enabled(1) {};

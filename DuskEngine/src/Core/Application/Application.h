@@ -1,5 +1,16 @@
 #pragma once
-#include "Core.h"
+
+#ifdef DUSK_DEBUG
+	#define TARGET "Debug" 
+#else
+	#define TARGET "Release" 
+#endif
+
+#ifdef DUSK_WINDOWS
+	#define PLATFORM "Windows" 
+#elif DUSK_LINUX
+	#define PLATFORM "Linux" 
+#endif
 
 #include <string>
 
@@ -15,10 +26,12 @@ namespace DuskEngine
 
 	struct ApplicationSpecs
 	{
-		std::string Name = "Dusk Application";
+		std::string Name;
+		std::string Target = TARGET;
+		std::string Platform = PLATFORM;
 	};
 
-	class DUSK_EXPORT Application
+	class Application
 	{
 	public:
 		Application(const ApplicationSpecs& specs);
@@ -32,20 +45,19 @@ namespace DuskEngine
 		void PushOverlay(Layer* overlay);
 		void OnEvent(Event& e);
 
-		void SetName(const char* name);
-
 		Window& GetWindow() const { return *m_Window; }
 		Renderer& GetRenderer() const { return *m_Renderer; }
 	private:
 		static Application* s_Instance;
 
+#ifdef DUSK_IMGUI
+		ImGuiLayer* m_ImGuiLayer;
+#endif
 		LayerStack* m_LayerStack;
 		Logger* m_Logger;
 		Window* m_Window;
 		Renderer* m_Renderer;
-		
-		ImGuiLayer* m_ImGuiLayer; // Deleted by m_LayerStack | Should consider moving to editor
-	
+
 		ApplicationSpecs m_Specs;
 	};
 

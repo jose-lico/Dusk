@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Core/ECS/Scene.h"
-
 #include "Utils/Memory/Memory.h"
 
 #include <unordered_map>
@@ -21,6 +19,7 @@ namespace DuskEngine
 	class Texture;
 	class Mesh;
 	class LuaScript;
+	class AssetHandler;
 
 	struct opt_path_hash {
 		std::size_t operator()(const std::optional<std::filesystem::path>& path) const {

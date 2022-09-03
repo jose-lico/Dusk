@@ -1,5 +1,6 @@
 #pragma once
 
+// TODO: Change time class to a more robust clock class
 namespace DuskEngine::Time
 {
 	void Update();

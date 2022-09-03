@@ -1,5 +1,8 @@
 #include "EditorLayer.h"
 
+#include "Core/Application/Application.h"
+#include "Core/Application/Window.h"
+
 #include "Core/Serialization/SceneSerializer.h"
 #include "Core/ECS/EditorCamera.h"
 #include "Core/Scripting/LuaScript.h"
@@ -20,6 +23,9 @@ namespace DuskEngine
 
 		TRACE("Tracing from the editor");
 		LOG("Logging from the editor");
+
+		std::string title = Application::Get().GetWindow().GetTitle() + " | MyScene";
+		Application::Get().GetWindow().SetWindowTitle(title);
 	}
 
 	EditorLayer::~EditorLayer()

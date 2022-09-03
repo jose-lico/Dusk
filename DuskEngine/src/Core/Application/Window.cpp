@@ -126,6 +126,11 @@ namespace DuskEngine
 		glfwSetDropCallback(m_Window, DropCallback);
 	}
 
+	Window::~Window()
+	{
+		glfwTerminate();
+	}
+
 	void Window::SetVSync(bool vsync)
 	{
 		m_Data.VSync = vsync;

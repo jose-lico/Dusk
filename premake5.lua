@@ -7,7 +7,7 @@ workspace "Dusk"
 	{
 		"Debug",
 		"Release",
-		"MinSizeRelease"
+		"ReleaseNoImGui"
 	}
 
 	startproject "DuskEditor"

@@ -1,9 +1,5 @@
 #pragma once
 
-// Core header included in pch.h
-
-// Includes logging, dll exporting, and other usefull macros
-
 #include "Logger.h"
 
 #ifdef DUSK_LIB
@@ -18,6 +14,7 @@
 #define ERR(...) Logger::Get(LOGGER)->Log(__VA_ARGS__, DuskEngine::LogLevel::ERR, __FILE__, __LINE__)
 #define FATAL(...) Logger::Get(LOGGER)->Log(__VA_ARGS__, DuskEngine::LogLevel::FATAL, __FILE__, __LINE__)
 
+// TODO: Remove - Dusk Engine is from now on only to be compiled as a static lib
 #ifdef DUSK_WINDOWS
 	#if defined(DUSK_EXE) || defined(DUSK_LIB)
 		#define DUSK_EXPORT 

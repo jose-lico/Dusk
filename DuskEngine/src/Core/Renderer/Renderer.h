@@ -1,5 +1,4 @@
 #pragma once
-#include "Core/Application/Core.h"
 
 #include "Utils/Memory/Memory.h"
 
@@ -10,7 +9,7 @@ namespace DuskEngine
 	class Mesh;
 	class Window;
 
-	class DUSK_EXPORT Renderer
+	class Renderer
 	{
 	public:
 		Renderer(const Window& window);

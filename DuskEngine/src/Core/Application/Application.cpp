@@ -2,14 +2,15 @@
 #include "Application.h"
 
 #include "Time.h"
+#include "Layer.h"
 #include "LayerStack.h"
 #include "Window.h"
-
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Events/EventBase.h"
 #include "Core/Renderer/Renderer.h"
-
+#ifdef DUSK_IMGUI
 #include "Utils/ImGui/ImGuiLayer.h"
+#endif
 
 namespace DuskEngine
 {
@@ -22,9 +23,10 @@ namespace DuskEngine
 
 		m_Logger = new Logger(LOGGER);
 
-		m_Window = new Window();
+		WindowData data;
+		data.Title = m_Specs.Name + " | " + m_Specs.Platform + " | " + m_Specs.Target;
+		m_Window = new Window(data);
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
-		m_Window->SetWindowTitle(m_Specs.Name.c_str());
 
 		m_Renderer = new Renderer(*m_Window);
 
@@ -32,10 +34,12 @@ namespace DuskEngine
 		AssetDatabase::CreateUUIDs();
 		AssetDatabase::LoadUUIDs();
 
-		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
 		m_LayerStack = new LayerStack();
+#ifdef DUSK_IMGUI
+		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
 		m_LayerStack->PushOverlay(m_ImGuiLayer);
 		m_ImGuiLayer->OnAttach();
+#endif
 	}
 
 	Application::~Application()
@@ -58,12 +62,15 @@ namespace DuskEngine
 				if (layer->Enabled)
 					layer->OnUpdate();
 
+#ifdef DUSK_IMGUI
 			m_ImGuiLayer->Begin();
+#endif
 			for (Layer* layer : *m_LayerStack)
 				if (layer->Enabled)
 					layer->OnImGuiRender();
+#ifdef DUSK_IMGUI
 			m_ImGuiLayer->End();
-
+#endif
 			m_Renderer->SwapBuffers();
 		}
 	}
@@ -89,11 +96,5 @@ namespace DuskEngine
 			if(layer->Enabled)
 				layer->OnEvent(e);
 		}
-	}
-
-	void Application::SetName(const char* name)
-	{
-		m_Specs.Name = name;
-		m_Window->SetWindowTitle(name);
 	}
 }

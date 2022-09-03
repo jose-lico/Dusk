@@ -1,6 +1,9 @@
 project "DuskEditor"
 	kind "ConsoleApp"
 	language "C++"
+	configmap {
+        ["ReleaseNoImGui"] = "Release"
+    }
 
 	targetdir ("%{wks.location}/bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputDir .. "/%{prj.name}")
@@ -49,7 +52,8 @@ project "DuskEditor"
 
 	defines
 	{
-		"DUSK_EXE"
+		"DUSK_EXE",
+		"DUSK_IMGUI"
 	}
 
 	filter "system:windows"
@@ -82,9 +86,5 @@ project "DuskEditor"
 		defines "DUSK_DEBUG"
 	
 	filter "configurations:Release"
-		runtime "Release"
-		optimize "On"
-
-	filter "configurations:MinSizeRelease"
 		runtime "Release"
 		optimize "On"

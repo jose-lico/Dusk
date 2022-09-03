@@ -39,17 +39,18 @@ project "DuskEngine"
 
 	defines
 	{
-		"DUSK_OPENGL",
-		"DUSK_LIB",
-		--"DUSK_DLL",
-
+		-- Lib includes
 		"GLFW_INCLUDE_NONE",
 		"GLEW_STATIC",
 		"_CRT_SECURE_NO_WARNINGS",
 		"YAML_CPP_STATIC_DEFINE",
 		"UUID_SYSTEM_GENERATOR",
 		"NOMINMAX",
-		"SOL_PRINT_ERRORS"
+		"SOL_PRINT_ERRORS",
+
+		-- Dusk includes
+		"DUSK_LIB",
+		"DUSK_IMGUI"
 	}
 
 	filter "files:../Dependencies/ImGuizmo/**.cpp"
@@ -85,6 +86,7 @@ project "DuskEngine"
 		runtime "Release"
 		optimize "On"
 
-	filter "configurations:MinSizeRelease"
+	filter "configurations:ReleaseNoImGui"
 		runtime "Release"
 		optimize "On"
+		undefines { "DUSK_IMGUI" }

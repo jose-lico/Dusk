@@ -10,28 +10,26 @@ namespace DuskEngine
 
 	struct WindowData
 	{
-		std::string Title;
-		unsigned int Width;
-		unsigned int Height;
-		bool VSync;
+		std::string Title = "Dusk Engine";
+		unsigned int Width = 1280;
+		unsigned int Height = 720;
+		bool VSync = true;
+		bool Maximized = true;
+		bool FullScreen = false;
 
 		std::function<void(Event&)> EventCallback;
-
-		WindowData(const std::string& title = "Dusk Engine", unsigned int width = 1280, unsigned height = 720, bool vsync = true)
-			: Title(title), Width(width), Height(height), VSync(vsync)
-		{
-		}
 	};
 
 	class Window
 	{
 	public:
-		Window(const WindowData& data = WindowData());
-		~Window() = default;
+		Window(const WindowData& data);
+		~Window();
 
 		GLFWwindow* GetNativeHandle() const { return m_Window; }
 		inline unsigned int GetWidth() const { return m_Data.Width; }
-		inline unsigned int GetHeight() { return m_Data.Height; }
+		inline unsigned int GetHeight() const { return m_Data.Height; }
+		inline std::string GetTitle() { return m_Data.Title; }
 		inline bool IsVSync() const { return m_Data.VSync; }
 
 		inline void SetEventCallback(const std::function<void(Event&)>& callback) { m_Data.EventCallback = callback; }
