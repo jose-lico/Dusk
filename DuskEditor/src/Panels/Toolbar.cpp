@@ -39,6 +39,7 @@ namespace DuskEngine
 
 			if (ImGui::BeginMenu("File"))
 			{
+				ImGui::PushStyleColor(ImGuiCol_Text, { 0.87f, 0.87f, 0.87f, 1.0f });
 				m_MenusOpen[0] = true;
 				ImGui::MenuItem("New Scene", "Ctrl + N");
 				ImGui::MenuItem("Open Scene", "Ctrl + O");
