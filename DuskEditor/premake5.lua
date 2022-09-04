@@ -61,12 +61,7 @@ project "DuskEditor"
 		staticruntime "on"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
-
-		links
-		{
-			"opengl32",
-			"nfd"
-		}
+		links "opengl32"
 
 	filter "system:linux"
 		cppdialect "gnu++17"

@@ -14,7 +14,6 @@
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
-#include "nfd/nfd.h"
 #include "IconsForkAwesome.h"
 
 namespace DuskEngine
@@ -557,21 +556,7 @@ namespace DuskEngine
 					if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->AssetPool<Texture>(uniform.Data.dataHandle)->GetRendererID(),
 						ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
 					{
-						//#ifdef 0
-						//nfdchar_t* path = NULL;
-						//nfdresult_t result = NFD_OpenDialog("png,jpg", NULL, &path);
-						//if (result == NFD_OKAY)
-						//{
-						//	// very temporary, but works!
-						//	auto texture = Texture::Create(path);
-						//	std::string str = path;
-						//	//std::replace(str.begin(), str.end(), '\\', '/');
-						//	texture->m_UUID = AssetManager::GetUUID(str);
-						//	material->SetTexture(uniform.Name, texture);
-						//	material->SerializeText(material->GetPath().string());
-						//	free(path);
-						//}
-						//#endif
+						TRACE("To be implemented");
 					}
 
 					if (ImGui::BeginDragDropTarget())

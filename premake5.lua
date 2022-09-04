@@ -19,7 +19,6 @@ end
 	include "Dependencies/glfw"
 	include "Dependencies/imgui"
 	include "Dependencies/assimp-premake"
-	include "Dependencies/nativefiledialog/build"
 	include "Dependencies/yaml-cpp"
 	include "Dependencies/ImGuizmo"
 	include "Dependencies/rttr"

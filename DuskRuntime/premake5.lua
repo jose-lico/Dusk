@@ -35,7 +35,6 @@ project "DuskRuntime"
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/imgui/include",
 		dependenciesDir .. "/entt/src",
-		dependenciesDir .. "/nativefiledialog/src/include",
 		dependenciesDir .. "/assimp-premake/include",
 		dependenciesDir .. "/yaml-cpp/include",
 		dependenciesDir .. "/stduuid/include",
@@ -53,12 +52,7 @@ project "DuskRuntime"
 		staticruntime "on"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
-
-		links
-		{
-			"opengl32",
-			"nfd"
-		}
+		links "opengl32"
 		
 	filter "system:linux"
 		cppdialect "gnu++17"
