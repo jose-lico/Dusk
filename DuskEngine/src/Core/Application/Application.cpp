@@ -32,7 +32,7 @@ namespace DuskEngine
 
 		AssetDatabase::Init();
 		AssetDatabase::CreateUUIDs();
-		AssetDatabase::LoadUUIDs();
+		//AssetDatabase::LoadUUIDs();
 
 		m_LayerStack = new LayerStack();
 #ifdef DUSK_IMGUI

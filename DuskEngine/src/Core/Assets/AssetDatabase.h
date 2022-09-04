@@ -36,7 +36,6 @@ namespace DuskEngine
 		static void LoadUUIDs();
 		static void CreateUUIDs();
 		static uuids::uuid CreateResource(const std::filesystem::path& path);
-		static void DeleteUUIDs();
 		
 		static uuids::uuid GetUUID(const std::filesystem::path& path);
 
@@ -59,6 +58,8 @@ namespace DuskEngine
 		static std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> m_UUIDsMap;
 
 		static void AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid);
+		static void CreateMetaFile(const std::filesystem::directory_entry& directoryEntry);
+		static void RegisterAsset(const std::filesystem::directory_entry& directoryEntry);
 
 		friend class WindowsWindow;
 	};

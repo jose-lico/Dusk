@@ -11,6 +11,8 @@
 
 #include "uuid.h"
 
+#undef CreateMetaFile
+
 namespace DuskEngine
 {
 	std::filesystem::path AssetDatabase::m_RootDirectory = "res";
@@ -90,8 +92,8 @@ namespace DuskEngine
 	{
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
-			/*if (directoryEntry.path().filename() == "editor")
-				continue;*/
+			if (directoryEntry.path().filename() == "import")
+				continue;
 
 			if(directoryEntry.is_directory())
 			{
@@ -100,29 +102,74 @@ namespace DuskEngine
 			}
 			else
 			{
-				std::filesystem::path metaFile = directoryEntry.path().string() + ".meta";
-
-				if(!std::filesystem::exists(metaFile) && directoryEntry.path().extension() != ".meta")
+				// If the file is a meta file, register it
+				if (directoryEntry.path().extension() == ".meta")
 				{
-					std::string message = "Creating meta file for " + directoryEntry.path().filename().string();
-					LOG(message.c_str());
-
-					uuids::uuid const id = uuids::uuid_system_generator{}();
-
-					YAML::Emitter out;
-					out << YAML::BeginMap;
-					out << YAML::Key << "uuid" << YAML::Value << id;
-
-					std::string metaName = directoryEntry.path().string() + ".meta";
-					std::ofstream fout(metaName.c_str());
-					fout << out.c_str();
-
-					m_PathsMap[id] = directoryEntry.path();
+					RegisterAsset(directoryEntry);
+				}
+				// If the file does not have a meta file and is not a meta file itself
+				else if (!std::filesystem::exists(directoryEntry.path().string() + ".meta") && directoryEntry.path().extension() != ".meta")
+				{
+					CreateMetaFile(directoryEntry);
 				}
 			}
 		}
 
 		m_CurrentDirectory = m_RootDirectory;
+	}
+
+	void AssetDatabase::CreateMetaFile(const std::filesystem::directory_entry& directoryEntry)
+	{
+		std::string message = "Creating meta file for " + directoryEntry.path().filename().string();
+		LOG(message.c_str());
+
+		uuids::uuid const id = uuids::uuid_system_generator{}();
+
+		YAML::Emitter out;
+		out << YAML::BeginMap;
+		out << YAML::Key << "uuid" << YAML::Value << id;
+
+		std::string metaName = directoryEntry.path().string() + ".meta";
+		std::ofstream fout(metaName.c_str());
+		fout << out.c_str();
+		fout.close();
+
+		m_PathsMap[id] = directoryEntry.path();
+	}
+
+	void AssetDatabase::RegisterAsset(const std::filesystem::directory_entry& directoryEntry)
+	{
+		// If the file has been moved, removed or renamed, delete meta file.
+		if(!std::filesystem::exists(m_CurrentDirectory / directoryEntry.path().stem()))
+		{
+			std::string message = directoryEntry.path().stem().string() + " has been moved, removed or renamed, deleting meta file.";
+			WARN(message.c_str());
+			std::filesystem::remove(directoryEntry);
+			return;
+		}
+
+		std::ifstream stream(directoryEntry.path());
+		std::stringstream strStream;
+		strStream << stream.rdbuf();
+
+		YAML::Emitter out;
+		YAML::Node data = YAML::Load(strStream.str());
+
+#ifdef DUSK_WINDOWS
+		std::string path = m_CurrentDirectory.string() + "\\" + directoryEntry.path().stem().string();
+#elif DUSK_LINUX
+		std::string path = m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string();
+#endif
+		uuids::uuid uuid = data["uuid"].as<uuids::uuid>();
+
+		//quick fix for name editing (need to remove old entry still)
+		if (m_UUIDsMap.find(path) == m_UUIDsMap.end())
+		{
+			m_PathsMap[uuid] = path;
+			m_UUIDsMap[path] = uuid;
+
+			AddToAssetDatabase(path, uuid);
+		}
 	}
 
 	uuids::uuid AssetDatabase::CreateResource(const std::filesystem::path& path)
@@ -140,6 +187,7 @@ namespace DuskEngine
 		std::string metaName = path.string() + ".meta";
 		std::ofstream fout(metaName.c_str());
 		fout << out.c_str();
+		fout.close();
 
 		m_PathsMap[id] = path;
 		m_UUIDsMap[path] = id;
@@ -149,6 +197,8 @@ namespace DuskEngine
 		return id;
 	}
 
+	// 1. Add asset to asset database of correct type
+	// 2. Import asset if it has not been imported yet
 	void AssetDatabase::AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
 		Asset* resource = new Asset(path, uuid);
@@ -157,7 +207,20 @@ namespace DuskEngine
 		
 		bool wasAssigned = false;
 		
-		if (extension == ".glsl")
+		if(extension == ".png" || extension == ".jpg")
+		{
+			std::string importFile = "res/import/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
+			if(!std::filesystem::exists(importFile))
+			{
+				std::string message = "Importing " + path.string();
+				TRACE(message.c_str());
+
+				std::ofstream fout(importFile, std::ios::app | std::ios::binary);
+				Texture::ImportTest(path, fout);
+				fout.close();
+			}
+		}
+		else if (extension == ".glsl")
 		{
 			wasAssigned = true;
 			ShaderDatabase.push_back(resource);
@@ -180,11 +243,6 @@ namespace DuskEngine
 			
 		if (!wasAssigned)
 			delete resource;
-	}
-
-	// If a file is no longer present, delete its meta file
-	void AssetDatabase::DeleteUUIDs()
-	{
 	}
 
 	uuids::uuid AssetDatabase::GetUUID(const std::filesystem::path& path)

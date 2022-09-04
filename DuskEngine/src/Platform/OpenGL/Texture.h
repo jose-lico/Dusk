@@ -9,6 +9,14 @@ namespace uuids
 
 namespace DuskEngine
 {
+	struct TextureData
+	{
+		uint32_t Width;
+		uint32_t Height;
+		uint32_t Channels;
+		uint64_t DataSize;
+	};
+
 	class Texture : public Asset
 	{
 	public:
@@ -28,6 +36,8 @@ namespace DuskEngine
 		unsigned int GetWidth() const { return m_Width; }
 		unsigned int GetHeight() const { return m_Height; }
 		unsigned int GetSize() const { return m_Height; }
+
+		static void ImportTest(const std::filesystem::path& path, std::ofstream& fout);
 	private:
 		unsigned int m_ID;
 		unsigned int m_Width;
