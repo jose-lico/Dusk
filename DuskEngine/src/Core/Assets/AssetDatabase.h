@@ -2,9 +2,13 @@
 
 #include "Utils/Memory/Memory.h"
 
+#include "uuid.h"
+
 #include <unordered_map>
 #include <filesystem>
 #include <optional>
+
+#undef CreateMetaFile
 
 namespace uuids
 {
@@ -30,36 +34,35 @@ namespace DuskEngine
 	class AssetDatabase
 	{
 	public:
-		static void Init();
-		static void Shutdown();
+		AssetDatabase();
+		~AssetDatabase();
 
-		static void LoadUUIDs();
-		static void CreateUUIDs();
-		static uuids::uuid CreateResource(const std::filesystem::path& path);
+		void CreateUUIDs();
+		uuids::uuid CreateResource(const std::filesystem::path& path);
 		
-		static uuids::uuid GetUUID(const std::filesystem::path& path);
+		uuids::uuid GetUUID(const std::filesystem::path& path);
 
-		static UniqueRef<Material> LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler);
-		static UniqueRef<Shader> LoadShader(const uuids::uuid& uuid);
-		static UniqueRef<Texture> LoadTexture(const uuids::uuid& uuid);
-		static UniqueRef<Mesh> LoadModel(const uuids::uuid& uuid);
-		static UniqueRef<LuaScript> LoadScript(const uuids::uuid& uuid);
+		UniqueRef<Material> LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler);
+		UniqueRef<Shader> LoadShader(const uuids::uuid& uuid);
+		UniqueRef<Texture> LoadTexture(const uuids::uuid& uuid);
+		UniqueRef<Mesh> LoadModel(const uuids::uuid& uuid);
+		UniqueRef<LuaScript> LoadScript(const uuids::uuid& uuid);
 
 		// Asset Lists
-		static std::vector<Asset*> ShaderDatabase;
-		static std::vector<Asset*> ModelDatabase;
-		static std::vector<Asset*> MaterialDatabase;
-		static std::vector<Asset*> ScriptsDatabase;
+		std::vector<Asset*> ShaderDatabase;
+		std::vector<Asset*> ModelDatabase;
+		std::vector<Asset*> MaterialDatabase;
+		std::vector<Asset*> ScriptsDatabase;
 	private:
-		static std::filesystem::path m_RootDirectory;
-		static std::filesystem::path m_CurrentDirectory;
+		std::filesystem::path m_RootDirectory = "res";
+		std::filesystem::path m_CurrentDirectory;
 
-		static std::unordered_map <uuids::uuid, std::filesystem::path> m_PathsMap;
-		static std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> m_UUIDsMap;
+		std::unordered_map <uuids::uuid, std::filesystem::path, std::hash<uuids::uuid>> m_PathsMap;
+		std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> m_UUIDsMap;
 
-		static void AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid);
-		static void CreateMetaFile(const std::filesystem::directory_entry& directoryEntry);
-		static void RegisterAsset(const std::filesystem::directory_entry& directoryEntry);
+		void AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid);
+		void CreateMetaFile(const std::filesystem::directory_entry& directoryEntry);
+		void RegisterAsset(const std::filesystem::directory_entry& directoryEntry);
 
 		friend class WindowsWindow;
 	};

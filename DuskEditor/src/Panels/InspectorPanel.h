@@ -7,6 +7,7 @@ namespace DuskEngine
 {
 	class Entity;
 	class AssetHandler;
+	class AssetDatabase;
 
 	class InspectorPanel : public Panel
 	{
@@ -20,6 +21,7 @@ namespace DuskEngine
 		std::vector<Entity>* m_SelectedEntities = nullptr;
 
 		AssetHandler* m_AssetHandler;
+		AssetDatabase* m_DB;
 
 		static void MetaInspector(std::vector<Meta*>& metas);
 		static void TransformInspector(std::vector<Transform*>& transforms);

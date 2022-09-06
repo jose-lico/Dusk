@@ -23,6 +23,7 @@ namespace DuskEngine
 	class Renderer;
 	class LayerStack;
 	class ImGuiLayer;
+	class AssetDatabase;
 
 	struct ApplicationSpecs
 	{
@@ -47,6 +48,7 @@ namespace DuskEngine
 
 		Window& GetWindow() const { return *m_Window; }
 		Renderer& GetRenderer() const { return *m_Renderer; }
+		AssetDatabase& GetAssetDatabase() const { return *m_AssetDatabase; }
 	private:
 		static Application* s_Instance;
 
@@ -57,6 +59,7 @@ namespace DuskEngine
 		Logger* m_Logger;
 		Window* m_Window;
 		Renderer* m_Renderer;
+		AssetDatabase* m_AssetDatabase;
 
 		ApplicationSpecs m_Specs;
 	};

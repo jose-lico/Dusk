@@ -15,23 +15,12 @@
 
 namespace DuskEngine
 {
-	std::filesystem::path AssetDatabase::m_RootDirectory = "res";
-	std::filesystem::path AssetDatabase::m_CurrentDirectory;
-
-	std::unordered_map<uuids::uuid, std::filesystem::path> AssetDatabase::m_PathsMap;
-	std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> AssetDatabase::m_UUIDsMap;
-
-	std::vector<Asset*> AssetDatabase::ShaderDatabase;
-	std::vector<Asset*> AssetDatabase::ModelDatabase;
-	std::vector<Asset*> AssetDatabase::MaterialDatabase;
-	std::vector<Asset*> AssetDatabase::ScriptsDatabase;
-
-	void AssetDatabase::Init()
+	AssetDatabase::AssetDatabase()
 	{
 		m_CurrentDirectory = m_RootDirectory;
 	}
 
-	void AssetDatabase::Shutdown()
+	AssetDatabase::~AssetDatabase()
 	{
 		for (Asset* resource : ShaderDatabase)
 			delete resource;
@@ -44,48 +33,6 @@ namespace DuskEngine
 
 		for (Asset* resource : ScriptsDatabase)
 			delete resource;
-	}
-
-	void AssetDatabase::LoadUUIDs()
-	{
-		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
-		{
-			if (directoryEntry.is_directory())
-			{
-				m_CurrentDirectory = directoryEntry.path();
-				LoadUUIDs();
-			}
-			else
-			{
-				if (directoryEntry.path().extension() == ".meta")
-				{
-					std::ifstream stream(directoryEntry.path());
-					std::stringstream strStream;
-					strStream << stream.rdbuf();
-					
-					YAML::Emitter out;
-					YAML::Node data = YAML::Load(strStream.str());
-
-#ifdef DUSK_WINDOWS
-					std::string path = m_CurrentDirectory.string() + "\\" + directoryEntry.path().stem().string();
-#elif DUSK_LINUX
-					std::string path = m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string();
-#endif
-					uuids::uuid uuid = data["uuid"].as<uuids::uuid>();
-					
-					//quick fix for name editing (need to remove old entry still)
-					if (m_UUIDsMap.find(path) == m_UUIDsMap.end())
-					{
-						m_PathsMap[uuid] = path;
-						m_UUIDsMap[path] = uuid;
-
-						AddToAssetDatabase(path, uuid);
-					}
-				}
-			}
-		}
-
-		m_CurrentDirectory = m_RootDirectory;
 	}
 
 	void AssetDatabase::CreateUUIDs()

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AssetDatabase.h"
-
+#include "Core/Application/Application.h"
 #include "Utils/Memory/Memory.h"
 
 #include <unordered_map>
@@ -28,13 +28,13 @@ namespace DuskEngine
 			if (handleMap.find(uuid) == handleMap.end())
 			{
 				if constexpr (std::is_same<T, Shader>::value)
-					m_Pool.push_back(AssetDatabase::LoadShader(uuid));
+					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadShader(uuid));
 				else if constexpr (std::is_same<T, Texture>::value)
-					m_Pool.push_back(AssetDatabase::LoadTexture(uuid));
+					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadTexture(uuid));
 				else if constexpr (std::is_same<T, Mesh>::value)
-					m_Pool.push_back(AssetDatabase::LoadModel(uuid));
+					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadModel(uuid));
 				else if constexpr (std::is_same<T, Material>::value)
-					m_Pool.push_back(AssetDatabase::LoadMaterial(uuid, m_AssetHandler));
+					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadMaterial(uuid, m_AssetHandler));
 
 				handleMap[uuid] = m_Pool.size() - 1;
 				return m_Pool.size() - 1;

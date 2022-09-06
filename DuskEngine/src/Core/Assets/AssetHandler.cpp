@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AssetHandler.h"
 
+#include "Core/Application/Application.h"
 #include "AssetDatabase.h"
 #include "Handle.h"
 
@@ -30,8 +31,8 @@ namespace DuskEngine
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Quad());
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Cube());
 
-		m_MaterialPool.m_Pool.push_back(AssetDatabase::LoadMaterial(
-			AssetDatabase::GetUUID("res/editor/materials/defaultMaterial.material"), this));
+		m_MaterialPool.m_Pool.push_back(Application::Get().GetAssetDatabase().LoadMaterial(
+			Application::Get().GetAssetDatabase().GetUUID("res/editor/materials/defaultMaterial.material"), this));
 
 		LOG(("Created Asset Handler " + m_Name).c_str());
 	}
@@ -54,7 +55,7 @@ namespace DuskEngine
 	{
 		if (m_HandleMap.find(uuid) == m_HandleMap.end())
 		{
-			m_LuaScriptPool.push_back(AssetDatabase::LoadScript(scriptUUID));
+			m_LuaScriptPool.push_back(Application::Get().GetAssetDatabase().LoadScript(scriptUUID));
 			m_HandleMap[uuid] = m_LuaScriptPool.size();
 			return m_LuaScriptPool.size() - 1;
 		}

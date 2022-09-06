@@ -3,7 +3,7 @@
 
 #include "Platform/OpenGL/Shader.h"
 #include "Platform/OpenGL/Texture.h"
-
+#include "Core/Application/Application.h"
 #include "Core/Assets/AssetHandler.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Utils/Serialization/Yaml.h"
@@ -189,7 +189,7 @@ namespace DuskEngine
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Material" << YAML::Value << "newMaterial";
-		out << YAML::Key << "Shader" << YAML::Value << AssetDatabase::GetUUID("res/shaders/simpleColor.glsl");
+		out << YAML::Key << "Shader" << YAML::Value << Application::Get().GetAssetDatabase().GetUUID("res/shaders/simpleColor.glsl");
 		out << YAML::Key << "Uniforms";
 		out << YAML::BeginMap;
 		out << YAML::Key << "Color" << YAML::Value << glm::vec3(1.0);

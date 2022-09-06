@@ -30,8 +30,11 @@ namespace DuskEngine
 
 		m_Renderer = new Renderer(*m_Window);
 
-		AssetDatabase::Init();
-		AssetDatabase::CreateUUIDs();
+		m_AssetDatabase = new AssetDatabase();
+		m_AssetDatabase->CreateUUIDs(); // load assets, load project whatever
+		
+		//AssetDatabase::Init();
+		//AssetDatabase::CreateUUIDs();
 		//AssetDatabase::LoadUUIDs();
 
 		m_LayerStack = new LayerStack();
@@ -46,7 +49,7 @@ namespace DuskEngine
 	{
 		TRACE("########## SHUTDOWN ##########");
 
-		AssetDatabase::Shutdown();
+		delete m_AssetDatabase;
 		delete m_Renderer;
 		delete m_LayerStack; // Deletes m_ImGuiLayer
 		delete m_Window;
