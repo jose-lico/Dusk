@@ -79,7 +79,7 @@ namespace DuskEngine
         m_Path = path;
         m_Name = path.filename().string();
 
-        std::string importFile = "res/import/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
+        std::string importFile = "res/.import/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
 
         if (std::filesystem::exists(importFile))
         //if (false)
@@ -142,6 +142,8 @@ namespace DuskEngine
         }
         else
         {
+            TRACE("Using raw version");
+
             stbi_set_flip_vertically_on_load(true);
             int width, height, channels;
             unsigned char* data;

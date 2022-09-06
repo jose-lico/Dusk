@@ -37,7 +37,7 @@ namespace DuskEngine
 		AssetDatabase();
 		~AssetDatabase();
 
-		void CreateUUIDs();
+		void LoadProject();
 		uuids::uuid CreateResource(const std::filesystem::path& path);
 		
 		uuids::uuid GetUUID(const std::filesystem::path& path);

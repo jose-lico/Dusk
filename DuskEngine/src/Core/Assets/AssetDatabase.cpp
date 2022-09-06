@@ -35,17 +35,19 @@ namespace DuskEngine
 			delete resource;
 	}
 
-	void AssetDatabase::CreateUUIDs()
+	// At the moment there is no concept of project, so the engine simply loads all assets inside the "res" folder.
+	void AssetDatabase::LoadProject()
 	{
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
-			if (directoryEntry.path().filename() == "import")
+			// skip the import folder
+			if (directoryEntry.path().filename() == ".import")
 				continue;
 
 			if(directoryEntry.is_directory())
 			{
 				m_CurrentDirectory = directoryEntry.path();
-				CreateUUIDs();
+				LoadProject();
 			}
 			else
 			{
@@ -82,6 +84,9 @@ namespace DuskEngine
 		fout.close();
 
 		m_PathsMap[id] = directoryEntry.path();
+		m_UUIDsMap[directoryEntry.path()] = id;
+
+		AddToAssetDatabase(directoryEntry.path(), id);
 	}
 
 	void AssetDatabase::RegisterAsset(const std::filesystem::directory_entry& directoryEntry)
@@ -109,7 +114,7 @@ namespace DuskEngine
 #endif
 		uuids::uuid uuid = data["uuid"].as<uuids::uuid>();
 
-		//quick fix for name editing (need to remove old entry still)
+		//quick fix for name editing (need to remove old entry still) TODO go over this again forgot what it does
 		if (m_UUIDsMap.find(path) == m_UUIDsMap.end())
 		{
 			m_PathsMap[uuid] = path;
@@ -156,7 +161,7 @@ namespace DuskEngine
 		
 		if(extension == ".png" || extension == ".jpg")
 		{
-			std::string importFile = "res/import/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
+			std::string importFile = "res/.import/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
 			if(!std::filesystem::exists(importFile))
 			{
 				std::string message = "Importing " + path.string();

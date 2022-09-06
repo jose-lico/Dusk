@@ -31,12 +31,8 @@ namespace DuskEngine
 		m_Renderer = new Renderer(*m_Window);
 
 		m_AssetDatabase = new AssetDatabase();
-		m_AssetDatabase->CreateUUIDs(); // load assets, load project whatever
+		m_AssetDatabase->LoadProject();
 		
-		//AssetDatabase::Init();
-		//AssetDatabase::CreateUUIDs();
-		//AssetDatabase::LoadUUIDs();
-
 		m_LayerStack = new LayerStack();
 #ifdef DUSK_IMGUI
 		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
