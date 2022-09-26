@@ -49,6 +49,8 @@ namespace DuskEngine
 		inline Window& GetWindow() const { return *m_Window; }
 		inline Renderer& GetRenderer() const { return *m_Renderer; }
 		inline AssetDatabase& GetAssetDatabase() const { return *m_AssetDatabase; }
+
+		inline const std::string& GetStartupTime() const { return m_StartupTime; }
 	private:
 		static Application* s_Instance;
 
@@ -62,6 +64,8 @@ namespace DuskEngine
 		AssetDatabase* m_AssetDatabase;
 
 		ApplicationSpecs m_Specs;
+
+		std::string m_StartupTime;
 	};
 
 	extern Application* CreateApplication();

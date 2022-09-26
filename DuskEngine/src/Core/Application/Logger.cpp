@@ -1,8 +1,11 @@
 #include "pch.h"
 #include "Logger.h"
 
+#include "Application.h"
+
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 namespace DuskEngine
 {
@@ -11,22 +14,43 @@ namespace DuskEngine
 	Logger::Logger(const char* name)
 		:m_Name(name)
 	{
-		m_Logger = spdlog::stdout_color_mt(name);
-		m_Logger->set_level(spdlog::level::trace);
-		m_Logger->set_pattern("%^[%T] [%n]: %v%$");
+		std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+		consoleSink->set_level(spdlog::level::trace);
+		consoleSink->set_pattern("%^[%T.%e] [%-9!n] [%-8!l] %v%$");
 
+		std::string logFile = "logs/log_" + Application::Get().GetStartupTime() + ".csv";
+		std::shared_ptr<spdlog::sinks::basic_file_sink_mt> fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logFile.c_str());
+		fileSink->set_level(spdlog::level::trace);
+		fileSink->set_pattern("%v");
+		
+		m_Logger = std::make_shared<spdlog::logger>(name, fileSink);
+		m_Logger->set_level(spdlog::level::trace);
+		m_Logger->flush_on(spdlog::level::err);
+		
+		if(m_Loggers.size() == 0)
+		{
+			m_Logger->trace("Time,Origin,Level,Message");
+			fileSink->flush();
+			fileSink->set_pattern("%^%T.%e,%n,%l,%v%$");
+		}
+		else
+			fileSink->set_pattern("%^%T.%e,%n,%l,%v%$");
+		
 		m_Loggers.insert({ name, this });
 		
+		auto& sinks = m_Logger->sinks();
+		sinks.push_back(consoleSink);
+		
 		std::string message = "Created Logger ";
-		message.append(name);
-		LOG(message.c_str());
+		message.append(name); 
+		TRACE(message);
 	}
 
 	Logger::~Logger()
 	{
 		std::string message = "Destroyed Logger ";
 		message.append(m_Name);
-		LOG(message.c_str());
+		TRACE(message);
 	}
 
 	Logger* Logger::Get(const char* name)
@@ -75,5 +99,10 @@ namespace DuskEngine
 		default:
 			break;
 		}
+	}
+
+	void Logger::Log(const std::string& message, LogLevel level, const char* file, unsigned int line)
+	{
+		Log(message.c_str(), level, file, line);
 	}
 }

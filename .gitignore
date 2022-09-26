@@ -15,3 +15,5 @@ premake5
 
 Makefile
 *.import
+
+logs

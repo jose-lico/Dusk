@@ -21,6 +21,14 @@ namespace DuskEngine
 	{
 		s_Instance = this;
 
+		time_t now = time(0);
+		struct tm tstruct;
+		char buffer[80];
+		tstruct = *localtime(&now);
+		strftime(buffer, sizeof(buffer), "%Y-%m-%d_%Hh%Mm%Ss", &tstruct);
+
+		m_StartupTime = buffer;
+
 		m_Logger = new Logger(LOGGER);
 
 		WindowData data;
