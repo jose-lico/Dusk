@@ -61,17 +61,19 @@ project "DuskEngine"
 		staticruntime "on"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
-
+		removefiles "Platform/Linux/OS_Linux.h"
 		disablewarnings 
 		{ 
 			"4003",
 			"4005"
 		}
 
+
 	filter "system:linux"
 		cppdialect "C++17"
 		systemversion "latest"
 		defines "DUSK_LINUX"
+		removefiles "Platform/Windows/OS_Windows.h"
 		links 
 		{
 			"pthread"
@@ -85,8 +87,10 @@ project "DuskEngine"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "On"
+		defines "DUSK_RELEASE"
 
 	filter "configurations:ReleaseNoImGui"
 		runtime "Release"
 		optimize "On"
 		undefines { "DUSK_IMGUI" }
+		defines "DUSK_RELEASE"

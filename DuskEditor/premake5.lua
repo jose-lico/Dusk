@@ -1,5 +1,4 @@
 project "DuskEditor"
-	kind "ConsoleApp"
 	language "C++"
 	configmap {
         ["ReleaseNoImGui"] = "Release"
@@ -62,6 +61,7 @@ project "DuskEditor"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
 		links "opengl32"
+		entrypoint "mainCRTStartup"
 
 	filter "system:linux"
 		cppdialect "gnu++17"
@@ -76,10 +76,13 @@ project "DuskEditor"
 		}
 
 	filter "configurations:Debug"
+		kind "ConsoleApp"
 		runtime "Debug"
 		symbols "On"
 		defines "DUSK_DEBUG"
 	
 	filter "configurations:Release"
+		kind "WindowedApp"
 		runtime "Release"
 		optimize "On"
+		defines "DUSK_RELEASE"

@@ -5,6 +5,7 @@
 #include "Layer.h"
 #include "LayerStack.h"
 #include "Window.h"
+#include "OS.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Events/EventBase.h"
 #include "Core/Renderer/Renderer.h"
@@ -28,6 +29,8 @@ namespace DuskEngine
 		strftime(buffer, sizeof(buffer), "%Y-%m-%d_%Hh%Mm%Ss", &tstruct);
 
 		m_StartupTime = buffer;
+
+		m_OS = OS::Create();
 
 		m_Logger = new Logger(LOGGER);
 

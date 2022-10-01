@@ -25,7 +25,7 @@ namespace DuskEngine
 		
 		m_Logger = std::make_shared<spdlog::logger>(name, fileSink);
 		m_Logger->set_level(spdlog::level::trace);
-		m_Logger->flush_on(spdlog::level::err);
+		m_Logger->flush_on(spdlog::level::trace);
 		
 		if(m_Loggers.size() == 0)
 		{
@@ -69,32 +69,22 @@ namespace DuskEngine
 	{
 		// construct struct with message and save for later, editor stuff
 
-		// Omitted for now
-		std::string log = "File: ";
-		log.append(file);
-		log.append(" Line:");
-		log.append(std::to_string(line));
-		log.append(" ");
-
-		log = "";
-		log.append(message);
-
 		switch (level)
 		{
 		case LogLevel::TRACE:
-			m_Logger->trace(log.c_str());
+			m_Logger->trace(message);
 			break;
 		case LogLevel::LOG:
-			m_Logger->debug(log.c_str());
+			m_Logger->debug(message);
 			break;
 		case LogLevel::WARN:
-			m_Logger->warn(log.c_str());
+			m_Logger->warn(message);
 			break;
 		case LogLevel::ERR:
-			m_Logger->error(log.c_str());
+			m_Logger->error(message);
 			break;
 		case LogLevel::FATAL:
-			m_Logger->critical(log.c_str());
+			m_Logger->critical(message);
 			break;
 		default:
 			break;

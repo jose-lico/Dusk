@@ -24,6 +24,7 @@ namespace DuskEngine
 	class LayerStack;
 	class ImGuiLayer;
 	class AssetDatabase;
+	class OS;
 
 	struct ApplicationSpecs
 	{
@@ -62,6 +63,7 @@ namespace DuskEngine
 		Window* m_Window;
 		Renderer* m_Renderer;
 		AssetDatabase* m_AssetDatabase;
+		OS* m_OS;
 
 		ApplicationSpecs m_Specs;
 
