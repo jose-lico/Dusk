@@ -36,9 +36,9 @@ newaction
 	description = "Cleans the generated projected files, binaries and intermediates",
 	execute = function()
 		print("Removing binaries...")
-		os.rmdir("**bin")
+		os.rmdir("bin")
 		print("Removing intermediate files...")
-		os.rmdir("**bin-int")
+		os.rmdir("bin-int")
 		print("Removing project files...")
 		os.remove("**.sln")
 		os.remove("**.vcxproj")

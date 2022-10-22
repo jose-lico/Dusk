@@ -1,7 +1,4 @@
 #pragma once
-
-#pragma once
-
 #include "Core/Application/OS.h"
 
 namespace DuskEngine

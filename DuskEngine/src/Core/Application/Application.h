@@ -39,9 +39,9 @@ namespace DuskEngine
 		Application(const ApplicationSpecs& specs);
 		virtual ~Application();
 
-		void Run();
-		
 		static Application& Get() { return *s_Instance; }
+		
+		void Run();
 		
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);

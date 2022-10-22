@@ -62,23 +62,21 @@ project "DuskEngine"
 		staticruntime "on"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
-		removefiles "Platform/Linux/OS_Linux.h"
+		-- removefiles does not work with a path relative to current premake5.lua, must provide full path from workspace location
+		removefiles "%{wks.location}/DuskEngine/src/Platform/Linux/**"
 		disablewarnings 
 		{ 
 			"4003",
 			"4005"
 		}
 
-
 	filter "system:linux"
 		cppdialect "C++17"
 		systemversion "latest"
 		defines "DUSK_LINUX"
-		removefiles "Platform/Windows/OS_Windows.h"
-		links 
-		{
-			"pthread"
-		}
+		-- removefiles does not work with a path relative to current premake5.lua, must provide full path from workspace location
+		removefiles "%{wks.location}/DuskEngine/src/Platform/Windows/**"
+		links "pthread"
 
 	filter "configurations:Debug"
 		runtime "Debug"
@@ -93,5 +91,7 @@ project "DuskEngine"
 	filter "configurations:ReleaseNoImGui"
 		runtime "Release"
 		optimize "On"
-		undefines { "DUSK_IMGUI" }
+		undefines "DUSK_IMGUI"
+		-- removefiles does not work with a path relative to current premake5.lua, must provide full path from workspace location
+		removefiles "%{wks.location}/DuskEngine/src/Utils/ImGui/**"
 		defines "DUSK_RELEASE"
