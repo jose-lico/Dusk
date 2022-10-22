@@ -5,7 +5,6 @@ namespace DuskEngine
 {
 	class Window;
 	class KeyPressedEvent;
-	struct Style;
 
 	class ImGuiLayer : public Layer
 	{
@@ -20,14 +19,15 @@ namespace DuskEngine
 
 		void Begin();
 		void End();
-		inline static Style* GetStyle() { return m_Style; }
+
+		void AddFontFromFile(const std::string& path, float size);
 	private:
-		void AddFont(const std::string& name, float size);
+		void AddFontFromMemory(void* fontData, float size);
 		void ApplyStyle();
-		bool m_ShowDemoWindow = false;
 		bool ActivateDemoWindow(KeyPressedEvent& e);
 
-		static Style* m_Style;
 		Window* m_Window;
+
+		bool m_ShowDemoWindow = false;
 	};
 }

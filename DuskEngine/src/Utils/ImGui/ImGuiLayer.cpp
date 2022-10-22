@@ -1,28 +1,26 @@
 #include "pch.h"
 #include "ImGuiLayer.h"
+
 #include "Style.h"
-
 #include "Core/Events/Events.h"
-
 #include "Core/Application/Window.h"
 
-#include "IconsForkAwesome.h"
+#include "fonts/roboto/Roboto-Regular.embeded"
+#include "fonts/forkawesome/forkawesome-webfont.embeded"
 
-#define IMGUI_IMPL_OPENGL_LOADER_GLEW
+#include "IconsForkAwesome.h"
+#include "ImGuizmo/ImGuizmo.h"
 #include "imgui/imgui.h"
 #include "../backends/imgui_impl_opengl3.cpp"
 #include "../backends/imgui_impl_glfw.cpp"
 
-#include "ImGuizmo/ImGuizmo.h"
-
 namespace DuskEngine
 {
-	Style* ImGuiLayer::m_Style;
+	const ImWchar glyphRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 
 	ImGuiLayer::ImGuiLayer(Window* window)
 		:m_Window(window)
 	{
-		m_Style = new Style();
 	}
 
 	ImGuiLayer::~ImGuiLayer()
@@ -31,26 +29,22 @@ namespace DuskEngine
 
 	void ImGuiLayer::OnAttach()
 	{
-		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
+		ImGuiStyle& style = ImGui::GetStyle();
+		style.WindowMenuButtonPosition = ImGuiDir_None;
+		
 		ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeHandle(), true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 
+		AddFontFromMemory((void*)g_Roboto_Regular_ttf, 18.0f);
+
 		ApplyStyle();
-
-		ImGui::GetStyle().WindowMenuButtonPosition = ImGuiDir_None;
-
-		//AddFont("res/editor/fonts/RobotoMono-Regular.ttf", 18.0f);
-		AddFont("res/editor/fonts/Roboto-Regular.ttf", 18.0f);
-		AddFont("res/editor/fonts/Roboto-Regular.ttf", 18.0f);
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -109,30 +103,41 @@ namespace DuskEngine
 		}
 	}
 
-	void ImGuiLayer::AddFont(const std::string& name, float size)
+	void ImGuiLayer::AddFontFromMemory(void* fontData, float size)
 	{
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.Fonts->AddFontFromFileTTF(name.c_str(), size);
-
-		static const ImWchar icons_ranges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 		
-		ImFontConfig icons_config;
-		icons_config.PixelSnapH = true;
-		icons_config.MergeMode = true;
+		ImFontConfig fontConfig;
+		fontConfig.FontDataOwnedByAtlas = false;
 
-#ifdef DUSK_WINDOWS
-		io.Fonts->AddFontFromFileTTF("../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 18.0f, &icons_config, icons_ranges);
-#elif DUSK_LINUX
-		io.Fonts->AddFontFromFileTTF("../../../Dependencies/Fork-Awesome/fonts/" FONT_ICON_FILE_NAME_FK, 18.0f, &icons_config, icons_ranges);
-#endif
+		io.Fonts->AddFontFromMemoryTTF(fontData, sizeof(g_Roboto_Regular_ttf), size, &fontConfig);
+
+		fontConfig.PixelSnapH = true;
+		fontConfig.MergeMode = true;
+		
+		io.Fonts->AddFontFromMemoryTTF((void*)g_forkawesome_webfont_ttf, sizeof(g_forkawesome_webfont_ttf), size, &fontConfig, glyphRanges);
+	}
+
+	void ImGuiLayer::AddFontFromFile(const std::string& path, float size)
+	{
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+		io.Fonts->AddFontFromFileTTF(path.c_str(), size);
+		
+		ImFontConfig fontConfig;
+		fontConfig.PixelSnapH = true;
+		fontConfig.MergeMode = true;
+		fontConfig.FontDataOwnedByAtlas = false;
+
+		io.Fonts->AddFontFromMemoryTTF((void*)g_forkawesome_webfont_ttf, sizeof(g_forkawesome_webfont_ttf), size, &fontConfig, glyphRanges);
 	}
 
 	void ImGuiLayer::ApplyStyle()
 	{
 		ImVec4 darkest(0.086f, 0.086f, 0.086f, 1.0f);
 		ImVec4 dark(0.12f, 0.12f, 0.12f, 1.0f);
-		ImVec4 grey1(0.15, 0.15, 0.15, 1.0f);
-		ImVec4 grey2(0.2, 0.2, 0.2, 1.0f);
+		ImVec4 grey1(0.15f, 0.15f, 0.15f, 1.0f);
+		ImVec4 grey2(0.2f, 0.2f, 0.2f, 1.0f);
 		ImVec4 grey3(0.25f, 0.25f, 0.25f, 1.0f);
 		ImVec4 grey4(0.41f, 0.5f, 0.52f, 1.0f);
 		ImVec4 white(0.87f, 0.87f, 0.87f, 1.0f);
@@ -141,12 +146,13 @@ namespace DuskEngine
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		style.TabRounding = 0.0f;
-		style.FramePadding = { 5.0f, 4 };
+		//style.TabRounding = 0.0f;
+		//style.FramePadding = { 5.0f, 4 };
 		//style.TabBorderSize = 10.0f;
+		
 		//TRACE(std::to_string(style.TabBorderSize).c_str());
 		
-		style.Colors[ImGuiCol_Text] = m_Style->Colors.ImGuiCol_Text;
+		style.Colors[ImGuiCol_Text] = white;
 		style.Colors[ImGuiCol_TextDisabled] = grey3;
 
 		style.Colors[ImGuiCol_MenuBarBg] = dark;

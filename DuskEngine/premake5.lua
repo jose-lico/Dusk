@@ -19,6 +19,7 @@ project "DuskEngine"
 	includedirs
 	{
 		"src",
+		"embeded",
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
 		dependenciesDir .. "/glm/include",
