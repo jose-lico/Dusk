@@ -7,6 +7,8 @@
 #include "Platform/OpenGL/OpenGLContext.h"
 #include "Core/Application/Window.h"
 
+#include "GL/glew.h"
+
 namespace DuskEngine {
 
 	Renderer::Renderer(const Window& window)
@@ -35,7 +37,7 @@ namespace DuskEngine {
 	void Renderer::Submit(const UniqueRef<Mesh>& mesh)
 	{
 		mesh->m_VA->Bind();
-		OpenGLAPI::DrawIndexed(mesh->m_VA);;
+		OpenGLAPI::DrawIndexed(mesh->m_VA);
 	}
 
 	void Renderer::SwapBuffers()

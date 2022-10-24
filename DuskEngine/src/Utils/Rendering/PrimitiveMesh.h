@@ -1,13 +1,10 @@
 #pragma once
-#include "Core/Application/Core.h"
-
-#include "Utils/Memory/Memory.h"
 
 namespace DuskEngine
 {
 	class Mesh;
 
-	class DUSK_EXPORT PrimitiveMesh
+	class PrimitiveMesh
 	{
 	public:
 		static UniqueRef<Mesh> Quad();

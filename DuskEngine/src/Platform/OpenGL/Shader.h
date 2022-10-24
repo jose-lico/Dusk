@@ -32,6 +32,13 @@ namespace DuskEngine
 	public:
 		Shader(const std::string& filepath, const std::string& name = "");
 		Shader(const std::filesystem::path& path, const uuids::uuid& uuid);
+
+		Shader(const Shader&) = delete;
+		Shader& operator = (const Shader&) = delete;
+		
+		Shader(Shader&&) = default;
+		Shader& operator = (Shader&&) = default;
+		
 		~Shader();
 
 		void Bind() const;

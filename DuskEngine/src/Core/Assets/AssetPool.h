@@ -28,13 +28,14 @@ namespace DuskEngine
 			if (handleMap.find(uuid) == handleMap.end())
 			{
 				if constexpr (std::is_same<T, Shader>::value)
-					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadShader(uuid));
+					m_Pool.push_back(std::move(Application::Get().GetAssetDatabase().LoadShader(uuid)));
 				else if constexpr (std::is_same<T, Texture>::value)
 					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadTexture(uuid));
-				else if constexpr (std::is_same<T, Mesh>::value)
+				else if constexpr (std::is_same<T, UniqueRef<Mesh>>::value)
 					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadModel(uuid));
 				else if constexpr (std::is_same<T, Material>::value)
 					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadMaterial(uuid, m_AssetHandler));
+				// add assert
 
 				handleMap[uuid] = m_Pool.size() - 1;
 				return m_Pool.size() - 1;
@@ -43,13 +44,13 @@ namespace DuskEngine
 			return handleMap[uuid];
 		};
 
-		UniqueRef<T>& operator()(uint32_t handle)
+		T& operator()(uint32_t handle)
 		{
 			return m_Pool[handle];
 		}
 
 	private:
-		std::vector<UniqueRef<T>> m_Pool;
+		std::vector<T> m_Pool;
 
 		AssetHandler* m_AssetHandler = nullptr;
 		friend class AssetHandler;

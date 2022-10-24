@@ -2,19 +2,19 @@
 
 namespace DuskEngine
 {	
-	template <typename Type, typename ValueType = uint32_t>
+	template <typename Type>
 	class Handle
 	{
 	public:
 		Handle() = default;
-		Handle(ValueType value):m_Value(value) {}
+		Handle(uint32_t value):m_Value(value) {}
 
-		operator ValueType() const { return m_Value; }
+		operator uint32_t() const { return m_Value; }
 
 		friend bool operator==(Handle a, Handle b) { return a.m_Value == b.m_Value; }
 		friend bool operator!=(Handle a, Handle b) { return a.m_Value != b.m_Value; }
 	private:
-		ValueType m_Value;
+		uint32_t m_Value;
 
 		friend class AssetHandler;
 	};

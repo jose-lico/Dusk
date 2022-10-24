@@ -1,5 +1,6 @@
 #include "ContentBrowserPanel.h"
 
+#include "Core/Application/Core.h"
 #include "Core/Application/Application.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/Assets/Material.h"

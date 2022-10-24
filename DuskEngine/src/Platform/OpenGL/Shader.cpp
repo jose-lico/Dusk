@@ -44,7 +44,7 @@ namespace DuskEngine
 
 	Shader::~Shader()
 	{
-		glDeleteProgram(m_ID);
+		//glDeleteProgram(m_ID);
 		std::string message = "Deleted Shader " + m_Name;
 		LOG(message.c_str());
 	}

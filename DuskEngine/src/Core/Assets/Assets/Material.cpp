@@ -23,31 +23,6 @@ namespace DuskEngine
 		LOG(message.c_str());
 	}
 
-	/*Material::Material(Ref<Shader>& shader, const std::string& name)
-		:m_Shader(shader)
-	{
-		if (name.empty())
-			m_Name = m_Shader->GetName();
-		else
-			m_Name = name;
-
-		CreateUniforms();
-		LOG("Created Material " + m_Name)
-	}*/
-
-	/*Material::Material(const std::string& shaderPath, const std::string& name)
-	{
-		m_Shader = Shader::Create(shaderPath);
-
-		if (name.empty())
-			m_Name = m_Shader->GetName();
-		else
-			m_Name = name;
-
-		CreateUniforms();
-		LOG("Created Material " + m_Name)
-	}*/
-
 	Material::~Material()
 	{
 		std::string message = "Destroyed Material " + m_Name;
@@ -57,21 +32,20 @@ namespace DuskEngine
 	void Material::UploadUniforms(AssetHandler& assetHandler)
 	{
 		auto& shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
-		shader->Bind();
-		//m_Shader->Bind();
+		shader.Bind();
+
 		unsigned int textSlot = 0;
 		for (auto uniform : m_Uniforms)
 		{
-			// switch uniform type
 			switch(uniform.Type)
 			{
 			case UniformType::Vec3:
-				shader->SetUniformVec3("u_" + uniform.Name, uniform.Data.vec3);
+				shader.SetUniformVec3("u_" + uniform.Name, uniform.Data.vec3);
 				break;
 			case UniformType::Texture:
-				shader->SetUniformInt("u_" + uniform.Name, textSlot);
+				shader.SetUniformInt("u_" + uniform.Name, textSlot);
 				auto& texture = assetHandler.AssetPool<Texture>(uniform.Data.dataHandle);
-				texture->Bind(textSlot++);
+				texture.Bind(textSlot++);
 				break;
 			}
 		}
@@ -120,10 +94,10 @@ namespace DuskEngine
 	{
 	}
 
-	void Material::SetTexture(const std::string& name, UniqueRef<Texture>& texture)
+	void Material::SetTexture(const std::string& name, Texture& texture)
 	{
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
-			m_UniformsMap[name]->Data.dataHandle = m_OwningHandler->AddToAssetPool<Texture>(texture->GetUUID());
+			m_UniformsMap[name]->Data.dataHandle = m_OwningHandler->AddToAssetPool<Texture>(texture.GetUUID());
 		else
 		{
 			std::string message = "Texture '" + name + "' doesnt exist";
@@ -131,17 +105,17 @@ namespace DuskEngine
 		}
 	}
 
-	const uuids::uuid& Material::GetShaderUUID()
+	/*const uuids::uuid& Material::GetShaderUUID()
 	{
 		return m_Shader->GetUUID();
-	}
+	}*/
 
 	void Material::SerializeText(const std::string& path)
 	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Material" << YAML::Value << m_Name;
-		out << YAML::Key << "Shader" << YAML::Value << m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
+		//out << YAML::Key << "Shader" << YAML::Value << m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
 		//out << YAML::Key << "Uniforms" << YAML::Value << m_Uniforms;
 
 		out << YAML::Key << "Uniforms";
@@ -170,9 +144,12 @@ namespace DuskEngine
 	{
 		auto& shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
 
-		for (auto uniform : shader->UniformSpecs)
+		for (auto uniform : shader.UniformSpecs)
 		{
-			auto u = Uniform(uniform.Name, uniform.Type);
+			Uniform u;
+			u.Name = uniform.Name;
+			u.Type = uniform.Type;
+
 			m_Uniforms.push_back(u);
 		}
 

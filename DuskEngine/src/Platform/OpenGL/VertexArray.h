@@ -13,6 +13,9 @@ namespace DuskEngine
 		VertexArray();
 		~VertexArray();
 
+		VertexArray(VertexArray&& va);
+		VertexArray& operator=(VertexArray&& va);
+				
 		void Bind() const;
 		void Unbind() const;
 

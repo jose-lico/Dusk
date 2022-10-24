@@ -29,16 +29,19 @@ namespace DuskEngine
 		uint32_t AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID);
 
 		template<typename T>
-		UniqueRef<T>& AssetPool(const Handle<T> handle)
+		T& AssetPool(const Handle<T> handle)
 		{
 			if constexpr (std::is_same<T, Shader>::value)
 				return m_ShaderPool(handle);
 			else if constexpr (std::is_same<T, Texture>::value)
 				return m_TexturePool(handle);
-			else if constexpr (std::is_same<T, Mesh>::value)
-				return m_MeshPool(handle);
 			else if constexpr (std::is_same<T, Material>::value)
 				return m_MaterialPool(handle);
+		}
+
+		UniqueRef<Mesh>& AssetPool(const Handle<Mesh> handle)
+		{
+			return m_MeshPool(handle);
 		}
 
 		template<typename T>
@@ -62,7 +65,7 @@ namespace DuskEngine
 		_AssetPool<Shader> m_ShaderPool;
 		_AssetPool<Texture> m_TexturePool;
 		_AssetPool<Material> m_MaterialPool;
-		_AssetPool<Mesh> m_MeshPool;
+		_AssetPool<UniqueRef<Mesh>> m_MeshPool;
 		
 		std::vector<UniqueRef<LuaScript>> m_LuaScriptPool;
 		

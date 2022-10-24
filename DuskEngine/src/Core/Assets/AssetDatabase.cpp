@@ -202,7 +202,7 @@ namespace DuskEngine
 		return m_UUIDsMap[path];
 	}
 
-	UniqueRef<Material> AssetDatabase::LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler)
+	Material AssetDatabase::LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler)
 	{
 		std::ifstream stream(m_PathsMap[uuid]);
 		std::stringstream strStream;
@@ -214,9 +214,9 @@ namespace DuskEngine
 		// dumb af
 		auto shaderHandle = handler->AddToAssetPool<Shader>(data["Shader"].as<uuids::uuid>());
 
-		UniqueRef<Material> material = MakeUnique<Material>(shaderHandle, handler, m_PathsMap[uuid], uuid);
+		Material material = Material(shaderHandle, handler, m_PathsMap[uuid], uuid);
 
-		for (auto& uniform : material->m_Uniforms)
+		for (auto& uniform : material.m_Uniforms)
 		{
 			switch (uniform.Type)
 			{
@@ -232,14 +232,14 @@ namespace DuskEngine
 		return material;
 	}
 
-	UniqueRef<Shader> AssetDatabase::LoadShader(const uuids::uuid& uuid)
+	Shader AssetDatabase::LoadShader(const uuids::uuid& uuid)
 	{
-		return MakeUnique<Shader>(m_PathsMap[uuid], uuid);
+		return Shader(m_PathsMap[uuid], uuid);
 	}
 
-	UniqueRef<Texture> AssetDatabase::LoadTexture(const uuids::uuid& uuid)
+	Texture AssetDatabase::LoadTexture(const uuids::uuid& uuid)
 	{
-		return MakeUnique<Texture>(m_PathsMap[uuid], uuid);
+		return Texture(m_PathsMap[uuid], uuid);
 	}
 
 	//TODO - improve model and mesh api and useflow

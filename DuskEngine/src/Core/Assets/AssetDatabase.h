@@ -42,9 +42,10 @@ namespace DuskEngine
 		
 		uuids::uuid GetUUID(const std::filesystem::path& path);
 
-		UniqueRef<Material> LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler);
-		UniqueRef<Shader> LoadShader(const uuids::uuid& uuid);
-		UniqueRef<Texture> LoadTexture(const uuids::uuid& uuid);
+		Material LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler);
+		Shader LoadShader(const uuids::uuid& uuid);
+		Texture LoadTexture(const uuids::uuid& uuid);
+
 		UniqueRef<Mesh> LoadModel(const uuids::uuid& uuid);
 		UniqueRef<LuaScript> LoadScript(const uuids::uuid& uuid);
 

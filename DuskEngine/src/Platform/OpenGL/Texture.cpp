@@ -206,7 +206,7 @@ namespace DuskEngine
 
     Texture::~Texture()
     {
-        glDeleteTextures(1, &m_ID);
+        //glDeleteTextures(1, &m_ID);
         std::string message = "Destroyed Texture " + m_Name;
         LOG(message.c_str());
     }

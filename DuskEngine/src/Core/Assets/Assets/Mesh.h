@@ -1,9 +1,8 @@
 #pragma once
-#include "Core/Application/Core.h"
-
 #include "Core/Assets/Asset.h"
 
 #include "Utils/Memory/Memory.h"
+#include "Platform/OpenGL/VertexArray.h"
 
 #include "glm/glm.hpp"
 
@@ -24,11 +23,21 @@ namespace DuskEngine
 		Model
 	};
 
-	class DUSK_EXPORT Mesh : public Asset
+	class Mesh : public Asset
 	{
 	public:
 		Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count, MeshType type);
 		Mesh(std::vector<Vertex>& vertices, unsigned int* indices, unsigned int count);
+		Mesh(const Mesh& mesh)
+		{
+			m_Name = mesh.m_Name;
+			m_UUID = mesh.m_UUID;
+			m_Path = mesh.m_Path;
+
+			m_Type = mesh.m_Type;
+			//m_VA = std::move(mesh.m_VA);
+		};
+		//Mesh& operator=(const Mesh&) = default;
 		~Mesh();
 		UniqueRef<VertexArray> m_VA; // TODO remove
 		MeshType GetType() { return m_Type; }

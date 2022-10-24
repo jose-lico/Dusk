@@ -129,7 +129,7 @@ namespace DuskEngine
 		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 		
 		ImGuiIO& io = ImGui::GetIO();
-		auto boldFont = io.Fonts->Fonts[1];
+		auto boldFont = io.Fonts->Fonts[0];
 		ImGui::PushFont(boldFont);
 		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name);
 		ImGui::PopStyleVar();
@@ -186,7 +186,7 @@ namespace DuskEngine
 		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 
 		ImGuiIO& io = ImGui::GetIO();
-		auto boldFont = io.Fonts->Fonts[1];
+		auto boldFont = io.Fonts->Fonts[0];
 		ImGui::PushFont(boldFont);
 		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name);
 		ImGui::PopStyleVar();
@@ -389,7 +389,7 @@ namespace DuskEngine
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
 			int modelIndex = 0;
-			uuids::uuid modelID = m_AssetHandler->AssetPool<Mesh>(meshes[0]->meshHandle)->GetUUID();
+			uuids::uuid modelID = m_AssetHandler->AssetPool(meshes[0]->meshHandle)->GetUUID();
 
 			for (unsigned int i = 0; i < m_DB->ModelDatabase.size(); i++)
 			{
@@ -400,7 +400,7 @@ namespace DuskEngine
 
 			if(!modelIndex)
 			{
-				switch (m_AssetHandler->AssetPool<Mesh>(meshes[0]->meshHandle)->GetType())
+				switch (m_AssetHandler->AssetPool(meshes[0]->meshHandle)->GetType())
 				{
 				case MeshType::Quad:
 					modelIndex = 0;
@@ -455,7 +455,7 @@ namespace DuskEngine
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> materialList; // Later add default materials
 			int materialIndex = 0;
-			uuids::uuid materialID = m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->GetUUID();
+			uuids::uuid materialID = m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetUUID();
 				;
 
 			for (unsigned int i = 0; i < m_DB->MaterialDatabase.size(); i++)
@@ -492,14 +492,14 @@ namespace DuskEngine
 			ImGui::Separator();
 			ImGui::Separator();
 
-			ImGui::Text(m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->GetName().c_str());
+			ImGui::Text(m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetName().c_str());
 
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> shaderList;
 			int shaderIndex = 0;
 			// bad
 			uuids::uuid shaderID = m_AssetHandler->AssetPool<Shader>(
-				m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->GetShaderHandle())->GetUUID();
+				m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetShaderHandle()).GetUUID();
 
 			for (unsigned int i = 0; i < m_DB->ShaderDatabase.size(); i++)
 			{
@@ -522,10 +522,10 @@ namespace DuskEngine
 							
 							auto id = m_DB->GetUUID(m_DB->ShaderDatabase[shaderIndex]->GetPath());
 							auto shaderHandle = m_AssetHandler->AddToAssetPool<Shader>(id);
-							m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->SetShader(shaderHandle);
+							m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).SetShader(shaderHandle);
 							
-							m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->SerializeText(
-								m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->GetPath().string());
+							m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).SerializeText(
+								m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetPath().string());
 						}
 					}
 
@@ -543,19 +543,19 @@ namespace DuskEngine
 
 			auto& material = m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle);
 
-			for (auto& uniform : m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle)->m_Uniforms)
+			for (auto& uniform : m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).m_Uniforms)
 			{
 				if (uniform.Type == UniformType::Vec3)
 				{
 					if (ImGui::ColorEdit3(uniform.Name.c_str(), &uniform.Data.vec3[0]))
-						material->SerializeText(material->GetPath().string());
+						material.SerializeText(material.GetPath().string());
 				}
 
 				if (uniform.Type == UniformType::Texture)
 				{
 					// this is broken but whatever, will be replaced in the future
 					ImGui::Text(uniform.Name.c_str());
-					if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->AssetPool<Texture>(uniform.Data.dataHandle)->GetRendererID(),
+					if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->AssetPool<Texture>(uniform.Data.dataHandle).GetRendererID(),
 						ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
 					{
 						TRACE("To be implemented");
@@ -569,8 +569,8 @@ namespace DuskEngine
 							std::wstring ws(data);
 
 							auto& texture = m_AssetHandler->AssetPool<Texture>(m_AssetHandler->AddToAssetPool<Texture>(m_DB->GetUUID(ws)));
-							material->SetTexture(uniform.Name, texture);
-							material->SerializeText(material->GetPath().string());
+							material.SetTexture(uniform.Name, texture);
+							material.SerializeText(material.GetPath().string());
 						}
 						ImGui::EndDragDropTarget();
 					}

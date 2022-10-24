@@ -36,6 +36,23 @@ namespace DuskEngine
 		glDeleteVertexArrays(1, &m_ID);
 	}
 
+	VertexArray::VertexArray(VertexArray&& va)
+	{
+		m_ID = va.m_ID;
+
+		m_VertexBuffer = std::move(va.m_VertexBuffer);
+		m_IndexBuffer = std::move(va.m_IndexBuffer);
+	}
+
+	VertexArray& VertexArray::operator=(VertexArray&& va)
+	{
+		m_ID = va.m_ID;
+
+		m_VertexBuffer = std::move(va.m_VertexBuffer);
+		m_IndexBuffer = std::move(va.m_IndexBuffer);
+		return *this;
+	}
+
 	void VertexArray::Bind() const
 	{
 		glBindVertexArray(m_ID);
