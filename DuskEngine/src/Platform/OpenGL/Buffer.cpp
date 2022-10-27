@@ -19,22 +19,18 @@ namespace DuskEngine
 	// VERTEX
 	// #############################################################
 
-	VertexBuffer::VertexBuffer(const void* data, unsigned int size)
-		:m_ID(0)
+	VertexBuffer::VertexBuffer()
 	{
-		glGenBuffers(1, &m_ID);
-		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
-		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
 
-	VertexBuffer::~VertexBuffer()
+	void VertexBuffer::Free()
 	{
-		glDeleteBuffers(1, &m_ID);
+		glDeleteBuffers(1, &ResourceID);
 	}
 
 	void VertexBuffer::Bind() const
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
+		glBindBuffer(GL_ARRAY_BUFFER, ResourceID);
 	}
 
 	void VertexBuffer::Unbind() const
@@ -42,30 +38,47 @@ namespace DuskEngine
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	void VertexBuffer::SetData(const void* data, unsigned int size)
+	{
+		LOG("Created VB");
+		LOG("Set Data VB");
+		glGenBuffers(1, &ResourceID);
+		glBindBuffer(GL_ARRAY_BUFFER, ResourceID);
+		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	}
+
 	// #############################################################
 	// INDEX
 	// #############################################################
 
-	IndexBuffer::IndexBuffer(const void* data, unsigned int count)
-		:m_ID(0), m_Count(count)
+	IndexBuffer::IndexBuffer()
+		:m_Count(0)
 	{
-		glGenBuffers(1, &m_ID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
+
 	}
 
-	IndexBuffer::~IndexBuffer()
+	void IndexBuffer::Free()
 	{
-		glDeleteBuffers(1, &m_ID);
+		glDeleteBuffers(1, &ResourceID);
 	}
 
 	void IndexBuffer::Bind() const
 	{
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ResourceID);
 	}
 
 	void IndexBuffer::Unbind() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
+	void IndexBuffer::SetData(const void* data, unsigned int count)
+	{
+		LOG("Created IB");
+		LOG("Set Data IB");
+		m_Count = count;
+		glGenBuffers(1, &ResourceID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ResourceID);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
 	}
 }

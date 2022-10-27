@@ -7,8 +7,8 @@ namespace DuskEngine
 	class PrimitiveMesh
 	{
 	public:
-		static UniqueRef<Mesh> Quad();
-		static UniqueRef<Mesh> Cube();
+		static Mesh Quad();
+		static Mesh Cube();
 	private:
 		static const char* m_Primitives[];
 		friend class InspectorPanel;

@@ -16,6 +16,6 @@ namespace DuskEngine :: OpenGLAPI
 	void Clear();
 
 	void UnbindVAO();
-	void DrawIndexed(const UniqueRef<DuskEngine::VertexArray>& vertexArray);
+	void DrawIndexed(const VertexArray& vertexArray);
 	void DrawArrays(unsigned int start, unsigned int count);
 }

@@ -243,14 +243,14 @@ namespace DuskEngine
 	}
 
 	//TODO - improve model and mesh api and useflow
-	UniqueRef<Mesh> AssetDatabase::LoadModel(const uuids::uuid& uuid)
+	Mesh AssetDatabase::LoadModel(const uuids::uuid& uuid)
 	{
 		Model* m = new Model(m_PathsMap[uuid].string(), uuid);
-		UniqueRef<Mesh> mesh = std::move(m->GetFirstMesh());
-		mesh->m_Type = MeshType::Model;
-		mesh->m_UUID = uuid;
-		mesh->m_Name = m->GetName();
-		mesh->m_Path = m->GetPath();
+		Mesh mesh = *m->GetFirstMesh();
+		mesh.m_Type = MeshType::Model;
+		mesh.m_UUID = uuid;
+		mesh.m_Name = m->GetName();
+		mesh.m_Path = m->GetPath();
 		delete(m);
 		return mesh;
 	}

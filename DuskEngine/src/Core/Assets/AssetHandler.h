@@ -35,13 +35,10 @@ namespace DuskEngine
 				return m_ShaderPool(handle);
 			else if constexpr (std::is_same<T, Texture>::value)
 				return m_TexturePool(handle);
+			else if constexpr (std::is_same<T, Mesh>::value)
+				return m_MeshPool(handle);
 			else if constexpr (std::is_same<T, Material>::value)
 				return m_MaterialPool(handle);
-		}
-
-		UniqueRef<Mesh>& AssetPool(const Handle<Mesh> handle)
-		{
-			return m_MeshPool(handle);
 		}
 
 		template<typename T>
@@ -65,7 +62,7 @@ namespace DuskEngine
 		_AssetPool<Shader> m_ShaderPool;
 		_AssetPool<Texture> m_TexturePool;
 		_AssetPool<Material> m_MaterialPool;
-		_AssetPool<UniqueRef<Mesh>> m_MeshPool;
+		_AssetPool<Mesh> m_MeshPool;
 		
 		std::vector<UniqueRef<LuaScript>> m_LuaScriptPool;
 		

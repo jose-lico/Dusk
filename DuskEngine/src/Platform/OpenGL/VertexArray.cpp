@@ -26,36 +26,37 @@ namespace DuskEngine
 	}
 
 	VertexArray::VertexArray()
-		:m_ID(-1)
 	{
-		glGenVertexArrays(1, &m_ID);
+		LOG("Created VA");
+		glGenVertexArrays(1, &ResourceID);
 	}
 
-	VertexArray::~VertexArray()
+	VertexArray::VertexArray(VertexArray& va) noexcept
+		:m_VB(va.m_VB), m_IB(va.m_IB)
 	{
-		glDeleteVertexArrays(1, &m_ID);
+		ResourceID = va.ResourceID;
 	}
 
-	VertexArray::VertexArray(VertexArray&& va)
+	VertexArray& VertexArray::operator=(VertexArray va) noexcept
 	{
-		m_ID = va.m_ID;
+		ResourceID = va.ResourceID;
 
-		m_VertexBuffer = std::move(va.m_VertexBuffer);
-		m_IndexBuffer = std::move(va.m_IndexBuffer);
-	}
+		m_VB = va.m_VB;
+		m_IB = va.m_IB;
 
-	VertexArray& VertexArray::operator=(VertexArray&& va)
-	{
-		m_ID = va.m_ID;
-
-		m_VertexBuffer = std::move(va.m_VertexBuffer);
-		m_IndexBuffer = std::move(va.m_IndexBuffer);
 		return *this;
+	}
+
+	void VertexArray::Free()
+	{
+		glDeleteVertexArrays(1, &ResourceID);
+		m_VB.Free();
+		m_IB.Free();
 	}
 
 	void VertexArray::Bind() const
 	{
-		glBindVertexArray(m_ID);
+		glBindVertexArray(ResourceID);
 	}
 
 	void VertexArray::Unbind() const
@@ -63,25 +64,25 @@ namespace DuskEngine
 		glBindVertexArray(0);
 	}
 
-	void VertexArray::AddBuffer(UniqueRef<VertexBuffer>& vb)
+	void VertexArray::SetBuffer(VertexBuffer& vb)
 	{
-		vb->Bind();
-		m_VertexBuffer = std::move(vb);
+		m_VB = vb;
+		m_VB.Bind();
 
-		const auto& elements = m_VertexBuffer->GetLayout()->GetElements();
+		const auto& elements = m_VB.GetLayout().GetElements();
 		unsigned int offset = 0;
 		for (unsigned int i = 0; i < elements.size(); i++) {
 			const auto& element = elements[i];
 			glVertexAttribPointer(i, element.count, ShaderDataTypeToOpenGLBaseType(element.type), element.normalized,
-				m_VertexBuffer->GetLayout()->GetStride(), (void*)(size_t)offset);
+				m_VB.GetLayout().GetStride(), (void*)(size_t)offset);
 			offset += element.count * ShaderDataTypeSize(element.type);
 			glEnableVertexAttribArray(i);
 		}
 	}
 
-	void VertexArray::AddIndices(UniqueRef<IndexBuffer>& ib)
+	void VertexArray::SetIndices(IndexBuffer& ib)
 	{
-		ib->Bind();
-		m_IndexBuffer = std::move(ib);
+		m_IB = ib;
+		m_IB.Bind();
 	}
 }

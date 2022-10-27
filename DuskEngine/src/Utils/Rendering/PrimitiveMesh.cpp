@@ -7,7 +7,7 @@ namespace DuskEngine
 {
 	const char* PrimitiveMesh::m_Primitives[] = { "Quad", "Cube" };
 
-	UniqueRef<Mesh> PrimitiveMesh::Quad()
+	Mesh PrimitiveMesh::Quad()
     {
 		float vertices[] =
 		{
@@ -24,13 +24,15 @@ namespace DuskEngine
 			1, 2, 3    // second triangle
 		};
 
-        return MakeUnique<Mesh>(vertices, (unsigned int)sizeof(vertices),
+		LOG("Loading Quad");
+
+        return Mesh(vertices, (unsigned int)sizeof(vertices),
 			indices, (unsigned int)(sizeof(indices) / sizeof(unsigned int)), MeshType::Quad);
     }
 
 	// This is terrible, redo in the future
 
-	UniqueRef<Mesh> PrimitiveMesh::Cube()
+	Mesh PrimitiveMesh::Cube()
 	{
 		float vertices[] =
 		{
@@ -90,7 +92,9 @@ namespace DuskEngine
 			23,22,21
 		};
 
-		return MakeUnique<Mesh>(vertices, (unsigned int)sizeof(vertices),
+		LOG("Loading Cube");
+
+		return Mesh(vertices, (unsigned int)sizeof(vertices),
 			indices, (unsigned int)(sizeof(indices) / sizeof(unsigned int)), MeshType::Cube);
 	}
 }

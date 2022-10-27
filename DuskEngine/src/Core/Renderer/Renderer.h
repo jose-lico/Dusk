@@ -18,8 +18,8 @@ namespace DuskEngine
 		void BeginScene();
 		void EndScene();
 
-		void Submit(const UniqueRef<VertexArray>& vertexArray);
-		void Submit(const UniqueRef<Mesh>& mesh);
+		void Submit(const VertexArray& vertexArray);
+		void Submit(const Mesh& mesh);
 
 		void SwapBuffers();
 	private:

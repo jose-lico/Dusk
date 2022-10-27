@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/Assets/Resource.h"
+
 namespace DuskEngine
 {
 	enum class ShaderDataType
@@ -42,41 +44,47 @@ namespace DuskEngine
 
 		void Push(ShaderDataType type, unsigned int count, bool normalized);
 
-		const std::vector<VertexBufferElement> GetElements() const { return m_Elements; }
-		const unsigned int GetStride() const { return m_Stride; }
+		inline const std::vector<VertexBufferElement>& GetElements() const { return m_Elements; }
+		inline const unsigned int GetStride() const { return m_Stride; }
 	private:
 		int m_Stride;
 		std::vector<VertexBufferElement> m_Elements;
 	};
 
-	class VertexBuffer
+	class VertexBuffer : public Resource
 	{
 	public:
-		VertexBuffer(const void* data, unsigned int size);
-		~VertexBuffer();
+		VertexBuffer();
+		~VertexBuffer() = default;
 
-		void Bind() const;
-		void Unbind() const;
+		virtual void Free() override;
 
-		inline const UniqueRef<VertexBufferLayout>& GetLayout() const { return m_Layout; }
-		inline void SetLayout(UniqueRef<VertexBufferLayout>& layout) { m_Layout = std::move(layout); }
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
+
+		void SetData(const void* data, unsigned int size);
+
+		inline const VertexBufferLayout& GetLayout() const { return m_Layout; }
+		inline void SetLayout(VertexBufferLayout& layout) { m_Layout = std::move(layout); }
 	private:
-		unsigned int m_ID;
-		UniqueRef<VertexBufferLayout> m_Layout;
+		VertexBufferLayout m_Layout;
 	};
 
-	class IndexBuffer
+	class IndexBuffer : public Resource
 	{
 	public:
-		IndexBuffer(const void* data, unsigned int count);
-		~IndexBuffer();
+		IndexBuffer();
+		~IndexBuffer() = default;
 
-		void Bind() const;
-		void Unbind() const;
+		virtual void Free() override;
+
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
+
+		void SetData(const void* data, unsigned int count);
 
 		inline unsigned int GetCount() const { return m_Count; }
 	private:
-		unsigned int m_ID;
 		unsigned int m_Count;
 	};
 }

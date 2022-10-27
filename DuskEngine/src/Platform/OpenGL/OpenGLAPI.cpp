@@ -7,7 +7,6 @@
 
 namespace DuskEngine :: OpenGLAPI 
 {
-
 	void Init()
 	{
 		TRACE("OpenGL API Created");
@@ -28,9 +27,9 @@ namespace DuskEngine :: OpenGLAPI
 		glBindVertexArray(0);
 	}
 
-	void DrawIndexed(const UniqueRef<DuskEngine::VertexArray>& vertexArray)
+	void DrawIndexed(const VertexArray& vertexArray)
 	{
-		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, vertexArray.GetIndexBuffer().GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
 	void DrawArrays(unsigned int start, unsigned int count)

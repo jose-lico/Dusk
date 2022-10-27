@@ -40,6 +40,7 @@ namespace DuskEngine
 			return;
 		}
 
+		LOG("Loading Model " + m_Name);
 		ProcessNode(scene->mRootNode, scene);
 	}
 

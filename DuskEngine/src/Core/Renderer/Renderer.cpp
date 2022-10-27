@@ -28,16 +28,16 @@ namespace DuskEngine {
 	{
 	}
 
-	void Renderer::Submit(const UniqueRef<VertexArray>& vertexArray)
+	void Renderer::Submit(const VertexArray& vertexArray)
 	{
-		vertexArray->Bind();
+		vertexArray.Bind();
 		OpenGLAPI::DrawIndexed(vertexArray);
 	}
 
-	void Renderer::Submit(const UniqueRef<Mesh>& mesh)
+	void Renderer::Submit(const Mesh& mesh)
 	{
-		mesh->m_VA->Bind();
-		OpenGLAPI::DrawIndexed(mesh->m_VA);
+		mesh.GetVertexArray().Bind();
+		OpenGLAPI::DrawIndexed(mesh.GetVertexArray());
 	}
 
 	void Renderer::SwapBuffers()

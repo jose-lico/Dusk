@@ -389,7 +389,7 @@ namespace DuskEngine
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
 			int modelIndex = 0;
-			uuids::uuid modelID = m_AssetHandler->AssetPool(meshes[0]->meshHandle)->GetUUID();
+			uuids::uuid modelID = m_AssetHandler->AssetPool(meshes[0]->meshHandle).GetUUID();
 
 			for (unsigned int i = 0; i < m_DB->ModelDatabase.size(); i++)
 			{
@@ -400,7 +400,7 @@ namespace DuskEngine
 
 			if(!modelIndex)
 			{
-				switch (m_AssetHandler->AssetPool(meshes[0]->meshHandle)->GetType())
+				switch (m_AssetHandler->AssetPool(meshes[0]->meshHandle).GetType())
 				{
 				case MeshType::Quad:
 					modelIndex = 0;

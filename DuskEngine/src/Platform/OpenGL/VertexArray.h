@@ -1,30 +1,29 @@
 #pragma once
 
-#include "Utils/Memory/Memory.h"
+#include "Buffer.h"
 
 namespace DuskEngine
 {
-	class VertexBuffer;
-	class IndexBuffer;
-
-	class VertexArray
+	class VertexArray : public Resource
 	{
 	public:
 		VertexArray();
-		~VertexArray();
+		~VertexArray() = default;
 
-		VertexArray(VertexArray&& va);
-		VertexArray& operator=(VertexArray&& va);
+		VertexArray(VertexArray& va) noexcept;
+		VertexArray& operator=(VertexArray va) noexcept;
 				
-		void Bind() const;
-		void Unbind() const;
+		virtual void Free() override;
 
-		void AddBuffer(UniqueRef<VertexBuffer>& vb);
-		void AddIndices(UniqueRef<IndexBuffer>& ib);
-		const UniqueRef<IndexBuffer>& GetIndexBuffer() const { return m_IndexBuffer; }
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
+
+		void SetBuffer(VertexBuffer& vb);
+		void SetIndices(IndexBuffer& ib);
+
+		inline const IndexBuffer& GetIndexBuffer() const { return m_IB; }
 	private:
-		unsigned int m_ID;
-		UniqueRef<VertexBuffer> m_VertexBuffer;
-		UniqueRef<IndexBuffer> m_IndexBuffer;
+		VertexBuffer m_VB;
+		IndexBuffer m_IB;
 	};
 }

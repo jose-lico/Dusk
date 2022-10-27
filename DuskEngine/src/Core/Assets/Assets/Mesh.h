@@ -28,20 +28,22 @@ namespace DuskEngine
 	public:
 		Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count, MeshType type);
 		Mesh(std::vector<Vertex>& vertices, unsigned int* indices, unsigned int count);
-		Mesh(const Mesh& mesh)
+		/*Mesh(const Mesh& mesh)
 		{
 			m_Name = mesh.m_Name;
 			m_UUID = mesh.m_UUID;
 			m_Path = mesh.m_Path;
 
 			m_Type = mesh.m_Type;
-			//m_VA = std::move(mesh.m_VA);
-		};
-		//Mesh& operator=(const Mesh&) = default;
+			m_VA = mesh.m_VA;
+		};*/
+
 		~Mesh();
-		UniqueRef<VertexArray> m_VA; // TODO remove
-		MeshType GetType() { return m_Type; }
+
+		inline MeshType GetType() { return m_Type; }
+		inline const VertexArray& GetVertexArray() const { return m_VA; }
 	private:
+		VertexArray m_VA;
 		MeshType m_Type;
 
 		friend class AssetDatabase;

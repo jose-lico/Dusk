@@ -45,8 +45,8 @@ namespace DuskEngine
 		Material LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler);
 		Shader LoadShader(const uuids::uuid& uuid);
 		Texture LoadTexture(const uuids::uuid& uuid);
+		Mesh LoadModel(const uuids::uuid& uuid);
 
-		UniqueRef<Mesh> LoadModel(const uuids::uuid& uuid);
 		UniqueRef<LuaScript> LoadScript(const uuids::uuid& uuid);
 
 		// Asset Lists

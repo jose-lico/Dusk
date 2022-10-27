@@ -31,7 +31,7 @@ namespace DuskEngine
 					m_Pool.push_back(std::move(Application::Get().GetAssetDatabase().LoadShader(uuid)));
 				else if constexpr (std::is_same<T, Texture>::value)
 					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadTexture(uuid));
-				else if constexpr (std::is_same<T, UniqueRef<Mesh>>::value)
+				else if constexpr (std::is_same<T, Mesh>::value)
 					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadModel(uuid));
 				else if constexpr (std::is_same<T, Material>::value)
 					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadMaterial(uuid, m_AssetHandler));
