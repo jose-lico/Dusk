@@ -23,16 +23,17 @@
 Dusk is still early in development and so its features are barebones.
 
 - Using a build system for all project modules and dependencies - with multiple target platforms and release configurations
+- Cross Platform - supports Windows and Linux
 - Logging system 
 - Simple 3D Rendering with rudimentary lighting
-- 3D model importing (.fbx or .obj)
-- Image (.png or .jpeg) importing to custom engine-ready format
+- 3D model importing (.fbx and .obj)
+- Image (.png and .jpeg) importing to custom engine-ready format
 - Asset management with UUIDs
 - Material System
 - Entity Component System, similar in use to Unity's
 - Embedded the lua language for easy scripting
 - Editor tool with level editor, scene hierarchy, entity inspector & asset browser
-- Notion of a runtime (albeit very simple and not practical)
+- Notion of a runtime (albeit very simple and not practical yet)
   
 # Goals
 
@@ -44,7 +45,7 @@ The immediate goals for this release to happen are:
 - Embedding all editor assets into the binary itself to allow for easy distribution of the editor
 - Importing of .gltf models (support for other formats will be dropped)
 - Importing of external assets to custom engine-ready format
-- Packaging of games assets into binary blob to allow for easy and safe distribution of the editor
+- Packaging of games assets into binary blob to allow for easy and safe distribution of a game
 - Virtual file system to navigate the generated package
 - Concept of a project
 - Generic improvements
@@ -95,6 +96,10 @@ Building a game engine is a massive task, and although I am trying to learn as m
 Some of these libraries will be swapped out in the future for a custom solution, once I feel like it is time/the engine is more mature.
 
 [Dependencies List](https://github.com/qolisipo/Dusk/blob/main/.github/DEPENDENCIES.md)
+
+On another note, by researching and using a wide array of external libraries, I have gained a lot of experience in diving into different codebases and learning how to use them.
+
+On top of that, I also wrote custom premake5 scripts for them which required me to really have an understanding of the lib and how it was built and is supposed to be used. It also gave me a better understanding of build systems work.
 
 # Resources
 
