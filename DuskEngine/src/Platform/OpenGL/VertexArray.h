@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Assets/Resource.h"
 #include "Buffer.h"
 
 namespace DuskEngine
@@ -8,7 +9,7 @@ namespace DuskEngine
 	{
 	public:
 		VertexArray();
-		~VertexArray() = default;
+		~VertexArray();
 
 		VertexArray(VertexArray& va) noexcept;
 		VertexArray& operator=(VertexArray va) noexcept;

@@ -143,6 +143,12 @@ namespace DuskEngine
 		KeyEvent(const KeyCode keycode)
 			: m_KeyCode(keycode) {}
 
+        void teste()
+        {
+            KeyCode k = Key::B;
+            int i = k;
+        }
+
 		KeyCode m_KeyCode;
 	};
 

@@ -2,6 +2,7 @@
 #include "VertexArray.h"
 
 #include "GLCommon.h"
+#include "OpenGLAPI.h"
 #include "Buffer.h"
 
 namespace DuskEngine
@@ -10,17 +11,17 @@ namespace DuskEngine
 	{
 		switch (type)
 		{
-		case ShaderDataType::Float:    return GL_FLOAT;
-		case ShaderDataType::Float2:   return GL_FLOAT;
-		case ShaderDataType::Float3:   return GL_FLOAT;
-		case ShaderDataType::Float4:   return GL_FLOAT;
-		case ShaderDataType::Mat3:     return GL_FLOAT;
-		case ShaderDataType::Mat4:     return GL_FLOAT;
-		case ShaderDataType::Int:      return GL_INT;
-		case ShaderDataType::Int2:     return GL_INT;
-		case ShaderDataType::Int3:     return GL_INT;
-		case ShaderDataType::Int4:     return GL_INT;
-		case ShaderDataType::Bool:     return GL_BOOL;
+		case ShaderDataType::FLOAT:    return GL_FLOAT;
+		case ShaderDataType::FLOAT2:   return GL_FLOAT;
+		case ShaderDataType::FLOAT3:   return GL_FLOAT;
+		case ShaderDataType::FLOAT4:   return GL_FLOAT;
+		case ShaderDataType::MAT3:     return GL_FLOAT;
+		case ShaderDataType::MAT4:     return GL_FLOAT;
+		case ShaderDataType::INT:      return GL_INT;
+		case ShaderDataType::INT2:     return GL_INT;
+		case ShaderDataType::INT3:     return GL_INT;
+		case ShaderDataType::INT4:     return GL_INT;
+		case ShaderDataType::BOOL:     return GL_BOOL;
 		}
 		return 0;
 	}
@@ -31,14 +32,21 @@ namespace DuskEngine
 		glGenVertexArrays(1, &ResourceID);
 	}
 
+	VertexArray::~VertexArray()
+	{
+		LOG("Destroyed vertexarray");
+	}
+
 	VertexArray::VertexArray(VertexArray& va) noexcept
 		:m_VB(va.m_VB), m_IB(va.m_IB)
 	{
+		LOG("Copied vertexarray constructor");
 		ResourceID = va.ResourceID;
 	}
 
 	VertexArray& VertexArray::operator=(VertexArray va) noexcept
 	{
+		LOG("Copied vertexarray operator");
 		ResourceID = va.ResourceID;
 
 		m_VB = va.m_VB;
@@ -50,8 +58,9 @@ namespace DuskEngine
 	void VertexArray::Free()
 	{
 		glDeleteVertexArrays(1, &ResourceID);
-		m_VB.Free();
-		m_IB.Free();
+		
+		OpenGLAPI::FreeBuffer(m_IB.ResourceID);
+		OpenGLAPI::FreeBuffer(m_VB.ResourceID);
 	}
 
 	void VertexArray::Bind() const
@@ -67,15 +76,15 @@ namespace DuskEngine
 	void VertexArray::SetBuffer(VertexBuffer& vb)
 	{
 		m_VB = vb;
-		m_VB.Bind();
+		OpenGLAPI::BindBuffer(m_VB.BufferType, m_VB.ResourceID);
 
-		const auto& elements = m_VB.GetLayout().GetElements();
+		const auto& elements = m_VB.Layout.Elements;
 		unsigned int offset = 0;
 		for (unsigned int i = 0; i < elements.size(); i++) {
 			const auto& element = elements[i];
-			glVertexAttribPointer(i, element.count, ShaderDataTypeToOpenGLBaseType(element.type), element.normalized,
-				m_VB.GetLayout().GetStride(), (void*)(size_t)offset);
-			offset += element.count * ShaderDataTypeSize(element.type);
+			glVertexAttribPointer(i, element.Count, ShaderDataTypeToOpenGLBaseType(element.ShaderType), element.Normalized,
+				m_VB.Layout.Stride, (void*)(size_t)offset);
+			offset += element.Count * ShaderDataTypeSize(element.ShaderType);
 			glEnableVertexAttribArray(i);
 		}
 	}
@@ -83,6 +92,7 @@ namespace DuskEngine
 	void VertexArray::SetIndices(IndexBuffer& ib)
 	{
 		m_IB = ib;
-		m_IB.Bind();
+
+		OpenGLAPI::BindBuffer(m_IB.BufferType, m_IB.ResourceID);
 	}
 }
