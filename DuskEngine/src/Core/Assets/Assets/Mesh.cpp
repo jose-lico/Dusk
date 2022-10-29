@@ -67,8 +67,4 @@ namespace DuskEngine
 		m_VA.SetBuffer(vb);
 		m_VA.SetIndices(ib);
 	}
-
-	Mesh::~Mesh()
-	{
-	}
 }

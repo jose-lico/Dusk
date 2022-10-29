@@ -28,6 +28,12 @@ namespace DuskEngine
 		m_TexturePool.m_AssetHandler = this;
 		m_MaterialPool.m_AssetHandler = this;
 
+
+		m_ShaderPool.m_Pool.reserve(10);
+		m_MeshPool.m_Pool.reserve(10);
+		m_TexturePool.m_Pool.reserve(10);
+		m_MaterialPool.m_Pool.reserve(10);
+
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Quad());
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Cube());
 
@@ -39,10 +45,11 @@ namespace DuskEngine
 
 	AssetHandler::~AssetHandler()
 	{
-		/*delete(m_ShaderPool);
-		delete(m_MeshPool);
-		delete(m_TexturePool);
-		delete(m_MaterialPool);*/
+		for(auto mesh : m_MeshPool.m_Pool)
+		{
+			mesh.m_VA.Free();
+		}
+
 		LOG(("Destroying Asset Handler " + m_Name).c_str());
 	}
 

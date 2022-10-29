@@ -28,36 +28,12 @@ namespace DuskEngine
 
 	VertexArray::VertexArray()
 	{
-		LOG("Created VA");
-		glGenVertexArrays(1, &ResourceID);
-	}
-
-	VertexArray::~VertexArray()
-	{
-		LOG("Destroyed vertexarray");
-	}
-
-	VertexArray::VertexArray(VertexArray& va) noexcept
-		:m_VB(va.m_VB), m_IB(va.m_IB)
-	{
-		LOG("Copied vertexarray constructor");
-		ResourceID = va.ResourceID;
-	}
-
-	VertexArray& VertexArray::operator=(VertexArray va) noexcept
-	{
-		LOG("Copied vertexarray operator");
-		ResourceID = va.ResourceID;
-
-		m_VB = va.m_VB;
-		m_IB = va.m_IB;
-
-		return *this;
+		glGenVertexArrays(1, &m_ResourceID);
 	}
 
 	void VertexArray::Free()
 	{
-		glDeleteVertexArrays(1, &ResourceID);
+		glDeleteVertexArrays(1, &m_ResourceID);
 		
 		OpenGLAPI::FreeBuffer(m_IB.ResourceID);
 		OpenGLAPI::FreeBuffer(m_VB.ResourceID);
@@ -65,7 +41,7 @@ namespace DuskEngine
 
 	void VertexArray::Bind() const
 	{
-		glBindVertexArray(ResourceID);
+		glBindVertexArray(m_ResourceID);
 	}
 
 	void VertexArray::Unbind() const
