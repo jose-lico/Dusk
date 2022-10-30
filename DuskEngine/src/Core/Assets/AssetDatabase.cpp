@@ -22,17 +22,7 @@ namespace DuskEngine
 
 	AssetDatabase::~AssetDatabase()
 	{
-		for (Asset* resource : ShaderDatabase)
-			delete resource;
 
-		for (Asset* resource : ModelDatabase)
-			delete resource;
-
-		for (Asset* resource : MaterialDatabase)
-			delete resource;
-
-		for (Asset* resource : ScriptsDatabase)
-			delete resource;
 	}
 
 	// At the moment there is no concept of project, so the engine simply loads all assets inside the "res" folder.
@@ -54,7 +44,7 @@ namespace DuskEngine
 				// If the file is a meta file, register it
 				if (directoryEntry.path().extension() == ".meta")
 				{
-					RegisterAsset(directoryEntry);
+					//RegisterAsset(directoryEntry);
 					continue;
 				}
 				// If the file does not have a meta file and is not a meta file itself
@@ -66,63 +56,6 @@ namespace DuskEngine
 		}
 
 		m_CurrentDirectory = m_RootDirectory;
-	}
-
-	void AssetDatabase::CreateMetaFile(const std::filesystem::directory_entry& directoryEntry)
-	{
-		std::string message = "Creating meta file for " + directoryEntry.path().filename().string();
-		LOG(message.c_str());
-
-		uuids::uuid const id = uuids::uuid_system_generator{}();
-
-		YAML::Emitter out;
-		out << YAML::BeginMap;
-		out << YAML::Key << "uuid" << YAML::Value << id;
-
-		std::string metaName = directoryEntry.path().string() + ".meta";
-		std::ofstream fout(metaName.c_str());
-		fout << out.c_str();
-		fout.close();
-
-		m_PathsMap[id] = directoryEntry.path();
-		m_UUIDsMap[directoryEntry.path()] = id;
-
-		AddToAssetDatabase(directoryEntry.path(), id);
-	}
-
-	void AssetDatabase::RegisterAsset(const std::filesystem::directory_entry& directoryEntry)
-	{
-		// If the file has been moved, removed or renamed, delete meta file.
-		if(!std::filesystem::exists(m_CurrentDirectory / directoryEntry.path().stem()))
-		{
-			std::string message = directoryEntry.path().stem().string() + " has been moved, removed or renamed, deleting meta file.";
-			WARN(message.c_str());
-			std::filesystem::remove(directoryEntry);
-			return;
-		}
-
-		std::ifstream stream(directoryEntry.path());
-		std::stringstream strStream;
-		strStream << stream.rdbuf();
-
-		YAML::Emitter out;
-		YAML::Node data = YAML::Load(strStream.str());
-
-#ifdef DUSK_WINDOWS
-		std::string path = m_CurrentDirectory.string() + "\\" + directoryEntry.path().stem().string();
-#elif DUSK_LINUX
-		std::string path = m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string();
-#endif
-		uuids::uuid uuid = data["uuid"].as<uuids::uuid>();
-
-		//quick fix for name editing (need to remove old entry still) TODO go over this again forgot what it does
-		if (m_UUIDsMap.find(path) == m_UUIDsMap.end())
-		{
-			m_PathsMap[uuid] = path;
-			m_UUIDsMap[path] = uuid;
-
-			AddToAssetDatabase(path, uuid);
-		}
 	}
 
 	uuids::uuid AssetDatabase::CreateResource(const std::filesystem::path& path)
@@ -145,57 +78,9 @@ namespace DuskEngine
 		m_PathsMap[id] = path;
 		m_UUIDsMap[path] = id;
 
-		AddToAssetDatabase(path, id);
+		//AddToAssetDatabase(path, id);
 
 		return id;
-	}
-
-	// 1. Add asset to asset database of correct type
-	// 2. Import asset if it has not been imported yet
-	void AssetDatabase::AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid)
-	{
-		Asset* resource = new Asset(path, uuid);
-
-		std::string extension = path.extension().string();
-		
-		bool wasAssigned = false;
-		
-		if(extension == ".png" || extension == ".jpg")
-		{
-			std::string importFile = "res/.import/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
-			if(!std::filesystem::exists(importFile))
-			{
-				std::string message = "Importing " + path.string();
-				TRACE(message.c_str());
-
-				std::ofstream fout(importFile, std::ios::app | std::ios::binary);
-				Texture::ImportTest(path, fout);
-				fout.close();
-			}
-		}
-		else if (extension == ".glsl")
-		{
-			wasAssigned = true;
-			ShaderDatabase.push_back(resource);
-		}
-		else if(extension == ".fbx" || extension == ".obj")
-		{
-			wasAssigned = true;
-			ModelDatabase.push_back(resource);
-		}
-		else if (extension == ".material")
-		{
-			wasAssigned = true;
-			MaterialDatabase.push_back(resource);
-		}
-		else if (extension == ".lua")
-		{
-			wasAssigned = true;
-			ScriptsDatabase.push_back(resource);
-		}
-			
-		if (!wasAssigned)
-			delete resource;
 	}
 
 	uuids::uuid AssetDatabase::GetUUID(const std::filesystem::path& path)

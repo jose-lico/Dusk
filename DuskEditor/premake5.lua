@@ -10,7 +10,9 @@ project "DuskEditor"
 	files
 	{
 		"src/**.h",
-		"src/**.cpp"
+		"src/**.cpp",
+
+		dependenciesDir .. "/stb/stb/stb_image.h"
 	}
 
 	links
@@ -30,10 +32,12 @@ project "DuskEditor"
 
 	includedirs
 	{
+		"src/",
 		"%{wks.location}/DuskEngine/src",
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
 		dependenciesDir .. "/glm/include",
+		dependenciesDir .. "/stb/include",
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/imgui/include",
 		dependenciesDir .. "/entt/src",

@@ -8,11 +8,12 @@ namespace DuskEngine
 	class Entity;
 	class AssetHandler;
 	class AssetDatabase;
+	class AssetDatabaseEditor;
 
 	class InspectorPanel : public Panel
 	{
 	public:
-		InspectorPanel(AssetHandler* assetHandler);
+		InspectorPanel(AssetHandler* assetHandler, AssetDatabaseEditor* db);
 		~InspectorPanel() = default;
 
 		virtual void OnImGuiRender() override;
@@ -22,6 +23,7 @@ namespace DuskEngine
 
 		AssetHandler* m_AssetHandler;
 		AssetDatabase* m_DB;
+		AssetDatabaseEditor* m_EditorDB;
 
 		static void MetaInspector(std::vector<Meta*>& metas);
 		static void TransformInspector(std::vector<Transform*>& transforms);

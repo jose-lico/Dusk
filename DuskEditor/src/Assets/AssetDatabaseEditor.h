@@ -2,13 +2,8 @@
 
 #include <filesystem>
 #include <unordered_map>
-//#include <optional>
-//
-//struct opt_path_hash {
-//	std::size_t operator()(const std::optional<std::filesystem::path>& path) const {
-//		return path ? hash_value(path.value()) : 0;
-//	}
-//};
+
+#undef CreateMetaFile
 
 namespace uuids
 {
@@ -18,6 +13,7 @@ namespace uuids
 namespace DuskEngine
 {
 	class AssetDatabase;
+	class Asset;
 
 	class AssetDatabaseEditor
 	{
@@ -28,7 +24,9 @@ namespace DuskEngine
 		void RegisterAssets();
 		void ImportAssets();
 	private:
+		void RegisterAsset(const std::filesystem::directory_entry& directoryEntry);
 		void CreateMetaFile(const std::filesystem::directory_entry& directoryEntry);
+		void AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid);
 
 		AssetDatabase* m_EngineDB;
 
@@ -36,6 +34,15 @@ namespace DuskEngine
 		std::filesystem::path m_CurrentDirectory;
 		std::unordered_map <std::filesystem::path, uuids::uuid> m_UUIDsMap;
 
+		std::vector<std::tuple<std::filesystem::path, std::filesystem::path>> m_ImagesToImport;
+
+		// Asset Lists
+		std::vector<Asset*> m_ShaderDatabase;
+		std::vector<Asset*> m_ModelDatabase;
+		std::vector<Asset*> m_MaterialDatabase;
+		std::vector<Asset*> m_ScriptsDatabase;
+
 		friend class AssetDatabase;
+		friend class InspectorPanel;
 	};
 }

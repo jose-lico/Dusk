@@ -1,5 +1,7 @@
 #include "InspectorPanel.h"
 
+#include "Assets/AssetDatabaseEditor.h"
+
 #include "Core/Application/Application.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/AssetHandler.h"
@@ -25,8 +27,8 @@ namespace DuskEngine
 	template<typename T, typename Arg, typename TOwner, void(TOwner::* func)(Arg a)>
 	void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, TOwner* p);
 
-	InspectorPanel::InspectorPanel(AssetHandler* assetHandler)
-		:m_AssetHandler(assetHandler)
+	InspectorPanel::InspectorPanel(AssetHandler* assetHandler, AssetDatabaseEditor* db)
+		:m_AssetHandler(assetHandler), m_EditorDB(db)
 	{
 		m_DB = &Application::Get().GetAssetDatabase();
 	}
@@ -77,7 +79,7 @@ namespace DuskEngine
 
 					if (ImGui::BeginMenu("Scripts"))
 					{
-						for (auto scriptAsset : m_DB->ScriptsDatabase)
+						for (auto scriptAsset : m_EditorDB->m_ScriptsDatabase)
 						{
 							if(ImGui::MenuItem(scriptAsset->GetName().c_str()))
 							{
@@ -391,10 +393,10 @@ namespace DuskEngine
 			int modelIndex = 0;
 			uuids::uuid modelID = m_AssetHandler->AssetPool(meshes[0]->meshHandle).GetUUID();
 
-			for (unsigned int i = 0; i < m_DB->ModelDatabase.size(); i++)
+			for (unsigned int i = 0; i < m_EditorDB->m_ModelDatabase.size(); i++)
 			{
-				modelList.push_back(m_DB->ModelDatabase[i]->GetName());
-				if (m_DB->ModelDatabase[i]->GetUUID() == modelID)
+				modelList.push_back(m_EditorDB->m_ModelDatabase[i]->GetName());
+				if (m_EditorDB->m_ModelDatabase[i]->GetUUID() == modelID)
 					modelIndex = i + 2;
 			}
 
@@ -441,7 +443,7 @@ namespace DuskEngine
 							else
 							{	
 								meshes[0]->meshHandle = 
-									m_AssetHandler->AddToAssetPool<Mesh>(m_DB->GetUUID(m_DB->ModelDatabase[modelIndex - 2]->GetPath()));
+									m_AssetHandler->AddToAssetPool<Mesh>(m_DB->GetUUID(m_EditorDB->m_ModelDatabase[modelIndex - 2]->GetPath()));
 							}
 						}
 					}
@@ -458,10 +460,10 @@ namespace DuskEngine
 			uuids::uuid materialID = m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetUUID();
 				;
 
-			for (unsigned int i = 0; i < m_DB->MaterialDatabase.size(); i++)
+			for (unsigned int i = 0; i < m_EditorDB->m_MaterialDatabase.size(); i++)
 			{
-				materialList.push_back(m_DB->MaterialDatabase[i]->GetName());
-				if (m_DB->MaterialDatabase[i]->GetUUID() == materialID)
+				materialList.push_back(m_EditorDB->m_MaterialDatabase[i]->GetName());
+				if (m_EditorDB->m_MaterialDatabase[i]->GetUUID() == materialID)
 					materialIndex = i;
 			}
 
@@ -477,7 +479,7 @@ namespace DuskEngine
 						if (n != materialIndex)
 						{
 							materialIndex = n;
-							auto id = m_DB->GetUUID(m_DB->MaterialDatabase[materialIndex]->GetPath());
+							auto id = m_DB->GetUUID(m_EditorDB->m_MaterialDatabase[materialIndex]->GetPath());
 							meshes[0]->materialHandle = m_AssetHandler->AddToAssetPool<Material>(id);
 						}
 					}
@@ -501,10 +503,10 @@ namespace DuskEngine
 			uuids::uuid shaderID = m_AssetHandler->AssetPool<Shader>(
 				m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetShaderHandle()).GetUUID();
 
-			for (unsigned int i = 0; i < m_DB->ShaderDatabase.size(); i++)
+			for (unsigned int i = 0; i < m_EditorDB->m_ShaderDatabase.size(); i++)
 			{
-				shaderList.push_back(m_DB->ShaderDatabase[i]->GetName());
-				if (m_DB->ShaderDatabase[i]->GetUUID() == shaderID)
+				shaderList.push_back(m_EditorDB->m_ShaderDatabase[i]->GetName());
+				if (m_EditorDB->m_ShaderDatabase[i]->GetUUID() == shaderID)
 					shaderIndex = i;
 			}
 
@@ -520,7 +522,7 @@ namespace DuskEngine
 						{
 							shaderIndex = n;
 							
-							auto id = m_DB->GetUUID(m_DB->ShaderDatabase[shaderIndex]->GetPath());
+							auto id = m_DB->GetUUID(m_EditorDB->m_ShaderDatabase[shaderIndex]->GetPath());
 							auto shaderHandle = m_AssetHandler->AddToAssetPool<Shader>(id);
 							m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).SetShader(shaderHandle);
 							

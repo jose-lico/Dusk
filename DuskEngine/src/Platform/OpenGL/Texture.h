@@ -36,8 +36,6 @@ namespace DuskEngine
 		unsigned int GetWidth() const { return m_Width; }
 		unsigned int GetHeight() const { return m_Height; }
 		unsigned int GetSize() const { return m_Height; }
-
-		static void ImportTest(const std::filesystem::path& path, std::ofstream& fout);
 	private:
 		unsigned int m_ID;
 		unsigned int m_Width;

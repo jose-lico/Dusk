@@ -49,21 +49,12 @@ namespace DuskEngine
 
 		UniqueRef<LuaScript> LoadScript(const uuids::uuid& uuid);
 
-		// Asset Lists
-		std::vector<Asset*> ShaderDatabase;
-		std::vector<Asset*> ModelDatabase;
-		std::vector<Asset*> MaterialDatabase;
-		std::vector<Asset*> ScriptsDatabase;
 	private:
 		std::filesystem::path m_RootDirectory = "res";
 		std::filesystem::path m_CurrentDirectory;
 
 		std::unordered_map <uuids::uuid, std::filesystem::path, std::hash<uuids::uuid>> m_PathsMap;
 		std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash> m_UUIDsMap;
-
-		void AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid);
-		void CreateMetaFile(const std::filesystem::directory_entry& directoryEntry);
-		void RegisterAsset(const std::filesystem::directory_entry& directoryEntry);
 
 		friend class WindowsWindow;
 		friend class AssetDatabaseEditor;
