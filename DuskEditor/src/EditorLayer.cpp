@@ -1,8 +1,9 @@
 #include "EditorLayer.h"
 
+#include "Assets/AssetDatabaseEditor.h"
+
 #include "Core/Application/Application.h"
 #include "Core/Application/Window.h"
-
 #include "Core/Serialization/SceneSerializer.h"
 #include "Core/ECS/EditorCamera.h"
 #include "Core/Scripting/LuaScript.h"
@@ -40,6 +41,13 @@ namespace DuskEngine
 
 	void EditorLayer::OnAttach()
 	{
+		auto& db = Application::Get().GetAssetDatabase();
+
+		m_EditorDB = new AssetDatabaseEditor(&db);
+		m_EditorDB->RegisterAssets();
+		
+		db.LoadProject();
+
 		m_AssetHandler = MakeRef<AssetHandler>("EditorHandler");
 
 		m_EditorCamera = new EditorCamera();

@@ -63,8 +63,8 @@ namespace DuskEngine
 		if (m_HandleMap.find(uuid) == m_HandleMap.end())
 		{
 			m_LuaScriptPool.push_back(Application::Get().GetAssetDatabase().LoadScript(scriptUUID));
-			m_HandleMap[uuid] = m_LuaScriptPool.size();
-			return m_LuaScriptPool.size() - 1;
+			m_HandleMap[uuid] = (uint32_t)m_LuaScriptPool.size();
+			return (uint32_t)m_LuaScriptPool.size() - 1;
 		}
 
 		return m_HandleMap[uuid];

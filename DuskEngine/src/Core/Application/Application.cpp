@@ -28,8 +28,6 @@ namespace DuskEngine
 		tstruct = *localtime(&now);
 		strftime(buffer, sizeof(buffer), "%Y-%m-%d_%Hh%Mm%Ss", &tstruct);
 
-		m_StartupTime = buffer;
-
 		m_OS = OS::Create();
 
 		m_Logger = new Logger(LOGGER);
@@ -42,7 +40,6 @@ namespace DuskEngine
 		m_Renderer = new Renderer(*m_Window);
 
 		m_AssetDatabase = new AssetDatabase();
-		m_AssetDatabase->LoadProject();
 		
 		m_LayerStack = new LayerStack();
 #ifdef DUSK_IMGUI

@@ -37,8 +37,8 @@ namespace DuskEngine
 					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadMaterial(uuid, m_AssetHandler));
 				// add assert
 
-				handleMap[uuid] = m_Pool.size() - 1;
-				return m_Pool.size() - 1;
+				handleMap[uuid] = (uint32_t)m_Pool.size() - 1;
+				return (uint32_t)m_Pool.size() - 1;
 			}
 
 			return handleMap[uuid];

@@ -55,11 +55,12 @@ namespace DuskEngine
 				if (directoryEntry.path().extension() == ".meta")
 				{
 					RegisterAsset(directoryEntry);
+					continue;
 				}
 				// If the file does not have a meta file and is not a meta file itself
 				else if (!std::filesystem::exists(directoryEntry.path().string() + ".meta") && directoryEntry.path().extension() != ".meta")
 				{
-					CreateMetaFile(directoryEntry);
+					//CreateMetaFile(directoryEntry);
 				}
 			}
 		}

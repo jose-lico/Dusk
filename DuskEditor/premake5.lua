@@ -51,6 +51,12 @@ project "DuskEditor"
 
 	defines
 	{
+		-- Lib includes
+		"YAML_CPP_STATIC_DEFINE",
+		"UUID_SYSTEM_GENERATOR",
+		"NOMINMAX",
+
+		-- Dusk includes
 		"DUSK_EXE",
 		"DUSK_IMGUI"
 	}

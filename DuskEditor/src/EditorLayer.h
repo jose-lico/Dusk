@@ -13,6 +13,7 @@ namespace DuskEngine
 	class Framebuffer;
 	class EditorCamera;
 	class Texture;
+	class AssetDatabaseEditor;
 
 	class EditorLayer : public Layer
 	{
@@ -40,6 +41,8 @@ namespace DuskEngine
 		HierarchyPanel* m_HierarchyPanel;
 
 		Ref<AssetHandler> m_AssetHandler;
+
+		AssetDatabaseEditor* m_EditorDB;
 
 		Logger* m_Logger;
 

@@ -66,5 +66,6 @@ namespace DuskEngine
 		void RegisterAsset(const std::filesystem::directory_entry& directoryEntry);
 
 		friend class WindowsWindow;
+		friend class AssetDatabaseEditor;
 	};
 }
