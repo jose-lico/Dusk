@@ -14,7 +14,7 @@ namespace DuskEngine
 		uint32_t Width;
 		uint32_t Height;
 		uint32_t Channels;
-		uint64_t DataSize;
+		size_t DataSize;
 	};
 
 	class Texture : public Asset
@@ -26,7 +26,7 @@ namespace DuskEngine
 			RGB = 0x1907,
 			RGBA
 		};
-
+		Texture(void* data);
 		Texture(const std::string& filepath, const std::string& name = "");
 		Texture(const std::filesystem::path& path, const uuids::uuid& uuid);
 		~Texture();
@@ -40,6 +40,5 @@ namespace DuskEngine
 		unsigned int m_ID;
 		unsigned int m_Width;
 		unsigned int m_Height;
-		unsigned int m_Size;
 	};
 }

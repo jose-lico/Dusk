@@ -2,13 +2,13 @@
 #include "PanelBase.h"
 
 #include "Utils/Memory/Memory.h"
+#include "Platform/OpenGL/Texture.h"
 
 #include <functional>
 
 namespace DuskEngine
 {
 	class EditorLayer;
-	class Texture;
 
 	class Toolbar : public Panel
 	{
@@ -25,7 +25,7 @@ namespace DuskEngine
 		bool* m_Playing;
 		bool* m_Paused;
 
-		Ref<Texture> m_Play, m_Pause, m_Stop, m_StepForward, m_Reload;
+		Texture m_Play, m_Pause, m_Stop, m_StepForward, m_Reload;
 
 		float m_AlphasButtons[4] = { 0.87f, 0.4f, 0.4f, 0.4f };
 		float m_AlphasMenus[4] = { 0.87f, 0.87f, 0.87f, 0.87f};

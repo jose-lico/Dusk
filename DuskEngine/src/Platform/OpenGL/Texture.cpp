@@ -10,8 +10,37 @@
 
 namespace DuskEngine
 {
+    Texture::Texture(void* data)
+    {
+        TextureData headerData;
+        memcpy(&headerData, data, sizeof(headerData));
+
+        m_Width = headerData.Width;
+        m_Height = headerData.Height;
+        
+        GLenum type = 0;
+
+        if (headerData.Channels == 4)
+            type = GL_RGBA;
+        else if (headerData.Channels == 3)
+            type = GL_RGB;
+
+        glGenTextures(1, &m_ID);
+        glBindTexture(GL_TEXTURE_2D, m_ID);
+
+        // set the texture wrapping/filtering options (on the currently bound texture object)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, type, m_Width, m_Height, 0, type, GL_UNSIGNED_BYTE, (unsigned char*)data + sizeof(TextureData));
+
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
     Texture::Texture(const std::string& filepath, const std::string& name)
-        :m_ID(0), m_Width(0), m_Height(0), m_Size(0)
+        :m_ID(0), m_Width(0), m_Height(0)
     {
         if (name.empty()) 
         {
@@ -73,7 +102,7 @@ namespace DuskEngine
     }
 
     Texture::Texture(const std::filesystem::path& path, const uuids::uuid& uuid)
-        :m_ID(0), m_Width(0), m_Height(0), m_Size(0)
+        :m_ID(0), m_Width(0), m_Height(0)
     {
         m_UUID = uuid;
         m_Path = path;

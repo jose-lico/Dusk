@@ -7,16 +7,18 @@
 #include "imgui/imgui_internal.h"
 #include "IconsForkAwesome.h"
 
+#include "images/PlayIcon.embeded"
+#include "images/PauseIcon.embeded"
+#include "images/StopIcon.embeded"
+#include "images/StepForwardIcon.embeded"
+#include "images/ReloadIcon.embeded"
+
 namespace DuskEngine
 {
 	Toolbar::Toolbar(bool* playing, bool* paused, const std::function<void(void)>& playfunc, const std::function<void(void)>& stopfunc, const std::function<void(void)>& pausefunc)
-		:m_Playing(playing), m_Paused(paused), m_PlayFunc(playfunc), m_StopFunc(stopfunc), m_PauseFunc(pausefunc)
+		:m_Playing(playing), m_Paused(paused), m_PlayFunc(playfunc), m_StopFunc(stopfunc), m_PauseFunc(pausefunc),
+		m_Pause((void*)g_PauseIcon), m_Play((void*)g_PlayIcon), m_Stop((void*)g_StopIcon), m_StepForward((void*)g_StepForwardIcon), m_Reload((void*)g_ReloadIcon)
 	{
-		m_Play  = MakeRef<Texture>("res/editor/icons/play.png");
-		m_Stop  = MakeRef<Texture>("res/editor/icons/stop.png");
-		m_Pause = MakeRef<Texture>("res/editor/icons/pause.png");
-		m_StepForward = MakeRef<Texture>("res/editor/icons/step-forward.png");
-		m_Reload = MakeRef<Texture>("res/editor/icons/reload.png");
 	}
 
 	void Toolbar::OnImGuiRender()
@@ -142,7 +144,7 @@ namespace DuskEngine
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
 
 			if (ImGui::ImageButton((ImTextureID)(size_t)
-				(!*m_Playing ? m_Play->GetRendererID() : m_Stop->GetRendererID()), buttonSize, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 },
+				(!*m_Playing ? m_Play.GetRendererID() : m_Stop.GetRendererID()), buttonSize, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 },
 				{ 1.0f, 1.0f, 1.0f, m_AlphasButtons[0] }))
 			{
 				if (!*m_Playing)
@@ -157,7 +159,7 @@ namespace DuskEngine
 				m_AlphasButtons[0] = 0.87f;
 
 			ImGui::SameLine();
-			if (ImGui::ImageButton((ImTextureID)(size_t)(!*m_Paused ? m_Pause->GetRendererID() : m_Play->GetRendererID()), buttonSize,
+			if (ImGui::ImageButton((ImTextureID)(size_t)(!*m_Paused ? m_Pause.GetRendererID() : m_Play.GetRendererID()), buttonSize,
 				{ 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1.0f, 1.0f, 1.0f, m_AlphasButtons[1] }))
 			{
 				if (*m_Playing)
@@ -176,7 +178,7 @@ namespace DuskEngine
 
 
 			ImGui::SameLine();
-			if (ImGui::ImageButton((ImTextureID)(size_t)m_StepForward->GetRendererID(), buttonSize,
+			if (ImGui::ImageButton((ImTextureID)(size_t)m_StepForward.GetRendererID(), buttonSize,
 				{ 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1.0f, 1.0f, 1.0f, m_AlphasButtons[2] }))
 			{
 				WARN("Step forward not implemented!");
@@ -193,7 +195,7 @@ namespace DuskEngine
 				m_AlphasButtons[2] = 0.4f;
 
 			ImGui::SameLine();
-			if (ImGui::ImageButton((ImTextureID)(size_t)m_Reload->GetRendererID(), buttonSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 },
+			if (ImGui::ImageButton((ImTextureID)(size_t)m_Reload.GetRendererID(), buttonSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 },
 				-1, { 0,0,0,0 }, { 1.0f, 1.0f, 1.0f, m_AlphasButtons[3] }))
 			{
 				WARN("Reloading scripts not implemented!");
