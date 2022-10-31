@@ -46,7 +46,7 @@ namespace DuskEngine
 			case UniformType::Texture:
 				shader.SetUniformInt("u_" + uniform.Name, textSlot);
 				auto& texture = assetHandler.AssetPool<Texture>(uniform.Data.dataHandle);
-				OpenGLAPI::BindTexture(textSlot++, texture.GetTextureData().ResourceID);
+				OpenGLAPI::BindTexture(textSlot++, texture.ResourceID);
 				break;
 			}
 		}

@@ -12,7 +12,6 @@ namespace DuskEngine
 	class Scene;
 	class Framebuffer;
 	class EditorCamera;
-	class Texture;
 	class AssetDatabaseEditor;
 
 	class EditorLayer : public Layer
@@ -48,8 +47,5 @@ namespace DuskEngine
 
 		bool m_Playing = false;
 		bool m_Paused = false;
-
-		// test
-		UniqueRef<Texture> m_TestTexture;
 	};
 }

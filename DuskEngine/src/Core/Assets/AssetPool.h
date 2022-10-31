@@ -12,7 +12,7 @@ namespace DuskEngine
 	class AssetHandler;
 
 	class Material;
-	class Texture;
+	struct Texture;
 	class Mesh;
 	class Shader;
 

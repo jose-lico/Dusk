@@ -125,7 +125,7 @@ namespace DuskEngine
 
 	Texture AssetDatabase::LoadTexture(const uuids::uuid& uuid)
 	{
-		return Texture(m_PathsMap[uuid], uuid);
+		return CreateTexture(m_PathsMap[uuid], uuid);
 	}
 
 	//TODO - improve model and mesh api and useflow

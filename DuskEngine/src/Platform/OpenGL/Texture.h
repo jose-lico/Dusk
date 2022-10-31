@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Core/Assets/Asset.h"
+#include "Core/Application/Core.h"
+
+#include <fstream>
 
 namespace uuids 
 {
@@ -45,7 +48,7 @@ namespace DuskEngine
 		size_t DataSize;
 	};
 
-	struct NewTexture
+	struct Texture : public Asset
 	{
 		uint32_t ResourceID;
 
@@ -60,23 +63,7 @@ namespace DuskEngine
 		bool Mipmaps;
 	};
 
-	class Texture : public Asset
-	{
-	public:
-		Texture(const unsigned char* data);
-		Texture(const std::filesystem::path& path, const uuids::uuid& uuid);
-		~Texture() = default;
+	Texture CreateTexture(const unsigned char* data);
 
-		inline const NewTexture& GetTextureData() const { return m_TextureData; }
-		//void Bind(unsigned int slot = 0) const;
-		//unsigned int GetRendererID() const { return m_ID; }
-		//unsigned int GetWidth() const { return m_Width; }
-		//unsigned int GetHeight() const { return m_Height; }
-		//unsigned int GetSize() const { return m_Height; }
-	private:
-		NewTexture m_TextureData;
-		/*unsigned int m_ID;
-		unsigned int m_Width;
-		unsigned int m_Height;*/
-	};
+	Texture CreateTexture(const std::filesystem::path& path, const uuids::uuid& uuid);
 }

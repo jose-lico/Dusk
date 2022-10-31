@@ -9,69 +9,76 @@
 
 namespace DuskEngine
 {
-    Texture::Texture(const unsigned char* data)
-    {
-        TextureData headerData;
-        memcpy(&headerData, data, sizeof(headerData));
+	Texture CreateTexture(const unsigned char* data)
+	{
+		TextureData headerData;
+		memcpy(&headerData, data, sizeof(headerData));
 
-        m_TextureData.Width = headerData.Width;
-        m_TextureData.Height = headerData.Height;
-        // These values should later be in the meta file
-        m_TextureData.Type = TextureType::TEXTURE_2D;
-        m_TextureData.WrapMode = WrapMode::CLAMP_TO_EDGE;
-        m_TextureData.FilterMode = FilterMode::LINEAR;
-        m_TextureData.Mipmaps = true;
+		Texture textureData;
+		textureData.Width = headerData.Width;
+		textureData.Height = headerData.Height;
+		// These values should later be in the meta file
+		textureData.Type = TextureType::TEXTURE_2D;
+		textureData.WrapMode = WrapMode::CLAMP_TO_EDGE;
+		textureData.FilterMode = FilterMode::LINEAR;
+		textureData.Mipmaps = false;
 
-        if (headerData.Channels == 4)
-            m_TextureData.Format = TextureFormat::RGBA;
-        else if (headerData.Channels == 3)
-            m_TextureData.Format = TextureFormat::RGB;
+		if (headerData.Channels == 4)
+			textureData.Format = TextureFormat::RGBA;
+		else if (headerData.Channels == 3)
+			textureData.Format = TextureFormat::RGB;
 
-        OpenGLAPI::SetTextureData(m_TextureData, data, true);
-    }
+		OpenGLAPI::SetTextureData(textureData, data, true);
 
-    Texture::Texture(const std::filesystem::path& path, const uuids::uuid& uuid)
-    {
-        m_UUID = uuid;
-        m_Path = path;
-        m_Name = path.filename().string();
+		return textureData;
+	}
 
-        std::string importFilePath = "res/.import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
+	Texture CreateTexture(const std::filesystem::path& path, const uuids::uuid& uuid)
+	{
+		Texture textureData;
+		textureData.m_UUID = uuid;
+		textureData.m_Path = path;
+		textureData.m_Name = path.filename().string();
 
-        if (std::filesystem::exists(importFilePath))
-        {
-            std::ifstream importFile(importFilePath, std::ios::binary);
-            TextureData headerData;
+		std::string importFilePath = "res/.import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
 
-            importFile.read((char*)&headerData, sizeof(TextureData));
+		if (std::filesystem::exists(importFilePath))
+		{
+			std::ifstream importFile(importFilePath, std::ios::binary);
 
-            m_TextureData.Width = headerData.Width;
-            m_TextureData.Height = headerData.Height;
-            // These values should later be in the meta file
-            m_TextureData.Type = TextureType::TEXTURE_2D;
-            m_TextureData.WrapMode = WrapMode::CLAMP_TO_EDGE;
-            m_TextureData.FilterMode = FilterMode::LINEAR;
-            m_TextureData.Mipmaps = true;
+			TextureData headerData;
+			importFile.read((char*)&headerData, sizeof(TextureData));
 
-            if (headerData.Channels == 4)
-                m_TextureData.Format = TextureFormat::RGBA;
-            else if (headerData.Channels == 3)
-                m_TextureData.Format = TextureFormat::RGB;
+			textureData.Width = headerData.Width;
+			textureData.Height = headerData.Height;
+			// These values should later be in the meta file
+			textureData.Type = TextureType::TEXTURE_2D;
+			textureData.WrapMode = WrapMode::CLAMP_TO_EDGE;
+			textureData.FilterMode = FilterMode::LINEAR;
+			textureData.Mipmaps = true;
 
-            uint8_t* textureData = new uint8_t[headerData.DataSize];
-            importFile.read((char*)textureData, headerData.DataSize);
-            importFile.close();
+			if (headerData.Channels == 4)
+				textureData.Format = TextureFormat::RGBA;
+			else if (headerData.Channels == 3)
+				textureData.Format = TextureFormat::RGB;
 
-            OpenGLAPI::SetTextureData(m_TextureData, textureData);
-           
-            delete[] textureData;
-        }
-        else
-        {
-            ERR("Error loading texture " + m_Name);
-            return;
-        }
+			uint8_t* data = new uint8_t[headerData.DataSize];
+			importFile.read((char*)data, headerData.DataSize);
+			importFile.close();
 
-        LOG("Created Texture " + m_Name);
-    }
+			OpenGLAPI::SetTextureData(textureData, data);
+
+			delete[] data;
+		}
+		else
+		{
+			ERR("Error loading texture " + textureData.m_Name);
+			// set pink square or something
+			return textureData;
+		}
+
+		LOG("Created Texture " + textureData.m_Name);
+
+		return textureData;
+	}
 }

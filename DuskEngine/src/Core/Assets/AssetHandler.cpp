@@ -6,6 +6,7 @@
 #include "Handle.h"
 
 #include "Assets/Mesh.h"
+#include "Platform/OpenGL/OpenGLAPI.h"
 #include "Platform/OpenGL/Texture.h"
 #include "Assets/Material.h"
 
@@ -47,6 +48,11 @@ namespace DuskEngine
 		for(auto mesh : m_MeshPool.m_Pool)
 		{
 			mesh.m_VA.Free();
+		}
+
+		for (auto texture : m_TexturePool.m_Pool)
+		{
+			OpenGLAPI::FreeTexture(texture.ResourceID);
 		}
 
 		LOG(("Destroying Asset Handler " + m_Name).c_str());

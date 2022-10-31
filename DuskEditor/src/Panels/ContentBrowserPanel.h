@@ -11,7 +11,7 @@
 
 namespace DuskEngine
 {
-	class Texture;
+	struct Texture;
 
 	class ContentBrowserPanel : public Panel
 	{

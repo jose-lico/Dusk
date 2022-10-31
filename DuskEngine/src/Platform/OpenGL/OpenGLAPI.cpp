@@ -40,7 +40,7 @@ namespace DuskEngine :: OpenGLAPI
 		glDeleteBuffers(1, &id);
 	}
 
-	void SetTextureData(NewTexture& textureData, const unsigned char* data, bool offset)
+	void SetTextureData(Texture& textureData, const unsigned char* data, bool offset)
 	{
 		glGenTextures(1, &textureData.ResourceID);
 		glBindTexture((GLenum)textureData.Type, textureData.ResourceID);

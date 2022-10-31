@@ -4,6 +4,7 @@
 #include "Core/Application/Application.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/Assets/Material.h"
+#include "Platform/OpenGL/OpenGLAPI.h"
 
 #include "images/UnknownIcon.embedded"
 #include "images/FolderIcon.embedded"
@@ -18,8 +19,10 @@ namespace DuskEngine
 	std::filesystem::path* g_currentDir;
 
 	ContentBrowserPanel::ContentBrowserPanel()
-		:m_FolderIcon(g_FolderIcon), m_UnknownIcon(g_UnknownIcon)
 	{
+		m_FolderIcon = CreateTexture(g_FolderIcon);
+		m_UnknownIcon = CreateTexture(g_UnknownIcon);
+
 		g_currentDir = &m_CurrentDirectory;
 		m_CurrentDirectory = g_RootDirectory;
 		CreateDirectoryItems();
@@ -28,6 +31,8 @@ namespace DuskEngine
 
 	ContentBrowserPanel::~ContentBrowserPanel()
 	{
+		OpenGLAPI::FreeTexture(m_FolderIcon.ResourceID);
+		OpenGLAPI::FreeTexture(m_UnknownIcon.ResourceID);
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()

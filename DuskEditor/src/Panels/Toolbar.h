@@ -14,7 +14,7 @@ namespace DuskEngine
 	{
 	public:
 		Toolbar(bool* playing, bool* paused, const std::function<void(void)>& playfunc, const std::function<void(void)>& stopfunc, const std::function<void(void)>& pausefunc);
-		~Toolbar() = default;
+		~Toolbar();
 
 		virtual void OnImGuiRender() override;
 	private:

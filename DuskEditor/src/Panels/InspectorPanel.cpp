@@ -557,7 +557,7 @@ namespace DuskEngine
 				{
 					// this is broken but whatever, will be replaced in the future
 					ImGui::Text(uniform.Name.c_str());
-					if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->AssetPool<Texture>(uniform.Data.dataHandle).GetTextureData().ResourceID,
+					if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->AssetPool<Texture>(uniform.Data.dataHandle).ResourceID,
 						ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
 					{
 						TRACE("To be implemented");
