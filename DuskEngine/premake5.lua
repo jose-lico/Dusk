@@ -11,9 +11,7 @@ project "DuskEngine"
 	files
 	{
 		"src/**.h",
-		"src/**.cpp",
-		
-		dependenciesDir .. "/stb/stb/stb_image.h"
+		"src/**.cpp"
 	}
 
 	includedirs
@@ -23,7 +21,6 @@ project "DuskEngine"
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
 		dependenciesDir .. "/glm/include",
-		dependenciesDir .. "/stb/include",
 		dependenciesDir .. "/imgui/include",
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/entt/src",

@@ -103,8 +103,6 @@ namespace DuskEngine
 		};
 
 		m_Panels.push_back(new Toolbar(&m_Playing, &m_Paused, play, stop, pause));
-
-		m_TestTexture = MakeUnique<Texture>("res/textures/white.png");
 	}
 
 	void EditorLayer::OnUpdate()

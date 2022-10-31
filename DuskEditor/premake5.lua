@@ -10,9 +10,7 @@ project "DuskEditor"
 	files
 	{
 		"src/**.h",
-		"src/**.cpp",
-
-		dependenciesDir .. "/stb/stb/stb_image.h"
+		"src/**.cpp"
 	}
 
 	links
