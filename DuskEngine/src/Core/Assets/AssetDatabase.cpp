@@ -120,7 +120,7 @@ namespace DuskEngine
 
 	Shader AssetDatabase::LoadShader(const uuids::uuid& uuid)
 	{
-		return Shader(m_PathsMap[uuid], uuid);
+		return CreateShader(m_PathsMap[uuid], uuid);
 	}
 
 	Texture AssetDatabase::LoadTexture(const uuids::uuid& uuid)

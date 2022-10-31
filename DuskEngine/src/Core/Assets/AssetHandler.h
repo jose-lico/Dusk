@@ -15,8 +15,8 @@ namespace DuskEngine
 {
 	class Material;
 	struct Texture;
+	struct Shader;
 	class Mesh;
-	class Shader;
 	class LuaScript;
 
 	class AssetHandler

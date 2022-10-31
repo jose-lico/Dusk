@@ -55,6 +55,11 @@ namespace DuskEngine
 			OpenGLAPI::FreeTexture(texture.ResourceID);
 		}
 
+		for (auto shader : m_ShaderPool.m_Pool)
+		{
+			OpenGLAPI::DeleteProgram(shader.ResourceID);
+		}
+
 		LOG(("Destroying Asset Handler " + m_Name).c_str());
 	}
 

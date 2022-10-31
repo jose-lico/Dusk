@@ -14,7 +14,7 @@ namespace DuskEngine
 	class Material;
 	struct Texture;
 	class Mesh;
-	class Shader;
+	struct ShaderNew;
 
 	template<typename T>
 	class _AssetPool

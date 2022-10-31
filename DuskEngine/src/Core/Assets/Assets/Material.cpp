@@ -33,7 +33,8 @@ namespace DuskEngine
 	void Material::UploadUniforms(AssetHandler& assetHandler)
 	{
 		auto& shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
-		shader.Bind();
+		
+		OpenGLAPI::UseProgram(shader.ResourceID);
 
 		unsigned int textSlot = 0;
 		for (auto uniform : m_Uniforms)
@@ -41,10 +42,11 @@ namespace DuskEngine
 			switch(uniform.Type)
 			{
 			case UniformType::Vec3:
-				shader.SetUniformVec3("u_" + uniform.Name, uniform.Data.vec3);
+				OpenGLAPI::SetUniformVec3(shader, "u_" + uniform.Name, uniform.Data.vec3);
+				//shader.SetUniformVec3("u_" + uniform.Name, uniform.Data.vec3);
 				break;
 			case UniformType::Texture:
-				shader.SetUniformInt("u_" + uniform.Name, textSlot);
+				OpenGLAPI::SetUniformInt(shader, "u_" + uniform.Name, textSlot);
 				auto& texture = assetHandler.AssetPool<Texture>(uniform.Data.dataHandle);
 				OpenGLAPI::BindTexture(textSlot++, texture.ResourceID);
 				break;

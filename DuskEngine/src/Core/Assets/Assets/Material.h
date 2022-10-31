@@ -10,7 +10,7 @@
 
 namespace DuskEngine
 {
-	class Shader;
+	struct Shader;
 	struct Texture;
 	class AssetHandler;
 	enum class UniformType;

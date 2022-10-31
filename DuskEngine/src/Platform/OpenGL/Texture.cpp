@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "Texture.h"
 
-#include "GLCommon.h"
 #include "OpenGLAPI.h"
-#include "Utils/Profiling/Timer.h"
 
 #include <filesystem>
 

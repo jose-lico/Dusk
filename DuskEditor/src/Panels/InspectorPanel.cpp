@@ -501,7 +501,7 @@ namespace DuskEngine
 			int shaderIndex = 0;
 			// bad
 			uuids::uuid shaderID = m_AssetHandler->AssetPool<Shader>(
-				m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetShaderHandle()).GetUUID();
+				m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetShaderHandle()).m_UUID;
 
 			for (unsigned int i = 0; i < m_EditorDB->m_ShaderDatabase.size(); i++)
 			{

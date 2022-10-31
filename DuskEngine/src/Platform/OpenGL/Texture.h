@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/Assets/Asset.h"
-#include "Core/Application/Core.h"
 
 #include <fstream>
 

@@ -7,7 +7,7 @@ namespace DuskEngine
 {
 	class Entity;
 	class EditorCamera;
-	class Shader;
+	struct Shader;
 	class ScriptingEngine;
 	class AssetHandler;
 
