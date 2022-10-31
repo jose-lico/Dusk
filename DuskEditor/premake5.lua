@@ -33,7 +33,7 @@ project "DuskEditor"
 	includedirs
 	{
 		"src",
-		"embeded",
+		"embedded",
 		"%{wks.location}/DuskEngine/src",
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",

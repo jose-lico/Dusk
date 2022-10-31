@@ -5,8 +5,8 @@
 #include "Core/Events/Events.h"
 #include "Core/Application/Window.h"
 
-#include "fonts/roboto/Roboto-Regular.embeded"
-#include "fonts/forkawesome/forkawesome-webfont.embeded"
+#include "fonts/roboto/Roboto-Regular.embedded"
+#include "fonts/forkawesome/forkawesome-webfont.embedded"
 
 #include "IconsForkAwesome.h"
 #include "ImGuizmo/ImGuizmo.h"

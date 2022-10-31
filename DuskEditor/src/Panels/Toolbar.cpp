@@ -7,17 +7,17 @@
 #include "imgui/imgui_internal.h"
 #include "IconsForkAwesome.h"
 
-#include "images/PlayIcon.embeded"
-#include "images/PauseIcon.embeded"
-#include "images/StopIcon.embeded"
-#include "images/StepForwardIcon.embeded"
-#include "images/ReloadIcon.embeded"
+#include "images/PlayIcon.embedded"
+#include "images/PauseIcon.embedded"
+#include "images/StopIcon.embedded"
+#include "images/StepForwardIcon.embedded"
+#include "images/ReloadIcon.embedded"
 
 namespace DuskEngine
 {
 	Toolbar::Toolbar(bool* playing, bool* paused, const std::function<void(void)>& playfunc, const std::function<void(void)>& stopfunc, const std::function<void(void)>& pausefunc)
 		:m_Playing(playing), m_Paused(paused), m_PlayFunc(playfunc), m_StopFunc(stopfunc), m_PauseFunc(pausefunc),
-		m_Pause((void*)g_PauseIcon), m_Play((void*)g_PlayIcon), m_Stop((void*)g_StopIcon), m_StepForward((void*)g_StepForwardIcon), m_Reload((void*)g_ReloadIcon)
+		m_Pause(g_PauseIcon), m_Play(g_PlayIcon), m_Stop(g_StopIcon), m_StepForward(g_StepForwardIcon), m_Reload(g_ReloadIcon)
 	{
 	}
 

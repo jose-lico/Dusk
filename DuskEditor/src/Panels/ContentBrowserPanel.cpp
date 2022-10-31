@@ -4,7 +4,9 @@
 #include "Core/Application/Application.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/Assets/Material.h"
-#include "Platform/OpenGL/Texture.h"
+
+#include "images/UnknownIcon.embedded"
+#include "images/FolderIcon.embedded"
 
 #include "IconsForkAwesome.h"
 
@@ -16,11 +18,10 @@ namespace DuskEngine
 	std::filesystem::path* g_currentDir;
 
 	ContentBrowserPanel::ContentBrowserPanel()
+		:m_FolderIcon(g_FolderIcon), m_UnknownIcon(g_UnknownIcon)
 	{
 		g_currentDir = &m_CurrentDirectory;
-		m_CurrentDirectory = g_RootDirectory; 
-		m_FolderIcon = MakeRef<Texture>("res/editor/icons/folder.png");
-		m_UnknownIcon = MakeRef<Texture>("res/editor/icons/question-mark.png");
+		m_CurrentDirectory = g_RootDirectory;
 		CreateDirectoryItems();
 		CreateDirectoryResources();
 	}
@@ -70,7 +71,7 @@ namespace DuskEngine
 			if (directoryEntry.is_directory())
 			{
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-				ImGui::ImageButton((ImTextureID)(size_t)m_FolderIcon->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::ImageButton((ImTextureID)(size_t)m_FolderIcon.GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
 				ImGui::PopStyleColor();
 
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
@@ -101,7 +102,7 @@ namespace DuskEngine
 			}
 			else
 			{
-				ImGui::ImageButton((ImTextureID*)(size_t)m_UnknownIcon->GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::ImageButton((ImTextureID*)(size_t)m_UnknownIcon.GetRendererID(), ImVec2(64, 64), ImVec2(0, 1), ImVec2(1, 0));
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 				{
 					LOG("This is an image");

@@ -10,7 +10,7 @@
 
 namespace DuskEngine
 {
-    Texture::Texture(void* data)
+    Texture::Texture(const unsigned char* data)
     {
         TextureData headerData;
         memcpy(&headerData, data, sizeof(headerData));
@@ -34,7 +34,7 @@ namespace DuskEngine
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, type, m_Width, m_Height, 0, type, GL_UNSIGNED_BYTE, (unsigned char*)data + sizeof(TextureData));
+        glTexImage2D(GL_TEXTURE_2D, 0, type, m_Width, m_Height, 0, type, GL_UNSIGNED_BYTE, data + sizeof(TextureData));
 
         glGenerateMipmap(GL_TEXTURE_2D);
     }

@@ -2,6 +2,7 @@
 #include "PanelBase.h"
 
 #include "Utils/Memory/Memory.h"
+#include "Platform/OpenGL/Texture.h"
 
 #include "imgui/imgui.h"
 
@@ -26,8 +27,7 @@ namespace DuskEngine
 		
 		std::vector<Ref<Texture>> m_Icons;
 		std::vector<std::filesystem::directory_entry> m_DirEntries;
-		Ref<Texture> m_FolderIcon;
-		Ref<Texture> m_UnknownIcon;
+		Texture m_FolderIcon, m_UnknownIcon;
 
 		unsigned int m_EditingName = -1;
 		std::filesystem::path m_EditingPath;

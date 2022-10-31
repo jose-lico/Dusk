@@ -26,7 +26,7 @@ namespace DuskEngine
 			RGB = 0x1907,
 			RGBA
 		};
-		Texture(void* data);
+		Texture(const unsigned char* data);
 		Texture(const std::string& filepath, const std::string& name = "");
 		Texture(const std::filesystem::path& path, const uuids::uuid& uuid);
 		~Texture();
