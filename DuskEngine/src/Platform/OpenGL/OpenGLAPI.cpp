@@ -4,6 +4,7 @@
 #include "GLCommon.h"
 #include "VertexArray.h"
 #include "Buffer.h"
+#include "Texture.h"
 
 namespace DuskEngine :: OpenGLAPI 
 {
@@ -37,6 +38,33 @@ namespace DuskEngine :: OpenGLAPI
 	void FreeBuffer(uint32_t& id)
 	{
 		glDeleteBuffers(1, &id);
+	}
+
+	void SetTextureData(NewTexture& textureData, const unsigned char* data, bool offset)
+	{
+		glGenTextures(1, &textureData.ResourceID);
+		glBindTexture((GLenum)textureData.Type, textureData.ResourceID);
+
+		glTexParameteri((GLenum)textureData.Type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri((GLenum)textureData.Type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri((GLenum)textureData.Type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri((GLenum)textureData.Type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glTexImage2D((GLenum)textureData.Type, 0, (GLenum)textureData.Format, textureData.Width, textureData.Height, 0, 
+			(GLenum)textureData.Format, GL_UNSIGNED_BYTE, data + (offset ? sizeof(TextureData) : 0));
+
+		if(textureData.Mipmaps)
+			glGenerateMipmap((GLenum)textureData.Type);
+	}
+
+	void BindTexture(uint32_t slot, uint32_t id)
+	{
+		glBindTextureUnit(slot, id);
+	}
+
+	void FreeTexture(uint32_t& id)
+	{
+		glDeleteTextures(1, &id);
 	}
 
 	void UnbindVAO()

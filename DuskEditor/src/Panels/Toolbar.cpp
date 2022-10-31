@@ -144,7 +144,7 @@ namespace DuskEngine
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0));
 
 			if (ImGui::ImageButton((ImTextureID)(size_t)
-				(!*m_Playing ? m_Play.GetRendererID() : m_Stop.GetRendererID()), buttonSize, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 },
+				(!*m_Playing ? m_Play.GetTextureData().ResourceID : m_Stop.GetTextureData().ResourceID), buttonSize, {0,0}, {1,1}, -1, {0,0,0,0},
 				{ 1.0f, 1.0f, 1.0f, m_AlphasButtons[0] }))
 			{
 				if (!*m_Playing)
@@ -159,7 +159,7 @@ namespace DuskEngine
 				m_AlphasButtons[0] = 0.87f;
 
 			ImGui::SameLine();
-			if (ImGui::ImageButton((ImTextureID)(size_t)(!*m_Paused ? m_Pause.GetRendererID() : m_Play.GetRendererID()), buttonSize,
+			if (ImGui::ImageButton((ImTextureID)(size_t)(!*m_Paused ? m_Pause.GetTextureData().ResourceID : m_Play.GetTextureData().ResourceID), buttonSize,
 				{ 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1.0f, 1.0f, 1.0f, m_AlphasButtons[1] }))
 			{
 				if (*m_Playing)
@@ -178,7 +178,7 @@ namespace DuskEngine
 
 
 			ImGui::SameLine();
-			if (ImGui::ImageButton((ImTextureID)(size_t)m_StepForward.GetRendererID(), buttonSize,
+			if (ImGui::ImageButton((ImTextureID)(size_t)m_StepForward.GetTextureData().ResourceID, buttonSize,
 				{ 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, { 1.0f, 1.0f, 1.0f, m_AlphasButtons[2] }))
 			{
 				WARN("Step forward not implemented!");
@@ -195,7 +195,7 @@ namespace DuskEngine
 				m_AlphasButtons[2] = 0.4f;
 
 			ImGui::SameLine();
-			if (ImGui::ImageButton((ImTextureID)(size_t)m_Reload.GetRendererID(), buttonSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 },
+			if (ImGui::ImageButton((ImTextureID)(size_t)m_Reload.GetTextureData().ResourceID, buttonSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 },
 				-1, { 0,0,0,0 }, { 1.0f, 1.0f, 1.0f, m_AlphasButtons[3] }))
 			{
 				WARN("Reloading scripts not implemented!");

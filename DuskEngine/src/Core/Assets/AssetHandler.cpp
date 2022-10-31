@@ -28,7 +28,6 @@ namespace DuskEngine
 		m_TexturePool.m_AssetHandler = this;
 		m_MaterialPool.m_AssetHandler = this;
 
-
 		m_ShaderPool.m_Pool.reserve(10);
 		m_MeshPool.m_Pool.reserve(10);
 		m_TexturePool.m_Pool.reserve(10);

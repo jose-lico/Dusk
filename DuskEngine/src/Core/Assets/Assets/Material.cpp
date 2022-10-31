@@ -3,6 +3,7 @@
 
 #include "Platform/OpenGL/Shader.h"
 #include "Platform/OpenGL/Texture.h"
+#include "Platform/OpenGL/OpenGLAPI.h"
 #include "Core/Application/Application.h"
 #include "Core/Assets/AssetHandler.h"
 #include "Core/Assets/AssetDatabase.h"
@@ -45,7 +46,7 @@ namespace DuskEngine
 			case UniformType::Texture:
 				shader.SetUniformInt("u_" + uniform.Name, textSlot);
 				auto& texture = assetHandler.AssetPool<Texture>(uniform.Data.dataHandle);
-				texture.Bind(textSlot++);
+				OpenGLAPI::BindTexture(textSlot++, texture.GetTextureData().ResourceID);
 				break;
 			}
 		}
