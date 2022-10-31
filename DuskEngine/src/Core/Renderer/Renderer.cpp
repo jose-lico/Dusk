@@ -30,13 +30,13 @@ namespace DuskEngine {
 
 	void Renderer::Submit(const VertexArray& vertexArray)
 	{
-		vertexArray.Bind();
+		OpenGLAPI::BindVertexArray(vertexArray.ResourceID);
 		OpenGLAPI::DrawIndexed(vertexArray);
 	}
 
 	void Renderer::Submit(const Mesh& mesh)
 	{
-		mesh.GetVertexArray().Bind();
+		OpenGLAPI::BindVertexArray(mesh.GetVertexArray().ResourceID);
 		OpenGLAPI::DrawIndexed(mesh.GetVertexArray());
 	}
 

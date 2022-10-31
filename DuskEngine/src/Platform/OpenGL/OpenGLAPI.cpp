@@ -11,6 +11,7 @@ namespace DuskEngine :: OpenGLAPI
 {
 	int GetUniformLocation(Shader& shader, const std::string& name);
 	uint32_t CompileShader(GLenum type, const std::string& source);
+	GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type);
 
 	void Init()
 	{
@@ -42,6 +43,38 @@ namespace DuskEngine :: OpenGLAPI
 	void FreeBuffer(uint32_t& id)
 	{
 		glDeleteBuffers(1, &id);
+	}
+
+	void GenVertexArrays(uint32_t& id)
+	{
+		glGenVertexArrays(1, &id);
+	}
+
+	void BindVertexArray(uint32_t id)
+	{
+		glBindVertexArray(id);
+	}
+
+	void SetVertexAttribPointer(VertexBuffer& vb)
+	{
+		const auto& elements = vb.Layout.Elements;
+
+		unsigned int offset = 0;
+		for (unsigned int i = 0; i < elements.size(); i++) {
+			const auto& element = elements[i];
+			glVertexAttribPointer(i, element.Count, ShaderDataTypeToOpenGLBaseType(element.ShaderType), element.Normalized,
+				vb.Layout.Stride, (void*)(size_t)offset);
+			offset += element.Count * ShaderDataTypeSize(element.ShaderType);
+			glEnableVertexAttribArray(i);
+		}
+	}
+
+	void FreeVertexArray(VertexArray& va)
+	{
+		glDeleteVertexArrays(1, &va.ResourceID);
+
+		FreeBuffer(va.VB.ResourceID);
+		FreeBuffer(va.IB.ResourceID);
 	}
 
 	void SetTextureData(Texture& textureData, const unsigned char* data, bool offset)
@@ -138,12 +171,35 @@ namespace DuskEngine :: OpenGLAPI
 
 	void DrawIndexed(const VertexArray& vertexArray)
 	{
-		glDrawElements(GL_TRIANGLES, vertexArray.GetIndexBuffer().Count, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, vertexArray.IB.Count, GL_UNSIGNED_INT, nullptr);
 	}
 
 	void DrawArrays(unsigned int start, unsigned int count)
 	{
 		glDrawArrays(GL_TRIANGLES, start, count);
+	}
+
+	// #############################################################
+	// HELPER FUNCS
+	// #############################################################
+
+	GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
+	{
+		switch (type)
+		{
+		case ShaderDataType::FLOAT:    return GL_FLOAT;
+		case ShaderDataType::FLOAT2:   return GL_FLOAT;
+		case ShaderDataType::FLOAT3:   return GL_FLOAT;
+		case ShaderDataType::FLOAT4:   return GL_FLOAT;
+		case ShaderDataType::MAT3:     return GL_FLOAT;
+		case ShaderDataType::MAT4:     return GL_FLOAT;
+		case ShaderDataType::INT:      return GL_INT;
+		case ShaderDataType::INT2:     return GL_INT;
+		case ShaderDataType::INT3:     return GL_INT;
+		case ShaderDataType::INT4:     return GL_INT;
+		case ShaderDataType::BOOL:     return GL_BOOL;
+		}
+		return 0;
 	}
 
 	int GetUniformLocation(Shader& shader, const std::string& name)

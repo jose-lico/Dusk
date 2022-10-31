@@ -4,8 +4,8 @@
 
 namespace DuskEngine 
 {
+	struct VertexArray;
 	class OpenGLContext;
-	class VertexArray;
 	class Mesh;
 	class Window;
 

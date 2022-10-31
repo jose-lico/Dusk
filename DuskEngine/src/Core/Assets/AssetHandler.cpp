@@ -47,7 +47,7 @@ namespace DuskEngine
 	{
 		for(auto mesh : m_MeshPool.m_Pool)
 		{
-			mesh.m_VA.Free();
+			OpenGLAPI::FreeVertexArray(mesh.m_VA);
 		}
 
 		for (auto texture : m_TexturePool.m_Pool)

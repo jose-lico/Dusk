@@ -6,9 +6,10 @@
 
 namespace DuskEngine
 {
-	class VertexArray;
+	struct VertexArray;
 	struct Texture;
 	struct Shader;
+	struct VertexBuffer;
 	enum class BufferType : uint16_t;
 	enum class UsageType : uint16_t;
 }
@@ -22,6 +23,11 @@ namespace DuskEngine :: OpenGLAPI
 	void SetBufferData(uint32_t& id, BufferType buffer, UsageType usage, void* data, size_t size);
 	void BindBuffer(BufferType BufferType, uint32_t id);
 	void FreeBuffer(uint32_t& id);
+
+	void GenVertexArrays(uint32_t& id);
+	void BindVertexArray(uint32_t id);
+	void SetVertexAttribPointer(VertexBuffer& vb);
+	void FreeVertexArray(VertexArray& va);
 
 	void SetTextureData(Texture& textureData, const unsigned char* data, bool offset = false);
 	void BindTexture(uint32_t slot, uint32_t id);
