@@ -67,51 +67,59 @@ namespace DuskEngine
 		FramebufferSpecification fbSpec;
 		fbSpec.Width = 720;
 		fbSpec.Height = 480;
-		m_EditorSceneFB = MakeRef<Framebuffer>(fbSpec);
-		m_PlayingSceneFB = MakeRef<Framebuffer>(fbSpec);
+		{
+			Timer panels("FB");
+
+			m_EditorSceneFB = MakeRef<Framebuffer>(fbSpec);
+			m_PlayingSceneFB = MakeRef<Framebuffer>(fbSpec);
+		}
 
 		m_EditingScene = MakeRef<Scene>("Editing Scene");
 
 		SceneSerializer::DeserializeText(m_EditingScene, "res/scenes/scene.yaml");
 
-		m_Panels.push_back(new InspectorPanel(m_EditingScene->m_AssetHandler, m_EditorDB));
-		InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
-		m_Panels.push_back(new ConsolePanel());
-		m_Panels.push_back(new ContentBrowserPanel());
-		m_Panels.push_back(new GameViewportPanel(m_PlayingSceneFB, *m_EditingScene->GetMainCamera(), &m_Playing));
-		m_GameViewportPanel = (GameViewportPanel*)m_Panels.back();
-		m_Panels.push_back(new SceneViewportPanel(m_EditorSceneFB, m_EditorCamera));
-		m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
-		m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel));
-		m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
+		{
+			Timer panels("Creating Panels");
+
+			m_Panels.push_back(new InspectorPanel(m_EditingScene->m_AssetHandler, m_EditorDB));
+			InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
+			m_Panels.push_back(new ConsolePanel());
+			m_Panels.push_back(new ContentBrowserPanel());
+			m_Panels.push_back(new GameViewportPanel(m_PlayingSceneFB, *m_EditingScene->GetMainCamera(), &m_Playing));
+			m_GameViewportPanel = (GameViewportPanel*)m_Panels.back();
+			m_Panels.push_back(new SceneViewportPanel(m_EditorSceneFB, m_EditorCamera));
+			m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
+			m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel));
+			m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
 
 
-		auto play = [&]() {
-			m_Playing = true;
-			m_PlayingScene = MakeRef<Scene>("Playing Scene");
-			SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");
-			m_PlayingScene->OnAwakeRuntime();
-			ImGui::SetWindowFocus(ICON_FK_GAMEPAD "  Game");
-			m_GameViewportPanel->SetCamera(m_PlayingScene->GetMainCamera());
-			m_HierarchyPanel->SetScene(m_PlayingScene); 
-		};
+			auto play = [&]() {
+				m_Playing = true;
+				m_PlayingScene = MakeRef<Scene>("Playing Scene");
+				SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");
+				m_PlayingScene->OnAwakeRuntime();
+				ImGui::SetWindowFocus(ICON_FK_GAMEPAD "  Game");
+				m_GameViewportPanel->SetCamera(m_PlayingScene->GetMainCamera());
+				m_HierarchyPanel->SetScene(m_PlayingScene); 
+			};
 
-		auto stop = [&]() {
-			m_PlayingScene->OnShutdownRuntime();
-			m_PlayingScene.reset();
-			m_Playing = false;
-			m_Paused = false;
-			ImGui::SetWindowFocus(ICON_FK_EYE "  Viewport");
-			m_GameViewportPanel->SetCamera(m_EditingScene->GetMainCamera());
-			m_HierarchyPanel->SetScene(m_EditingScene);
-		};
+			auto stop = [&]() {
+				m_PlayingScene->OnShutdownRuntime();
+				m_PlayingScene.reset();
+				m_Playing = false;
+				m_Paused = false;
+				ImGui::SetWindowFocus(ICON_FK_EYE "  Viewport");
+				m_GameViewportPanel->SetCamera(m_EditingScene->GetMainCamera());
+				m_HierarchyPanel->SetScene(m_EditingScene);
+			};
 
-		auto pause = [&]() {
-			m_Paused = !m_Paused;
-		};
+			auto pause = [&]() {
+				m_Paused = !m_Paused;
+			};
 
-		m_Panels.push_back(new Toolbar(&m_Playing, &m_Paused, play, stop, pause));
-		m_Panels.push_back(new DebugPanel());
+			m_Panels.push_back(new Toolbar(&m_Playing, &m_Paused, play, stop, pause));
+			m_Panels.push_back(new DebugPanel());
+		}
 	}
 
 	void EditorLayer::OnUpdate()

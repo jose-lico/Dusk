@@ -2,6 +2,7 @@
 #include "Window.h"
 
 #include "Core/Events/Events.h"
+#include "Utils/Profiling/Timer.h"
 
 #include "GLFW/glfw3.h"
 #include "GL/glew.h"
@@ -13,6 +14,7 @@ namespace DuskEngine
 	Window::Window(const WindowData& data)
 		:m_Data(data)
 	{
+		Timer windowTimer("Window creation");
 		glfwInit();
 
 		glfwWindowHint(GLFW_SAMPLES, 4);
@@ -147,6 +149,4 @@ namespace DuskEngine
 	{
 		return glfwWindowShouldClose(m_Window);
 	}
-
-	
 }

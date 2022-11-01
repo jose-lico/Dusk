@@ -17,7 +17,7 @@ namespace DuskEngine
 	class Timer
 	{
 	public:
-		Timer(const std::string& text);
+		Timer(const std::string& text, bool runtime = false);
 		~Timer();
 		inline static TimerNode* GetRootTimer() { return m_RootTimer; }
 	private:

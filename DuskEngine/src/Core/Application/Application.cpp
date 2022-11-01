@@ -9,7 +9,6 @@
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Events/EventBase.h"
 #include "Core/Renderer/Renderer.h"
-#include "Utils/Profiling/Timer.h"
 #ifdef DUSK_IMGUI
 #include "Utils/ImGui/ImGuiLayer.h"
 #endif
@@ -59,10 +58,7 @@ namespace DuskEngine
 
 		WindowData data;
 		data.Title = m_Specs.Name + " | " + m_Specs.Platform + " | " + m_Specs.Target;
-		{
-			Timer windowTimer("Window creation");
-			m_Window = new Window(data);
-		}
+		m_Window = new Window(data);
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		m_Renderer = new Renderer(*m_Window);
@@ -71,12 +67,9 @@ namespace DuskEngine
 		
 		m_LayerStack = new LayerStack();
 #ifdef DUSK_IMGUI
-		{
-			Timer imguiTimer("ImGuiLayer creation");
-			m_ImGuiLayer = new ImGuiLayer(&GetWindow());
-			m_LayerStack->PushOverlay(m_ImGuiLayer);
-			m_ImGuiLayer->OnAttach();
-		}
+		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
+		m_LayerStack->PushOverlay(m_ImGuiLayer);
+		m_ImGuiLayer->OnAttach();
 #endif
 	}
 

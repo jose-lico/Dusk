@@ -4,6 +4,7 @@
 #include "Style.h"
 #include "Core/Events/Events.h"
 #include "Core/Application/Window.h"
+#include "Utils/Profiling/Timer.h"
 
 #include "fonts/roboto/Roboto-Regular.embedded"
 #include "fonts/forkawesome/forkawesome-webfont.embedded"
@@ -29,6 +30,7 @@ namespace DuskEngine
 
 	void ImGuiLayer::OnAttach()
 	{
+		Timer imguiTimer("ImGuiLayer");
 		ImGui::CreateContext();
 
 		ImGuiIO& io = ImGui::GetIO();

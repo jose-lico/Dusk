@@ -9,9 +9,9 @@
 #include "Platform/OpenGL/OpenGLAPI.h"
 #include "Platform/OpenGL/Texture.h"
 #include "Assets/Material.h"
-
 #include "Utils/Rendering/PrimitiveMesh.h"
 #include "Core/Scripting/LuaScript.h"
+#include "Utils/Profiling/Timer.h"
 
 #include <iostream>
 
@@ -22,6 +22,7 @@ namespace DuskEngine
 	AssetHandler::AssetHandler(const std::string& name)
 		:m_Name(name)
 	{
+		Timer assetHandlerTimer("Asset Handler " + name);
 		m_AssetHandlers.push_back(this);
 
 		m_ShaderPool.m_AssetHandler = this;

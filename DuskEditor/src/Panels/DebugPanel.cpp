@@ -11,14 +11,18 @@ namespace DuskEngine
 {
 	TimerNode* DebugPanel::m_RootTimer = nullptr;
 
-	void GoDown(TimerNode* node);
+	void GoDownTreeEx(TimerNode* node);
+	void GoDownDelete(TimerNode* node);
 
 	DebugPanel::DebugPanel()
 	{
 		m_RootTimer = Timer::GetRootTimer();
 	}
+
 	DebugPanel::~DebugPanel()
 	{
+		GoDownDelete(m_RootTimer);
+		delete m_RootTimer;
 	}
 
 	void DebugPanel::OnImGuiRender()
@@ -32,14 +36,14 @@ namespace DuskEngine
 
 		if (ImGui::TreeNodeEx(message.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			GoDown(m_RootTimer);
+			GoDownTreeEx(m_RootTimer);
 			ImGui::TreePop();
 		}
 
 		ImGui::End();
 	}
 
-	void GoDown(TimerNode* node)
+	void GoDownTreeEx(TimerNode* node)
 	{
 		for each (auto timer in node->Children)
 		{
@@ -47,9 +51,18 @@ namespace DuskEngine
 			std::string message = timer->Name + ": " + fmt::format("{:.3f}", duration) + " ms";
 			if (ImGui::TreeNodeEx(message.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Leaf))
 			{
-				GoDown(timer);
+				GoDownTreeEx(timer);
 				ImGui::TreePop();
 			}
+		}
+	}
+
+	void GoDownDelete(TimerNode* node)
+	{
+		for each (auto timer in node->Children)
+		{
+			GoDownDelete(timer);
+			delete timer;
 		}
 	}
 }
