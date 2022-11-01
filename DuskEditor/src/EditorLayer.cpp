@@ -10,6 +10,7 @@
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/AssetHandler.h"
 #include "Platform/OpenGL/Framebuffer.h"
+#include "Utils/Profiling/Timer.h"
 
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/string_cast.hpp"
@@ -40,13 +41,16 @@ namespace DuskEngine
 
 	void EditorLayer::OnAttach()
 	{
-		auto& db = Application::Get().GetAssetDatabase();
+		{
+			Timer databaseTimer("Loading project assets");
+			auto& db = Application::Get().GetAssetDatabase();
 
-		m_EditorDB = new AssetDatabaseEditor(&db);
-		m_EditorDB->RegisterAssets();
-		m_EditorDB->ImportAssets();
+			m_EditorDB = new AssetDatabaseEditor(&db);
+			m_EditorDB->RegisterAssets();
+			m_EditorDB->ImportAssets();
 		
-		db.LoadProject();
+			db.LoadProject();
+		}
 
 		m_AssetHandler = MakeRef<AssetHandler>("EditorHandler");
 
@@ -102,6 +106,7 @@ namespace DuskEngine
 		};
 
 		m_Panels.push_back(new Toolbar(&m_Playing, &m_Paused, play, stop, pause));
+		m_Panels.push_back(new DebugPanel());
 	}
 
 	void EditorLayer::OnUpdate()

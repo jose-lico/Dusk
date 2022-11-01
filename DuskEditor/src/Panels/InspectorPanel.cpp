@@ -391,7 +391,7 @@ namespace DuskEngine
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
 			int modelIndex = 0;
-			uuids::uuid modelID = m_AssetHandler->AssetPool(meshes[0]->meshHandle).GetUUID();
+			uuids::uuid modelID = m_AssetHandler->GetAsset(meshes[0]->meshHandle).GetUUID();
 
 			for (unsigned int i = 0; i < m_EditorDB->m_ModelDatabase.size(); i++)
 			{
@@ -402,7 +402,7 @@ namespace DuskEngine
 
 			if(!modelIndex)
 			{
-				switch (m_AssetHandler->AssetPool(meshes[0]->meshHandle).GetType())
+				switch (m_AssetHandler->GetAsset(meshes[0]->meshHandle).GetType())
 				{
 				case MeshType::Quad:
 					modelIndex = 0;
@@ -457,7 +457,7 @@ namespace DuskEngine
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> materialList; // Later add default materials
 			int materialIndex = 0;
-			uuids::uuid materialID = m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetUUID();
+			uuids::uuid materialID = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetUUID();
 				;
 
 			for (unsigned int i = 0; i < m_EditorDB->m_MaterialDatabase.size(); i++)
@@ -494,14 +494,14 @@ namespace DuskEngine
 			ImGui::Separator();
 			ImGui::Separator();
 
-			ImGui::Text(m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetName().c_str());
+			ImGui::Text(m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetName().c_str());
 
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> shaderList;
 			int shaderIndex = 0;
 			// bad
-			uuids::uuid shaderID = m_AssetHandler->AssetPool<Shader>(
-				m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetShaderHandle()).m_UUID;
+			uuids::uuid shaderID = m_AssetHandler->GetAsset<Shader>(
+				m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetShaderHandle()).m_UUID;
 
 			for (unsigned int i = 0; i < m_EditorDB->m_ShaderDatabase.size(); i++)
 			{
@@ -524,10 +524,10 @@ namespace DuskEngine
 							
 							auto id = m_DB->GetUUID(m_EditorDB->m_ShaderDatabase[shaderIndex]->GetPath());
 							auto shaderHandle = m_AssetHandler->AddToAssetPool<Shader>(id);
-							m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).SetShader(shaderHandle);
+							m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SetShader(shaderHandle);
 							
-							m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).SerializeText(
-								m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).GetPath().string());
+							m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SerializeText(
+								m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetPath().string());
 						}
 					}
 
@@ -543,9 +543,9 @@ namespace DuskEngine
 			//// if accessing from asset browser ->		propagate
 			//// if playing and accessing from scene ->	do not propagate
 
-			auto& material = m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle);
+			auto& material = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle);
 
-			for (auto& uniform : m_AssetHandler->AssetPool<Material>(meshes[0]->materialHandle).m_Uniforms)
+			for (auto& uniform : m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).m_Uniforms)
 			{
 				if (uniform.Type == UniformType::Vec3)
 				{
@@ -557,7 +557,7 @@ namespace DuskEngine
 				{
 					// this is broken but whatever, will be replaced in the future
 					ImGui::Text(uniform.Name.c_str());
-					if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->AssetPool<Texture>(uniform.Data.dataHandle).ResourceID,
+					if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->GetAsset<Texture>(uniform.Data.dataHandle).ResourceID,
 						ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
 					{
 						TRACE("To be implemented");
@@ -570,7 +570,7 @@ namespace DuskEngine
 							const wchar_t* data = (const wchar_t*)payload->Data;
 							std::wstring ws(data);
 
-							auto& texture = m_AssetHandler->AssetPool<Texture>(m_AssetHandler->AddToAssetPool<Texture>(m_DB->GetUUID(ws)));
+							auto& texture = m_AssetHandler->GetAsset<Texture>(m_AssetHandler->AddToAssetPool<Texture>(m_DB->GetUUID(ws)));
 							material.SetTexture(uniform.Name, texture);
 							material.SerializeText(material.GetPath().string());
 						}

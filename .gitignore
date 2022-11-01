@@ -5,6 +5,9 @@ premake5.exe
 bin
 bin-int
 
+#vs code
+.vscode
+
 # vs stuff
 .vs
 *.sln

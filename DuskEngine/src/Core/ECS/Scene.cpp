@@ -121,7 +121,7 @@ namespace DuskEngine
 
 				if (!meta.enabled) continue;
 
-				auto& material = m_AssetHandler->AssetPool<Material>(mesh.materialHandle);
+				auto& material = m_AssetHandler->GetAsset<Material>(mesh.materialHandle);
 
 				material.UploadUniforms(*m_AssetHandler);
 
@@ -129,7 +129,7 @@ namespace DuskEngine
 					* glm::toMat4(glm::quat(transform.rotation))
 					* glm::scale(glm::mat4(1.0f), transform.scale);
 
-				Shader& shader = m_AssetHandler->AssetPool<Shader>(material.m_ShaderHandle);
+				Shader& shader = m_AssetHandler->GetAsset<Shader>(material.m_ShaderHandle);
 
 				// Expected Uniforms
 				OpenGLAPI::SetUniformMat4(shader, "e_Model", transform.model);
@@ -186,7 +186,7 @@ namespace DuskEngine
 				OpenGLAPI::SetUniformInt(shader, "e_DirectionalLightsCount", dirLightIndex);
 				OpenGLAPI::SetUniformInt(shader, "e_PointLightsCount", pointLightIndex);
 
-				renderer.Submit(m_AssetHandler->AssetPool(mesh.meshHandle));
+				renderer.Submit(m_AssetHandler->GetAsset(mesh.meshHandle));
 			}
 
 			//glm::mat4 viewMatrix = camera.camera.viewMatrix;
@@ -286,7 +286,7 @@ namespace DuskEngine
 
 				if (!meta.enabled) continue;
 
-				auto& material = m_AssetHandler->AssetPool<Material>(mesh.materialHandle);
+				auto& material = m_AssetHandler->GetAsset<Material>(mesh.materialHandle);
 
 				material.UploadUniforms(*m_AssetHandler);
 
@@ -294,7 +294,7 @@ namespace DuskEngine
 					* glm::toMat4(glm::quat(transform.rotation))
 					* glm::scale(glm::mat4(1.0f), transform.scale);
 
-				Shader& shader = m_AssetHandler->AssetPool<Shader>(material.m_ShaderHandle);
+				Shader& shader = m_AssetHandler->GetAsset<Shader>(material.m_ShaderHandle);
 
 				// Expected Uniforms
 				OpenGLAPI::SetUniformMat4(shader, "e_Model", transform.model);
@@ -349,7 +349,7 @@ namespace DuskEngine
 				OpenGLAPI::SetUniformInt(shader, "e_DirectionalLightsCount", dirLightIndex);
 				OpenGLAPI::SetUniformInt(shader, "e_PointLightsCount", pointLightIndex);
 
-				renderer.Submit(m_AssetHandler->AssetPool(mesh.meshHandle));
+				renderer.Submit(m_AssetHandler->GetAsset(mesh.meshHandle));
 			}
 
 			renderer.EndScene();

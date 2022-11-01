@@ -17,18 +17,18 @@ namespace DuskEngine
 	struct ShaderNew;
 
 	template<typename T>
-	class _AssetPool
+	class AssetPool
 	{
 	public:
-		_AssetPool() = default;
-		~_AssetPool() = default;
+		AssetPool() = default;
+		~AssetPool() = default;
 
 		uint32_t AddToPool(std::unordered_map<uuids::uuid, uint32_t>& handleMap, const uuids::uuid& uuid)
 		{
 			if (handleMap.find(uuid) == handleMap.end())
 			{
 				if constexpr (std::is_same<T, Shader>::value)
-					m_Pool.push_back(std::move(Application::Get().GetAssetDatabase().LoadShader(uuid)));
+					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadShader(uuid));
 				else if constexpr (std::is_same<T, Texture>::value)
 					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadTexture(uuid));
 				else if constexpr (std::is_same<T, Mesh>::value)

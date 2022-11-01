@@ -1,32 +1,31 @@
 #pragma once
-#include "Core/Application/Core.h"
 
 #include <chrono>
 #include <string>
+#include <vector>
 
 namespace DuskEngine
 {
+	struct TimerNode {
+		std::chrono::nanoseconds Duration;
+
+		std::string Name;
+		TimerNode* Parent;
+		std::vector<TimerNode*> Children;
+	};
+
 	class Timer
 	{
 	public:
-		Timer(const std::string& text)
-			:m_Text(text), m_Start(std::chrono::high_resolution_clock::now()), m_Duration(0.0f)
-		{
-		}
-
-		~Timer()
-		{
-			auto end = std::chrono::high_resolution_clock::now();
-			m_Duration = end - m_Start;
-			
-			std::string message = m_Text + " timer took: " + std::to_string(m_Duration.count()) + " seconds";
-			TRACE(message.c_str());
-			message = m_Text + " timer took: " + std::to_string((m_Duration.count() * 1000.0f)) + " ms";
-			TRACE(message.c_str());
-		}
+		Timer(const std::string& text);
+		~Timer();
+		inline static TimerNode* GetRootTimer() { return m_RootTimer; }
 	private:
+		static TimerNode* m_RootTimer;
+		static TimerNode* m_LastTimer;
+
+		TimerNode* m_MyNode;
 		std::string m_Text;
 		std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
-		std::chrono::duration<float> m_Duration;
 	};
 }

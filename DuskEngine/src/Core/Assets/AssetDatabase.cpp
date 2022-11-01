@@ -28,34 +28,34 @@ namespace DuskEngine
 	// At the moment there is no concept of project, so the engine simply loads all assets inside the "res" folder.
 	void AssetDatabase::LoadProject()
 	{
-		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
-		{
-			// skip the import folder
-			if (directoryEntry.path().filename() == ".import")
-				continue;
+		//for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
+		//{
+		//	// skip the import folder
+		//	if (directoryEntry.path().filename() == ".import")
+		//		continue;
 
-			if(directoryEntry.is_directory())
-			{
-				m_CurrentDirectory = directoryEntry.path();
-				LoadProject();
-			}
-			else
-			{
-				// If the file is a meta file, register it
-				if (directoryEntry.path().extension() == ".meta")
-				{
-					//RegisterAsset(directoryEntry);
-					continue;
-				}
-				// If the file does not have a meta file and is not a meta file itself
-				else if (!std::filesystem::exists(directoryEntry.path().string() + ".meta") && directoryEntry.path().extension() != ".meta")
-				{
-					//CreateMetaFile(directoryEntry);
-				}
-			}
-		}
+		//	if(directoryEntry.is_directory())
+		//	{
+		//		m_CurrentDirectory = directoryEntry.path();
+		//		LoadProject();
+		//	}
+		//	else
+		//	{
+		//		// If the file is a meta file, register it
+		//		if (directoryEntry.path().extension() == ".meta")
+		//		{
+		//			//RegisterAsset(directoryEntry);
+		//			continue;
+		//		}
+		//		// If the file does not have a meta file and is not a meta file itself
+		//		else if (!std::filesystem::exists(directoryEntry.path().string() + ".meta") && directoryEntry.path().extension() != ".meta")
+		//		{
+		//			//CreateMetaFile(directoryEntry);
+		//		}
+		//	}
+		//}
 
-		m_CurrentDirectory = m_RootDirectory;
+		//m_CurrentDirectory = m_RootDirectory;
 	}
 
 	uuids::uuid AssetDatabase::CreateResource(const std::filesystem::path& path)

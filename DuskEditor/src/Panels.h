@@ -8,3 +8,4 @@
 #include "Panels/ConsolePanel.h"
 #include "Panels/ContentBrowserPanel.h"
 #include "Panels/Toolbar.h"
+#include "Panels/DebugPanel.h"

@@ -1,10 +1,17 @@
 #pragma once
 
+#include "Utils/Profiling/Timer.h"
+
 extern DuskEngine::Application* DuskEngine::CreateApplication();
 
 int main()
 {
-	auto app = DuskEngine::CreateApplication();
+	DuskEngine::Application* app;
+
+	{
+		DuskEngine::Timer startup("Startup");
+		app = DuskEngine::CreateApplication();
+	}
 
 	app->Run();
 

@@ -32,7 +32,7 @@ namespace DuskEngine
 
 	void Material::UploadUniforms(AssetHandler& assetHandler)
 	{
-		auto& shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
+		auto& shader = m_OwningHandler->GetAsset<Shader>(m_ShaderHandle);
 		
 		OpenGLAPI::UseProgram(shader.ResourceID);
 
@@ -47,7 +47,7 @@ namespace DuskEngine
 				break;
 			case UniformType::Texture:
 				OpenGLAPI::SetUniformInt(shader, "u_" + uniform.Name, textSlot);
-				auto& texture = assetHandler.AssetPool<Texture>(uniform.Data.dataHandle);
+				auto& texture = assetHandler.GetAsset<Texture>(uniform.Data.dataHandle);
 				OpenGLAPI::BindTexture(textSlot++, texture.ResourceID);
 				break;
 			}
@@ -132,7 +132,7 @@ namespace DuskEngine
 				out << YAML::Key << uniform.Name << YAML::Value << uniform.Data.vec3;
 				break;
 			case UniformType::Texture:
-				out << YAML::Key << uniform.Name << YAML::Value << m_OwningHandler->AssetPool<Texture>(uniform.Data.dataHandle);
+				out << YAML::Key << uniform.Name << YAML::Value << m_OwningHandler->GetAsset<Texture>(uniform.Data.dataHandle);
 				break;
 			}
 		}
@@ -145,7 +145,7 @@ namespace DuskEngine
 
 	void Material::CreateUniforms()
 	{
-		auto& shader = m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
+		auto& shader = m_OwningHandler->GetAsset<Shader>(m_ShaderHandle);
 
 		for (auto uniform : shader.UniformSpecs)
 		{

@@ -11,7 +11,6 @@ Some of these libraries will be swapped out in the future for a custom solution,
 - [spdlog](https://github.com/gabime/spdlog) - Fast C++ logging library
 - [Dear ImGui](https://github.com/ocornut/imgui) - Bloat-free Graphical User interface for C++ with minimal dependencies
 - [entt](https://github.com/skypjack/entt) - Fast and reliable entity component system (ECS)
-- [nfd](https://github.com/qolisipo/nativefiledialog) - A tiny, neat C library that portably invokes native file open and save dialogs
 - [yaml-cpp](https://github.com/qolisipo/yaml-cpp) - A YAML parser and emitter in C++
 - [stduuid](https://github.com/mariusbancila/stduuid) - A C++17 cross-platform implementation for UUIDs
 - [assimp](https://github.com/qolisipo/assimp-1) - The official Open-Asset-Importer-Library Repository. Loads 40+ 3D-file-formats into one unified and clean data structure.

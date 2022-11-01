@@ -50,7 +50,6 @@ namespace DuskEngine
 		// change to pass handle only
 		void SetTexture(const std::string& name, Texture& texture);
 		
-		//const uuids::uuid& GetShaderUUID();
 		const uint32_t GetShaderHandle() { return m_ShaderHandle; }
 		
 		// Serialization
