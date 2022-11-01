@@ -33,10 +33,18 @@ namespace DuskEngine
 		std::string Platform = PLATFORM;
 	};
 
+	struct CliOptions
+	{
+		std::string ExeName;
+		bool Help = false;
+		bool Verbose = false;
+		bool DumpLogs = false;
+	};
+
 	class Application
 	{
 	public:
-		Application(const ApplicationSpecs& specs);
+		Application(const ApplicationSpecs& specs, const CliOptions& options);
 		virtual ~Application();
 
 		static Application& Get() { return *s_Instance; }
@@ -50,6 +58,9 @@ namespace DuskEngine
 		inline Window& GetWindow() const { return *m_Window; }
 		inline Renderer& GetRenderer() const { return *m_Renderer; }
 		inline AssetDatabase& GetAssetDatabase() const { return *m_AssetDatabase; }
+		inline OS& GetOS() const { return *m_OS; }
+
+		inline const CliOptions& GetCmdOptions() const { return m_Options; }
 
 		inline const std::string& GetStartupTime() const { return m_StartupTime; }
 	private:
@@ -66,9 +77,10 @@ namespace DuskEngine
 		OS* m_OS;
 
 		ApplicationSpecs m_Specs;
+		CliOptions m_Options;
 
 		std::string m_StartupTime;
 	};
 
-	extern Application* CreateApplication();
+	extern Application* CreateApplication(int argc, char** argv);
 }

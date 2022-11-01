@@ -18,8 +18,8 @@ namespace DuskEngine
 {
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application(const ApplicationSpecs& specs)
-		:m_Specs(specs)
+	Application::Application(const ApplicationSpecs& specs, const CliOptions& options)
+		:m_Specs(specs), m_Options(options)
 	{
 		s_Instance = this;
 
@@ -29,7 +29,31 @@ namespace DuskEngine
 		tstruct = *localtime(&now);
 		strftime(buffer, sizeof(buffer), "%Y-%m-%d_%Hh%Mm%Ss", &tstruct);
 
+		m_StartupTime = buffer;
+
 		m_OS = OS::Create();
+
+		if (m_OS->IsConsoleAttached())
+		{
+			printf("Dusk Engine WIP - https://github.com/jose-lico/Dusk\n");
+			printf("Personal game engine to explore and learn\n");
+			printf("(c) 2021-2022 Jose Lico\n\n");
+		}
+
+		if (m_Options.Help)
+		{
+			printf("Usage: %s [options]\n\n", m_Options.ExeName.c_str());
+			printf("Options:\n\n");
+			printf("-h, --help                              Print this message and quit the application\n");
+			printf("-v, --verbose                           Prints more useful information to the console\n");
+			printf("-l, --log                               Dumps all logs to a file. Example log file name: %s.csv\n", m_StartupTime.c_str());
+			return;
+		}
+
+#if DUSK_DEBUG
+		m_Options.Verbose = true;
+		m_Options.DumpLogs = true;
+#endif
 
 		m_Logger = new Logger(LOGGER);
 

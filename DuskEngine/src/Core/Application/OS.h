@@ -8,5 +8,10 @@ namespace DuskEngine
 		virtual ~OS() = default;
 
 		static OS* Create();
+		inline static bool IsConsoleAttached() { return m_OS->m_AttachedConsole; }
+	protected:
+		bool m_AttachedConsole = false;
+	private:
+		static OS* m_OS;
 	};
 }

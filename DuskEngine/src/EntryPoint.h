@@ -1,19 +1,15 @@
 #pragma once
 
-#include "Utils/Profiling/Timer.h"
+extern DuskEngine::Application* DuskEngine::CreateApplication(int argc, char** argv);
 
-extern DuskEngine::Application* DuskEngine::CreateApplication();
-
-int main()
+int main(int argc, char** argv)
 {
 	DuskEngine::Application* app;
 
-	{
-		DuskEngine::Timer startup("Startup");
-		app = DuskEngine::CreateApplication();
-	}
+	app = DuskEngine::CreateApplication(argc, argv);
 
-	app->Run();
+	if(!app->GetCmdOptions().Help)
+		app->Run();
 
 	delete app;
 

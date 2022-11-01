@@ -13,6 +13,6 @@ namespace DuskEngine
 
 		virtual void OnImGuiRender() override;
 	private:
-		//static TimerNode* m_RootTimer;
+		static TimerNode* m_RootTimer;
 	};
 }

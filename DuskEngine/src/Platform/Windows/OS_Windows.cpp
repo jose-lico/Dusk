@@ -18,14 +18,19 @@ namespace DuskEngine
 	OS_Windows::OS_Windows()
 	{
 #ifdef DUSK_RELEASE
-		// Yoinked from https://github.com/godotengine/godot/blob/master/platform/windows/os_windows.cpp shamelessly
-		if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+		// Yoinked shamelessly from https://github.com/godotengine/godot/blob/master/platform/windows/os_windows.cpp
+		if (AttachConsole(ATTACH_PARENT_PROCESS)) 
+		{
 			RedirectStream("CONIN$", "r", stdin, STD_INPUT_HANDLE);
 			RedirectStream("CONOUT$", "w", stdout, STD_OUTPUT_HANDLE);
 			RedirectStream("CONOUT$", "w", stderr, STD_ERROR_HANDLE);
 
 			printf("\n"); // Make sure our output is starting from the new line.
+			
+			m_AttachedConsole = true;
 		}
+#elif DUSK_DEBUG
+		m_AttachedConsole = true;
 #endif
 	}
 
@@ -34,7 +39,7 @@ namespace DuskEngine
 	}
 
 #ifdef DUSK_RELEASE
-	// Yoinked from https://github.com/godotengine/godot/blob/master/platform/windows/os_windows.cpp shamelessly
+	// Yoinked shamelessly from https://github.com/godotengine/godot/blob/master/platform/windows/os_windows.cpp
 	void RedirectStream(const char* p_file_name, const char* p_mode, FILE* p_cpp_stream, const DWORD p_std_handle) 
 	{
 		const HANDLE h_existing = GetStdHandle(p_std_handle);

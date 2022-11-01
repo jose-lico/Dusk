@@ -46,7 +46,12 @@ namespace DuskEngine
 			auto& db = Application::Get().GetAssetDatabase();
 
 			m_EditorDB = new AssetDatabaseEditor(&db);
-			m_EditorDB->RegisterAssets();
+
+			{
+				Timer registerAssets("Register Assets");
+				m_EditorDB->RegisterAssets();
+			}
+
 			m_EditorDB->ImportAssets();
 		
 			db.LoadProject();

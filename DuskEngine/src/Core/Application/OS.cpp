@@ -9,12 +9,16 @@
 
 namespace DuskEngine
 {
-	OS* DuskEngine::OS::Create()
+	OS* OS::m_OS = nullptr;
+
+	OS* OS::Create()
 	{
 #ifdef DUSK_WINDOWS
-		return new OS_Windows();
+		m_OS = new OS_Windows();
+		return m_OS;
 #elif DUSK_LINUX
-		return new OS_Linux();
+		m_OS = new OS_Linux();
+		return m_Linux;
 #endif
 	}
 }

@@ -19,7 +19,7 @@ namespace DuskEngine
 		}
 	};
 
-	Application* CreateApplication()
+	Application* CreateApplication(int argc, char** argv)
 	{
 		ApplicationSpecs spec;
 		spec.Name = "Dusk Runtime";
