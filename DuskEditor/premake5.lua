@@ -83,6 +83,7 @@ project "DuskEditor"
 			"dl",
 			"uuid"
 		}
+		buildoptions "-fpermissive"
 
 	filter "configurations:Debug"
 		kind "ConsoleApp"

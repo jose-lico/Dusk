@@ -97,6 +97,9 @@ namespace DuskEngine
 
 	void Logger::Log(const char* message, LogLevel level, const char* file, unsigned int line)
 	{
+#if DUSK_LINUX
+	return;
+#endif
 		// construct struct with message and save for later, editor stuff
 		// In editor mode, this message is always constructed to be displayed in the editor
 		// At runtime, dont bother

@@ -1,7 +1,11 @@
 #pragma once
 
+#include "uuid.h"
+
+#include <vector>
 #include <filesystem>
 #include <unordered_map>
+#include <optional>
 
 #undef CreateMetaFile
 
@@ -14,6 +18,13 @@ namespace DuskEngine
 {
 	class AssetDatabase;
 	class Asset;
+
+	struct opt_path_hash2 {
+		std::size_t operator()(const std::optional<std::filesystem::path>& path) const {
+			return path ? hash_value(path.value()) : 0;
+		}
+	};
+
 
 	class AssetDatabaseEditor
 	{
@@ -32,7 +43,7 @@ namespace DuskEngine
 
 		std::filesystem::path m_RootDirectory = "res";
 		std::filesystem::path m_CurrentDirectory;
-		std::unordered_map <std::filesystem::path, uuids::uuid> m_UUIDsMap;
+		std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash2> m_UUIDsMap;
 
 		std::vector<std::tuple<std::filesystem::path, std::filesystem::path>> m_ImagesToImport;
 

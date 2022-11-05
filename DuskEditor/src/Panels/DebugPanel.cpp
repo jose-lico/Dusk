@@ -45,7 +45,7 @@ namespace DuskEngine
 
 	void GoDownTreeEx(TimerNode* node)
 	{
-		for each (auto timer in node->Children)
+		for(auto timer : node->Children)
 		{
 			auto duration = timer->Duration.count() / 1000000.0f;
 			std::string message = timer->Name + ": " + fmt::format("{:.3f}", duration) + " ms";
@@ -59,7 +59,7 @@ namespace DuskEngine
 
 	void GoDownDelete(TimerNode* node)
 	{
-		for each (auto timer in node->Children)
+		for(auto timer : node->Children)
 		{
 			GoDownDelete(timer);
 			delete timer;

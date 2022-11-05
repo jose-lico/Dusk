@@ -9,8 +9,6 @@
 
 #include "Utils/Serialization/Yaml.h"
 
-#include "uuid.h"
-
 #undef CreateMetaFile
 
 namespace DuskEngine
