@@ -8,7 +8,7 @@ int main(int argc, char** argv)
 
 	app = DuskEngine::CreateApplication(argc, argv);
 
-	if(!app->GetCmdOptions().Help)
+	if(!app->GetCliOptions().Help)
 		app->Run();
 
 	delete app;

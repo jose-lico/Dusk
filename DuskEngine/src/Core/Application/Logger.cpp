@@ -18,7 +18,7 @@ namespace DuskEngine
 		m_Loggers.insert({ name, this });
 
 		bool consoleAttached = Application::Get().GetOS().IsConsoleAttached();
-		bool logToFile = Application::Get().GetCmdOptions().DumpLogs;
+		bool logToFile = Application::Get().GetCliOptions().DumpLogs;
 
 		// If the console is not attached and logs are not written to a file, dont bother to create spdlog logger
 		if (!consoleAttached && !logToFile)
@@ -46,7 +46,7 @@ namespace DuskEngine
 			m_Logger->sinks().push_back(fileSink);
 		}
 		
-		bool verbose = Application::Get().GetCmdOptions().Verbose;
+		bool verbose = Application::Get().GetCliOptions().Verbose;
 
 		// Debug mode is always verbose btw
 		if(verbose)
@@ -105,7 +105,7 @@ namespace DuskEngine
 		// At runtime, dont bother
 
 		bool consoleAttached = Application::Get().GetOS().IsConsoleAttached();
-		bool logToFile = Application::Get().GetCmdOptions().DumpLogs;
+		bool logToFile = Application::Get().GetCliOptions().DumpLogs;
 
 		// If the console is not attached and logs are not written to a file, dont call spdlog
 		if (!consoleAttached && !logToFile)

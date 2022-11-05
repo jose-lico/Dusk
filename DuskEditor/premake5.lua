@@ -73,6 +73,7 @@ project "DuskEditor"
 		entrypoint "mainCRTStartup"
 
 	filter "system:linux"
+		kind "ConsoleApp"
 		cppdialect "gnu++17"
 		systemversion "latest"
 		defines "DUSK_LINUX"

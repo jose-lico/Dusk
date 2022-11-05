@@ -16,6 +16,8 @@
 #include "glm/gtx/string_cast.hpp"
 #include "IconsForkAwesome.h"
 
+#include <cstdio>
+
 namespace DuskEngine
 {
 	EditorLayer::EditorLayer()
