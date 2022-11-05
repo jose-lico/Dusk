@@ -13,6 +13,7 @@ namespace DuskEngine
 	class Framebuffer;
 	class EditorCamera;
 	class AssetDatabaseEditor;
+	class Logger;
 
 	class EditorLayer : public Layer
 	{

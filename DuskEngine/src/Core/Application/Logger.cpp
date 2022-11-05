@@ -10,12 +10,12 @@
 
 namespace DuskEngine
 {
-	std::unordered_map<const char*, Logger*> Logger::m_Loggers;
+	std::unordered_map<std::string_view, Logger*> Logger::m_Loggers;
 
 	Logger::Logger(const char* name)
 		:m_Name(name)
 	{
-		m_Loggers.insert({ name, this });
+		m_Loggers[m_Name] = this;
 
 		bool consoleAttached = Application::Get().GetOS().IsConsoleAttached();
 		bool logToFile = Application::Get().GetCliOptions().DumpLogs;
@@ -24,7 +24,7 @@ namespace DuskEngine
 		if (!consoleAttached && !logToFile)
 			return;
 		
-		m_Logger = std::make_shared<spdlog::logger>(name);
+		m_Logger = std::make_shared<spdlog::logger>(m_Name);
 
 		// If the console is attached, create a sink for it
 		std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> consoleSink;
@@ -72,7 +72,7 @@ namespace DuskEngine
 		m_Logger->sinks().push_back(consoleSink);
 		
 		std::string message = "Created Logger ";
-		message.append(name); 
+		message.append(m_Name); 
 		TRACE(message);
 	}
 
@@ -85,21 +85,15 @@ namespace DuskEngine
 
 	Logger* Logger::Get(const char* name)
 	{
-		// for some godforsaken reason, unordered_map.find(name) on gcc 
-		// was finding the entry but returning a nullptr, this works :/    
-		for (auto const& pair : m_Loggers) {
-			if (strcmp(name, pair.first) == 0)
-				return pair.second;
-		}
+		if (m_Loggers.find(name) != m_Loggers.end())
+			return m_Loggers[name];
 
+		// should probably assert
 		return nullptr;
 	}
 
 	void Logger::Log(const char* message, LogLevel level, const char* file, unsigned int line)
 	{
-#if DUSK_LINUX
-	return;
-#endif
 		// construct struct with message and save for later, editor stuff
 		// In editor mode, this message is always constructed to be displayed in the editor
 		// At runtime, dont bother
