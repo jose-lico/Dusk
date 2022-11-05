@@ -16,11 +16,13 @@
 #include "glm/gtx/string_cast.hpp"
 #include "IconsForkAwesome.h"
 
+#include <cstdio>
+
 namespace DuskEngine
 {
 	EditorLayer::EditorLayer()
 	{
-		m_Logger = new Logger("Editor");
+		m_Logger = new Logger(LOGGER);
 
 		TRACE("Tracing from the editor");
 		LOG("Logging from the editor");

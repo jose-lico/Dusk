@@ -242,7 +242,7 @@ namespace DuskEngine
 		if (metas.size() == 1)
 		{
 			char buffer[64];
-			sprintf_s(buffer, metas[0]->name.c_str());
+			sprintf(buffer, metas[0]->name.c_str());
 			if(ImGui::InputText("Name", buffer, IM_ARRAYSIZE(buffer)))
 			{
 				metas[0]->name = buffer;

@@ -1,6 +1,6 @@
 workspace "Dusk"
 	architecture "x64"
-	outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+	outputDir = "%{cfg.system}-%{cfg.buildcfg}-%{cfg.architecture}"
 	dependenciesDir = "%{wks.location}/Dependencies"
 
 	configurations

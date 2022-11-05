@@ -74,6 +74,7 @@ project "DuskEngine"
 		-- removefiles does not work with a path relative to current premake5.lua, must provide full path from workspace location
 		removefiles "%{wks.location}/DuskEngine/src/Platform/Windows/**"
 		links "pthread"
+		buildoptions "-fpermissive" 
 
 	filter "configurations:Debug"
 		runtime "Debug"

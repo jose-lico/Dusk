@@ -12,7 +12,8 @@ namespace DuskEngine
 		DuskEditor(const ApplicationSpecs& specs, const CliOptions& options)
 			: Application(specs, options)
 		{
-			PushLayer(new EditorLayer());
+			if(!m_Options.Help)
+				PushLayer(new EditorLayer());
 		}
 
 		~DuskEditor()

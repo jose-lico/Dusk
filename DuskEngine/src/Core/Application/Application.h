@@ -60,26 +60,28 @@ namespace DuskEngine
 		inline AssetDatabase& GetAssetDatabase() const { return *m_AssetDatabase; }
 		inline OS& GetOS() const { return *m_OS; }
 
-		inline const CliOptions& GetCmdOptions() const { return m_Options; }
+		inline const CliOptions& GetCliOptions() const { return m_Options; }
 
 		inline const std::string& GetStartupTime() const { return m_StartupTime; }
 	private:
 		static Application* s_Instance;
 
 #ifdef DUSK_IMGUI
-		ImGuiLayer* m_ImGuiLayer;
+		ImGuiLayer* m_ImGuiLayer = nullptr;
 #endif
-		LayerStack* m_LayerStack;
-		Logger* m_Logger;
-		Window* m_Window;
-		Renderer* m_Renderer;
-		AssetDatabase* m_AssetDatabase;
-		OS* m_OS;
+		LayerStack* m_LayerStack = nullptr;
+		Logger* m_Logger = nullptr;
+		Window* m_Window = nullptr;
+		Renderer* m_Renderer = nullptr;
+		AssetDatabase* m_AssetDatabase = nullptr;
+		OS* m_OS = nullptr;
 
 		ApplicationSpecs m_Specs;
 		CliOptions m_Options;
 
 		std::string m_StartupTime;
+
+		friend class DuskEditor;
 	};
 
 	extern Application* CreateApplication(int argc, char** argv);

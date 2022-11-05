@@ -10,21 +10,21 @@
 
 namespace DuskEngine
 {
-	std::unordered_map<const char*, Logger*> Logger::m_Loggers;
+	std::unordered_map<std::string_view, Logger*> Logger::m_Loggers;
 
 	Logger::Logger(const char* name)
 		:m_Name(name)
 	{
-		m_Loggers.insert({ name, this });
+		m_Loggers[m_Name] = this;
 
 		bool consoleAttached = Application::Get().GetOS().IsConsoleAttached();
-		bool logToFile = Application::Get().GetCmdOptions().DumpLogs;
+		bool logToFile = Application::Get().GetCliOptions().DumpLogs;
 
 		// If the console is not attached and logs are not written to a file, dont bother to create spdlog logger
 		if (!consoleAttached && !logToFile)
 			return;
 		
-		m_Logger = std::make_shared<spdlog::logger>(name);
+		m_Logger = std::make_shared<spdlog::logger>(m_Name);
 
 		// If the console is attached, create a sink for it
 		std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> consoleSink;
@@ -46,7 +46,7 @@ namespace DuskEngine
 			m_Logger->sinks().push_back(fileSink);
 		}
 		
-		bool verbose = Application::Get().GetCmdOptions().Verbose;
+		bool verbose = Application::Get().GetCliOptions().Verbose;
 
 		// Debug mode is always verbose btw
 		if(verbose)
@@ -72,7 +72,7 @@ namespace DuskEngine
 		m_Logger->sinks().push_back(consoleSink);
 		
 		std::string message = "Created Logger ";
-		message.append(name); 
+		message.append(m_Name); 
 		TRACE(message);
 	}
 
@@ -85,13 +85,10 @@ namespace DuskEngine
 
 	Logger* Logger::Get(const char* name)
 	{
-		// for some godforsaken reason, unordered_map.find(name) on gcc 
-		// was finding the entry but returning a nullptr, this works :/    
-		for (auto const& pair : m_Loggers) {
-			if (strcmp(name, pair.first) == 0)
-				return pair.second;
-		}
+		if (m_Loggers.find(name) != m_Loggers.end())
+			return m_Loggers[name];
 
+		// should probably assert
 		return nullptr;
 	}
 
@@ -102,7 +99,7 @@ namespace DuskEngine
 		// At runtime, dont bother
 
 		bool consoleAttached = Application::Get().GetOS().IsConsoleAttached();
-		bool logToFile = Application::Get().GetCmdOptions().DumpLogs;
+		bool logToFile = Application::Get().GetCliOptions().DumpLogs;
 
 		// If the console is not attached and logs are not written to a file, dont call spdlog
 		if (!consoleAttached && !logToFile)

@@ -9,8 +9,6 @@
 
 #include "Utils/Serialization/Yaml.h"
 
-#include "uuid.h"
-
 #undef CreateMetaFile
 
 namespace DuskEngine
@@ -22,7 +20,7 @@ namespace DuskEngine
 
 	AssetDatabase::~AssetDatabase()
 	{
-
+		
 	}
 
 	// At the moment there is no concept of project, so the engine simply loads all assets inside the "res" folder.

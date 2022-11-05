@@ -18,7 +18,7 @@ namespace DuskEngine
 		return m_OS;
 #elif DUSK_LINUX
 		m_OS = new OS_Linux();
-		return m_Linux;
+		return m_OS;
 #endif
 	}
 }
