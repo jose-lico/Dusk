@@ -6,6 +6,7 @@
 #include "Buffer.h"
 #include "Texture.h"
 #include "Shader.h"
+#include "Framebuffer.h"
 
 namespace DuskEngine :: OpenGLAPI 
 {
@@ -53,6 +54,11 @@ namespace DuskEngine :: OpenGLAPI
 	void BindVertexArray(uint32_t id)
 	{
 		glBindVertexArray(id);
+	}
+
+	void UnbindVertexArray()
+	{
+		glBindVertexArray(0);
 	}
 
 	void SetVertexAttribPointer(VertexBuffer& vb)
@@ -164,9 +170,53 @@ namespace DuskEngine :: OpenGLAPI
 		glUniformMatrix4fv(GetUniformLocation(shader, name), 1, GL_FALSE, &m[0][0]);
 	}
 
-	void UnbindVAO()
+	void ResizeFramebuffer(Framebuffer& buffer)
 	{
-		glBindVertexArray(0);
+		if (buffer.ResourceID)
+		{
+			glDeleteFramebuffers(1, &buffer.ResourceID);
+			glDeleteTextures(1, &buffer.ColorAttachment);
+			glDeleteTextures(1, &buffer.DepthAttachment);
+		}
+
+		glGenFramebuffers(1, &buffer.ResourceID);
+		glBindFramebuffer(GL_FRAMEBUFFER, buffer.ResourceID);
+
+		glGenTextures(1, &buffer.ColorAttachment);
+		glBindTexture(GL_TEXTURE_2D, buffer.ColorAttachment);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, buffer.Width, buffer.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, buffer.ColorAttachment, 0);
+
+		glGenTextures(1, &buffer.DepthAttachment);
+		glBindTexture(GL_TEXTURE_2D, buffer.DepthAttachment);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, buffer.Width, buffer.Height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, buffer.DepthAttachment, 0);
+
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			ERR("Error in the Framebuffer");
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void BindFramebuffer(Framebuffer& buffer)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, buffer.ResourceID);
+		glViewport(0, 0, buffer.Width, buffer.Height);
+	}
+
+	void UnbindFramebuffer()
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void FreeFramebuffer(Framebuffer& buffer)
+	{
+		glDeleteFramebuffers(1, &buffer.ResourceID);
+		glDeleteTextures(1, &buffer.ColorAttachment);
+		glDeleteTextures(1, &buffer.DepthAttachment);
 	}
 
 	void DrawIndexed(const VertexArray& vertexArray)

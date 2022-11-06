@@ -9,7 +9,7 @@
 #include "Core/Scripting/LuaScript.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/AssetHandler.h"
-#include "Platform/OpenGL/Framebuffer.h"
+#include "Platform/OpenGL/OpenGLAPI.h"
 #include "Utils/Profiling/Timer.h"
 
 #include "glm/gtc/type_ptr.hpp"
@@ -37,6 +37,9 @@ namespace DuskEngine
 		{
 			delete panel;
 		}
+
+		OpenGLAPI::FreeFramebuffer(m_EditorSceneFB);
+		OpenGLAPI::FreeFramebuffer(m_PlayingSceneFB);
 
 		delete(m_Logger);
 	}
@@ -66,14 +69,18 @@ namespace DuskEngine
 		m_EditorCamera->transform.rotation = glm::vec3(0.25f, 2.5f, 0.0f);
 		m_EditorCamera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
 
-		FramebufferSpecification fbSpec;
-		fbSpec.Width = 720;
-		fbSpec.Height = 480;
 		{
 			Timer panels("FB");
 
-			m_EditorSceneFB = MakeRef<Framebuffer>(fbSpec);
-			m_PlayingSceneFB = MakeRef<Framebuffer>(fbSpec);
+			Framebuffer specs;
+			specs.Width = 720;
+			specs.Height = 480;
+
+			m_EditorSceneFB = specs;
+			m_PlayingSceneFB = specs;
+
+			OpenGLAPI::ResizeFramebuffer(m_EditorSceneFB);
+			OpenGLAPI::ResizeFramebuffer(m_PlayingSceneFB);
 		}
 
 		m_EditingScene = MakeRef<Scene>("Editing Scene");
@@ -87,9 +94,9 @@ namespace DuskEngine
 			InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
 			m_Panels.push_back(new ConsolePanel());
 			m_Panels.push_back(new ContentBrowserPanel());
-			m_Panels.push_back(new GameViewportPanel(m_PlayingSceneFB, *m_EditingScene->GetMainCamera(), &m_Playing));
+			m_Panels.push_back(new GameViewportPanel(&m_PlayingSceneFB, *m_EditingScene->GetMainCamera(), &m_Playing));
 			m_GameViewportPanel = (GameViewportPanel*)m_Panels.back();
-			m_Panels.push_back(new SceneViewportPanel(m_EditorSceneFB, m_EditorCamera));
+			m_Panels.push_back(new SceneViewportPanel(&m_EditorSceneFB, m_EditorCamera));
 			m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
 			m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel));
 			m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
@@ -129,23 +136,23 @@ namespace DuskEngine
 	{
 		if (!m_Playing)
 		{
-			m_EditorSceneFB->Bind();
+			OpenGLAPI::BindFramebuffer(m_EditorSceneFB);
 			m_EditingScene->OnUpdateEditor(*m_EditorCamera);
-			m_EditorSceneFB->Unbind();
+			OpenGLAPI::UnbindFramebuffer();
 
-			m_PlayingSceneFB->Bind();
+			OpenGLAPI::BindFramebuffer(m_PlayingSceneFB);
 			m_EditingScene->OnUpdateRuntime(false);
-			m_PlayingSceneFB->Unbind();
+			OpenGLAPI::UnbindFramebuffer();
 		}
 		else
 		{
-			m_EditorSceneFB->Bind();
+			OpenGLAPI::BindFramebuffer(m_EditorSceneFB);
 			m_PlayingScene->OnUpdateEditor(*m_EditorCamera);
-			m_EditorSceneFB->Unbind();
+			OpenGLAPI::UnbindFramebuffer();
 
-			m_PlayingSceneFB->Bind();
+			OpenGLAPI::BindFramebuffer(m_PlayingSceneFB);
 			m_PlayingScene->OnUpdateRuntime(true, m_Paused);
-			m_PlayingSceneFB->Unbind();
+			OpenGLAPI::UnbindFramebuffer();
 		}
 	}
 

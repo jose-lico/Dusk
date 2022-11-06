@@ -10,6 +10,7 @@ namespace DuskEngine
 	struct Texture;
 	struct Shader;
 	struct VertexBuffer;
+	struct Framebuffer;
 	enum class BufferType : uint16_t;
 	enum class UsageType : uint16_t;
 }
@@ -20,18 +21,35 @@ namespace DuskEngine :: OpenGLAPI
 	void SetClearColor(const glm::vec4& color);
 	void Clear();
 
+	// #############################################################
+	// Buffer
+	// #############################################################
+
 	void SetBufferData(uint32_t& id, BufferType buffer, UsageType usage, void* data, size_t size);
 	void BindBuffer(BufferType BufferType, uint32_t id);
 	void FreeBuffer(uint32_t& id);
 
+	// #############################################################
+	// Vertex Array
+	// #############################################################
+
 	void GenVertexArrays(uint32_t& id);
 	void BindVertexArray(uint32_t id);
+	void UnbindVertexArray();
 	void SetVertexAttribPointer(VertexBuffer& vb);
 	void FreeVertexArray(VertexArray& va);
+
+	// #############################################################
+	// Texture
+	// #############################################################
 
 	void SetTextureData(Texture& textureData, const unsigned char* data, bool offset = false);
 	void BindTexture(uint32_t slot, uint32_t id);
 	void FreeTexture(uint32_t& id);
+
+	// #############################################################
+	// Shader
+	// #############################################################
 
 	void CreateProgram(Shader& shader, const std::string& vertexShader, const std::string& fragmentShader);
 	void UseProgram(uint32_t id);
@@ -45,7 +63,19 @@ namespace DuskEngine :: OpenGLAPI
 	void SetUniformMat3(Shader& shader, const std::string& name , const glm::mat3& m);
 	void SetUniformMat4(Shader& shader, const std::string& name , const glm::mat4& m);
 
-	void UnbindVAO();
+	// #############################################################
+	// Framebuffer
+	// #############################################################
+
+	void ResizeFramebuffer(Framebuffer& buffer);
+	void BindFramebuffer(Framebuffer& buffer);
+	void UnbindFramebuffer();
+	void FreeFramebuffer(Framebuffer& buffer);
+
+	// #############################################################
+	// Drawing
+	// #############################################################
+
 	void DrawIndexed(const VertexArray& vertexArray);
 	void DrawArrays(unsigned int start, unsigned int count);
 }

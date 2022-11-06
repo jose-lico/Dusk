@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Application/Layer.h"
 
+#include "Platform/OpenGL/Framebuffer.h"
 #include "Utils/Memory/Memory.h"
 
 #include "Panels.h"
@@ -10,7 +11,6 @@
 namespace DuskEngine
 {
 	class Scene;
-	class Framebuffer;
 	class EditorCamera;
 	class AssetDatabaseEditor;
 	class Logger;
@@ -31,8 +31,8 @@ namespace DuskEngine
 		Ref<Scene> m_EditingScene;
 		Ref<Scene> m_PlayingScene;
 
-		Ref<Framebuffer> m_EditorSceneFB;
-		Ref<Framebuffer> m_PlayingSceneFB;
+		Framebuffer m_EditorSceneFB;
+		Framebuffer m_PlayingSceneFB;
 
 		EditorCamera* m_EditorCamera;
 

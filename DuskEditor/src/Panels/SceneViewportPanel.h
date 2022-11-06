@@ -11,14 +11,14 @@
 
 namespace DuskEngine
 {
-	class Framebuffer;
+	struct Framebuffer;
 	class EditorCamera;
 	class KeyPressedEvent;
 	
 	class SceneViewportPanel : public Panel
 	{
 	public:
-		SceneViewportPanel(Ref<Framebuffer>& fb, EditorCamera* camera);
+		SceneViewportPanel(Framebuffer* fb, EditorCamera* camera);
 		~SceneViewportPanel() = default;
 
 		virtual void OnImGuiRender() override;
@@ -29,7 +29,7 @@ namespace DuskEngine
 	private:
 		std::vector<Entity>* m_SelectedEntities = nullptr;
 
-		WeakRef<Framebuffer> m_FB;
+		Framebuffer* m_FB;
 
 		glm::vec2 m_ViewportSize;
 		EditorCamera* m_Camera;

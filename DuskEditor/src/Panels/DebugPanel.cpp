@@ -24,7 +24,6 @@ namespace DuskEngine
 	{
 		GoDownDelete(m_RootTimer);
 		delete m_RootTimer;
-		WARN("Deleted timers");
 	}
 
 	void DebugPanel::OnImGuiRender()

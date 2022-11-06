@@ -7,6 +7,7 @@
 #include "Core/Application/Input.h"
 #include "Core/Events/KeyEvent.h"
 #include "Platform/OpenGL/Framebuffer.h"
+#include "Platform/OpenGL/OpenGLAPI.h"
 
 #include "imgui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"
@@ -15,7 +16,7 @@
 
 namespace DuskEngine
 {
-	SceneViewportPanel::SceneViewportPanel(Ref<Framebuffer>& fb, EditorCamera* camera)
+	SceneViewportPanel::SceneViewportPanel(Framebuffer* fb, EditorCamera* camera)
 	{ 
 		m_ViewportSize = glm::vec2(0.0f);
 		m_FB = fb;
@@ -40,22 +41,20 @@ namespace DuskEngine
 		ImGui::PopStyleColor();
 		ImGui::Unindent();*/
 		
-		if (auto fb = m_FB.lock())
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		if (m_ViewportSize != *(glm::vec2*)&viewportSize)
 		{
-			ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-			if (m_ViewportSize != *(glm::vec2*)&viewportSize)
-			{
-				m_ViewportSize = { viewportSize.x, viewportSize.y };
-
-				fb->Resize(m_ViewportSize);
-				m_Camera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f);
-			}
-			ImGui::Image((ImTextureID)(size_t)fb->GetColorAttachmentID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-			ImGui::PopStyleVar();
-			ImVec2 work_pos = ImGui::GetWindowPos();
-			auto viewportID = ImGui::GetWindowViewport()->ID;
+			m_ViewportSize = { viewportSize.x, viewportSize.y };
+			m_FB->Width = viewportSize.x;
+			m_FB->Height = viewportSize.y;
+			OpenGLAPI::ResizeFramebuffer(*m_FB);
+			m_Camera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), viewportSize.x / viewportSize.y, 0.01f, 100.0f);
 		}
-
+		ImGui::Image((ImTextureID)(size_t)m_FB->ColorAttachment, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::PopStyleVar();
+		ImVec2 work_pos = ImGui::GetWindowPos();
+		auto viewportID = ImGui::GetWindowViewport()->ID;
+		
 		/*if (ImGui::BeginMenuBar())
 		{
 			ImGui::MenuItem("Stats", "", &stats);
