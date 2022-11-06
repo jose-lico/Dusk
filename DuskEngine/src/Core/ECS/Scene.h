@@ -11,7 +11,7 @@ namespace DuskEngine
 	class ScriptingEngine;
 	class AssetHandler;
 
-	class DUSK_EXPORT Scene
+	class Scene
 	{
 	public:
 		Scene(const std::string& name);

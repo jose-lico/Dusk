@@ -1,6 +1,9 @@
 #include "pch.h"
 
 #include "Components.h"
+#include "Core/Scripting/LuaScript.h"
+#include "Core/Assets/Assets/Mesh.h"
+#include "Core/Assets/Assets/Material.h"
 
 #include "rttr/registration.h"
 
@@ -36,11 +39,11 @@ enum class MetaData_Type
 // MESH RENDERER
 // #############################################################
 
-//#define REGISTER_MESH_RENDERER\
-//	rttr::registration::class_<DuskEngine::MeshRenderer>("MeshRenderer")\
-//		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
-//		property("mesh", &DuskEngine::MeshRenderer::meshHandle).\
-//		property("material", &DuskEngine::MeshRenderer::materialHandle);\
+#define REGISTER_MESH_RENDERER\
+	rttr::registration::class_<DuskEngine::MeshRenderer>("MeshRenderer")\
+		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
+		property("mesh", &DuskEngine::MeshRenderer::meshHandle).\
+		property("material", &DuskEngine::MeshRenderer::materialHandle);\
 
 // #############################################################
 // CAMERA
@@ -65,10 +68,10 @@ enum class MetaData_Type
 // SCRIPT
 // #############################################################
 
-//#define REGISTER_SCRIPT\
-//	rttr::registration::class_<DuskEngine::Script>("Script")\
-//		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
-//		property("script", &DuskEngine::Script::luaScriptHandle);
+#define REGISTER_SCRIPT\
+	rttr::registration::class_<DuskEngine::Script>("Script")\
+		(rttr::metadata(MetaData_Type::COMPONENT, true)).\
+		property("script", &DuskEngine::Script::luaScriptHandle);
 
 // #############################################################
 // RTTR REGISTRATION
@@ -78,8 +81,8 @@ RTTR_REGISTRATION
 {
 	REGISTER_META
 	REGISTER_TRANSFORM
-	//REGISTER_MESH_RENDERER
+	REGISTER_MESH_RENDERER
 	REGISTER_CAMERA
 	REGISTER_LIGHT
-	//REGISTER_SCRIPT
+	REGISTER_SCRIPT
 }

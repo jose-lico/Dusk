@@ -6,6 +6,8 @@
 #include "Core/Assets/Assets/Mesh.h"
 #include "Core/ECS/Components/Light.h"
 #include "Core/Scripting/LuaScript.h"
+#include "Core/Serialization/SceneSerializer.h"
+#include "Core/Assets/AssetHandler.h"
 
 #include "yaml-cpp/yaml.h"
 #include "glm/glm.hpp"
@@ -38,11 +40,11 @@ namespace DuskEngine
 	}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<Mesh>& mesh)
+	YAML::Emitter& operator<<(YAML::Emitter& out, Mesh& mesh)
 	{
 		out << YAML::BeginMap;
 
-		auto type = mesh->GetType();
+		auto type = mesh.GetType();
 
 		switch (type)
 		{
@@ -60,27 +62,19 @@ namespace DuskEngine
 			break;
 		}
 
-		out << YAML::Key << "uuid" << YAML::Value << mesh->GetUUID();
+		out << YAML::Key << "uuid" << YAML::Value << mesh.GetUUID();
 		out << YAML::EndMap;
 
 		return out;
 	}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<Material>& material)
+	YAML::Emitter& operator<<(YAML::Emitter& out, Material& material)
 	{
-		out << YAML::Value << material->GetUUID();
+		out << YAML::Value << material.GetUUID();
 
 		return out;
 	}
-
-	//inline
-	//YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<Shader>& shader)
-	//{
-	//	out << YAML::Value << shader->GetUUID();
-
-	//	return out;
-	//}
 
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, Texture& texture)
@@ -130,66 +124,60 @@ namespace DuskEngine
 	}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, std::vector<UniqueRef<LuaScript>>& scripts)
+	YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<LuaScript>& script)
 	{
-		out << YAML::BeginMap;
+		out << YAML::Value << script->GetUUID();
 
-		for (auto& script : scripts)
-		{
-			out << YAML::Key << script->GetName() << YAML::Value << script->GetUUID();
-		}
-
-		out << YAML::EndMap;
 		return out;
 	}
 
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, const rttr::variant& var)
 	{
-		//if(var.can_convert<glm::vec3>())
-		//{
-		//	return out << YAML::Value << var.convert<glm::vec3>();
-		//}
-		//else if (var.can_convert<glm::vec4>())
-		//{
-		//	return out << YAML::Value << var.convert<glm::vec4>();
-		//}
-		//else if(var.can_convert<std::string>())
-		//{
-		//	return out << YAML::Value << var.convert<std::string>();
-		//}
-		//else if (var.can_convert<LightType>()) // enums need to come before bool
-		//{
-		//	return out << YAML::Value << var.convert<LightType>();
-		//}
-		//else if (var.can_convert<bool>())
-		//{
-		//	return out << YAML::Value << var.convert<bool>();
-		//}
-		//else if (var.can_convert<uuids::uuid>())
-		//{
-		//	return out << YAML::Value << var.convert<uuids::uuid>();
-		//}
-		//else if (var.can_convert<UniqueRef<Mesh>>())
-		//{
-		//	return out << YAML::Value << var.convert<UniqueRef<Mesh>>();
-		//}
-		//else if (var.can_convert<UniqueRef<Material>>())
-		//{
-		//	return out << YAML::Value << var.convert<UniqueRef<Material>>();
-		//}
-		//else if (var.can_convert<UniqueRef<Shader>>())
-		//{
-		//	return out << YAML::Value << var.convert<UniqueRef<Shader>>();
-		//}
-		//else if (var.can_convert<std::vector<Uniform>>())
-		//{
-		//	return out << YAML::Value << var.convert<std::vector<Uniform>>();
-		//}
-		//else if (var.can_convert<std::vector<UniqueRef<LuaScript>>>())
-		//{
-		//	return out << YAML::Value << var.convert<std::vector<UniqueRef<LuaScript>>>();
-		//}
+		if(var.can_convert<glm::vec3>())
+		{
+			return out << YAML::Value << var.convert<glm::vec3>();
+		}
+		else if (var.can_convert<glm::vec4>())
+		{
+			return out << YAML::Value << var.convert<glm::vec4>();
+		}
+		else if(var.can_convert<std::string>())
+		{
+			return out << YAML::Value << var.convert<std::string>();
+		}
+		else if (var.can_convert<LightType>()) // enums need to come before bool
+		{
+			return out << YAML::Value << var.convert<LightType>();
+		}
+		else if (var.can_convert<bool>())
+		{
+			return out << YAML::Value << var.convert<bool>();
+		}
+		else if (var.can_convert<uuids::uuid>())
+		{
+			return out << YAML::Value << var.convert<uuids::uuid>();
+		}
+		else if (var.can_convert<Handle<Mesh>>())
+		{
+			auto handle = var.convert<Handle<Mesh>>();
+			return out << YAML::Value << SceneSerializer::GetCurrentHandler().GetAsset<Mesh>(handle);
+		}
+		else if (var.can_convert<Handle<Material>>())
+		{
+			auto handle = var.convert<Handle<Material>>();
+			return out << YAML::Value << SceneSerializer::GetCurrentHandler().GetAsset<Material>(handle);
+		}
+		else if (var.can_convert<Handle<Shader>>())
+		{
+			auto handle = var.convert<Handle<Shader>>();
+			return out << YAML::Value << SceneSerializer::GetCurrentHandler().GetAsset<Shader>(handle);
+		}
+		else if (var.can_convert<Handle<LuaScript>>())
+		{
+			auto handle = var.convert<Handle<LuaScript>>();
+			return out << YAML::Value << SceneSerializer::GetCurrentHandler().LuaScriptPool(handle);
+		}
 
 		return out << YAML::Value << "Unrecognized type";
 	}

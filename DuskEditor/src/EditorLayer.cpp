@@ -168,7 +168,7 @@ namespace DuskEngine
 		
 		//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 		//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 0,0 });
-		//ImGui::Begin("Stuff");
+		ImGui::Begin("Stuff");
 
 		////ImGui::Indent();
 		//float height = ImGui::GetContentRegionAvail().y;
@@ -178,15 +178,15 @@ namespace DuskEngine
 		////ImGui::Unindent();
 		////ImGui::Text("Nope?");
 
-		////if (ImGui::Button("Save Scene"))
-		////	SceneSerializer::SerializeText(m_EditingScene, "res/scenes/scene.yaml");
+		if (ImGui::Button("Save Scene"))
+			SceneSerializer::SerializeText(m_EditingScene, "res/scenes/scene.yaml");
 
 		///*ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.2, 0.2, 0.2, 1.0f });
 		//ImGui::BeginChild("Window inside a window", {0,0}, false);
 		//ImGui::EndChild();
 		//ImGui::PopStyleColor();*/
 		//
-		//ImGui::End();
+		ImGui::End();
 		//ImGui::PopStyleVar();
 		//ImGui::PopStyleVar();
 

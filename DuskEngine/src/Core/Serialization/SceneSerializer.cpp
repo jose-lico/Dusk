@@ -6,7 +6,6 @@
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/ECS/ComponentRegistry.cpp"
 #include "Core/Assets/AssetHandler.h"
-
 #include "Utils/Rendering/PrimitiveMesh.h"
 #include "Utils/Serialization/Yaml.h"
 #include "Utils/Profiling/Timer.h"
@@ -16,11 +15,15 @@
 namespace DuskEngine
 {
 	template<typename T>
-	static void SerializeComponentText(const std::string& name, YAML::Emitter& out, Entity entity);	
-	
+	static void SerializeComponentText(const std::string& name, YAML::Emitter& out, Entity entity);
+
+	AssetHandler* SceneSerializer::m_AssetHandler = nullptr;
+
     void SceneSerializer::SerializeText(const Ref<Scene>& scene, const std::string& path)
     {
-		Timer timer("Serialize Text");
+		//Timer timer("Serialize Text");
+
+		m_AssetHandler = scene->m_AssetHandler;
 
 		YAML::Emitter out;
 		out << YAML::BeginMap;
@@ -158,6 +161,15 @@ namespace DuskEngine
 			auto& component = entity.GetComponent<T>();
 
 			rttr::type type = rttr::type::get(component);
+			if(std::is_same<T, MeshRenderer>())
+			{
+				for (auto& prop : type.get_properties())
+				{
+					auto& hello = prop.get_value(component).convert<Handle<Mesh>>();
+					LOG(prop.get_name().to_string());
+					LOG(std::to_string(prop.get_value(component).convert<uint32_t>()));
+				}
+			}
 
 			for (auto& prop : type.get_properties())
 			{

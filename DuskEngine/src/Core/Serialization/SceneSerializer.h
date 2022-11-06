@@ -1,9 +1,12 @@
-#include "Core/ECS/Scene.h"
+#pragma once
 
 #include "Utils/Memory/Memory.h"
 
 namespace DuskEngine
 {
+	class Scene;
+	class AssetHandler;
+
 	class SceneSerializer
 	{
 	public:
@@ -12,5 +15,8 @@ namespace DuskEngine
 
 		static bool DeserializeText(const Ref<Scene>& scene, const std::string& path);
 		static bool DeserializeBinary(const Ref<Scene>& scene, const std::string& path);
+		static AssetHandler& GetCurrentHandler() { return *m_AssetHandler; }
+	private:
+		static AssetHandler* m_AssetHandler;
 	};
 }
