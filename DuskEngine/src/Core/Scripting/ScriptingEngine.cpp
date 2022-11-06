@@ -18,7 +18,7 @@ namespace DuskEngine
 	ScriptingEngine::ScriptingEngine()
 	{
 		m_State.open_libraries(sol::lib::base);
-		RegisterFunctions();
+        RegisterFunctions();
 	}
 
     void ScriptingEngine::RegisterFunctions()

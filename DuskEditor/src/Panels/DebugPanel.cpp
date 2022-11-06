@@ -1,5 +1,6 @@
 #include "DebugPanel.h"
 
+#include "Core/Application/Core.h"
 #include "Utils/Profiling/Timer.h"
 
 #include "imgui/imgui.h"
@@ -23,6 +24,7 @@ namespace DuskEngine
 	{
 		GoDownDelete(m_RootTimer);
 		delete m_RootTimer;
+		WARN("Deleted timers");
 	}
 
 	void DebugPanel::OnImGuiRender()
