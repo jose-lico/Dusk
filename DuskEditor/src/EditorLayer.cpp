@@ -96,6 +96,7 @@ namespace DuskEngine
 
 
 			auto play = [&]() {
+				Timer::Stop = true;
 				m_Playing = true;
 				m_PlayingScene = MakeRef<Scene>("Playing Scene");
 				SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");

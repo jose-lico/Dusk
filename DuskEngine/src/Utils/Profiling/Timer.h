@@ -20,6 +20,7 @@ namespace DuskEngine
 		Timer(const std::string& text, bool runtime = false);
 		~Timer();
 		inline static TimerNode* GetRootTimer() { return m_RootTimer; }
+		static bool Stop; // very temp 
 	private:
 		static TimerNode* m_RootTimer;
 		static TimerNode* m_LastTimer;
