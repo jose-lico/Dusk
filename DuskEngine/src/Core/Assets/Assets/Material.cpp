@@ -75,6 +75,10 @@ namespace DuskEngine
 	void Material::SetShader(const Handle<Shader> shader)
 	{
 		m_ShaderHandle = shader;
+
+		m_Uniforms.clear();
+		m_UniformsMap.clear();
+		CreateUniforms();
 	}
 
 	void Material::SetFloat(const std::string& name, float f)
@@ -118,7 +122,7 @@ namespace DuskEngine
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Material" << YAML::Value << m_Name;
-		//out << YAML::Key << "Shader" << YAML::Value << m_OwningHandler->AssetPool<Shader>(m_ShaderHandle);
+		out << YAML::Key << "Shader" << YAML::Value << m_OwningHandler->GetAsset<Shader>(m_ShaderHandle);
 		//out << YAML::Key << "Uniforms" << YAML::Value << m_Uniforms;
 
 		out << YAML::Key << "Uniforms";

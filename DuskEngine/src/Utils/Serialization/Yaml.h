@@ -83,9 +83,17 @@ namespace DuskEngine
 	//}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<Texture>& texture)
+	YAML::Emitter& operator<<(YAML::Emitter& out, Texture& texture)
 	{
-		out << YAML::Value << texture->GetUUID();
+		out << YAML::Value << texture.GetUUID();
+
+		return out;
+	}
+
+	inline
+	YAML::Emitter& operator<<(YAML::Emitter& out, Shader& shader)
+	{
+		out << YAML::Value << shader.GetUUID();
 
 		return out;
 	}

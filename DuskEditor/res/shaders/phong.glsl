@@ -117,7 +117,7 @@ vec3 CalcPointLight(PointLight light, vec3 viewDir)
     
     // Diffuse
     float diff = max(dot(normalize(Normal), lightDir), 0.0);
-    vec3 diffuse  = light.Color  * diff * vec3(texture(u_Diffuse, TexCoords));
+    vec3 diffuse  = light.Color * diff * vec3(texture(u_Diffuse, TexCoords)) * u_DiffuseColor;
 
     // Specular
     vec3 reflectDir = reflect(-lightDir, normalize(Normal));
