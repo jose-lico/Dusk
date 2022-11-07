@@ -10,7 +10,7 @@ namespace DuskEngine
 	bool Timer::Stop = false;
 
 	Timer::Timer(const std::string& text, bool runtime)
-	:m_Text(text), m_Start(std::chrono::high_resolution_clock::now())
+	:m_Text(text), m_Runtime(runtime)
 	{
 		if(!Stop)
 		{
@@ -29,15 +29,27 @@ namespace DuskEngine
 
 			m_LastTimer = m_MyNode;
 		}
+
+		if(m_Runtime)
+		{
+			delete m_RootTimer;
+			m_MyNode = new TimerNode;
+			m_MyNode->Name = m_Text;
+			m_MyNode->Parent = nullptr;
+			m_RootTimer = m_MyNode;
+		}
+
+		m_Start = std::chrono::high_resolution_clock::now();
 	}
 	
 	Timer::~Timer()
 	{
-		if(!Stop)
+		if(!Stop || m_Runtime)
 		{
 			auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - m_Start);
 
-			TRACE(m_Text + " took: " + std::to_string(duration.count() / 1000000.0f) + " ms");
+			if(!m_Runtime)
+				TRACE(m_Text + " took: " + std::to_string(duration.count() / 1000000.0f) + " ms");
 
 			m_MyNode->Duration = duration;
 			if(m_MyNode->Parent != nullptr)

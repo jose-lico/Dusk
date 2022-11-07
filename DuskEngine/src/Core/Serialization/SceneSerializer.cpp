@@ -161,15 +161,6 @@ namespace DuskEngine
 			auto& component = entity.GetComponent<T>();
 
 			rttr::type type = rttr::type::get(component);
-			if(std::is_same<T, MeshRenderer>())
-			{
-				for (auto& prop : type.get_properties())
-				{
-					auto& hello = prop.get_value(component).convert<Handle<Mesh>>();
-					LOG(prop.get_name().to_string());
-					LOG(std::to_string(prop.get_value(component).convert<uint32_t>()));
-				}
-			}
 
 			for (auto& prop : type.get_properties())
 			{

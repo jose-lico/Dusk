@@ -1,6 +1,7 @@
 #include "DebugPanel.h"
 
 #include "Core/Application/Core.h"
+#include "Core/Application/Time.h"
 #include "Utils/Profiling/Timer.h"
 
 #include "imgui/imgui.h"
@@ -10,36 +11,46 @@
 
 namespace DuskEngine
 {
-	TimerNode* DebugPanel::m_RootTimer = nullptr;
-
 	void GoDownTreeEx(TimerNode* node);
 	void GoDownDelete(TimerNode* node);
 
 	DebugPanel::DebugPanel()
 	{
-		m_RootTimer = Timer::GetRootTimer();
+		m_StartupRoot = Timer::GetRootTimer();
 	}
 
 	DebugPanel::~DebugPanel()
 	{
-		GoDownDelete(m_RootTimer);
-		delete m_RootTimer;
+		GoDownDelete(m_StartupRoot);
+		delete m_StartupRoot;
 	}
 
 	void DebugPanel::OnImGuiRender()
 	{
 		ImGui::Begin("Debug");
 		CheckFocus();
-		auto duration = m_RootTimer->Duration.count() / 1000000.0f;
-		std::string message = m_RootTimer->Name + ": " + fmt::format("{:.3f}", duration) + " ms";
+		auto duration = m_StartupRoot->Duration.count() / 1000000.0f;
+		std::string message = m_StartupRoot->Name + ": " + fmt::format("{:.3f}", duration) + " ms";
 
 		// possibly need to add styling so they arent highlitable/selectable
 
 		if (ImGui::TreeNodeEx(message.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			GoDownTreeEx(m_RootTimer);
+			GoDownTreeEx(m_StartupRoot);
 			ImGui::TreePop();
 		}
+
+		ImGui::Separator();
+
+		if (m_RefreshFPSTimer > 0.25f)
+		{
+			m_RefreshFPSTimer = 0.0f;
+			m_Frametime = Timer::GetRootTimer()->Duration.count() / 1000000.0f;
+		}
+		else
+			m_RefreshFPSTimer += Time::GetDeltaTime();
+		
+		ImGui::Text("%s: %sms (%d FPS)", Timer::GetRootTimer()->Name.c_str(), fmt::format("{:.3f}", m_Frametime).c_str(), (int)(1000.0f / m_Frametime));
 
 		ImGui::End();
 	}

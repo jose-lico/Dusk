@@ -103,7 +103,6 @@ namespace DuskEngine
 
 
 			auto play = [&]() {
-				Timer::Stop = true;
 				m_Playing = true;
 				m_PlayingScene = MakeRef<Scene>("Playing Scene");
 				SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");
@@ -140,9 +139,12 @@ namespace DuskEngine
 			m_EditingScene->OnUpdateEditor(*m_EditorCamera);
 			OpenGLAPI::UnbindFramebuffer();
 
-			OpenGLAPI::BindFramebuffer(m_PlayingSceneFB);
-			m_EditingScene->OnUpdateRuntime(false);
-			OpenGLAPI::UnbindFramebuffer();
+			{
+				Timer timer("Update editor mode", true);
+				OpenGLAPI::BindFramebuffer(m_PlayingSceneFB);
+				m_EditingScene->OnUpdateRuntime(false);
+				OpenGLAPI::UnbindFramebuffer();
+			}
 		}
 		else
 		{
@@ -150,9 +152,12 @@ namespace DuskEngine
 			m_PlayingScene->OnUpdateEditor(*m_EditorCamera);
 			OpenGLAPI::UnbindFramebuffer();
 
-			OpenGLAPI::BindFramebuffer(m_PlayingSceneFB);
-			m_PlayingScene->OnUpdateRuntime(true, m_Paused);
-			OpenGLAPI::UnbindFramebuffer();
+			{
+				Timer timer("Update runtime mode", true);
+				OpenGLAPI::BindFramebuffer(m_PlayingSceneFB);
+				m_PlayingScene->OnUpdateRuntime(true, m_Paused);
+				OpenGLAPI::UnbindFramebuffer();
+			}
 		}
 	}
 

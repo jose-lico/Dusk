@@ -27,8 +27,8 @@ namespace DuskEngine
 
 			printf("\n"); // Make sure our output is starting from the new line.
 			
-			m_AttachedConsole = true;
 		}
+			m_AttachedConsole = true;
 #elif DUSK_DEBUG
 		m_AttachedConsole = true;
 #endif

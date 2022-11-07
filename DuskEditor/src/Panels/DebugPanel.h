@@ -13,6 +13,8 @@ namespace DuskEngine
 
 		virtual void OnImGuiRender() override;
 	private:
-		static TimerNode* m_RootTimer;
+		TimerNode* m_StartupRoot;
+		float m_RefreshFPSTimer = 0.0f;
+		float m_Frametime = 0.0f;
 	};
 }

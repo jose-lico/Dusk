@@ -49,8 +49,8 @@ namespace DuskEngine
 			return;
 		}
 
-#if DUSK_DEBUG
 		m_Options.Verbose = true;
+#if DUSK_DEBUG
 		m_Options.DumpLogs = true;
 #endif
 
