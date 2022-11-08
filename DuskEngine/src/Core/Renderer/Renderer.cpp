@@ -7,17 +7,16 @@
 #include "Platform/OpenGL/OpenGLContext.h"
 #include "Core/Application/Window.h"
 
-#include "GL/glew.h"
-
 namespace DuskEngine {
 
 	Renderer::Renderer(const Window& window)
 	{
-		m_Context = MakeUnique<OpenGLContext>(window.GetNativeHandle());
+		m_Context = new OpenGLContext(window.GetNativeHandle());
 	}
 
 	Renderer::~Renderer()
 	{
+		delete m_Context;
 	}
 
 	void Renderer::BeginScene()

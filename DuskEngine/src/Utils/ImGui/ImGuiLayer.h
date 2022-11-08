@@ -5,6 +5,7 @@ namespace DuskEngine
 {
 	class Window;
 	class KeyPressedEvent;
+	struct DuskImGuiStyle;
 
 	class ImGuiLayer : public Layer
 	{
@@ -12,10 +13,10 @@ namespace DuskEngine
 		ImGuiLayer(Window* window);
 		~ImGuiLayer();
 
-		void OnAttach() override;
-		void OnDetach() override;
-		void OnImGuiRender() override;
-		void OnEvent(Event& event) override;
+		virtual void OnAttach() override;
+		virtual void OnDetach() override;
+		virtual void OnImGuiRender() override;
+		virtual void OnEvent(Event& event) override;
 
 		void Begin();
 		void End();
@@ -27,6 +28,7 @@ namespace DuskEngine
 		bool ActivateDemoWindow(KeyPressedEvent& e);
 
 		Window* m_Window;
+		DuskImGuiStyle* m_Style;
 
 		bool m_ShowDemoWindow = false;
 	};

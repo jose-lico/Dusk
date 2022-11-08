@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ImGuiLayer.h"
 
-#include "Style.h"
+#include "DuskImGuiStyle.h"
 #include "Core/Events/Events.h"
 #include "Core/Application/Window.h"
 #include "Utils/Profiling/Timer.h"
@@ -20,7 +20,7 @@ namespace DuskEngine
 	const ImWchar glyphRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 
 	ImGuiLayer::ImGuiLayer(Window* window)
-		:m_Window(window)
+		:m_Window(window), m_Style(new DuskImGuiStyle())
 	{
 	}
 
@@ -30,7 +30,6 @@ namespace DuskEngine
 
 	void ImGuiLayer::OnAttach()
 	{
-		Timer imguiTimer("ImGuiLayer");
 		ImGui::CreateContext();
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -71,8 +70,8 @@ namespace DuskEngine
 
 	bool ImGuiLayer::ActivateDemoWindow(KeyPressedEvent& e)
 	{
-		if(e.GetKeyCode() == Key::P)
-			m_ShowDemoWindow = true;
+		if(e.GetKeyCode() == Key::TAB)
+			m_ShowDemoWindow = !m_ShowDemoWindow;
 
 		return true;
 	}
@@ -136,93 +135,105 @@ namespace DuskEngine
 
 	void ImGuiLayer::ApplyStyle()
 	{
-		ImVec4 darkest(0.086f, 0.086f, 0.086f, 1.0f);
-		ImVec4 dark(0.12f, 0.12f, 0.12f, 1.0f);
-		ImVec4 grey1(0.15f, 0.15f, 0.15f, 1.0f);
-		ImVec4 grey2(0.2f, 0.2f, 0.2f, 1.0f);
-		ImVec4 grey3(0.25f, 0.25f, 0.25f, 1.0f);
-		ImVec4 grey4(0.41f, 0.5f, 0.52f, 1.0f);
-		ImVec4 white(0.87f, 0.87f, 0.87f, 1.0f);
-		
-		ImVec4 red(1.0f, 0.0f, 0.0f, 1.0f);
-
 		ImGuiStyle& style = ImGui::GetStyle();
+		
+		style.Colors[ImGuiCol_Text                 ] = m_Style->Colors.Text;
+		style.Colors[ImGuiCol_TextDisabled		   ] = m_Style->Colors.TextDisabled;
+		style.Colors[ImGuiCol_WindowBg			   ] = m_Style->Colors.WindowBg;
+		style.Colors[ImGuiCol_ChildBg			   ] = m_Style->Colors.ChildBg;
+		style.Colors[ImGuiCol_PopupBg			   ] = m_Style->Colors.PopupBg;
+		style.Colors[ImGuiCol_Border			   ] = m_Style->Colors.Border;
+		style.Colors[ImGuiCol_BorderShadow		   ] = m_Style->Colors.BorderShadow;
+		style.Colors[ImGuiCol_FrameBg			   ] = m_Style->Colors.FrameBg;
+		style.Colors[ImGuiCol_FrameBgHovered	   ] = m_Style->Colors.FrameBgHovered;
+		style.Colors[ImGuiCol_FrameBgActive		   ] = m_Style->Colors.FrameBgActive;
+		style.Colors[ImGuiCol_TitleBg			   ] = m_Style->Colors.TitleBg;
+		style.Colors[ImGuiCol_TitleBgActive		   ] = m_Style->Colors.TitleBgActive;
+		style.Colors[ImGuiCol_TitleBgCollapsed	   ] = m_Style->Colors.TitleBgCollapsed;
+		style.Colors[ImGuiCol_MenuBarBg			   ] = m_Style->Colors.MenuBarBg;
+		style.Colors[ImGuiCol_ScrollbarBg		   ] = m_Style->Colors.ScrollbarBg;
+		style.Colors[ImGuiCol_ScrollbarGrab		   ] = m_Style->Colors.ScrollbarGrab;
+		style.Colors[ImGuiCol_ScrollbarGrabHovered ] = m_Style->Colors.ScrollbarGrabHovered;
+		style.Colors[ImGuiCol_ScrollbarGrabActive  ] = m_Style->Colors.ScrollbarGrabActive;
+		style.Colors[ImGuiCol_CheckMark			   ] = m_Style->Colors.CheckMark;
+		style.Colors[ImGuiCol_SliderGrab		   ] = m_Style->Colors.SliderGrab;
+		style.Colors[ImGuiCol_SliderGrabActive	   ] = m_Style->Colors.SliderGrabActive;
+		style.Colors[ImGuiCol_Button			   ] = m_Style->Colors.Button;
+		style.Colors[ImGuiCol_ButtonHovered		   ] = m_Style->Colors.ButtonHovered;
+		style.Colors[ImGuiCol_ButtonActive		   ] = m_Style->Colors.ButtonActive;
+		style.Colors[ImGuiCol_Header			   ] = m_Style->Colors.Header;
+		style.Colors[ImGuiCol_HeaderHovered		   ] = m_Style->Colors.HeaderHovered;
+		style.Colors[ImGuiCol_HeaderActive		   ] = m_Style->Colors.HeaderActive;
+		style.Colors[ImGuiCol_Separator			   ] = m_Style->Colors.Separator;
+		style.Colors[ImGuiCol_SeparatorHovered	   ] = m_Style->Colors.SeparatorHovered;
+		style.Colors[ImGuiCol_SeparatorActive	   ] = m_Style->Colors.SeparatorActive;
+		style.Colors[ImGuiCol_ResizeGrip		   ] = m_Style->Colors.ResizeGrip;
+		style.Colors[ImGuiCol_ResizeGripHovered	   ] = m_Style->Colors.ResizeGripHovered;
+		style.Colors[ImGuiCol_ResizeGripActive	   ] = m_Style->Colors.ResizeGripActive;
+		style.Colors[ImGuiCol_Tab				   ] = m_Style->Colors.Tab;
+		style.Colors[ImGuiCol_TabHovered		   ] = m_Style->Colors.TabHovered;
+		style.Colors[ImGuiCol_TabActive			   ] = m_Style->Colors.TabActive;
+		style.Colors[ImGuiCol_TabUnfocused		   ] = m_Style->Colors.TabUnfocused;
+		style.Colors[ImGuiCol_TabUnfocusedActive   ] = m_Style->Colors.TabUnfocusedActive;
+		style.Colors[ImGuiCol_DockingPreview	   ] = m_Style->Colors.DockingPreview;
+		style.Colors[ImGuiCol_DockingEmptyBg	   ] = m_Style->Colors.DockingEmptyBg;
+		style.Colors[ImGuiCol_PlotLines			   ] = m_Style->Colors.PlotLines;
+		style.Colors[ImGuiCol_PlotLinesHovered	   ] = m_Style->Colors.PlotLinesHovered;
+		style.Colors[ImGuiCol_PlotHistogram		   ] = m_Style->Colors.PlotHistogram;
+		style.Colors[ImGuiCol_PlotHistogramHovered ] = m_Style->Colors.PlotHistogramHovered;
+		style.Colors[ImGuiCol_TableHeaderBg		   ] = m_Style->Colors.TableHeaderBg;
+		style.Colors[ImGuiCol_TableBorderStrong	   ] = m_Style->Colors.TableBorderStrong;
+		style.Colors[ImGuiCol_TableBorderLight	   ] = m_Style->Colors.TableBorderLight;
+		style.Colors[ImGuiCol_TableRowBg		   ] = m_Style->Colors.TableRowBg;
+		style.Colors[ImGuiCol_TableRowBgAlt		   ] = m_Style->Colors.TableRowBgAlt;
+		style.Colors[ImGuiCol_TextSelectedBg	   ] = m_Style->Colors.TextSelectedBg;
+		style.Colors[ImGuiCol_DragDropTarget	   ] = m_Style->Colors.DragDropTarget;
+		style.Colors[ImGuiCol_NavHighlight		   ] = m_Style->Colors.NavHighlight;
+		style.Colors[ImGuiCol_NavWindowingHighlight] = m_Style->Colors.NavWindowingHighlight;
+		style.Colors[ImGuiCol_NavWindowingDimBg	   ] = m_Style->Colors.NavWindowingDimBg;
+		style.Colors[ImGuiCol_ModalWindowDimBg     ] = m_Style->Colors.ModalWindowDimBg;
 
-		//style.TabRounding = 0.0f;
-		//style.FramePadding = { 5.0f, 4 };
-		//style.TabBorderSize = 10.0f;
-		
-		//TRACE(std::to_string(style.TabBorderSize).c_str());
-		
-		style.Colors[ImGuiCol_Text] = white;
-		style.Colors[ImGuiCol_TextDisabled] = grey3;
+		// Test vars later
 
-		style.Colors[ImGuiCol_MenuBarBg] = dark;
-		style.Colors[ImGuiCol_Border] = dark;
-		style.Colors[ImGuiCol_Separator] = dark;
-		style.Colors[ImGuiCol_SeparatorHovered] = dark;
-		style.Colors[ImGuiCol_SeparatorActive] = dark;
-		
-		style.Colors[ImGuiCol_WindowBg] = grey2;
-
-		style.Colors[ImGuiCol_FrameBg] = grey1;
-		style.Colors[ImGuiCol_TitleBg] = dark;
-		style.Colors[ImGuiCol_TitleBgActive] = dark;
-		style.Colors[ImGuiCol_TitleBgCollapsed] = dark;
-		style.Colors[ImGuiCol_Header] = dark;
-
-		style.Colors[ImGuiCol_Tab] = grey1;
-		style.Colors[ImGuiCol_TabHovered] = grey3;
-		style.Colors[ImGuiCol_TabActive] = grey3;
-		style.Colors[ImGuiCol_TabUnfocused] = grey1;
-		style.Colors[ImGuiCol_TabUnfocusedActive] = grey2;
-
-		style.Colors[ImGuiCol_HeaderHovered] = dark;
-		style.Colors[ImGuiCol_PopupBg] = darkest;
-
-		style.Colors[ImGuiCol_BorderShadow] = dark;
-
-		//style.Colors[ImGuiCol_Header] = dark;
-		//style.Colors[ImGuiCol_NavHighlight] = dark;
-		
-		/*style.Colors[ImGuiCol_ChildBg] = dark;
-		style.Colors[ImGuiCol_PopupBg] = dark;
-		
-
-		style.Colors[ImGuiCol_FrameBgHovered] = dark;
-		style.Colors[ImGuiCol_FrameBgActive] = dark;
-		
-		
-		
-		style.Colors[ImGuiCol_ScrollbarBg] = dark;
-		style.Colors[ImGuiCol_ScrollbarGrab] = dark;
-		style.Colors[ImGuiCol_ScrollbarGrabHovered] = dark;
-		style.Colors[ImGuiCol_ScrollbarGrabActive] = dark;
-		style.Colors[ImGuiCol_CheckMark] = dark;
-		style.Colors[ImGuiCol_SliderGrab] = dark;
-		style.Colors[ImGuiCol_SliderGrabActive] = dark;
-		style.Colors[ImGuiCol_Button] = grey3;
-		style.Colors[ImGuiCol_ButtonHovered] = grey3;
-		style.Colors[ImGuiCol_ButtonActive] = grey3;
-		
-		style.Colors[ImGuiCol_HeaderHovered] = dark;
-		style.Colors[ImGuiCol_HeaderActive] = dark;
-		
-		style.Colors[ImGuiCol_ResizeGrip] = dark;
-		style.Colors[ImGuiCol_ResizeGripHovered] = dark;
-		style.Colors[ImGuiCol_ResizeGripActive] = dark;
-
-		style.Colors[ImGuiCol_DockingPreview] = dark;
-		style.Colors[ImGuiCol_DockingEmptyBg] = dark;
-		style.Colors[ImGuiCol_PlotLines] = dark;
-		style.Colors[ImGuiCol_PlotLinesHovered] = dark;
-		style.Colors[ImGuiCol_PlotHistogram] = dark;
-		style.Colors[ImGuiCol_PlotHistogramHovered] = dark;
-		style.Colors[ImGuiCol_TextSelectedBg] = dark;
-		style.Colors[ImGuiCol_DragDropTarget] = dark;
-		style.Colors[ImGuiCol_NavHighlight] = dark;
-		style.Colors[ImGuiCol_NavWindowingHighlight] = dark;
-		style.Colors[ImGuiCol_NavWindowingDimBg] = dark;
-		style.Colors[ImGuiCol_ModalWindowDimBg] = dark;*/
+		/*style.Alpha							= m_Style->Vars.Alpha;
+		style.DisabledAlpha					= m_Style->Vars.DisabledAlpha;
+		style.WindowPadding					= m_Style->Vars.WindowPadding;
+		style.WindowRounding				= m_Style->Vars.WindowRounding;
+		style.WindowBorderSize				= m_Style->Vars.WindowBorderSize;
+		style.WindowMinSize					= m_Style->Vars.WindowMinSize;
+		style.WindowTitleAlign				= m_Style->Vars.WindowTitleAlign;
+		style.WindowMenuButtonPosition		= m_Style->Vars.WindowMenuButtonPosition;
+		style.ChildRounding					= m_Style->Vars.ChildRounding;
+		style.ChildBorderSize				= m_Style->Vars.ChildBorderSize;
+		style.PopupRounding					= m_Style->Vars.PopupRounding;
+		style.PopupBorderSize				= m_Style->Vars.PopupBorderSize;
+		style.FramePadding					= m_Style->Vars.FramePadding;
+		style.FrameRounding					= m_Style->Vars.FrameRounding;
+		style.FrameBorderSize				= m_Style->Vars.FrameBorderSize;
+		style.ItemSpacing					= m_Style->Vars.ItemSpacing;
+		style.ItemInnerSpacing				= m_Style->Vars.ItemInnerSpacing;
+		style.CellPadding					= m_Style->Vars.CellPadding;
+		style.TouchExtraPadding				= m_Style->Vars.TouchExtraPadding;
+		style.IndentSpacing					= m_Style->Vars.IndentSpacing;
+		style.ColumnsMinSpacing				= m_Style->Vars.ColumnsMinSpacing;
+		style.ScrollbarSize					= m_Style->Vars.ScrollbarSize;
+		style.ScrollbarRounding				= m_Style->Vars.ScrollbarRounding;
+		style.GrabMinSize					= m_Style->Vars.GrabMinSize;
+		style.GrabRounding					= m_Style->Vars.GrabRounding;
+		style.LogSliderDeadzone				= m_Style->Vars.LogSliderDeadzone;
+		style.TabRounding					= m_Style->Vars.TabRounding;
+		style.TabBorderSize					= m_Style->Vars.TabBorderSize;
+		style.TabMinWidthForCloseButton		= m_Style->Vars.TabMinWidthForCloseButton;
+		style.ColorButtonPosition			= m_Style->Vars.ColorButtonPosition;
+		style.ButtonTextAlign				= m_Style->Vars.ButtonTextAlign;
+		style.SelectableTextAlign			= m_Style->Vars.SelectableTextAlign;
+		style.DisplayWindowPadding			= m_Style->Vars.DisplayWindowPadding;
+		style.DisplaySafeAreaPadding		= m_Style->Vars.DisplaySafeAreaPadding;
+		style.MouseCursorScale				= m_Style->Vars.MouseCursorScale;
+		style.AntiAliasedLines				= m_Style->Vars.AntiAliasedLines;
+		style.AntiAliasedLinesUseTex		= m_Style->Vars.AntiAliasedLinesUseTex;
+		style.AntiAliasedFill				= m_Style->Vars.AntiAliasedFill;
+		style.CurveTessellationTol			= m_Style->Vars.CurveTessellationTol;
+		style.CircleTessellationMaxError	= m_Style->Vars.CircleTessellationMaxError;*/
 	}
 }

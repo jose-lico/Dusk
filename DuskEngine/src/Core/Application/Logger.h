@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Utils/Memory/Memory.h"
-
 #include <unordered_map>
+#include <memory>
 #include <string_view>
 
 namespace spdlog
@@ -33,7 +32,7 @@ namespace DuskEngine
 		void Log(const std::string& message, LogLevel level, const char* file, unsigned int line);
 	private:
 		static std::unordered_map<std::string_view, Logger*> m_Loggers;
-		Ref<spdlog::logger> m_Logger;
+		std::shared_ptr<spdlog::logger> m_Logger;
 		const char* m_Name;
 	};
 }

@@ -9,6 +9,7 @@
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Events/EventBase.h"
 #include "Core/Renderer/Renderer.h"
+#include "Utils/Profiling/Timer.h"
 #ifdef DUSK_IMGUI
 #include "Utils/ImGui/ImGuiLayer.h"
 #endif
@@ -21,14 +22,6 @@ namespace DuskEngine
 		:m_Specs(specs), m_Options(options)
 	{
 		s_Instance = this;
-
-		time_t now = time(0);
-		struct tm tstruct;
-		char buffer[80];
-		tstruct = *localtime(&now);
-		strftime(buffer, sizeof(buffer), "%Y-%m-%d_%Hh%Mm%Ss", &tstruct);
-
-		m_StartupTime = buffer;
 
 		m_OS = OS::Create();
 
@@ -48,11 +41,19 @@ namespace DuskEngine
 			printf("-l, --log                               Dumps all logs to a file. Example log file name: %s.csv\n", m_StartupTime.c_str());
 			return;
 		}
-
-		m_Options.Verbose = true;
+		
 #if DUSK_DEBUG
+		m_Options.Verbose = true;
 		m_Options.DumpLogs = true;
 #endif
+
+		time_t now = time(0);
+		struct tm tstruct;
+		char buffer[80];
+		tstruct = *localtime(&now);
+		strftime(buffer, sizeof(buffer), "%Y-%m-%d_%Hh%Mm%Ss", &tstruct);
+
+		m_StartupTime = buffer;
 
 		m_Logger = new Logger(LOGGER);
 
@@ -67,9 +68,12 @@ namespace DuskEngine
 		
 		m_LayerStack = new LayerStack();
 #ifdef DUSK_IMGUI
-		m_ImGuiLayer = new ImGuiLayer(&GetWindow());
-		m_LayerStack->PushOverlay(m_ImGuiLayer);
-		m_ImGuiLayer->OnAttach();
+		{
+			Timer imguiTimer("ImGuiLayer");
+			m_ImGuiLayer = new ImGuiLayer(&GetWindow());
+			m_LayerStack->PushOverlay(m_ImGuiLayer);
+			m_ImGuiLayer->OnAttach();
+		}
 #endif
 	}
 

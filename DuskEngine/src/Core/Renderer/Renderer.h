@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Utils/Memory/Memory.h"
-
 namespace DuskEngine 
 {
 	struct VertexArray;
@@ -23,6 +21,6 @@ namespace DuskEngine
 
 		void SwapBuffers();
 	private:
-		UniqueRef<OpenGLContext> m_Context;
+		OpenGLContext* m_Context;
 	};
 }

@@ -17,7 +17,7 @@ namespace DuskEngine
 		Timer windowTimer("Window creation");
 		glfwInit();
 
-		glfwWindowHint(GLFW_SAMPLES, 4);
+		//glfwWindowHint(GLFW_SAMPLES, 4);
 
 		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL);
 
@@ -36,7 +36,7 @@ namespace DuskEngine
 		glfwSwapInterval(m_Data.VSync);
 
 		// glfw callbacks
-		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int32_t key, int32_t scancode, int32_t action, int32_t mods)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
@@ -63,7 +63,7 @@ namespace DuskEngine
 				}
 			});
 
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int32_t width, int32_t height)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 				data.Width = width;
@@ -88,7 +88,7 @@ namespace DuskEngine
 		//		LOG("Maximized");
 		//	});
 
-		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
+		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int32_t button, int32_t action, int32_t mods)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
