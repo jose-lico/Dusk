@@ -8,14 +8,14 @@ namespace DuskEngine
 {
 	LuaScript::LuaScript(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
-		m_UUID = uuid;
-		m_Path = path;
-		m_Name = path.filename().string();
+		UUID = uuid;
+		Path = path;
+		Name = path.filename().string();
 	}
 
 	LuaScript::~LuaScript()
 	{
-		std::string message = "Destroyed Script " + m_Name;
+		std::string message = "Destroyed Script " + Name;
 		LOG(message.c_str());
 	}
 
@@ -25,7 +25,7 @@ namespace DuskEngine
 
 		m_Env["entity"] = m_Ent;
 
-		auto loadScript = state.script_file(m_Path.string(), m_Env);
+		auto loadScript = state.script_file(Path.string(), m_Env);
 		
 		if(!loadScript.valid())
 		{

@@ -13,20 +13,20 @@ namespace DuskEngine
 {
 	Material::Material(Handle<Shader> shaderHandle, AssetHandler* owningHandler, const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
-		m_UUID = uuid;
-		m_Path = path;
-		m_Name = path.filename().string();
+		UUID = uuid;
+		Path = path;
+		Name = path.filename().string();
 		m_ShaderHandle = shaderHandle;
 		m_OwningHandler = owningHandler;
 
 		CreateUniforms();
-		std::string message = "Created Material " + m_Name;
+		std::string message = "Created Material " + Name;
 		LOG(message.c_str());
 	}
 
 	Material::~Material()
 	{
-		std::string message = "Destroyed Material " + m_Name;
+		std::string message = "Destroyed Material " + Name;
 		LOG(message.c_str());
 	}
 
@@ -34,7 +34,7 @@ namespace DuskEngine
 	{
 		auto& shader = m_OwningHandler->GetAsset<Shader>(m_ShaderHandle);
 		
-		OpenGLAPI::UseProgram(shader.ResourceID);
+		OpenGLAPI::UseProgram(shader);
 
 		unsigned int textSlot = 0;
 		for (auto uniform : m_Uniforms)
@@ -48,7 +48,7 @@ namespace DuskEngine
 			case UniformType::Texture:
 				OpenGLAPI::SetUniformInt(shader, "u_" + uniform.Name, textSlot);
 				auto& texture = assetHandler.GetAsset<Texture>(uniform.Data.dataHandle);
-				OpenGLAPI::BindTexture(textSlot++, texture.ResourceID);
+				OpenGLAPI::BindTexture(texture, textSlot++);
 				break;
 			}
 		}
@@ -104,7 +104,7 @@ namespace DuskEngine
 	void Material::SetTexture(const std::string& name, Texture& texture)
 	{
 		if (m_UniformsMap.find(name) != m_UniformsMap.end())
-			m_UniformsMap[name]->Data.dataHandle = m_OwningHandler->AddToAssetPool<Texture>(texture.GetUUID());
+			m_UniformsMap[name]->Data.dataHandle = m_OwningHandler->AddToAssetPool<Texture>(texture.UUID);
 		else
 		{
 			std::string message = "Texture '" + name + "' doesnt exist";
@@ -121,7 +121,7 @@ namespace DuskEngine
 	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
-		out << YAML::Key << "Material" << YAML::Value << m_Name;
+		out << YAML::Key << "Material" << YAML::Value << Name;
 		out << YAML::Key << "Shader" << YAML::Value << m_OwningHandler->GetAsset<Shader>(m_ShaderHandle);
 		//out << YAML::Key << "Uniforms" << YAML::Value << m_Uniforms;
 

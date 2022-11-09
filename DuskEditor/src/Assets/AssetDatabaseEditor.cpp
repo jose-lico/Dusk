@@ -130,7 +130,9 @@ namespace DuskEngine
 
 	void AssetDatabaseEditor::AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
-		Asset* resource = new Asset(path, uuid);
+		Asset* resource = new Asset();
+		resource->Path = path;
+		resource->UUID = uuid;
 
 		std::string extension = path.extension().string();
 

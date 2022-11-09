@@ -62,7 +62,7 @@ namespace DuskEngine
 			break;
 		}
 
-		out << YAML::Key << "uuid" << YAML::Value << mesh.GetUUID();
+		out << YAML::Key << "uuid" << YAML::Value << mesh.UUID;
 		out << YAML::EndMap;
 
 		return out;
@@ -71,7 +71,7 @@ namespace DuskEngine
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, Material& material)
 	{
-		out << YAML::Value << material.GetUUID();
+		out << YAML::Value << material.UUID;
 
 		return out;
 	}
@@ -79,7 +79,7 @@ namespace DuskEngine
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, Texture& texture)
 	{
-		out << YAML::Value << texture.GetUUID();
+		out << YAML::Value << texture.UUID;
 
 		return out;
 	}
@@ -87,7 +87,7 @@ namespace DuskEngine
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, Shader& shader)
 	{
-		out << YAML::Value << shader.GetUUID();
+		out << YAML::Value << shader.UUID;
 
 		return out;
 	}
@@ -126,7 +126,7 @@ namespace DuskEngine
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<LuaScript>& script)
 	{
-		out << YAML::Value << script->GetUUID();
+		out << YAML::Value << script->UUID;
 
 		return out;
 	}

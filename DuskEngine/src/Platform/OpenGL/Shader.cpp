@@ -12,22 +12,22 @@ namespace DuskEngine
 	Shader CreateShader(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
 		Shader shader;
-		shader.m_UUID = uuid;
-		shader.m_Path = path;
-		shader.m_Name = path.filename().string();
+		shader.UUID = uuid;
+		shader.Path = path;
+		shader.Name = path.filename().string();
 
 		ShaderProgramSource source = ParseShader(shader);
 
 		CreateProgram(shader, source.VertexSource, source.FragmentSource);
 
-		LOG("Created Shader " + shader.m_Name);
+		LOG("Created Shader " + shader.Name);
 
 		return shader;
 	}
 
 	ShaderProgramSource ParseShader(Shader& shader)
 	{
-		std::ifstream stream(shader.m_Path);
+		std::ifstream stream(shader.Path);
 
 		enum class ShaderType
 		{

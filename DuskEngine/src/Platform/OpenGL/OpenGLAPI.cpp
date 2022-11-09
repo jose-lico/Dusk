@@ -29,31 +29,31 @@ namespace DuskEngine :: OpenGLAPI
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void SetBufferData(uint32_t& id, BufferType buffer, UsageType usage, void* data, size_t size)
+	void SetBufferData(OpenGLBuffer& buffer, void* data)
 	{
-		glGenBuffers(1, &id);
-		glBindBuffer((GLenum)buffer, id);
-		glBufferData((GLenum)buffer, size, data, (GLenum)usage);
+		glGenBuffers(1, &buffer.ResourceID);
+		glBindBuffer((GLenum)buffer.BufferType, buffer.ResourceID);
+		glBufferData((GLenum)buffer.BufferType, buffer.Size, data, (GLenum)buffer.UsageType);
 	}
 
-	void BindBuffer(BufferType BufferType, uint32_t id)
+	void BindBuffer(const OpenGLBuffer& buffer)
 	{
-		glBindBuffer((GLenum)BufferType, id);
+		glBindBuffer((GLenum)buffer.BufferType, buffer.ResourceID);
 	}
 
-	void FreeBuffer(uint32_t& id)
+	void FreeBuffer(OpenGLBuffer& buffer)
 	{
-		glDeleteBuffers(1, &id);
+		glDeleteBuffers(1, &buffer.ResourceID);
 	}
 
-	void GenVertexArrays(uint32_t& id)
+	void GenVertexArrays(VertexArray& array)
 	{
-		glGenVertexArrays(1, &id);
+		glGenVertexArrays(1, &array.ResourceID);
 	}
 
-	void BindVertexArray(uint32_t id)
+	void BindVertexArray(const VertexArray& array)
 	{
-		glBindVertexArray(id);
+		glBindVertexArray(array.ResourceID);
 	}
 
 	void UnbindVertexArray()
@@ -66,7 +66,8 @@ namespace DuskEngine :: OpenGLAPI
 		const auto& elements = vb.Layout.Elements;
 
 		unsigned int offset = 0;
-		for (unsigned int i = 0; i < elements.size(); i++) {
+		for (unsigned int i = 0; i < elements.size(); i++) 
+		{
 			const auto& element = elements[i];
 			glVertexAttribPointer(i, element.Count, ShaderDataTypeToOpenGLBaseType(element.ShaderType), element.Normalized,
 				vb.Layout.Stride, (void*)(size_t)offset);
@@ -78,36 +79,35 @@ namespace DuskEngine :: OpenGLAPI
 	void FreeVertexArray(VertexArray& va)
 	{
 		glDeleteVertexArrays(1, &va.ResourceID);
-
-		FreeBuffer(va.VB.ResourceID);
-		FreeBuffer(va.IB.ResourceID);
+		FreeBuffer(va.VB);
+		FreeBuffer(va.IB);
 	}
 
-	void SetTextureData(Texture& textureData, const unsigned char* data, bool offset)
+	void SetTextureData(Texture& texture, const unsigned char* data, bool offset)
 	{
-		glGenTextures(1, &textureData.ResourceID);
-		glBindTexture((GLenum)textureData.Type, textureData.ResourceID);
+		glGenTextures(1, &texture.ResourceID);
+		glBindTexture((GLenum)texture.Type, texture.ResourceID);
 
-		glTexParameteri((GLenum)textureData.Type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri((GLenum)textureData.Type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri((GLenum)textureData.Type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri((GLenum)textureData.Type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri((GLenum)texture.Type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri((GLenum)texture.Type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri((GLenum)texture.Type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri((GLenum)texture.Type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexImage2D((GLenum)textureData.Type, 0, (GLenum)textureData.Format, textureData.Width, textureData.Height, 0, 
-			(GLenum)textureData.Format, GL_UNSIGNED_BYTE, data + (offset ? sizeof(TextureData) : 0));
+		glTexImage2D((GLenum)texture.Type, 0, (GLenum)texture.Format, texture.Width, texture.Height, 0,
+			(GLenum)texture.Format, GL_UNSIGNED_BYTE, data + (offset ? sizeof(TextureData) : 0));
 
-		if(textureData.Mipmaps)
-			glGenerateMipmap((GLenum)textureData.Type);
+		if(texture.Mipmaps)
+			glGenerateMipmap((GLenum)texture.Type);
 	}
 
-	void BindTexture(uint32_t slot, uint32_t id)
+	void BindTexture(const Texture& texture, uint32_t slot)
 	{
-		glBindTextureUnit(slot, id);
+		glBindTextureUnit(slot, texture.ResourceID);
 	}
 
-	void FreeTexture(uint32_t& id)
+	void FreeTexture(Texture& texture)
 	{
-		glDeleteTextures(1, &id);
+		glDeleteTextures(1, &texture.ResourceID);
 	}
 
 	void CreateProgram(Shader& shader ,const std::string& vertexShader, const std::string& fragmentShader)
@@ -125,14 +125,14 @@ namespace DuskEngine :: OpenGLAPI
 		glDeleteShader(fs);
 	}
 
-	void UseProgram(uint32_t id)
+	void UseProgram(const Shader& shader)
 	{
-		glUseProgram(id);
+		glUseProgram(shader.ResourceID);
 	}
 
-	void DeleteProgram(uint32_t id)
+	void DeleteProgram(Shader& shader)
 	{
-		glDeleteProgram(id);
+		glDeleteProgram(shader.ResourceID);
 	}
 
 	void SetUniformInt(Shader& shader, const std::string& name, int i)
@@ -201,7 +201,7 @@ namespace DuskEngine :: OpenGLAPI
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void BindFramebuffer(Framebuffer& buffer)
+	void BindFramebuffer(const Framebuffer& buffer)
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, buffer.ResourceID);
 		glViewport(0, 0, buffer.Width, buffer.Height);

@@ -1,7 +1,6 @@
 #pragma once
 #include "Core/Assets/Asset.h"
 
-#include "Utils/Memory/Memory.h"
 #include "Platform/OpenGL/VertexArray.h"
 
 #include "glm/glm.hpp"

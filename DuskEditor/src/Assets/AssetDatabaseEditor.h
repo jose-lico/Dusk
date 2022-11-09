@@ -17,7 +17,7 @@ namespace uuids
 namespace DuskEngine
 {
 	class AssetDatabase;
-	class Asset;
+	struct Asset;
 
 	struct opt_path_hash2 {
 		std::size_t operator()(const std::optional<std::filesystem::path>& path) const {

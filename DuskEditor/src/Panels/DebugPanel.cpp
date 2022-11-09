@@ -50,7 +50,8 @@ namespace DuskEngine
 		else
 			m_RefreshFPSTimer += Time::GetDeltaTime();
 		
-		ImGui::Text("%s: %sms (%d FPS)", Timer::GetRootTimer()->Name.c_str(), fmt::format("{:.3f}", m_Frametime).c_str(), (int)(1000.0f / m_Frametime));
+		//if(Timer::GetRootTimer() != nullptr)
+			ImGui::Text("%s: %sms (%d FPS)", Timer::GetRootTimer()->Name.c_str(), fmt::format("{:.3f}", m_Frametime).c_str(), (int)(1000.0f / m_Frametime));
 
 		ImGui::End();
 	}

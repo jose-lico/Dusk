@@ -6,10 +6,11 @@
 
 namespace DuskEngine
 {
-	struct VertexArray;
-	struct Texture;
-	struct Shader;
+	struct OpenGLBuffer;
 	struct VertexBuffer;
+	struct VertexArray;
+	struct Shader;
+	struct Texture;
 	struct Framebuffer;
 	enum class BufferType : uint16_t;
 	enum class UsageType : uint16_t;
@@ -25,16 +26,16 @@ namespace DuskEngine :: OpenGLAPI
 	// Buffer
 	// #############################################################
 
-	void SetBufferData(uint32_t& id, BufferType buffer, UsageType usage, void* data, size_t size);
-	void BindBuffer(BufferType BufferType, uint32_t id);
-	void FreeBuffer(uint32_t& id);
+	void SetBufferData(OpenGLBuffer& buffer, void* data);
+	void BindBuffer(const OpenGLBuffer& buffer);
+	void FreeBuffer(OpenGLBuffer& buffer);
 
 	// #############################################################
 	// Vertex Array
 	// #############################################################
 
-	void GenVertexArrays(uint32_t& id);
-	void BindVertexArray(uint32_t id);
+	void GenVertexArrays(VertexArray& id);
+	void BindVertexArray(const VertexArray& id);
 	void UnbindVertexArray();
 	void SetVertexAttribPointer(VertexBuffer& vb);
 	void FreeVertexArray(VertexArray& va);
@@ -43,17 +44,17 @@ namespace DuskEngine :: OpenGLAPI
 	// Texture
 	// #############################################################
 
-	void SetTextureData(Texture& textureData, const unsigned char* data, bool offset = false);
-	void BindTexture(uint32_t slot, uint32_t id);
-	void FreeTexture(uint32_t& id);
+	void SetTextureData(Texture& texture, const unsigned char* data, bool offset = false);
+	void BindTexture(const Texture& texture, uint32_t slot);
+	void FreeTexture(Texture& texture);
 
 	// #############################################################
 	// Shader
 	// #############################################################
 
 	void CreateProgram(Shader& shader, const std::string& vertexShader, const std::string& fragmentShader);
-	void UseProgram(uint32_t id);
-	void DeleteProgram(uint32_t id);
+	void UseProgram(const Shader& shader);
+	void DeleteProgram(Shader& shader);
 
 	void SetUniformInt(Shader& shader, const std::string& name, int i);
 	void SetUniformFloat(Shader& shader, const std::string& name, float f);
@@ -68,7 +69,7 @@ namespace DuskEngine :: OpenGLAPI
 	// #############################################################
 
 	void ResizeFramebuffer(Framebuffer& buffer);
-	void BindFramebuffer(Framebuffer& buffer);
+	void BindFramebuffer(const Framebuffer& buffer);
 	void UnbindFramebuffer();
 	void FreeFramebuffer(Framebuffer& buffer);
 

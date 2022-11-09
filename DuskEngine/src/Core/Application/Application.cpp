@@ -106,7 +106,10 @@ namespace DuskEngine
 #ifdef DUSK_IMGUI
 			m_ImGuiLayer->End();
 #endif
-			m_Renderer->SwapBuffers();
+			{
+				//Timer timer("Swap buffers", true);
+				m_Renderer->SwapBuffers();
+			}
 		}
 	}
 

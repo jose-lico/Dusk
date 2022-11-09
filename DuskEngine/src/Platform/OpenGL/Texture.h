@@ -1,8 +1,7 @@
 #pragma once
 
+#include "Resource.h"
 #include "Core/Assets/Asset.h"
-
-#include <fstream>
 
 namespace uuids 
 {
@@ -47,7 +46,7 @@ namespace DuskEngine
 		size_t DataSize;
 	};
 
-	struct Texture : public Asset
+	struct Texture : Asset, OpenGLResource
 	{
 		uint32_t ResourceID;
 

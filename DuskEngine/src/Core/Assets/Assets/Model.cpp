@@ -26,9 +26,9 @@ namespace DuskEngine
 
 	Model::Model(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
-		m_UUID = uuid;
-		m_Path = path;
-		m_Name = path.filename().string();
+		UUID = uuid;
+		Path = path;
+		Name = path.filename().string();
 
 		Assimp::Importer import;
 		const aiScene* scene = import.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_FlipWindingOrder);
@@ -40,7 +40,7 @@ namespace DuskEngine
 			return;
 		}
 
-		LOG("Loading Model " + m_Name);
+		LOG("Loading Model " + Name);
 		ProcessNode(scene->mRootNode, scene);
 	}
 

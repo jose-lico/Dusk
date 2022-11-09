@@ -4,9 +4,8 @@
 
 namespace DuskEngine
 {
-	struct VertexArray
+	struct VertexArray : OpenGLResource
 	{
-		uint32_t ResourceID;
 		VertexBuffer VB;
 		IndexBuffer IB;
 	};

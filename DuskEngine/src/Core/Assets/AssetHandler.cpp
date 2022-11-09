@@ -46,19 +46,19 @@ namespace DuskEngine
 
 	AssetHandler::~AssetHandler()
 	{
-		for(auto mesh : m_MeshPool.m_Pool)
+		for(auto& mesh : m_MeshPool.m_Pool)
 		{
 			OpenGLAPI::FreeVertexArray(mesh.m_VA);
 		}
 
-		for (auto texture : m_TexturePool.m_Pool)
+		for (auto& texture : m_TexturePool.m_Pool)
 		{
-			OpenGLAPI::FreeTexture(texture.ResourceID);
+			OpenGLAPI::FreeTexture(texture);
 		}
 
-		for (auto shader : m_ShaderPool.m_Pool)
+		for (auto& shader : m_ShaderPool.m_Pool)
 		{
-			OpenGLAPI::DeleteProgram(shader.ResourceID);
+			OpenGLAPI::DeleteProgram(shader);
 		}
 
 		LOG(("Destroying Asset Handler " + m_Name).c_str());

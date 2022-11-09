@@ -28,11 +28,11 @@ namespace DuskEngine
 
 	Toolbar::~Toolbar()
 	{
-		OpenGLAPI::FreeTexture(m_Play.ResourceID);
-		OpenGLAPI::FreeTexture(m_Pause.ResourceID);
-		OpenGLAPI::FreeTexture(m_Stop.ResourceID);
-		OpenGLAPI::FreeTexture(m_StepForward.ResourceID);
-		OpenGLAPI::FreeTexture(m_Reload.ResourceID);
+		OpenGLAPI::FreeTexture(m_Play);
+		OpenGLAPI::FreeTexture(m_Pause);
+		OpenGLAPI::FreeTexture(m_Stop);
+		OpenGLAPI::FreeTexture(m_StepForward);
+		OpenGLAPI::FreeTexture(m_Reload);
 	}
 
 	void Toolbar::OnImGuiRender()

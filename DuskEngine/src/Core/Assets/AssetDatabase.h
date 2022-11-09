@@ -17,8 +17,8 @@ namespace uuids
 
 namespace DuskEngine
 {
-	class Asset;
 	class Material;
+	struct Asset;
 	struct Shader;
 	struct Texture;
 	class Mesh;

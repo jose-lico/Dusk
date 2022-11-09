@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Resource.h"
+
 #include <vector>
 
 namespace DuskEngine
@@ -42,9 +44,8 @@ namespace DuskEngine
 		BOOL
 	};
 
-	struct OpenGLBuffer
+	struct OpenGLBuffer : OpenGLResource
 	{
-		uint32_t ResourceID;
 		size_t Size;
 		BufferType BufferType;
 		UsageType UsageType;

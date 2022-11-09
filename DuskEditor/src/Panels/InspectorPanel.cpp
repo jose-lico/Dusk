@@ -81,7 +81,7 @@ namespace DuskEngine
 					{
 						for (auto scriptAsset : m_EditorDB->m_ScriptsDatabase)
 						{
-							if(ImGui::MenuItem(scriptAsset->GetName().c_str()))
+							if(ImGui::MenuItem(scriptAsset->Name.c_str()))
 							{
 								//auto& script = (*m_SelectedEntities)[0].AddComponent<Script>();
 								//script.luaScriptHandle = scriptAsset->GetUUID();
@@ -391,12 +391,12 @@ namespace DuskEngine
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
 			int modelIndex = 0;
-			uuids::uuid modelID = m_AssetHandler->GetAsset(meshes[0]->meshHandle).GetUUID();
+			uuids::uuid modelID = m_AssetHandler->GetAsset(meshes[0]->meshHandle).UUID;
 
 			for (unsigned int i = 0; i < m_EditorDB->m_ModelDatabase.size(); i++)
 			{
-				modelList.push_back(m_EditorDB->m_ModelDatabase[i]->GetName());
-				if (m_EditorDB->m_ModelDatabase[i]->GetUUID() == modelID)
+				modelList.push_back(m_EditorDB->m_ModelDatabase[i]->Name);
+				if (m_EditorDB->m_ModelDatabase[i]->UUID == modelID)
 					modelIndex = i + 2;
 			}
 
@@ -443,7 +443,7 @@ namespace DuskEngine
 							else
 							{	
 								meshes[0]->meshHandle = 
-									m_AssetHandler->AddToAssetPool<Mesh>(m_DB->GetUUID(m_EditorDB->m_ModelDatabase[modelIndex - 2]->GetPath()));
+									m_AssetHandler->AddToAssetPool<Mesh>(m_DB->GetUUID(m_EditorDB->m_ModelDatabase[modelIndex - 2]->Path));
 							}
 						}
 					}
@@ -457,13 +457,13 @@ namespace DuskEngine
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> materialList; // Later add default materials
 			int materialIndex = 0;
-			uuids::uuid materialID = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetUUID();
+			uuids::uuid materialID = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).UUID;
 				;
 
 			for (unsigned int i = 0; i < m_EditorDB->m_MaterialDatabase.size(); i++)
 			{
-				materialList.push_back(m_EditorDB->m_MaterialDatabase[i]->GetName());
-				if (m_EditorDB->m_MaterialDatabase[i]->GetUUID() == materialID)
+				materialList.push_back(m_EditorDB->m_MaterialDatabase[i]->Name);
+				if (m_EditorDB->m_MaterialDatabase[i]->UUID == materialID)
 					materialIndex = i;
 			}
 
@@ -479,7 +479,7 @@ namespace DuskEngine
 						if (n != materialIndex)
 						{
 							materialIndex = n;
-							auto id = m_DB->GetUUID(m_EditorDB->m_MaterialDatabase[materialIndex]->GetPath());
+							auto id = m_DB->GetUUID(m_EditorDB->m_MaterialDatabase[materialIndex]->Path);
 							meshes[0]->materialHandle = m_AssetHandler->AddToAssetPool<Material>(id);
 						}
 					}
@@ -494,19 +494,19 @@ namespace DuskEngine
 			ImGui::Separator();
 			ImGui::Separator();
 
-			ImGui::Text(m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetName().c_str());
+			ImGui::Text(m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Name.c_str());
 
 			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
 			std::vector<std::string> shaderList;
 			int shaderIndex = 0;
 			// bad
 			uuids::uuid shaderID = m_AssetHandler->GetAsset<Shader>(
-				m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetShaderHandle()).m_UUID;
+				m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetShaderHandle()).UUID;
 
 			for (unsigned int i = 0; i < m_EditorDB->m_ShaderDatabase.size(); i++)
 			{
-				shaderList.push_back(m_EditorDB->m_ShaderDatabase[i]->GetName());
-				if (m_EditorDB->m_ShaderDatabase[i]->GetUUID() == shaderID)
+				shaderList.push_back(m_EditorDB->m_ShaderDatabase[i]->Name);
+				if (m_EditorDB->m_ShaderDatabase[i]->UUID == shaderID)
 					shaderIndex = i;
 			}
 
@@ -522,12 +522,12 @@ namespace DuskEngine
 						{
 							shaderIndex = n;
 							
-							auto id = m_DB->GetUUID(m_EditorDB->m_ShaderDatabase[shaderIndex]->GetPath());
+							auto id = m_DB->GetUUID(m_EditorDB->m_ShaderDatabase[shaderIndex]->Path);
 							auto shaderHandle = m_AssetHandler->AddToAssetPool<Shader>(id);
 							m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SetShader(shaderHandle);
 							
 							m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SerializeText(
-								m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetPath().string());
+								m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Path.string());
 						}
 					}
 
@@ -550,7 +550,7 @@ namespace DuskEngine
 				if (uniform.Type == UniformType::Vec3)
 				{
 					if (ImGui::ColorEdit3(uniform.Name.c_str(), &uniform.Data.vec3[0]))
-						material.SerializeText(material.GetPath().string());
+						material.SerializeText(material.Path.string());
 				}
 
 				if (uniform.Type == UniformType::Texture)
@@ -572,7 +572,7 @@ namespace DuskEngine
 
 							auto& texture = m_AssetHandler->GetAsset<Texture>(m_AssetHandler->AddToAssetPool<Texture>(m_DB->GetUUID(ws)));
 							material.SetTexture(uniform.Name, texture);
-							material.SerializeText(material.GetPath().string());
+							material.SerializeText(material.Path.string());
 						}
 						ImGui::EndDragDropTarget();
 					}

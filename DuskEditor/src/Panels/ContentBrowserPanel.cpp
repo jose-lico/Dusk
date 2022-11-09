@@ -31,8 +31,8 @@ namespace DuskEngine
 
 	ContentBrowserPanel::~ContentBrowserPanel()
 	{
-		OpenGLAPI::FreeTexture(m_FolderIcon.ResourceID);
-		OpenGLAPI::FreeTexture(m_UnknownIcon.ResourceID);
+		OpenGLAPI::FreeTexture(m_FolderIcon);
+		OpenGLAPI::FreeTexture(m_UnknownIcon);
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()

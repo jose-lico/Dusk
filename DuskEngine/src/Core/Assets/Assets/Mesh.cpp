@@ -11,8 +11,8 @@ namespace DuskEngine
 	Mesh::Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count, MeshType type)
 		:m_Type(type)
 	{
-		OpenGLAPI::GenVertexArrays(m_VA.ResourceID);
-		OpenGLAPI::BindVertexArray(m_VA.ResourceID);
+		OpenGLAPI::GenVertexArrays(m_VA);
+		OpenGLAPI::BindVertexArray(m_VA);
 
 		VertexBufferLayout vbl;
 		vbl.Push(ShaderDataType::FLOAT, 3, true);
@@ -25,7 +25,7 @@ namespace DuskEngine
 		vb.Size = size;
 		vb.Layout = vbl;
 
-		OpenGLAPI::SetBufferData(vb.ResourceID, vb.BufferType, vb.UsageType, vertices, vb.Size);
+		OpenGLAPI::SetBufferData(vb, vertices);
 		OpenGLAPI::SetVertexAttribPointer(vb);
 		
 		IndexBuffer ib;
@@ -34,7 +34,7 @@ namespace DuskEngine
 		ib.Size = count * sizeof(unsigned int);
 		ib.Count = count;
 
-		OpenGLAPI::SetBufferData(ib.ResourceID, ib.BufferType, ib.UsageType, indices, ib.Size);
+		OpenGLAPI::SetBufferData(ib, indices);
 
 		m_VA.VB = vb;
 		m_VA.IB = ib;
@@ -43,8 +43,8 @@ namespace DuskEngine
 	Mesh::Mesh(std::vector<Vertex>& vertices, unsigned int* indices, unsigned int count)
 		:m_Type(MeshType::Model)
 	{
-		OpenGLAPI::GenVertexArrays(m_VA.ResourceID);
-		OpenGLAPI::BindVertexArray(m_VA.ResourceID);
+		OpenGLAPI::GenVertexArrays(m_VA);
+		OpenGLAPI::BindVertexArray(m_VA);
 
 		VertexBufferLayout vbl;
 		vbl.Push(ShaderDataType::FLOAT, 3, true);
@@ -57,7 +57,7 @@ namespace DuskEngine
 		vb.Size = vertices.size() * sizeof(Vertex);
 		vb.Layout = vbl;
 
-		OpenGLAPI::SetBufferData(vb.ResourceID, vb.BufferType, vb.UsageType, &vertices[0], vb.Size);
+		OpenGLAPI::SetBufferData(vb, &vertices[0]);
 		OpenGLAPI::SetVertexAttribPointer(vb);
 
 		IndexBuffer ib;
@@ -66,7 +66,7 @@ namespace DuskEngine
 		ib.Size = count * sizeof(unsigned int);
 		ib.Count = count;
 
-		OpenGLAPI::SetBufferData(ib.ResourceID, ib.BufferType, ib.UsageType, indices, ib.Size);
+		OpenGLAPI::SetBufferData(ib, indices);
 
 		m_VA.VB = vb;
 		m_VA.IB = ib;

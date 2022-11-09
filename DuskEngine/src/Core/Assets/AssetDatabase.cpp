@@ -132,9 +132,9 @@ namespace DuskEngine
 		Model* m = new Model(m_PathsMap[uuid].string(), uuid);
 		Mesh mesh = *m->GetFirstMesh();
 		mesh.m_Type = MeshType::Model;
-		mesh.m_UUID = uuid;
-		mesh.m_Name = m->GetName();
-		mesh.m_Path = m->GetPath();
+		mesh.UUID = uuid;
+		mesh.Name = m->Name;
+		mesh.Path = m->Path;
 		delete(m);
 		return mesh;
 	}

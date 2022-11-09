@@ -34,9 +34,9 @@ namespace DuskEngine
 	Texture CreateTexture(const std::filesystem::path& path, const uuids::uuid& uuid)
 	{
 		Texture textureData;
-		textureData.m_UUID = uuid;
-		textureData.m_Path = path;
-		textureData.m_Name = path.filename().string();
+		textureData.UUID = uuid;
+		textureData.Path = path;
+		textureData.Name = path.filename().string();
 
 		std::string importFilePath = "res/.import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
 
@@ -70,12 +70,12 @@ namespace DuskEngine
 		}
 		else
 		{
-			ERR("Error loading texture " + textureData.m_Name);
+			ERR("Error loading texture " + textureData.Name);
 			// set pink square or something
 			return textureData;
 		}
 
-		LOG("Created Texture " + textureData.m_Name);
+		LOG("Created Texture " + textureData.Name);
 
 		return textureData;
 	}
