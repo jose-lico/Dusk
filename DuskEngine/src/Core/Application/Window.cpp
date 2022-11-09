@@ -7,6 +7,8 @@
 #include "GLFW/glfw3.h"
 #include "GL/glew.h"
 
+#include <iostream>
+
 namespace DuskEngine 
 {
 	extern void DropCallback(GLFWwindow* window, int count, const char** paths);
@@ -18,9 +20,12 @@ namespace DuskEngine
 		glfwInit();
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		//glfwWindowHint(GLFW_SAMPLES, 4);
+#if DUSK_DEBUG
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+#endif
 
 		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL);
 
