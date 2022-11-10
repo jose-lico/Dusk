@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Application/Core.h"
-#include "Utils/Memory/Memory.h"
+#include "Platform/OpenGL/Shader.h"
 
 #include "entt/entity/registry.hpp"
 
@@ -52,7 +52,7 @@ namespace DuskEngine
 		friend class HierarchyPanel;
 		friend class EditorLayer;
 
-		Ref<Shader> m_GridShader;
+		Shader m_GridShader;
 
 		ScriptingEngine* m_ScriptingEngine;
 		AssetHandler* m_AssetHandler;

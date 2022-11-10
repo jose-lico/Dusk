@@ -25,6 +25,14 @@ namespace DuskEngine
 		return shader;
 	}
 
+	Shader CreateShader(const char* vertSource, const char* fragSource)
+	{
+		Shader shader;
+		CreateProgram(shader, vertSource, fragSource);
+
+		return shader;
+	}
+
 	ShaderProgramSource ParseShader(Shader& shader)
 	{
 		std::ifstream stream(shader.Path);

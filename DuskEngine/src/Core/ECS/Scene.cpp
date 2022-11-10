@@ -15,6 +15,9 @@
 #include "Platform/OpenGL/OpenGLAPI.h"
 #include "Core/Assets/Assets/Mesh.h"
 
+#include "shaders/grid_vert.embedded"
+#include "shaders/grid_frag.embedded"
+
 const unsigned int MAX_LIGHTS = 8;
 
 namespace DuskEngine
@@ -25,7 +28,8 @@ namespace DuskEngine
 	{
 		std::string message = "Creating new scene " + m_Name;
 		LOG(message.c_str());
-		//m_GridShader = MakeRef<Shader>("res/editor/shaders/grid.glsl");
+
+		m_GridShader = CreateShader(grid_vert, grid_frag);
 
 		m_ScriptingEngine = new ScriptingEngine();
 		m_AssetHandler = new AssetHandler("SceneHandler");
@@ -35,6 +39,8 @@ namespace DuskEngine
 	{
 		std::string message = "Destroying scene " + m_Name;
 		LOG(message.c_str());
+
+		OpenGLAPI::DeleteProgram(m_GridShader);
 
 		delete(m_AssetHandler);
 		delete(m_ScriptingEngine);
@@ -189,16 +195,16 @@ namespace DuskEngine
 				renderer.Submit(m_AssetHandler->GetAsset(mesh.meshHandle));
 			}
 
-			//glm::mat4 viewMatrix = camera.camera.viewMatrix;
-			//glm::mat4 projectionMatrix = camera.camera.projectionMatrix;
+			glm::mat4 viewMatrix = camera.camera.viewMatrix;
+			glm::mat4 projectionMatrix = camera.camera.projectionMatrix;
 
-			/*m_GridShader->Bind();
-			m_GridShader->SetUniformMat4("e_ViewProjection", VPM);
-			m_GridShader->SetUniformMat4("e_Projection", projectionMatrix);
-			m_GridShader->SetUniformMat4("e_View", viewMatrix);
+			OpenGLAPI::UseProgram(m_GridShader);
 
-			OpenGLAPI::UnbindVAO();
-			OpenGLAPI::DrawArrays(0, 6);*/
+			OpenGLAPI::SetUniformMat4(m_GridShader, "e_ViewProjection", VPM);
+			OpenGLAPI::SetUniformMat4(m_GridShader, "e_Projection", projectionMatrix);
+			OpenGLAPI::SetUniformMat4(m_GridShader, "e_View", viewMatrix);
+
+			OpenGLAPI::DrawArrays(0, 6);
 
 			renderer.EndScene();
 		}

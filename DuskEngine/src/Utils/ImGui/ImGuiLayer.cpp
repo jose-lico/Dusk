@@ -6,14 +6,14 @@
 #include "Core/Application/Window.h"
 #include "Utils/Profiling/Timer.h"
 
-#include "fonts/roboto/Roboto-Regular.embedded"
-#include "fonts/forkawesome/forkawesome-webfont.embedded"
-
 #include "IconsForkAwesome.h"
 #include "ImGuizmo/ImGuizmo.h"
 #include "imgui/imgui.h"
 #include "../backends/imgui_impl_opengl3.cpp"
 #include "../backends/imgui_impl_glfw.cpp"
+
+#include "fonts/roboto/Roboto-Regular.embedded"
+#include "fonts/forkawesome/forkawesome-webfont.embedded"
 
 namespace DuskEngine
 {

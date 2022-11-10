@@ -7,8 +7,10 @@
 
 namespace DuskEngine
 {
+#if DUSK_DEBUG
 	void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity,
 		GLsizei length, const char* message, const void* userParam);
+#endif
 
 	OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
 		:m_WindowHandle(windowHandle)
@@ -17,6 +19,8 @@ namespace DuskEngine
 
 		if (glewInit() != GLEW_OK)
 			FATAL("Failed to initialize glew!");
+
+		TRACE("OpenGL Context created.");
 
 #if DUSK_DEBUG
 		int flags;
@@ -35,8 +39,6 @@ namespace DuskEngine
 		glEnable(GL_MULTISAMPLE);
 		glEnable(GL_CULL_FACE);
 		glFrontFace(GL_CW);
-
-		TRACE("OpenGL Context created and initialized.");
 	}
 
 	OpenGLContext::~OpenGLContext()
@@ -50,6 +52,7 @@ namespace DuskEngine
 		glfwPollEvents();
 	}
 
+#if DUSK_DEBUG
 	void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, 
 		const char* message, const void* userParam)
 	{
@@ -95,4 +98,5 @@ namespace DuskEngine
 
 		ERR(errorMessage);
 	}
+#endif
 }
