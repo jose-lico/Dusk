@@ -58,10 +58,11 @@ namespace DuskEngine
 		m_Logger = new Logger(LOGGER);
 
 		WindowData data;
-		data.Title = m_Specs.Name + " | " + m_Specs.Platform + " | " + m_Specs.Target;
+		//data.Title = m_Specs.Name + " | " + m_Specs.Platform + " | " + m_Specs.Target;
+		data.Title = "Launcher";
+
 		m_Window = new Window(data);
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
-
 		m_Renderer = new Renderer(*m_Window);
 
 		m_AssetDatabase = new AssetDatabase();
@@ -69,10 +70,9 @@ namespace DuskEngine
 		m_LayerStack = new LayerStack();
 #ifdef DUSK_IMGUI
 		{
-			Timer imguiTimer("ImGuiLayer");
+			//Timer imguiTimer("ImGuiLayer");
 			m_ImGuiLayer = new ImGuiLayer(&GetWindow());
-			m_LayerStack->PushOverlay(m_ImGuiLayer);
-			m_ImGuiLayer->OnAttach();
+			PushOverlay(m_ImGuiLayer);
 		}
 #endif
 	}
@@ -93,17 +93,19 @@ namespace DuskEngine
 		while (!m_Window->ShouldClose())
 		{
 			Time::Update();
-			for (Layer* layer : *m_LayerStack)
-				if (layer->Enabled)
-					layer->OnUpdate();
+			for (size_t i = 0; i < *m_LayerStack; i++)
+			{
+				if((*m_LayerStack)[i]->Enabled)
+					(*m_LayerStack)[i]->OnUpdate();
+			}
 
 #ifdef DUSK_IMGUI
 			m_ImGuiLayer->Begin();
-#endif
-			for (Layer* layer : *m_LayerStack)
-				if (layer->Enabled)
-					layer->OnImGuiRender();
-#ifdef DUSK_IMGUI
+			for (size_t i = 0; i < *m_LayerStack; i++)
+			{
+				if ((*m_LayerStack)[i]->Enabled)
+					(*m_LayerStack)[i]->OnImGuiRender();
+			}
 			m_ImGuiLayer->End();
 #endif
 			{
@@ -125,6 +127,18 @@ namespace DuskEngine
 		overlay->OnAttach();
 	}
 
+	void Application::PopLayer(Layer* layer)
+	{
+		m_LayerStack->PopLayer(layer);
+		layer->OnDetach();
+	}
+
+	void Application::PopOverlay(Layer* overlay)
+	{
+		m_LayerStack->PopOverlay(overlay);
+		overlay->OnDetach();
+	}
+
 	void Application::OnEvent(Event& e)
 	{
 		for (Layer* layer : *m_LayerStack)
@@ -134,5 +148,23 @@ namespace DuskEngine
 			if(layer->Enabled)
 				layer->OnEvent(e);
 		}
+	}
+
+	void Application::CreateWindowDusk()
+	{
+		WindowData data;
+		data.Title = m_Specs.Name + " | " + m_Specs.Platform + " | " + m_Specs.Target;
+		data.Title = "Editor";
+
+		m_ImGuiLayer->OnDetach();
+
+		delete m_Window;
+		delete m_Renderer;
+
+		m_Window = new Window(data);
+		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+		m_Renderer = new Renderer(*m_Window);
+
+		m_ImGuiLayer->SetGLContext(m_Window);
 	}
 }

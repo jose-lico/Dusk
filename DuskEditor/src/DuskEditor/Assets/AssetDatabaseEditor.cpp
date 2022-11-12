@@ -1,6 +1,6 @@
 #include "AssetDatabaseEditor.h"
 
-#include "Importers/ImageImporter.h"
+#include "DuskEditor/Importers/ImageImporter.h"
 
 #include "Core/Application/Core.h"
 #include "Core/Assets/AssetDatabase.h"

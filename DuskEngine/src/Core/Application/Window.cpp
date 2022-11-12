@@ -30,10 +30,7 @@ namespace DuskEngine
 		m_Window = glfwCreateWindow(data.Width, data.Height, data.Title.c_str(), NULL, NULL);
 
 		if (!m_Window)
-		{
 			ERR("Window wasn't created properly, shutting glfw down");
-			glfwTerminate();
-		}
 
 		TRACE("Window created");
 

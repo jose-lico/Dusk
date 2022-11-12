@@ -1,25 +1,35 @@
-#include "Core/Application/Application.h"
+#include "DuskEditor.h"
 #include "EntryPoint.h"
 
 #include "Utils/Profiling/Timer.h"
-#include "EditorLayer.h"
+#include "DuskEditor/EditorLayer.h"
+#include "DuskLauncher/LauncherLayer.h"
 
 namespace DuskEngine
 {
-	class DuskEditor : public Application
+	DuskEditor::DuskEditor(const ApplicationSpecs& specs, const CliOptions& options)
+		: Application(specs, options)
 	{
-	public:
-		DuskEditor(const ApplicationSpecs& specs, const CliOptions& options)
-			: Application(specs, options)
+		if (!m_Options.Help)
 		{
-			if(!m_Options.Help)
-				PushLayer(new EditorLayer());
+			m_Layer = new LauncherLayer(this);
+			PushLayer(m_Layer);
 		}
+		
+	}
 
-		~DuskEditor()
-		{
-		}
-	};
+	DuskEditor::~DuskEditor()
+	{
+	}
+
+	void DuskEditor::LaunchEditor()
+	{
+		PopLayer(m_Layer);
+		delete m_Layer;
+		m_Layer = new EditorLayer();
+
+		PushLayer(m_Layer);
+	}
 
 	Application* CreateApplication(int argc, char** argv)
 	{

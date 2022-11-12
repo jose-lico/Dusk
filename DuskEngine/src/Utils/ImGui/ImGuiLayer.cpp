@@ -52,7 +52,7 @@ namespace DuskEngine
 	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
+		//ImGui::DestroyContext();
 	}
 
 	void ImGuiLayer::OnImGuiRender()
@@ -117,6 +117,16 @@ namespace DuskEngine
 		fontConfig.MergeMode = true;
 		
 		io.Fonts->AddFontFromMemoryTTF((void*)g_forkawesome_webfont_ttf, sizeof(g_forkawesome_webfont_ttf), size, &fontConfig, glyphRanges);
+	}
+
+	void ImGuiLayer::SetGLContext(Window* window)
+	{
+		//ImGui_ImplOpenGL3_Shutdown();
+		//ImGui_ImplGlfw_Shutdown();
+
+		m_Window = window;
+		ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeHandle(), true);
+		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
 	void ImGuiLayer::AddFontFromFile(const std::string& path, float size)

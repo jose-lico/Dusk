@@ -53,7 +53,11 @@ namespace DuskEngine
 		
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
+		void PopLayer(Layer* layer);
+		void PopOverlay(Layer* overlay);
 		void OnEvent(Event& e);
+
+		void CreateWindowDusk();
 
 		inline Window& GetWindow() const { return *m_Window; }
 		inline Renderer& GetRenderer() const { return *m_Renderer; }

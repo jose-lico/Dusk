@@ -28,6 +28,9 @@ namespace DuskEngine
 		LOG("Logging from the editor");
 
 		std::string title = Application::Get().GetWindow().GetTitle() + " | MyScene";
+
+		Application::Get().CreateWindowDusk();
+
 		Application::Get().GetWindow().SetWindowTitle(title);
 	}
 

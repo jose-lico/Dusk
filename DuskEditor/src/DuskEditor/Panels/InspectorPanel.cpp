@@ -1,6 +1,6 @@
 #include "InspectorPanel.h"
 
-#include "Assets/AssetDatabaseEditor.h"
+#include "DuskEditor/Assets/AssetDatabaseEditor.h"
 
 #include "Core/Application/Application.h"
 #include "Core/Assets/AssetDatabase.h"

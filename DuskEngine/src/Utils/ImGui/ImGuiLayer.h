@@ -21,6 +21,7 @@ namespace DuskEngine
 		void Begin();
 		void End();
 
+		void SetGLContext(Window* window);
 		void AddFontFromFile(const std::string& path, float size);
 	private:
 		void AddFontFromMemory(void* fontData, float size);

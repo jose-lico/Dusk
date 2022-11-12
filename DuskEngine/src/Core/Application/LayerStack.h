@@ -17,6 +17,8 @@ namespace DuskEngine
 		void PopLayer(Layer* layer);
 		void PopOverlay(Layer* overlay);
 
+		operator uint32_t() { return m_Layers.size(); }
+		Layer* operator[](uint32_t i) { return m_Layers[i]; }
 		std::vector<Layer*>::iterator begin() { return m_Layers.begin(); }
 		std::vector<Layer*>::iterator end() { return m_Layers.end(); }
 		std::vector<Layer*>::reverse_iterator rbegin() { return m_Layers.rbegin(); }
