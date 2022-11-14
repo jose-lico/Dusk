@@ -14,8 +14,11 @@
 
 #include <string>
 
+#undef CreateWindow
+
 namespace DuskEngine
 {
+	struct WindowData;
 	class Layer;
 	class Event;
 	class Window;
@@ -57,7 +60,11 @@ namespace DuskEngine
 		void PopOverlay(Layer* overlay);
 		void OnEvent(Event& e);
 
-		void CreateWindowDusk();
+#ifdef DUSK_IMGUI
+		void SetImGuiGLContext() const;
+		void DestroyImGuiGLContext() const;
+#endif
+		Window& CreateWindow(WindowData& data);
 
 		inline Window& GetWindow() const { return *m_Window; }
 		inline Renderer& GetRenderer() const { return *m_Renderer; }

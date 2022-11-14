@@ -19,16 +19,8 @@ namespace DuskEngine
 {
 	const ImWchar glyphRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 
-	ImGuiLayer::ImGuiLayer(Window* window)
-		:m_Window(window), m_Style(new DuskImGuiStyle())
-	{
-	}
-
-	ImGuiLayer::~ImGuiLayer()
-	{
-	}
-
-	void ImGuiLayer::OnAttach()
+	ImGuiLayer::ImGuiLayer()
+		:m_Style(new DuskImGuiStyle())
 	{
 		ImGui::CreateContext();
 
@@ -39,19 +31,17 @@ namespace DuskEngine
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		style.WindowMenuButtonPosition = ImGuiDir_None;
-		
-		ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeHandle(), true);
-		ImGui_ImplOpenGL3_Init("#version 410");
 
 		AddFontFromMemory((void*)g_Roboto_Regular_ttf, 18.0f);
 
 		ApplyStyle();
 	}
 
-	void ImGuiLayer::OnDetach()
+	ImGuiLayer::~ImGuiLayer()
 	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 	}
 
 	void ImGuiLayer::OnImGuiRender()
@@ -67,15 +57,21 @@ namespace DuskEngine
 		dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(ImGuiLayer::ActivateDemoWindow));
 	}
 
-	bool ImGuiLayer::ActivateDemoWindow(KeyPressedEvent& e)
+	void ImGuiLayer::SetGLContext(Window* window)
 	{
-		if(e.GetKeyCode() == Key::TAB)
-			m_ShowDemoWindow = !m_ShowDemoWindow;
+		m_Window = window;
 
-		return true;
+		ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeHandle(), true);
+		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
-	void ImGuiLayer::Begin()
+	void ImGuiLayer::DestroyGLContext()
+	{
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+	}
+
+	void ImGuiLayer::Begin() const
 	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -83,12 +79,12 @@ namespace DuskEngine
 		ImGuizmo::BeginFrame();
 	}
 
-	void ImGuiLayer::End()
+	void ImGuiLayer::End() const
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		int width;
-		int height;
-		glfwGetWindowSize((GLFWwindow*)m_Window->GetNativeHandle(), &width, &height);
+		int32_t width;
+		int32_t height;
+		glfwGetWindowSize(m_Window->GetNativeHandle(), &width, &height);
 		io.DisplaySize = ImVec2((float)width, (float)height);
 
 		ImGui::Render();
@@ -103,7 +99,21 @@ namespace DuskEngine
 		}
 	}
 
-	void ImGuiLayer::AddFontFromMemory(void* fontData, float size)
+	void ImGuiLayer::AddFontFromFile(const std::string& path, float size) const
+	{
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+		io.Fonts->AddFontFromFileTTF(path.c_str(), size);
+
+		ImFontConfig fontConfig;
+		fontConfig.PixelSnapH = true;
+		fontConfig.MergeMode = true;
+		fontConfig.FontDataOwnedByAtlas = false;
+
+		io.Fonts->AddFontFromMemoryTTF((void*)g_forkawesome_webfont_ttf, (int32_t)sizeof(g_forkawesome_webfont_ttf), size, &fontConfig, glyphRanges);
+	}
+
+	void ImGuiLayer::AddFontFromMemory(void* fontData, float size) const
 	{
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		
@@ -115,31 +125,18 @@ namespace DuskEngine
 		fontConfig.PixelSnapH = true;
 		fontConfig.MergeMode = true;
 		
-		io.Fonts->AddFontFromMemoryTTF((void*)g_forkawesome_webfont_ttf, sizeof(g_forkawesome_webfont_ttf), size, &fontConfig, glyphRanges);
+		io.Fonts->AddFontFromMemoryTTF((void*)g_forkawesome_webfont_ttf, (int32_t)sizeof(g_forkawesome_webfont_ttf), size, &fontConfig, glyphRanges);
 	}
 
-	void ImGuiLayer::SetGLContext(Window* window)
+	bool ImGuiLayer::ActivateDemoWindow(KeyPressedEvent& e)
 	{
-		m_Window = window;
-		ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeHandle(), true);
-		ImGui_ImplOpenGL3_Init("#version 410");
+		if (e.GetKeyCode() == Key::TAB)
+			m_ShowDemoWindow = !m_ShowDemoWindow;
+
+		return true;
 	}
 
-	void ImGuiLayer::AddFontFromFile(const std::string& path, float size)
-	{
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-		io.Fonts->AddFontFromFileTTF(path.c_str(), size);
-		
-		ImFontConfig fontConfig;
-		fontConfig.PixelSnapH = true;
-		fontConfig.MergeMode = true;
-		fontConfig.FontDataOwnedByAtlas = false;
-
-		io.Fonts->AddFontFromMemoryTTF((void*)g_forkawesome_webfont_ttf, sizeof(g_forkawesome_webfont_ttf), size, &fontConfig, glyphRanges);
-	}
-
-	void ImGuiLayer::ApplyStyle()
+	void ImGuiLayer::ApplyStyle() const
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
 		

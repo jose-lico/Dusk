@@ -27,11 +27,16 @@ namespace DuskEngine
 		TRACE("Tracing from the editor");
 		LOG("Logging from the editor");
 
-		std::string title = Application::Get().GetWindow().GetTitle() + " | MyScene";
+		//std::string title = Application::Get().GetWindow().GetTitle() + " | MyScene";
+		//Application::Get().CreateWindowDusk();
+		//Application::Get().GetWindow().SetWindowTitle(title);
 
-		Application::Get().CreateWindowDusk();
+		auto& app = Application::Get();
 
-		Application::Get().GetWindow().SetWindowTitle(title);
+		WindowData data;
+		Window& window = app.CreateWindow(data);
+		OpenGLAPI::CreateContext(window.GetNativeHandle());
+		app.SetImGuiGLContext();
 		Application::Get().GetWindow().Maximize();
 	}
 

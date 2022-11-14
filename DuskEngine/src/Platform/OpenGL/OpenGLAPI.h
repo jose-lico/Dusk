@@ -4,6 +4,8 @@
 
 #include "glm/glm.hpp"
 
+struct GLFWwindow;
+
 namespace DuskEngine
 {
 	struct OpenGLBuffer;
@@ -18,7 +20,9 @@ namespace DuskEngine
 
 namespace DuskEngine :: OpenGLAPI
 {
-	void Init();
+	void CreateContext(GLFWwindow* window);
+	void SwapBuffers(GLFWwindow* window);
+
 	void SetClearColor(const glm::vec4& color);
 	void Clear();
 

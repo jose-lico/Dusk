@@ -4,6 +4,7 @@
 #include "Utils/Profiling/Timer.h"
 #include "DuskEditor/EditorLayer.h"
 #include "DuskLauncher/LauncherLayer.h"
+#include "Core/Application/Window.h"
 
 namespace DuskEngine
 {
@@ -25,8 +26,11 @@ namespace DuskEngine
 	{
 		PopLayer(m_Layer);
 		delete m_Layer;
-		m_Layer = new EditorLayer();
 
+		DestroyImGuiGLContext();
+		delete m_Window;
+
+		m_Layer = new EditorLayer();
 		PushLayer(m_Layer);
 	}
 
