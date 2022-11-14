@@ -33,8 +33,10 @@ namespace DuskEngine
 		inline bool IsVSync() const { return m_Data.VSync; }
 
 		inline void SetEventCallback(const std::function<void(Event&)>& callback) { m_Data.EventCallback = callback; }
+		void Maximize();
 		void SetVSync(bool vsync); 
 		void SetWindowTitle(const std::string& title);
+		void CenterWindow();
 		bool ShouldClose() const;
 	private:
 		GLFWwindow* m_Window;

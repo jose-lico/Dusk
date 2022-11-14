@@ -32,6 +32,7 @@ namespace DuskEngine
 		Application::Get().CreateWindowDusk();
 
 		Application::Get().GetWindow().SetWindowTitle(title);
+		Application::Get().GetWindow().Maximize();
 	}
 
 	EditorLayer::~EditorLayer()

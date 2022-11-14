@@ -36,8 +36,7 @@ namespace DuskEngine
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		
-		glfwSetWindowSizeLimits(m_Window, 600, 600, GLFW_DONT_CARE, GLFW_DONT_CARE);
-		glfwMaximizeWindow(m_Window);
+		glfwSetWindowSizeLimits(m_Window, data.Width, data.Height, GLFW_DONT_CARE, GLFW_DONT_CARE);
 		glfwSwapInterval(m_Data.VSync);
 
 		// glfw callbacks
@@ -138,6 +137,11 @@ namespace DuskEngine
 		glfwTerminate();
 	}
 
+	void Window::Maximize()
+	{
+		glfwMaximizeWindow(m_Window);
+	}
+
 	void Window::SetVSync(bool vsync)
 	{
 		m_Data.VSync = vsync;
@@ -148,6 +152,15 @@ namespace DuskEngine
 	{
 		m_Data.Title = title;
 		glfwSetWindowTitle(m_Window, title.c_str());
+	}
+
+	void Window::CenterWindow()
+	{
+		GLFWmonitor* primary = glfwGetPrimaryMonitor();
+
+		const GLFWvidmode* mode = glfwGetVideoMode(primary);
+
+		glfwSetWindowPos(m_Window, mode->width / 2 - m_Data.Width / 2, mode->height / 2 - m_Data.Height / 2);
 	}
 
 	bool Window::ShouldClose() const

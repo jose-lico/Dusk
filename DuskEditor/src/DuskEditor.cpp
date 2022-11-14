@@ -15,7 +15,6 @@ namespace DuskEngine
 			m_Layer = new LauncherLayer(this);
 			PushLayer(m_Layer);
 		}
-		
 	}
 
 	DuskEditor::~DuskEditor()
@@ -34,6 +33,7 @@ namespace DuskEngine
 	Application* CreateApplication(int argc, char** argv)
 	{
 		Timer startup("Startup");
+
 		ApplicationSpecs spec;
 		spec.Name = "Dusk Editor";
 

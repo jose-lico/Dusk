@@ -58,8 +58,7 @@ namespace DuskEngine
 		m_Logger = new Logger(LOGGER);
 
 		WindowData data;
-		//data.Title = m_Specs.Name + " | " + m_Specs.Platform + " | " + m_Specs.Target;
-		data.Title = "Launcher";
+		data.Title = m_Specs.Name + " | " + m_Specs.Platform + " | " + m_Specs.Target;
 
 		m_Window = new Window(data);
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
@@ -90,21 +89,28 @@ namespace DuskEngine
 
 	void Application::Run()
 	{
+		if (m_Options.Help)
+			return;
+
 		while (!m_Window->ShouldClose())
 		{
 			Time::Update();
-			for (size_t i = 0; i < *m_LayerStack; i++)
+			for (uint32_t i = 0; i < *m_LayerStack; i++)
 			{
-				if((*m_LayerStack)[i]->Enabled)
-					(*m_LayerStack)[i]->OnUpdate();
+				Layer& layer = *(*m_LayerStack)[i];
+
+				if (layer.Enabled)
+					layer.OnUpdate();
 			}
 
 #ifdef DUSK_IMGUI
 			m_ImGuiLayer->Begin();
-			for (size_t i = 0; i < *m_LayerStack; i++)
+			for (uint32_t i = 0; i < *m_LayerStack; i++)
 			{
-				if ((*m_LayerStack)[i]->Enabled)
-					(*m_LayerStack)[i]->OnImGuiRender();
+				Layer& layer = *(*m_LayerStack)[i];
+
+				if (layer.Enabled)
+					layer.OnImGuiRender();
 			}
 			m_ImGuiLayer->End();
 #endif
@@ -141,12 +147,15 @@ namespace DuskEngine
 
 	void Application::OnEvent(Event& e)
 	{
-		for (Layer* layer : *m_LayerStack)
+		for (uint32_t i = 0; i < *m_LayerStack; i++)
 		{
 			if (e.Handled)
 				break;
-			if(layer->Enabled)
-				layer->OnEvent(e);
+
+			Layer& layer = *(*m_LayerStack)[i];
+
+			if (layer.Enabled)
+				layer.OnEvent(e);
 		}
 	}
 

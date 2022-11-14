@@ -3,6 +3,7 @@
 #include "DuskEditor.h"
 
 #include "Core/Application/Core.h"
+#include "Core/Application/Window.h"
 
 #include "imgui/imgui.h"
 
@@ -12,6 +13,9 @@ namespace DuskEngine
 		:m_Editor(editor)
 	{
 		m_Logger = new Logger(LOGGER);
+
+		auto& window = Application::Get().GetWindow();
+		window.CenterWindow();
 	}
 
 	LauncherLayer::~LauncherLayer()
@@ -34,9 +38,8 @@ namespace DuskEngine
 		ImGui::Begin("Launcher");
 		ImGui::Text("This is the launcher");
 		if (ImGui::Button("Launch"))
-		{
 			m_LaunchEditor = true;
-		}
+
 		ImGui::End();
 		m_Dockspace.EndDockspace();
 	}

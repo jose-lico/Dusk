@@ -13,8 +13,7 @@ int main(int argc, char** argv)
 	DuskEngine::Timer::ResetRoot();
 	DuskEngine::Timer::Stop = true;
 
-	if(!app->GetCliOptions().Help)
-		app->Run();
+	app->Run();
 
 	delete app;
 

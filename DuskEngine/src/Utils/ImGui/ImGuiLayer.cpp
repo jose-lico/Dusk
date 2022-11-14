@@ -52,7 +52,6 @@ namespace DuskEngine
 	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
-		//ImGui::DestroyContext();
 	}
 
 	void ImGuiLayer::OnImGuiRender()
@@ -121,9 +120,6 @@ namespace DuskEngine
 
 	void ImGuiLayer::SetGLContext(Window* window)
 	{
-		//ImGui_ImplOpenGL3_Shutdown();
-		//ImGui_ImplGlfw_Shutdown();
-
 		m_Window = window;
 		ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeHandle(), true);
 		ImGui_ImplOpenGL3_Init("#version 410");
