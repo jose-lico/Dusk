@@ -36,6 +36,8 @@ namespace DuskEngine
 		OpenGLAPI::CreateContext(window.GetNativeHandle());
 		app.SetImGuiGLContext();
 		Application::Get().GetWindow().Maximize();
+
+		// On Load Project do something with path from clioptions
 	}
 
 	EditorLayer::~EditorLayer()

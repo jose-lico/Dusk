@@ -41,7 +41,8 @@ namespace DuskEngine
 			printf("Options:\n\n");
 			printf("-h, --help                              Print this message and quit the application\n");
 			printf("-v, --verbose                           Prints more useful information to the console\n");
-			printf("-l, --log                               Dumps all logs to a file. Example log file name: %s.csv\n", m_StartupTime.c_str());
+			printf("-l, --log                               Dumps all logs to a file. Example log file name: log_%s.csv\n", m_StartupTime.c_str());
+			printf("-p, --path <path>                       Opens the editor directly with the project from the provided path\n");
 			return;
 		}
 		

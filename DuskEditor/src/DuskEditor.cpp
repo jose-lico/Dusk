@@ -13,7 +13,10 @@ namespace DuskEngine
 	{
 		if (!m_Options.Help)
 		{
-			m_Layer = new LauncherLayer(this);
+			if(m_Options.Path)
+				m_Layer = new EditorLayer();
+			else	
+				m_Layer = new LauncherLayer(this);
 			PushLayer(m_Layer);
 		}
 	}
@@ -63,6 +66,16 @@ namespace DuskEngine
 			}
 			else if (strcmp(argv[i], "--logs") == 0) {
 				options.DumpLogs = true;
+			}
+			else if (strcmp(argv[i], "-p") == 0) {
+				options.Path = true;
+				if(argc < i + 1)
+					options.PathName = argv[i + 1];
+			}
+			else if (strcmp(argv[i], "--path") == 0) {
+				options.Path = true;
+				if (argc < i + 1)
+					options.PathName = argv[i + 1];
 			}
 		}
 

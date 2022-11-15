@@ -34,10 +34,7 @@ namespace DuskEngine
 	void LauncherLayer::OnUpdate()
 	{
 		if(m_LaunchEditor)
-		{
 			m_Editor->LaunchEditor();
-			TRACE("Launched");
-		}
 	}
 
 	void LauncherLayer::OnImGuiRender()
