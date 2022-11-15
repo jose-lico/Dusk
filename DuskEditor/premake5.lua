@@ -6,6 +6,7 @@ project "DuskEditor"
 
 	targetdir ("%{wks.location}/bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputDir .. "/%{prj.name}")
+	targetname ("%{prj.name}-%{cfg.system}-%{cfg.buildcfg}-%{cfg.architecture}")
 
 	files
 	{
@@ -90,6 +91,12 @@ project "DuskEditor"
 		kind "ConsoleApp"
 		runtime "Debug"
 		symbols "On"
+		defines "DUSK_DEBUG"
+
+	filter "configurations:ReleaseWithInfo"
+		kind "ConsoleApp"
+		runtime "Release"
+		optimize "On"
 		defines "DUSK_DEBUG"
 	
 	filter "configurations:Release"

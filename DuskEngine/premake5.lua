@@ -80,6 +80,11 @@ project "DuskEngine"
 		runtime "Debug"
 		symbols "On"
 		defines "DUSK_DEBUG"
+
+	filter "configurations:ReleaseWithInfo"
+		runtime "Release"
+		optimize "On"
+		defines "DUSK_DEBUG"
 	
 	filter "configurations:Release"
 		runtime "Release"

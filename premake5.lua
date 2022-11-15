@@ -7,7 +7,8 @@ workspace "Dusk"
 	{
 		"Debug",
 		"Release",
-		"ReleaseNoImGui"
+		"ReleaseWithInfo",
+		"ReleaseNoImGui" -- Should probably swap for ReleaseWithImGui
 	}
 
 	startproject "DuskEditor"
