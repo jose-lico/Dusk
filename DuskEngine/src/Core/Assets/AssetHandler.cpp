@@ -44,7 +44,7 @@ namespace DuskEngine
 			Application::Get().GetAssetDatabase().GetUUID("C:/dev/Dusk/DuskEditor/res/editor/materials/defaultMaterial.material"), this));
 #elif DUSK_LINUX
 		m_MaterialPool.m_Pool.push_back(Application::Get().GetAssetDatabase().LoadMaterial(
-			Application::Get().GetAssetDatabase().GetUUID("C:/dev/Dusk/DuskEditor/res/editor/materials/defaultMaterial.material"), this));
+			Application::Get().GetAssetDatabase().GetUUID("/home/jose/projects/Dusk/bin/linux-Release-x86_64/DuskEditor/res/editor/materials/defaultMaterial.material"), this));
 #endif
 
 		LOG(("Created Asset Handler " + m_Name).c_str());

@@ -30,11 +30,11 @@ namespace DuskEngine
 
 		YAML::Node projectsData = YAML::LoadFile("projectList.yaml"); // In the future, save this in os specific folder for appdata
 
-		YAML::Node& projects = projectsData["Projects"];
+		YAML::Node projects = projectsData["Projects"];
 
 		if (projects)
 		{
-			for (auto& project : projects)
+			for (auto project : projects)
 			{
 				Project p{ project["Project"].as<std::string>(), project["Path"].as<std::string>() };
 				m_Projects.emplace_back(p);
