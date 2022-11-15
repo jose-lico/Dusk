@@ -33,6 +33,7 @@ Dusk is still early in development and so its features are barebones.
 - Entity Component System, similar in use to Unity's
 - Embedded the lua language for easy scripting
 - Editor tool with level editor, scene hierarchy, entity inspector & asset browser
+- Concept of a project
 - Notion of a runtime (albeit very simple and not practical yet)
   
 # Goals
@@ -47,7 +48,6 @@ The immediate goals for this release to happen are:
 - Importing of external assets to custom engine-ready format
 - Packaging of games assets into binary blob to allow for easy and safe distribution of a game
 - Virtual file system to navigate the generated package
-- Concept of a project
 - Generic improvements
   - Improve overall quality of the codebase
   - Better editor wtih more functionality
