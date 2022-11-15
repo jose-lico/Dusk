@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "OpenGLAPI.h"
 
-#include "GLCommon.h"
 #include "VertexArray.h"
 #include "Buffer.h"
 #include "Texture.h"
@@ -9,6 +8,7 @@
 #include "Framebuffer.h"
 
 #include "GLFW/glfw3.h"
+#include "GL/glew.h"
 
 namespace DuskEngine :: OpenGLAPI 
 {

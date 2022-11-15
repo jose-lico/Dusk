@@ -27,13 +27,11 @@ namespace DuskEngine
 		TRACE("Tracing from the editor");
 		LOG("Logging from the editor");
 
-		//std::string title = Application::Get().GetWindow().GetTitle() + " | MyScene";
-		//Application::Get().CreateWindowDusk();
-		//Application::Get().GetWindow().SetWindowTitle(title);
-
 		auto& app = Application::Get();
 
 		WindowData data;
+		const ApplicationSpecs& specs = app.GetSpecs();
+		data.Title = specs.Name + " | " + specs.Platform + " | " + specs.Target + " | MyProject | MyScene";
 		Window& window = app.CreateWindow(data);
 		OpenGLAPI::CreateContext(window.GetNativeHandle());
 		app.SetImGuiGLContext();

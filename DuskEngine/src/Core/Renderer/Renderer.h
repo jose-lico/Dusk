@@ -3,7 +3,6 @@
 namespace DuskEngine 
 {
 	struct VertexArray;
-	class OpenGLContext;
 	class Mesh;
 	class Window;
 
@@ -18,9 +17,5 @@ namespace DuskEngine
 
 		void Submit(const VertexArray& vertexArray);
 		void Submit(const Mesh& mesh);
-
-		void SwapBuffers();
-	private:
-		OpenGLContext* m_Context;
 	};
 }

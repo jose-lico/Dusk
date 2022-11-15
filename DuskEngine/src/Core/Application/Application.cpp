@@ -60,14 +60,6 @@ namespace DuskEngine
 
 		m_Logger = new Logger(LOGGER);
 
-		/*WindowData data;
-		data.Title = m_Specs.Name + " | " + m_Specs.Platform + " | " + m_Specs.Target;*/
-
-		//m_Window = new Window(data);
-		//m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
-		
-		//m_Renderer = new Renderer(*m_Window);
-
 		m_AssetDatabase = new AssetDatabase();
 		
 		m_LayerStack = new LayerStack();

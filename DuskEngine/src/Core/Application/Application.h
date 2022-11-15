@@ -72,6 +72,7 @@ namespace DuskEngine
 		inline OS& GetOS() const { return *m_OS; }
 
 		inline const CliOptions& GetCliOptions() const { return m_Options; }
+		inline const ApplicationSpecs& GetSpecs() const { return m_Specs; }
 
 		inline const std::string& GetStartupTime() const { return m_StartupTime; }
 	private:

@@ -18,6 +18,8 @@ namespace DuskEngine
 		auto& app = Application::Get();
 
 		WindowData data;
+		const ApplicationSpecs& specs = app.GetSpecs();
+		data.Title = specs.Name + " | " + specs.Platform + " | " + specs.Target + " | Launcher";
 		Window& window = app.CreateWindow(data);
 		OpenGLAPI::CreateContext(window.GetNativeHandle());
 		app.SetImGuiGLContext();
