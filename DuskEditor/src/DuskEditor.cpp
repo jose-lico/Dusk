@@ -14,7 +14,7 @@ namespace DuskEngine
 		if (!m_Options.Help)
 		{
 			if(m_Options.Path)
-				m_Layer = new EditorLayer();
+				m_Layer = new EditorLayer("teste");
 			else	
 				m_Layer = new LauncherLayer(this);
 			PushLayer(m_Layer);
@@ -33,7 +33,7 @@ namespace DuskEngine
 		DestroyImGuiGLContext();
 		delete m_Window;
 
-		m_Layer = new EditorLayer();
+		m_Layer = new EditorLayer(ProjectPath);
 		PushLayer(m_Layer);
 	}
 

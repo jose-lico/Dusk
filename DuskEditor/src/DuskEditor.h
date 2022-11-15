@@ -15,6 +15,7 @@ namespace DuskEngine
 		~DuskEditor();
 
 		void LaunchEditor();
+		std::string ProjectPath;
 	private:
 		Layer* m_Layer = nullptr;
 	};

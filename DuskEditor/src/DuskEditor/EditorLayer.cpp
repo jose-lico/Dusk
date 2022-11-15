@@ -20,7 +20,8 @@
 
 namespace DuskEngine
 {
-	EditorLayer::EditorLayer()
+	EditorLayer::EditorLayer(const std::string& path)
+		:m_ProjectPath(path)
 	{
 		m_Logger = new Logger(LOGGER);
 
@@ -59,7 +60,7 @@ namespace DuskEngine
 			Timer databaseTimer("Loading project assets");
 			auto& db = Application::Get().GetAssetDatabase();
 
-			m_EditorDB = new AssetDatabaseEditor(&db);
+			m_EditorDB = new AssetDatabaseEditor(&db, m_ProjectPath);
 
 			{
 				Timer registerAssets("Register Assets");

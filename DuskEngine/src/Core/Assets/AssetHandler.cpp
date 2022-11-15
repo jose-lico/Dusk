@@ -38,8 +38,14 @@ namespace DuskEngine
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Quad());
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Cube());
 
+		// Ultimately this material will be embedded in the engine
+#ifdef DUSK_WINDOWS
 		m_MaterialPool.m_Pool.push_back(Application::Get().GetAssetDatabase().LoadMaterial(
-			Application::Get().GetAssetDatabase().GetUUID("res/editor/materials/defaultMaterial.material"), this));
+			Application::Get().GetAssetDatabase().GetUUID("C:/dev/Dusk/DuskEditor/res/editor/materials/defaultMaterial.material"), this));
+#elif DUSK_LINUX
+		m_MaterialPool.m_Pool.push_back(Application::Get().GetAssetDatabase().LoadMaterial(
+			Application::Get().GetAssetDatabase().GetUUID("C:/dev/Dusk/DuskEditor/res/editor/materials/defaultMaterial.material"), this));
+#endif
 
 		LOG(("Created Asset Handler " + m_Name).c_str());
 	}

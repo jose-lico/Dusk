@@ -29,7 +29,7 @@ namespace DuskEngine
 	class AssetDatabaseEditor
 	{
 	public:
-		AssetDatabaseEditor(AssetDatabase* database);
+		AssetDatabaseEditor(AssetDatabase* database, const std::string& path);
 		~AssetDatabaseEditor();
 
 		void RegisterAssets();
