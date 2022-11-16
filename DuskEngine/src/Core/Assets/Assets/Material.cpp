@@ -24,6 +24,11 @@ namespace DuskEngine
 		LOG(message.c_str());
 	}
 
+	Material::Material(AssetHandler* owningHandler)
+		:m_OwningHandler(owningHandler), m_ShaderHandle(0)
+	{
+	}
+
 	Material::~Material()
 	{
 		std::string message = "Destroyed Material " + Name;
@@ -32,7 +37,7 @@ namespace DuskEngine
 
 	void Material::UploadUniforms(AssetHandler& assetHandler)
 	{
-		auto& shader = m_OwningHandler->GetAsset<Shader>(m_ShaderHandle);
+		auto& shader = assetHandler.GetAsset<Shader>(m_ShaderHandle);
 		
 		OpenGLAPI::UseProgram(shader);
 
@@ -43,7 +48,6 @@ namespace DuskEngine
 			{
 			case UniformType::Vec3:
 				OpenGLAPI::SetUniformVec3(shader, "u_" + uniform.Name, uniform.Data.vec3);
-				//shader.SetUniformVec3("u_" + uniform.Name, uniform.Data.vec3);
 				break;
 			case UniformType::Texture:
 				OpenGLAPI::SetUniformInt(shader, "u_" + uniform.Name, textSlot);
@@ -182,5 +186,13 @@ namespace DuskEngine
 
 		std::ofstream material(path);
 		material << out.c_str();
+	}
+
+	Material Material::CreateDefaultMaterial(AssetHandler* owningHandler)
+	{
+		Material material(owningHandler);
+		material.m_ShaderHandle = 0;
+		material.CreateUniforms();
+		return material;
 	}
 }

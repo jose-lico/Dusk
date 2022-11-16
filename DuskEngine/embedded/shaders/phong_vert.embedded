@@ -1,0 +1,21 @@
+const char phong_vert[] = { "#version 330 core\n\
+\
+layout (location = 0) in vec3 position;\
+layout (location = 1) in vec2 textureCoords;\
+layout (location = 2) in vec3 normal;\
+\
+out vec2 TexCoords;\
+out vec3 Normal;\
+out vec3 FragPos;\
+\
+uniform mat4 e_Model;\
+uniform mat4 e_ViewProjection;\
+\
+void main()\
+{\
+    gl_Position = e_ViewProjection * e_Model * vec4(position, 1.0);\
+    FragPos = vec3(e_Model * vec4(position, 1.0));\
+    TexCoords = textureCoords;\
+    Normal = mat3(transpose(inverse(e_Model))) * normal;\
+}"
+};

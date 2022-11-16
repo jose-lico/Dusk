@@ -29,7 +29,7 @@ in vec3 FragPos;
 
 out vec4 FragColor;
 
-#define MAX_LIGHTS 8
+const int MAX_LIGHTS = 8;
 
 struct DirectionalLight
 {

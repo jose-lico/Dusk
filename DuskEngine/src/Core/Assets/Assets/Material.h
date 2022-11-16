@@ -15,6 +15,12 @@ namespace DuskEngine
 	class AssetHandler;
 	enum class UniformType;
 
+	enum class MaterialType
+	{
+		Default,
+		Custom
+	};
+
 	union UniformData
 	{
 		float fValue;
@@ -36,6 +42,7 @@ namespace DuskEngine
 	{
 	public:
 		Material(Handle<Shader> shaderHandle, AssetHandler* owningHandler, const std::filesystem::path& path, const uuids::uuid& uuid);
+		Material(AssetHandler* owningHandler);
 		~Material();
 
 		void UploadUniforms(AssetHandler& assetHandler);
@@ -55,6 +62,7 @@ namespace DuskEngine
 		// Serialization
 		void SerializeText(const std::string& path);
 		static void CreateDefaultMaterial(const std::filesystem::path& path);
+		static Material CreateDefaultMaterial(AssetHandler* owningHandler);
 	private:
 		void CreateUniforms();
 

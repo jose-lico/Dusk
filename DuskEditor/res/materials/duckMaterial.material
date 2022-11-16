@@ -1,4 +1,4 @@
-Material: modelMaterial.material
+Material: duckMaterial.material
 Shader: 273a0e85-9157-41a8-a769-8eb00ebc93ee
 Uniforms:
   Diffuse: 2bed8e21-0471-4527-8171-5a968a7b80de

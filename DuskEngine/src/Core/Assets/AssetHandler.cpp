@@ -12,6 +12,10 @@
 #include "Utils/Rendering/PrimitiveMesh.h"
 #include "Core/Scripting/LuaScript.h"
 #include "Utils/Profiling/Timer.h"
+#include "Platform/OpenGL/Shader.h"
+
+#include "shaders/phong_vert.embedded"
+#include "shaders/phong_frag.embedded"
 
 #include <iostream>
 
@@ -37,15 +41,10 @@ namespace DuskEngine
 
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Quad());
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Cube());
+		
+		m_ShaderPool.m_Pool.push_back(CreateShader(phong_vert, phong_frag));
 
-		// Ultimately this material will be embedded in the engine
-#ifdef DUSK_WINDOWS
-		m_MaterialPool.m_Pool.push_back(Application::Get().GetAssetDatabase().LoadMaterial(
-			Application::Get().GetAssetDatabase().GetUUID("C:/dev/Dusk/DuskEditor/res/editor/materials/defaultMaterial.material"), this));
-#elif DUSK_LINUX
-		m_MaterialPool.m_Pool.push_back(Application::Get().GetAssetDatabase().LoadMaterial(
-			Application::Get().GetAssetDatabase().GetUUID("/home/jose/projects/Dusk/bin/linux-Release-x86_64/DuskEditor/res/editor/materials/defaultMaterial.material"), this));
-#endif
+		m_MaterialPool.m_Pool.push_back(Material::CreateDefaultMaterial(this));
 
 		LOG(("Created Asset Handler " + m_Name).c_str());
 	}
