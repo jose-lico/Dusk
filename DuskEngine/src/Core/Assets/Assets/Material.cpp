@@ -18,6 +18,7 @@ namespace DuskEngine
 		Name = path.filename().string();
 		m_ShaderHandle = shaderHandle;
 		m_OwningHandler = owningHandler;
+		m_Type = MaterialType::Custom;
 
 		CreateUniforms();
 		std::string message = "Created Material " + Name;
@@ -25,7 +26,7 @@ namespace DuskEngine
 	}
 
 	Material::Material(AssetHandler* owningHandler)
-		:m_OwningHandler(owningHandler), m_ShaderHandle(0)
+		:m_OwningHandler(owningHandler), m_ShaderHandle(0), m_Type(m_Type = MaterialType::Default)
 	{
 	}
 

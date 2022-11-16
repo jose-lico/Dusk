@@ -58,6 +58,7 @@ namespace DuskEngine
 		void SetTexture(const std::string& name, Texture& texture);
 		
 		const uint32_t GetShaderHandle() { return m_ShaderHandle; }
+		const MaterialType GetType() { return m_Type; }
 		
 		// Serialization
 		void SerializeText(const std::string& path);
@@ -67,6 +68,7 @@ namespace DuskEngine
 		void CreateUniforms();
 
 		Handle<Shader> m_ShaderHandle;
+		MaterialType m_Type;
 		AssetHandler* m_OwningHandler;
 
 		// Map is for direct access to set uniform values

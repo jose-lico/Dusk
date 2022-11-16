@@ -71,8 +71,24 @@ namespace DuskEngine
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, Material& material)
 	{
-		out << YAML::Value << material.UUID;
+		out << YAML::BeginMap;
 
+		auto type = material.GetType();
+
+		switch (type)
+		{
+		case DuskEngine::MaterialType::Default:
+			out << YAML::Key << "fileID" << YAML::Value << 0;
+			break;
+		case DuskEngine::MaterialType::Custom:
+			out << YAML::Key << "fileID" << YAML::Value << 1;
+			break;
+		default:
+			break;
+		}
+
+		out << YAML::Key << "uuid" << YAML::Value << material.UUID;
+		out << YAML::EndMap;
 		return out;
 	}
 
