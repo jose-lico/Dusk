@@ -31,24 +31,24 @@ namespace DuskEngine
         RegisterECS();
     }
 
-	void ScriptingEngine::LoadScript(UniqueRef<LuaScript>& script)
+	void ScriptingEngine::LoadScript(LuaScript& script)
 	{
-		script->LoadScript(m_State);
+		script.LoadScript(m_State);
 	}
 
-	void ScriptingEngine::OnAwake(UniqueRef<LuaScript>& script)
+	void ScriptingEngine::OnAwake(LuaScript& script)
 	{
-		script->OnAwake();
+		script.OnAwake();
 	}
 
-	void ScriptingEngine::OnUpdate(UniqueRef<LuaScript>& script)
+	void ScriptingEngine::OnUpdate(LuaScript& script)
 	{
-		script->OnUpdate();
+		script.OnUpdate();
 	}
 
-	void ScriptingEngine::OnShutdown(UniqueRef<LuaScript>& script)
+	void ScriptingEngine::OnShutdown(LuaScript& script)
 	{
-		script->OnShutdown();
+		script.OnShutdown();
 	}
 
 	void ScriptingEngine::RegisterInput()

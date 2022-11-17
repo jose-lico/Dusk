@@ -139,8 +139,8 @@ namespace DuskEngine
 		return mesh;
 	}
 
-	UniqueRef<LuaScript> AssetDatabase::LoadScript(const uuids::uuid& uuid)
+	LuaScript AssetDatabase::LoadScript(const uuids::uuid& uuid)
 	{
-		return MakeUnique<LuaScript>(m_PathsMap[uuid], uuid);
+		return LuaScript(m_PathsMap[uuid], uuid);
 	}
 }

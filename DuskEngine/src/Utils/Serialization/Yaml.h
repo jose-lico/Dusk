@@ -140,9 +140,9 @@ namespace DuskEngine
 	}
 
 	inline
-	YAML::Emitter& operator<<(YAML::Emitter& out, UniqueRef<LuaScript>& script)
+	YAML::Emitter& operator<<(YAML::Emitter& out, LuaScript& script)
 	{
-		out << YAML::Value << script->UUID;
+		out << YAML::Value << script.UUID;
 
 		return out;
 	}
@@ -192,7 +192,7 @@ namespace DuskEngine
 		else if (var.can_convert<Handle<LuaScript>>())
 		{
 			auto handle = var.convert<Handle<LuaScript>>();
-			return out << YAML::Value << SceneSerializer::GetCurrentHandler().LuaScriptPool(handle);
+			return out << YAML::Value << SceneSerializer::GetCurrentHandler().GetAsset<LuaScript>(handle);
 		}
 
 		return out << YAML::Value << "Unrecognized type";

@@ -38,6 +38,7 @@ namespace DuskEngine
 		m_MeshPool.m_Pool.reserve(10);
 		m_TexturePool.m_Pool.reserve(10);
 		m_MaterialPool.m_Pool.reserve(10);
+		m_LuaScriptPool.m_Pool.reserve(10);
 
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Quad());
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Cube());
@@ -69,18 +70,13 @@ namespace DuskEngine
 		LOG(("Destroying Asset Handler " + m_Name).c_str());
 	}
 
-	UniqueRef<LuaScript>& AssetHandler::LuaScriptPool(const uint32_t handle)
-	{
-		return m_LuaScriptPool[handle];
-	}
-
-	uint32_t AssetHandler::AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID)
+	Handle<LuaScript> AssetHandler::AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID)
 	{
 		if (m_HandleMap.find(uuid) == m_HandleMap.end())
 		{
-			m_LuaScriptPool.push_back(Application::Get().GetAssetDatabase().LoadScript(scriptUUID));
-			m_HandleMap[uuid] = (uint32_t)m_LuaScriptPool.size();
-			return (uint32_t)m_LuaScriptPool.size() - 1;
+			m_LuaScriptPool.m_Pool.push_back(Application::Get().GetAssetDatabase().LoadScript(scriptUUID));
+			m_HandleMap[uuid] = (uint32_t)m_LuaScriptPool.m_Pool.size() -1;
+			return (uint32_t)m_LuaScriptPool.m_Pool.size() - 1;
 		}
 
 		return m_HandleMap[uuid];

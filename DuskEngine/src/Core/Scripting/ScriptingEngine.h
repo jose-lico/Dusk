@@ -13,11 +13,11 @@ namespace DuskEngine
 		ScriptingEngine();
 		~ScriptingEngine() = default;
 
-		void LoadScript(UniqueRef<LuaScript>& script);
+		void LoadScript(LuaScript& script);
 
-		void OnAwake(UniqueRef<LuaScript>& script);
-		void OnUpdate(UniqueRef<LuaScript>& script);
-		void OnShutdown(UniqueRef<LuaScript>& script);
+		void OnAwake(LuaScript& script);
+		void OnUpdate(LuaScript& script);
+		void OnShutdown(LuaScript& script);
 	private:
 		void RegisterFunctions();
 

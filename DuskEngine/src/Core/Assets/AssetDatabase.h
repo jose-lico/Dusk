@@ -46,8 +46,7 @@ namespace DuskEngine
 		Shader LoadShader(const uuids::uuid& uuid);
 		Texture LoadTexture(const uuids::uuid& uuid);
 		Mesh LoadModel(const uuids::uuid& uuid);
-
-		UniqueRef<LuaScript> LoadScript(const uuids::uuid& uuid);
+		LuaScript LoadScript(const uuids::uuid& uuid);
 
 	private:
 		std::filesystem::path m_RootDirectory = "res";

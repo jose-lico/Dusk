@@ -2,7 +2,6 @@
 
 #include "Utils/Memory/Memory.h"
 
-#include "Platform/OpenGL/Shader.h"
 #include "Handle.h"
 #include "AssetPool.h"
 
@@ -25,8 +24,7 @@ namespace DuskEngine
 		AssetHandler(const std::string& name);
 		~AssetHandler();
 
-		UniqueRef<LuaScript>& LuaScriptPool(const uint32_t handle);
-		uint32_t AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID);
+		Handle<LuaScript> AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID);
 
 		template<typename T>
 		T& GetAsset(const Handle<T> handle)
@@ -39,6 +37,8 @@ namespace DuskEngine
 				return m_MeshPool(handle);
 			else if constexpr (std::is_same<T, Material>::value)
 				return m_MaterialPool(handle);
+			else if constexpr (std::is_same<T, LuaScript>::value)
+				return m_LuaScriptPool(handle);
 		}
 
 		template<typename T>
@@ -63,9 +63,8 @@ namespace DuskEngine
 		AssetPool<Texture> m_TexturePool;
 		AssetPool<Material> m_MaterialPool;
 		AssetPool<Mesh> m_MeshPool;
-		
-		std::vector<UniqueRef<LuaScript>> m_LuaScriptPool;
-		
+		AssetPool<LuaScript> m_LuaScriptPool;
+				
 		static std::vector<AssetHandler*> m_AssetHandlers;
 	};
 }

@@ -11,6 +11,7 @@
 #include "Platform/OpenGL/Shader.h"
 #include "Core/Assets/Assets/Material.h"
 #include "Core/Assets/AssetHandler.h"
+#include "Core/Scripting/LuaScript.h"
 #include "Core/Scripting/ScriptingEngine.h"
 #include "Platform/OpenGL/OpenGLAPI.h"
 #include "Core/Assets/Assets/Mesh.h"
@@ -216,8 +217,8 @@ namespace DuskEngine
 		for (auto entity : view)
 		{
 			auto& script = view.get<Script>(entity);
-			m_ScriptingEngine->LoadScript(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
-			m_ScriptingEngine->OnAwake(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
+			m_ScriptingEngine->LoadScript(m_AssetHandler->GetAsset<LuaScript>(script.luaScriptHandle));
+			m_ScriptingEngine->OnAwake(m_AssetHandler->GetAsset<LuaScript>(script.luaScriptHandle));
 		}
 	}
 
@@ -229,7 +230,7 @@ namespace DuskEngine
 			for (auto entity : view)
 			{
 				auto& script = view.get<Script>(entity);
-				m_ScriptingEngine->OnUpdate(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
+				m_ScriptingEngine->OnUpdate(m_AssetHandler->GetAsset<LuaScript>(script.luaScriptHandle));
 			}
 		}
 
@@ -368,7 +369,7 @@ namespace DuskEngine
 		for (auto entity : view)
 		{
 			auto& script = view.get<Script>(entity);
-			m_ScriptingEngine->OnShutdown(m_AssetHandler->LuaScriptPool(script.luaScriptHandle));
+			m_ScriptingEngine->OnShutdown(m_AssetHandler->GetAsset<LuaScript>(script.luaScriptHandle));
 		}
 	}
 }
