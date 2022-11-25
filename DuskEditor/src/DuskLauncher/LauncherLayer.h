@@ -28,6 +28,7 @@ namespace DuskEngine
 	private:
 		Dockspace m_Dockspace;
 		std::vector<Project> m_Projects;
+		std::string m_ProjectListPath;
 
 		DuskEditor* m_Editor;
 		Logger* m_Logger;

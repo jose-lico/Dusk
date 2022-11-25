@@ -9,5 +9,7 @@ namespace DuskEngine
 	public:
 		OS_Windows();
 		~OS_Windows();
+
+		virtual char* GetAppDataFolder() const override;
 	};
 }

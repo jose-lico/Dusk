@@ -26,7 +26,6 @@ namespace DuskEngine
 			RedirectStream("CONOUT$", "w", stderr, STD_ERROR_HANDLE);
 
 			printf("\n"); // Make sure our output is starting from the new line.
-			
 		}
 			m_AttachedConsole = true;
 #elif DUSK_DEBUG
@@ -36,6 +35,15 @@ namespace DuskEngine
 
 	OS_Windows::~OS_Windows()
 	{
+	}
+
+	char* OS_Windows::GetAppDataFolder() const
+	{
+		char* pValue;
+		size_t len;
+		// Handle error
+		errno_t err = _dupenv_s(&pValue, &len, "APPDATA");
+		return pValue;
 	}
 
 #ifdef DUSK_RELEASE

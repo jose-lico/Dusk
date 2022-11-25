@@ -5,11 +5,13 @@
 #include "Core/Application/Core.h"
 #include "Core/Application/Window.h"
 #include "Platform/OpenGL/OpenGLAPI.h"
+#include "Core/Application/OS.h"
 
 #include "imgui/imgui.h"
 #include "yaml-cpp/yaml.h"
 
 #include <fstream>
+#include <filesystem>
 
 namespace DuskEngine
 {
@@ -28,18 +30,48 @@ namespace DuskEngine
 		app.SetImGuiGLContext();
 		window.CenterWindow();
 
-		YAML::Node projectsData = YAML::LoadFile("projectList.yaml"); // In the future, save this in os specific folder for appdata
+		char* appdata = app.GetOS().GetAppDataFolder();
+		std::string duskDataFolder = appdata;
+		duskDataFolder.append("\\Dusk");
 
-		YAML::Node projects = projectsData["Projects"];
 
-		if (projects)
+		if(!std::filesystem::exists(duskDataFolder))
 		{
-			for (auto project : projects)
-			{
-				Project p{ project["Project"].as<std::string>(), project["Path"].as<std::string>() };
-				m_Projects.emplace_back(p);
-			}
+			std::filesystem::create_directory(duskDataFolder);
+			TRACE("Created folder in AppData");
 		}
+
+		m_ProjectListPath = duskDataFolder + "\\projectList.yaml";
+
+		if (std::filesystem::exists(m_ProjectListPath))
+		{
+			YAML::Node projectsData = YAML::LoadFile(m_ProjectListPath);
+			YAML::Node projects = projectsData["Projects"];
+
+			if (projects)
+			{
+				for (auto project : projects)
+				{
+					Project p{ project["Project"].as<std::string>(), project["Path"].as<std::string>() };
+					m_Projects.emplace_back(p);
+				}
+			}
+
+			TRACE("Fetched project list from AppData");
+		}
+		// Only usefull if I can append ...
+		/*else
+		{
+			YAML::Emitter out;
+
+			out << YAML::BeginMap;
+			out << YAML::Key << "Projects" << YAML::Value << YAML::BeginSeq;
+
+			std::ofstream fout(m_ProjectListPath);
+			fout << out.c_str();
+
+			TRACE("Created project list in AppData");
+		}*/
 	}
 
 	LauncherLayer::~LauncherLayer()
@@ -64,7 +96,7 @@ namespace DuskEngine
 		static char path[128] = "";
 		ImGui::InputTextWithHint("##Project Path", "Project Path", path, IM_ARRAYSIZE(path));
 
-		if(ImGui::Button("Create Project"))
+		if(ImGui::Button("Create Project") && path[0] != 0 && name[0] != 0)
 		{
 			YAML::Emitter out;
 
@@ -86,8 +118,11 @@ namespace DuskEngine
 			out << YAML::Key << "Path" << YAML::Value << path;
 			out << YAML::EndMap;
 			
-			std::ofstream fout("projectList.yaml");
+
+			std::ofstream fout(m_ProjectListPath);
 			fout << out.c_str();
+			m_LaunchEditor = true;
+			m_Editor->ProjectPath = path;
 		}
 
 		ImGui::Separator();
