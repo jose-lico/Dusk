@@ -1,0 +1,1 @@
+constexpr auto hey = __TIME__;

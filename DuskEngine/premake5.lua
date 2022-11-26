@@ -51,9 +51,21 @@ project "DuskEngine"
 		"DUSK_IMGUI"
 	}
 
+	prebuildcommands   
+	{
+		"python ../scripts/embed_assets.py"
+	}
+
+	postbuildcommands
+	{
+		"{DELETE} %{wks.location}/bin-int/" .. outputDir .. "/%{prj.name}/ALWAYS_BUILD.obj"
+	}
+
+	filter "files:src/ALWAYS_BUILD.cpp"
+	flags { "NoPCH" }
 	filter "files:../Dependencies/ImGuizmo/**.cpp"
 	flags { "NoPCH" }
-
+	
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "on"
@@ -66,7 +78,7 @@ project "DuskEngine"
 			"4003",
 			"4005"
 		}
-
+	
 	filter "system:linux"
 		cppdialect "C++17"
 		systemversion "latest"
