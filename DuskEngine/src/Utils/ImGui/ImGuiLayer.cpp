@@ -12,8 +12,8 @@
 #include "../backends/imgui_impl_opengl3.cpp"
 #include "../backends/imgui_impl_glfw.cpp"
 
-#include "fonts/roboto/Roboto-Regular.embedded"
-#include "fonts/forkawesome/forkawesome-webfont.embedded"
+#include "fonts/roboto/Roboto-Regular.ttf.embedded"
+#include "fonts/forkawesome/forkawesome-webfont.ttf.embedded"
 
 namespace DuskEngine
 {
@@ -33,7 +33,7 @@ namespace DuskEngine
 		ImGuiStyle& style = ImGui::GetStyle();
 		style.WindowMenuButtonPosition = ImGuiDir_None;
 
-		AddFontFromMemory((void*)g_Roboto_Regular_ttf, 18.0f);
+		AddFontFromMemory((void*)EMBEDDED_ROBOTO_REGULAR, 18.0f);
 
 		ApplyStyle();
 	}
@@ -111,7 +111,7 @@ namespace DuskEngine
 		fontConfig.MergeMode = true;
 		fontConfig.FontDataOwnedByAtlas = false;
 
-		io.Fonts->AddFontFromMemoryTTF((void*)g_forkawesome_webfont_ttf, (int32_t)sizeof(g_forkawesome_webfont_ttf), size, &fontConfig, glyphRanges);
+		io.Fonts->AddFontFromMemoryTTF((void*)EMBEDDED_FORKAWESOME_WEBFONT, (int32_t)sizeof(EMBEDDED_FORKAWESOME_WEBFONT), size, &fontConfig, glyphRanges);
 	}
 
 	void ImGuiLayer::AddFontFromMemory(void* fontData, float size) const
@@ -121,12 +121,12 @@ namespace DuskEngine
 		ImFontConfig fontConfig;
 		fontConfig.FontDataOwnedByAtlas = false;
 
-		io.Fonts->AddFontFromMemoryTTF(fontData, sizeof(g_Roboto_Regular_ttf), size, &fontConfig);
+		io.Fonts->AddFontFromMemoryTTF(fontData, sizeof(EMBEDDED_ROBOTO_REGULAR), size, &fontConfig);
 
 		fontConfig.PixelSnapH = true;
 		fontConfig.MergeMode = true;
 		
-		io.Fonts->AddFontFromMemoryTTF((void*)g_forkawesome_webfont_ttf, (int32_t)sizeof(g_forkawesome_webfont_ttf), size, &fontConfig, glyphRanges);
+		io.Fonts->AddFontFromMemoryTTF((void*)EMBEDDED_FORKAWESOME_WEBFONT, (int32_t)sizeof(EMBEDDED_FORKAWESOME_WEBFONT), size, &fontConfig, glyphRanges);
 	}
 
 	bool ImGuiLayer::ActivateDemoWindow(KeyPressedEvent& e)

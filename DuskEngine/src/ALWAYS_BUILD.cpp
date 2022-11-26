@@ -1,1 +1,1 @@
-constexpr auto hey = __TIME__;
+// If included in project, will always be built, forcing the pre build command to take place.

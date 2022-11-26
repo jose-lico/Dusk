@@ -5,7 +5,13 @@ premake5.exe
 bin
 bin-int
 
-#vs code
+# editor/engine generated files
+*.import
+*.embedded
+*.md5
+logs
+
+# vs code
 .vscode
 
 # vs stuff
@@ -14,9 +20,6 @@ bin-int
 *.vcxproj
 *.vcxproj.user
 *.vcxproj.filters
+
 premake5
-
 Makefile
-*.import
-
-logs
