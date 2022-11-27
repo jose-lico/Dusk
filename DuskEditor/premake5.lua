@@ -65,6 +65,11 @@ project "DuskEditor"
 		"DUSK_IMGUI"
 	}
 
+	prebuildcommands   
+	{
+		"python ../scripts/embed_assets.py"
+	}
+
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "on"

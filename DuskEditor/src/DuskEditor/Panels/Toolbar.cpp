@@ -8,22 +8,22 @@
 #include "imgui/imgui_internal.h"
 #include "IconsForkAwesome.h"
 
-#include "images/PlayIcon.embedded"
-#include "images/PauseIcon.embedded"
-#include "images/StopIcon.embedded"
-#include "images/StepForwardIcon.embedded"
-#include "images/ReloadIcon.embedded"
+#include "images/PlayIcon.png.embedded"
+#include "images/PauseIcon.png.embedded"
+#include "images/StopIcon.png.embedded"
+#include "images/StepForwardIcon.png.embedded"
+#include "images/ReloadIcon.png.embedded"
 
 namespace DuskEngine
 {
 	Toolbar::Toolbar(bool* playing, bool* paused, const std::function<void(void)>& playfunc, const std::function<void(void)>& stopfunc, const std::function<void(void)>& pausefunc)
 		:m_Playing(playing), m_Paused(paused), m_PlayFunc(playfunc), m_StopFunc(stopfunc), m_PauseFunc(pausefunc)
 	{
-		m_Play = CreateTexture(g_PlayIcon);
-		m_Pause = CreateTexture(g_PauseIcon);
-		m_Stop = CreateTexture(g_StopIcon);
-		m_StepForward = CreateTexture(g_StepForwardIcon);
-		m_Reload = CreateTexture(g_ReloadIcon);
+		m_Play = CreateTexture(EMBEDDED_PLAYICON);
+		m_Pause = CreateTexture(EMBEDDED_PAUSEICON);
+		m_Stop = CreateTexture(EMBEDDED_STOPICON);
+		m_StepForward = CreateTexture(EMBEDDED_STEPFORWARDICON);
+		m_Reload = CreateTexture(EMBEDDED_RELOADICON);
 	}
 
 	Toolbar::~Toolbar()

@@ -56,6 +56,11 @@ project "DuskEngine"
 		"python ../scripts/embed_assets.py"
 	}
 
+	postbuildcommands
+	{
+		"{DELETE} %{wks.location}/bin-int/" .. outputDir .. "/%{prj.name}/ALWAYS_BUILD.obj"
+	}
+
 	filter "files:src/ALWAYS_BUILD.cpp"
 	flags { "NoPCH" }
 	filter "files:../Dependencies/ImGuizmo/**.cpp"

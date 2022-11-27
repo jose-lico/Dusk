@@ -25,17 +25,20 @@ def generate_embedded(path, file_type, extension, data=None, md5=None):
     if(extension == ".png" or extension == ".jpg" or extension == ".jpeg"):
         image = Image.open(io.BytesIO(data))
         image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+        # optimally would just write to a variable but fuck it
         image_embedded = open(path + ".embedded", "wb")
         image_embedded.write(struct.pack("@IIQQ", image.width, image.height, len(image.getbands()), len(image.tobytes())))
         image_embedded.write(image.tobytes())
         image_embedded.close()
-    elif(extension == ".ttf"):
-        c_array_name = "EMBEDDED_" + filename_tup[0].upper().replace("-", "_") # replace potential dangerous chars
+        data = open(path + ".embedded", "rb").read()
+        os.remove(path + ".embedded")
 
-        c_array = "static const unsigned char {0}[] = {{{1}}};".format(c_array_name, ", ".join(bytes_to_c_arr(data)))
-        c_array_file = open(path + ".embedded", "w")
-        c_array_file.write(c_array)
-        c_array_file.close()
+    c_array_name = "EMBEDDED_" + filename_tup[0].upper().replace("-", "_") # replace potential dangerous chars
+    
+    c_array = "static const unsigned char {0}[] = {{{1}}};".format(c_array_name, ", ".join(bytes_to_c_arr(data)))
+    c_array_file = open(path + ".embedded", "w")
+    c_array_file.write(c_array)
+    c_array_file.close()
 
 embedded_extensions = [".ttf", ".png", "jpg", ".jpeg"] # only embed files with these extensions
 
