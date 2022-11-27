@@ -145,7 +145,7 @@ namespace DuskEngine :: OpenGLAPI
 		glDeleteTextures(1, &texture.ResourceID);
 	}
 
-	void CreateProgram(Shader& shader ,const std::string& vertexShader, const std::string& fragmentShader)
+	void CreateProgram(Shader& shader, const std::string& vertexShader, const std::string& fragmentShader)
 	{
 		shader.ResourceID = glCreateProgram();
 		uint32_t vs = CompileShader(GL_VERTEX_SHADER, vertexShader);

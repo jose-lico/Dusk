@@ -14,8 +14,8 @@
 #include "Utils/Profiling/Timer.h"
 #include "Platform/OpenGL/Shader.h"
 
-#include "shaders/phong_vert.embedded"
-#include "shaders/phong_frag.embedded"
+#include "shaders/phong.glsl.vert.embedded"
+#include "shaders/phong.glsl.frag.embedded"
 
 #include <iostream>
 
@@ -43,7 +43,7 @@ namespace DuskEngine
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Quad());
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Cube());
 		
-		m_ShaderPool.m_Pool.push_back(CreateShader(phong_vert, phong_frag));
+		m_ShaderPool.m_Pool.push_back(CreateShader((const char*)EMBEDDED_PHONGVERT, (const char*)EMBEDDED_PHONGFRAG));
 
 		m_MaterialPool.m_Pool.push_back(Material::CreateDefaultMaterial(this));
 

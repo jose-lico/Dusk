@@ -16,8 +16,8 @@
 #include "Platform/OpenGL/OpenGLAPI.h"
 #include "Core/Assets/Assets/Mesh.h"
 
-#include "shaders/grid_vert.embedded"
-#include "shaders/grid_frag.embedded"
+#include "shaders/grid.glsl.vert.embedded"
+#include "shaders/grid.glsl.frag.embedded"
 
 const unsigned int MAX_LIGHTS = 8;
 
@@ -30,7 +30,8 @@ namespace DuskEngine
 		std::string message = "Creating new scene " + m_Name;
 		LOG(message.c_str());
 
-		m_GridShader = CreateShader(grid_vert, grid_frag);
+		m_GridShader = CreateShader((const char*)EMBEDDED_GRIDVERT, (const char*)EMBEDDED_GRIDFRAG);
+		//m_GridShader = CreateShader();
 
 		m_ScriptingEngine = new ScriptingEngine();
 		m_AssetHandler = new AssetHandler("SceneHandler");
