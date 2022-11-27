@@ -13,7 +13,6 @@
 #include <string>
 #include <fstream>
 
-
 #undef CreateMetaFile
 
 namespace DuskEngine
@@ -139,7 +138,7 @@ namespace DuskEngine
 
 		bool wasAssigned = false;
 
-		if (extension == ".png" || extension == ".jpg" || extension == ".jepg")
+		if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
 		{
 			std::filesystem::path importFilePath = "res/.import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
 			if (!std::filesystem::exists(importFilePath))

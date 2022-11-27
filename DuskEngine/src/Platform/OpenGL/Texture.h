@@ -43,7 +43,7 @@ namespace DuskEngine
 		uint32_t Width;
 		uint32_t Height;
 		uint32_t Channels;
-		size_t DataSize;
+		uint64_t DataSize;
 	};
 
 	struct Texture : Asset, OpenGLResource
