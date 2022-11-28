@@ -62,13 +62,12 @@ def generate_embedded(path, file_type, extension, data=None, md5=None):
         os.remove(path + ".embedded")
 
     c_array_name = "EMBEDDED_" + filename_tup[0].upper().replace("-", "_") # replace illegal chars
-    
     c_array = "static const unsigned char {0}[] = {{{1}}};".format(c_array_name, ", ".join(bytes_to_c_arr(data)))
     c_array_file = open(path + ".embedded", "w")
     c_array_file.write(c_array)
     c_array_file.close()
 
-embedded_extensions = [".ttf", ".png", "jpg", ".jpeg", ".glsl"] # only embed files with these extensions
+embedded_extensions = [".ttf", ".png", "jpg", ".jpeg", ".glsl", ".ini"] # only embed files with these extensions
 
 cwd = os.getcwd()
 embedded_dir = cwd + "\embedded"
@@ -96,9 +95,9 @@ for root, subdirs, files in os.walk(embedded_dir):
         # get file type
         try:
             with open(filepath, "r") as f:
-                data = f.read(1024)
+                data = f.read(512)
                 file_type = "text"
-        except UnicodeDecodeError:
+        except UnicodeDecodeError: 
             file_type = "binary"
 
         if(os.path.exists(filepath + ".md5")): # if the asset has an md5

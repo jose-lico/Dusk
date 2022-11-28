@@ -32,5 +32,6 @@ namespace DuskEngine
 		DuskImGuiStyle* m_Style;
 
 		bool m_ShowDemoWindow = false;
+		std::string m_SettingsPath;
 	};
 }

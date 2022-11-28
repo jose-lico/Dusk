@@ -4,6 +4,8 @@
 #include "DuskImGuiStyle.h"
 #include "Core/Events/Events.h"
 #include "Core/Application/Window.h"
+#include "Core/Application/Application.h"
+#include "Core/Application/OS.h"
 #include "Utils/Profiling/Timer.h"
 
 #include "IconsForkAwesome.h"
@@ -14,6 +16,9 @@
 
 #include "fonts/roboto/Roboto-Regular.ttf.embedded"
 #include "fonts/forkawesome/forkawesome-webfont.ttf.embedded"
+#include "settings/editorSettings.ini.embedded"
+
+#include <filesystem>
 
 namespace DuskEngine
 {
@@ -25,7 +30,15 @@ namespace DuskEngine
 		ImGui::CreateContext();
 
 		ImGuiIO& io = ImGui::GetIO();
-		io.IniFilename = "teste.ini";
+
+		char* appdata = Application::Get().GetOS().GetAppDataFolder();
+		m_SettingsPath = appdata;
+		m_SettingsPath.append("\\Dusk\\editorSettings.ini");
+
+		if(!std::filesystem::exists(m_SettingsPath))
+			ImGui::LoadIniSettingsFromMemory((const char*)EMBEDDED_EDITORSETTINGS);
+
+		io.IniFilename = m_SettingsPath.c_str();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows

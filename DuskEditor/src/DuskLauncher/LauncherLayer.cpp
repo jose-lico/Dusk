@@ -34,7 +34,6 @@ namespace DuskEngine
 		std::string duskDataFolder = appdata;
 		duskDataFolder.append("\\Dusk");
 
-
 		if(!std::filesystem::exists(duskDataFolder))
 		{
 			std::filesystem::create_directory(duskDataFolder);
