@@ -140,7 +140,7 @@ namespace DuskEngine
 
 		if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
 		{
-			std::filesystem::path importFilePath = "res/.import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
+			std::filesystem::path importFilePath = m_RootDirectory.string() + "/.import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
 			if (!std::filesystem::exists(importFilePath))
 			{
 				m_ImagesToImport.push_back({path, importFilePath});

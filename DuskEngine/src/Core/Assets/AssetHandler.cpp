@@ -23,8 +23,8 @@ namespace DuskEngine
 {
 	std::vector<AssetHandler*> AssetHandler::m_AssetHandlers;
 
-	AssetHandler::AssetHandler(const std::string& name)
-		:m_Name(name)
+	AssetHandler::AssetHandler(const std::string& name, const std::string& projectPath)
+		:m_Name(name), m_ProjectPath(projectPath)
 	{
 		Timer assetHandlerTimer("Asset Handler " + name);
 		m_AssetHandlers.push_back(this);

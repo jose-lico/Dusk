@@ -24,8 +24,8 @@ const unsigned int MAX_LIGHTS = 8;
 namespace DuskEngine
 {
 	// maybe reserve ahead of time # of entities present in the base scene
-	Scene::Scene(const std::string& name)
-		:m_Name(name)
+	Scene::Scene(const std::string& name, const std::string& projectPath)
+		:m_Name(name), m_ProjectPath(projectPath)
 	{
 		std::string message = "Creating new scene " + m_Name;
 		LOG(message.c_str());
@@ -34,7 +34,7 @@ namespace DuskEngine
 		//m_GridShader = CreateShader();
 
 		m_ScriptingEngine = new ScriptingEngine();
-		m_AssetHandler = new AssetHandler("SceneHandler");
+		m_AssetHandler = new AssetHandler("SceneHandler", m_ProjectPath);
 	}
 
 	Scene::~Scene()

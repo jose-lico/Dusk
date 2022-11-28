@@ -25,8 +25,8 @@ namespace DuskEngine
 
 		g_currentDir = &m_CurrentDirectory;
 		m_CurrentDirectory = g_RootDirectory;
-		CreateDirectoryItems();
-		CreateDirectoryResources();
+		//CreateDirectoryItems();
+		//CreateDirectoryResources();
 	}
 
 	ContentBrowserPanel::~ContentBrowserPanel()

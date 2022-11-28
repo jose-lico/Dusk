@@ -21,7 +21,7 @@ namespace DuskEngine
 	class AssetHandler
 	{
 	public:
-		AssetHandler(const std::string& name);
+		AssetHandler(const std::string& name, const std::string& projectPath);
 		~AssetHandler();
 
 		Handle<LuaScript> AddToLuaScriptPool(const uuids::uuid& uuid, const uuids::uuid& scriptUUID);
@@ -56,6 +56,7 @@ namespace DuskEngine
 		}
 	private:
 		std::string m_Name;
+		std::string m_ProjectPath;
 
 		std::unordered_map<uuids::uuid, uint32_t> m_HandleMap;
 
@@ -66,5 +67,11 @@ namespace DuskEngine
 		AssetPool<LuaScript> m_LuaScriptPool;
 				
 		static std::vector<AssetHandler*> m_AssetHandlers;
+
+		friend class AssetPool<Shader>;
+		friend class AssetPool<Texture>;
+		friend class AssetPool<Material>;
+		friend class AssetPool<Mesh>;
+		friend class AssetPool<LuaScript>;
 	};
 }

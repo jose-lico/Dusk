@@ -3,14 +3,13 @@
 #include "AssetDatabase.h"
 #include "Core/Application/Application.h"
 #include "Utils/Memory/Memory.h"
+#include "AssetHandler.h"
 
 #include <unordered_map>
 #include <vector>
 
 namespace DuskEngine
 {
-	class AssetHandler;
-
 	class Material;
 	struct Texture;
 	class Mesh;
@@ -30,7 +29,7 @@ namespace DuskEngine
 				if constexpr (std::is_same<T, Shader>::value)
 					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadShader(uuid));
 				else if constexpr (std::is_same<T, Texture>::value)
-					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadTexture(uuid));
+					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadTexture(uuid, m_AssetHandler->m_ProjectPath));
 				else if constexpr (std::is_same<T, Mesh>::value)
 					m_Pool.push_back(Application::Get().GetAssetDatabase().LoadModel(uuid));
 				else if constexpr (std::is_same<T, Material>::value)

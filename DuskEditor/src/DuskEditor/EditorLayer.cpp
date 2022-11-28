@@ -72,7 +72,7 @@ namespace DuskEngine
 			db.LoadProject();
 		}
 
-		m_AssetHandler = MakeRef<AssetHandler>("EditorHandler");
+		m_AssetHandler = MakeRef<AssetHandler>("EditorHandler", m_ProjectPath);
 
 		m_EditorCamera = new EditorCamera();
 		m_EditorCamera->transform.position = glm::vec3(-4.0f, 2.0f, 4.0f);
@@ -93,10 +93,9 @@ namespace DuskEngine
 			OpenGLAPI::ResizeFramebuffer(m_PlayingSceneFB);
 		}
 
-		m_EditingScene = MakeRef<Scene>("Editing Scene");
+		m_EditingScene = MakeRef<Scene>("Editing Scene", m_ProjectPath);
 
-		SceneSerializer::DeserializeText(m_EditingScene, "res/scenes/scene.yaml");
-
+		SceneSerializer::DeserializeText(m_EditingScene, m_ProjectPath + "/scenes/scene.yaml");
 		{
 			Timer panels("Creating Panels");
 
@@ -110,12 +109,11 @@ namespace DuskEngine
 			m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
 			m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel));
 			m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
-
-
+			
 			auto play = [&]() {
 				m_Playing = true;
-				m_PlayingScene = MakeRef<Scene>("Playing Scene");
-				SceneSerializer::DeserializeText(m_PlayingScene, "res/scenes/scene.yaml");
+				m_PlayingScene = MakeRef<Scene>("Playing Scene", m_ProjectPath);
+				SceneSerializer::DeserializeText(m_PlayingScene, m_ProjectPath + "/scenes/scene.yaml");
 				m_PlayingScene->OnAwakeRuntime();
 				ImGui::SetWindowFocus(ICON_FK_GAMEPAD "  Game");
 				m_GameViewportPanel->SetCamera(m_PlayingScene->GetMainCamera());

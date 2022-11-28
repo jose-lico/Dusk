@@ -31,14 +31,14 @@ namespace DuskEngine
 		return textureData;
 	}
 
-	Texture CreateTexture(const std::filesystem::path& path, const uuids::uuid& uuid)
+	Texture CreateTexture(const std::filesystem::path& path, const uuids::uuid& uuid, const std::string& projectPath)
 	{
 		Texture textureData;
 		textureData.UUID = uuid;
 		textureData.Path = path;
 		textureData.Name = path.filename().string();
 
-		std::string importFilePath = "res/.import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
+		std::string importFilePath = projectPath + "/.import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
 
 		if (std::filesystem::exists(importFilePath))
 		{

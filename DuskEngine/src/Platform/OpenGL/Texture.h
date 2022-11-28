@@ -63,5 +63,5 @@ namespace DuskEngine
 
 	Texture CreateTexture(const unsigned char* data);
 
-	Texture CreateTexture(const std::filesystem::path& path, const uuids::uuid& uuid);
+	Texture CreateTexture(const std::filesystem::path& path, const uuids::uuid& uuid, const std::string& projectPath);
 }
