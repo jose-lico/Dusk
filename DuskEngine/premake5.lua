@@ -51,11 +51,6 @@ project "DuskEngine"
 		"DUSK_IMGUI"
 	}
 
-	prebuildcommands   
-	{
-		"python ../scripts/embed_assets.py"
-	}
-
 	postbuildcommands
 	{
 		"{DELETE} %{wks.location}/bin-int/" .. outputDir .. "/%{prj.name}/ALWAYS_BUILD.obj"
@@ -68,11 +63,12 @@ project "DuskEngine"
 	
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "on"
+		staticruntime "On"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
 		-- removefiles does not work with a path relative to current premake5.lua, must provide full path from workspace location
 		removefiles "%{wks.location}/DuskEngine/src/Platform/Linux/**"
+		prebuildcommands "python ../scripts/embed_assets.py"
 		disablewarnings 
 		{ 
 			"4003",
@@ -85,6 +81,7 @@ project "DuskEngine"
 		defines "DUSK_LINUX"
 		-- removefiles does not work with a path relative to current premake5.lua, must provide full path from workspace location
 		removefiles "%{wks.location}/DuskEngine/src/Platform/Windows/**"
+		prebuildcommands "python3 ../scripts/embed_assets.py"
 		links "pthread"
 		buildoptions "-fpermissive" 
 

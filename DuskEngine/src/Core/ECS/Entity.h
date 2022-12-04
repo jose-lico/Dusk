@@ -7,7 +7,7 @@
 
 namespace DuskEngine
 {
-	class DUSK_EXPORT Entity
+	class Entity
 	{
 		struct Meta;
 		struct Transform;

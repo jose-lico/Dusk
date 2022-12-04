@@ -95,7 +95,7 @@ namespace DuskEngine
 		static char path[128] = "";
 		ImGui::InputTextWithHint("##Project Path", "Project Path", path, IM_ARRAYSIZE(path));
 
-		if(ImGui::Button("Create Project") && path[0] != 0 && name[0] != 0)
+		if(ImGui::Button("Import Project") && path[0] != 0 && name[0] != 0)
 		{
 			YAML::Emitter out;
 

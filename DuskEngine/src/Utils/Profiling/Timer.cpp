@@ -12,7 +12,7 @@ namespace DuskEngine
 	Timer::Timer(const std::string& text, bool runtime)
 	:m_Text(text), m_Runtime(runtime)
 	{
-		if(!Stop)
+		/*if(!Stop)
 		{
 			m_MyNode = new TimerNode;
 			m_MyNode->Name = m_Text;
@@ -37,7 +37,7 @@ namespace DuskEngine
 			m_MyNode->Name = m_Text;
 			m_MyNode->Parent = nullptr;
 			m_RootTimer = m_MyNode;
-		}
+		}*/
 
 		m_Start = std::chrono::high_resolution_clock::now();
 	}
@@ -51,9 +51,9 @@ namespace DuskEngine
 			if(!m_Runtime)
 				TRACE(m_Text + " took: " + std::to_string(duration.count() / 1000000.0f) + " ms");
 
-			m_MyNode->Duration = duration;
+			/*m_MyNode->Duration = duration;
 			if(m_MyNode->Parent != nullptr)
-				m_LastTimer = m_MyNode->Parent;
+				m_LastTimer = m_MyNode->Parent;*/
 		}
 	}
 }

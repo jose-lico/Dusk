@@ -1,9 +1,6 @@
 #include "pch.h"
 
 #include "Components.h"
-#include "Core/Scripting/LuaScript.h"
-#include "Core/Assets/Assets/Mesh.h"
-#include "Core/Assets/Assets/Material.h"
 
 #include "rttr/registration.h"
 

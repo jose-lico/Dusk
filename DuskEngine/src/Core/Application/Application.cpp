@@ -1,16 +1,15 @@
 #include "pch.h"
 #include "Application.h"
 
+#include "OS.h"
 #include "Time.h"
 #include "Layer.h"
-#include "LayerStack.h"
 #include "Window.h"
-#include "OS.h"
-#include "Core/Assets/AssetDatabase.h"
+#include "LayerStack.h"
 #include "Core/Events/EventBase.h"
 #include "Core/Renderer/Renderer.h"
+#include "Core/Assets/AssetDatabase.h"
 #include "Platform/OpenGL/OpenGLAPI.h"
-#include "Utils/Profiling/Timer.h"
 #ifdef DUSK_IMGUI
 #include "Utils/ImGui/ImGuiLayer.h"
 #endif
@@ -64,12 +63,10 @@ namespace DuskEngine
 		m_AssetDatabase = new AssetDatabase();
 		
 		m_LayerStack = new LayerStack();
+
 #ifdef DUSK_IMGUI
-		{
-			//Timer imguiTimer("ImGuiLayer");
-			m_ImGuiLayer = new ImGuiLayer();
-			PushOverlay(m_ImGuiLayer);
-		}
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 #endif
 	}
 
@@ -111,10 +108,7 @@ namespace DuskEngine
 			}
 			m_ImGuiLayer->End();
 #endif
-			{
-				//Timer timer("Swap buffers", true);
-				OpenGLAPI::SwapBuffers(m_Window->GetNativeHandle());
-			}
+			OpenGLAPI::SwapBuffers(m_Window->GetNativeHandle());
 		}
 	}
 
@@ -168,10 +162,6 @@ namespace DuskEngine
 
 	Window& Application::CreateWindow(WindowData& data)
 	{
-		//WindowData data;
-		/*data.Title = m_Specs.Name + " | " + m_Specs.Platform + " | " + m_Specs.Target;
-		data.Title = "Editor";*/
-
 		m_Window = new Window(data);
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
