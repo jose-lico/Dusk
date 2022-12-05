@@ -7,9 +7,9 @@
 
 namespace DuskEngine
 {
+	struct Camera;
+	struct Transform;
 	class Entity;
-	class EditorCamera;
-	struct Shader;
 	class ScriptingEngine;
 	class AssetHandler;
 
@@ -34,7 +34,7 @@ namespace DuskEngine
 		Entity* GetMainCamera();
 		Entity* FindEntity(const std::string& name);
 
-		void OnUpdateEditor(EditorCamera& camera);
+		void OnUpdateEditor(Transform& cameraTransform, Camera& camera);
 
 		void OnAwakeRuntime();
 		void OnUpdateRuntime(bool running, bool paused = false);

@@ -5,7 +5,6 @@
 #include "Core/Application/Application.h"
 #include "Core/Application/Window.h"
 #include "Core/Serialization/SceneSerializer.h"
-#include "Core/ECS/EditorCamera.h"
 #include "Core/Scripting/LuaScript.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/AssetHandler.h"
@@ -74,10 +73,9 @@ namespace DuskEngine
 
 		m_AssetHandler = MakeRef<AssetHandler>("EditorHandler", m_ProjectPath);
 
-		m_EditorCamera = new EditorCamera();
-		m_EditorCamera->transform.position = glm::vec3(-4.0f, 2.0f, 4.0f);
-		m_EditorCamera->transform.rotation = glm::vec3(0.25f, 2.5f, 0.0f);
-		m_EditorCamera->camera.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
+		m_EditorCamera.transform.position = glm::vec3(-4.0f, 2.0f, 4.0f);
+		m_EditorCamera.transform.rotation = glm::vec3(0.25f, 2.5f, 0.0f);
+		m_EditorCamera.camera.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
 
 		{
 			Timer panels("FB");
@@ -105,7 +103,7 @@ namespace DuskEngine
 			m_Panels.push_back(new ContentBrowserPanel());
 			m_Panels.push_back(new GameViewportPanel(&m_PlayingSceneFB, *m_EditingScene->GetMainCamera(), &m_Playing));
 			m_GameViewportPanel = (GameViewportPanel*)m_Panels.back();
-			m_Panels.push_back(new SceneViewportPanel(&m_EditorSceneFB, m_EditorCamera));
+			m_Panels.push_back(new SceneViewportPanel(&m_EditorSceneFB, &m_EditorCamera));
 			m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
 			m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel));
 			m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
@@ -144,7 +142,7 @@ namespace DuskEngine
 		if (!m_Playing)
 		{
 			OpenGLAPI::BindFramebuffer(m_EditorSceneFB);
-			m_EditingScene->OnUpdateEditor(*m_EditorCamera);
+			m_EditingScene->OnUpdateEditor(m_EditorCamera.transform, m_EditorCamera.camera);
 			OpenGLAPI::UnbindFramebuffer();
 
 			{
@@ -157,7 +155,7 @@ namespace DuskEngine
 		else
 		{
 			OpenGLAPI::BindFramebuffer(m_EditorSceneFB);
-			m_PlayingScene->OnUpdateEditor(*m_EditorCamera);
+			m_PlayingScene->OnUpdateEditor(m_EditorCamera.transform, m_EditorCamera.camera);
 			OpenGLAPI::UnbindFramebuffer();
 
 			{

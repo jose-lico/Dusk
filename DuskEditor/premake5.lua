@@ -1,6 +1,7 @@
 project "DuskEditor"
 	language "C++"
-	configmap {
+	configmap 
+	{
         ["ReleaseNoImGui"] = "Release"
     }
 

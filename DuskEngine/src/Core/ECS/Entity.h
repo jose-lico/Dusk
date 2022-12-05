@@ -62,5 +62,6 @@ namespace DuskEngine
 		Scene* m_Scene;
 
 		friend class Scene;
+		friend class HierarchyPanel;
 	};
 }

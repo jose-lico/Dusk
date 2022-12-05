@@ -13,7 +13,5 @@ namespace DuskEngine
 	{
 		Handle<Mesh> meshHandle;
 		Handle<Material> materialHandle;
-
-		MeshRenderer() = default;
 	};
 }

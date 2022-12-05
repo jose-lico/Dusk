@@ -16,7 +16,7 @@ namespace DuskEngine
 	{
 	public:
 		HierarchyPanel(Ref<Scene>& scene, InspectorPanel& inspector, SceneViewportPanel& viewport);
-		~HierarchyPanel();
+		~HierarchyPanel() = default;
 
 		virtual void OnImGuiRender() override;
 
@@ -28,5 +28,6 @@ namespace DuskEngine
 		std::vector<Entity> m_SelectedEntities;
 
 		friend class Scene;
+		friend class Entity;
 	};
 }

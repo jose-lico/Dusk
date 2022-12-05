@@ -3,44 +3,41 @@
 
 #include "Entity.h"
 #include "Components.h"
-#include "EditorCamera.h"
 
 #include "Core/Application/Application.h"
 #include "Core/Application/Window.h"
 #include "Core/Renderer/Renderer.h"
-#include "Platform/OpenGL/Shader.h"
 #include "Core/Assets/Assets/Material.h"
 #include "Core/Assets/AssetHandler.h"
 #include "Core/Scripting/LuaScript.h"
-#include "Core/Scripting/ScriptingEngine.h"
-#include "Platform/OpenGL/OpenGLAPI.h"
 #include "Core/Assets/Assets/Mesh.h"
+#include "Core/Scripting/ScriptingEngine.h"
+#include "Platform/OpenGL/Shader.h"
+#include "Platform/OpenGL/OpenGLAPI.h"
 
 #include "shaders/grid.glsl.vert.embedded"
 #include "shaders/grid.glsl.frag.embedded"
+
+#include "GL/glew.h"
 
 const unsigned int MAX_LIGHTS = 8;
 
 namespace DuskEngine
 {
-	// maybe reserve ahead of time # of entities present in the base scene
 	Scene::Scene(const std::string& name, const std::string& projectPath)
 		:m_Name(name), m_ProjectPath(projectPath)
 	{
-		std::string message = "Creating new scene " + m_Name;
-		LOG(message.c_str());
+		LOG("Creating new scene " + m_Name);
 
 		m_GridShader = CreateShader((const char*)EMBEDDED_GRIDVERT, (const char*)EMBEDDED_GRIDFRAG);
-		//m_GridShader = CreateShader();
 
 		m_ScriptingEngine = new ScriptingEngine();
-		m_AssetHandler = new AssetHandler("SceneHandler", m_ProjectPath);
+		m_AssetHandler = new AssetHandler(m_Name + "SceneHandler", m_ProjectPath);
 	}
 
 	Scene::~Scene()
 	{
-		std::string message = "Destroying scene " + m_Name;
-		LOG(message.c_str());
+		LOG("Destroying scene " + m_Name);
 
 		OpenGLAPI::DeleteProgram(m_GridShader);
 
@@ -94,25 +91,20 @@ namespace DuskEngine
 		return nullptr;
 	}
 
-	void Scene::OnUpdateEditor(EditorCamera& camera)
+	void Scene::OnUpdateEditor(Transform& cameraTransform, Camera& camera)
 	{
-		auto& transform = camera.transform;
+		glm::quat quat = glm::quat(cameraTransform.rotation);
+		glm::vec3 front = quat * glm::vec3(0.0f, 0.0f, 1.0f);
 
-		glm::vec3 front;
+		cameraTransform.front = glm::normalize(front);
+		cameraTransform.right = glm::normalize(glm::cross(cameraTransform.front, glm::vec3(0.0f, 1.0f, 0.0f)));
+		cameraTransform.up = glm::normalize(glm::cross(cameraTransform.right, cameraTransform.front));
 
-		glm::quat quat = glm::quat(transform.rotation);
+		camera.viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.front, cameraTransform.up);
+		camera.viewProjectionMatrix = camera.projectionMatrix * camera.viewMatrix;
 
-		front = quat * glm::vec3(0.0f, 0.0f, 1.0f);
-
-		transform.front = glm::normalize(front);
-		transform.right = glm::normalize(glm::cross(transform.front, glm::vec3(0.0f, 1.0f, 0.0f)));
-		transform.up = glm::normalize(glm::cross(transform.right, transform.front));
-
-		camera.camera.viewMatrix = glm::lookAt(transform.position, transform.position + transform.front, transform.up);
-		camera.camera.viewProjectionMatrix = camera.camera.projectionMatrix * camera.camera.viewMatrix;
-
-		glm::vec3 cameraPos = camera.transform.position;
-		glm::mat4 VPM = camera.camera.viewProjectionMatrix;
+		glm::vec3 cameraPos = cameraTransform.position;
+		glm::mat4 VPM = camera.viewProjectionMatrix;
 
 		auto& renderer = Application::Get().GetRenderer();
 
@@ -120,12 +112,12 @@ namespace DuskEngine
 
 		OpenGLAPI::SetClearColor({ 0.192f, 0.301f, 0.474f, 1.0f });
 		OpenGLAPI::Clear();
+
 		{
-			// Most of this should maybe be moved to the renderer
 			auto view = m_Registry.view<Transform, MeshRenderer, Meta>();
-			for (auto entity : view)
+			for (auto& entity : view)
 			{
-				auto [transform, mesh, meta] = view.get<Transform, MeshRenderer, Meta>(entity);
+				auto& [transform, mesh, meta] = view.get<Transform, MeshRenderer, Meta>(entity);
 
 				if (!meta.enabled) continue;
 
@@ -144,14 +136,14 @@ namespace DuskEngine
 				OpenGLAPI::SetUniformMat4(shader, "e_ViewProjection", VPM);
 				OpenGLAPI::SetUniformVec3(shader, "e_ViewPosition", cameraPos);
 
-				auto lights = m_Registry.view<Light, Meta>();
+				auto lightsView = m_Registry.view<Light, Meta>();
 
 				int dirLightIndex = 0;
 				int pointLightIndex = 0;
 
-				for (auto light : lights)
+				for (auto& light : lightsView)
 				{
-					auto [l, t, m] = m_Registry.get<Light, Transform, Meta>(light);
+					auto& [l, t, m] = m_Registry.get<Light, Transform, Meta>(light);
 
 					if (m.enabled)
 					{
@@ -197,16 +189,17 @@ namespace DuskEngine
 				renderer.Submit(m_AssetHandler->GetAsset(mesh.meshHandle));
 			}
 
-			glm::mat4 viewMatrix = camera.camera.viewMatrix;
-			glm::mat4 projectionMatrix = camera.camera.projectionMatrix;
+			// Grid on hold for now
+
+			/*glm::mat4 viewMatrix = camera.viewMatrix;
+			glm::mat4 projectionMatrix = camera.projectionMatrix;
 
 			OpenGLAPI::UseProgram(m_GridShader);
 
-			OpenGLAPI::SetUniformMat4(m_GridShader, "e_ViewProjection", VPM);
 			OpenGLAPI::SetUniformMat4(m_GridShader, "e_Projection", projectionMatrix);
 			OpenGLAPI::SetUniformMat4(m_GridShader, "e_View", viewMatrix);
-
-			OpenGLAPI::DrawArrays(0, 6);
+			
+			OpenGLAPI::DrawArrays(0, 6);*/
 
 			renderer.EndScene();
 		}
@@ -237,12 +230,11 @@ namespace DuskEngine
 
 		{
 			// TODO: for static objects in the future only calculate this once and not every frame
-
 			// Should I/Do I need to even calculate Front, Right and Up vectors every frame? probably not
 			auto view = m_Registry.view<Transform, Meta>();
-			for (auto entity : view)
+			for (auto& entity : view)
 			{
-				auto [transform,meta] = view.get<Transform, Meta>(entity);
+				auto& [transform,meta] = view.get<Transform, Meta>(entity);
 
 				if (!meta.enabled) continue;
 
@@ -262,9 +254,9 @@ namespace DuskEngine
 		glm::mat4 VPM;
 		{
 			auto view = m_Registry.view<Transform, Camera, Meta>();
-			for (auto entity : view)
+			for (auto& entity : view)
 			{
-				auto [transform, camera, meta] = view.get<Transform, Camera, Meta>(entity);
+				auto& [transform, camera, meta] = view.get<Transform, Camera, Meta>(entity);
 
 				if (!meta.enabled) continue;
 
@@ -288,9 +280,9 @@ namespace DuskEngine
 		{
 			// Most of this should maybe be moved to the renderer
 			auto view = m_Registry.view<Transform, MeshRenderer, Meta>();
-			for (auto entity : view)
+			for (auto& entity : view)
 			{
-				auto [transform, mesh, meta] = view.get<Transform, MeshRenderer, Meta>(entity);
+				auto& [transform, mesh, meta] = view.get<Transform, MeshRenderer, Meta>(entity);
 
 				if (!meta.enabled) continue;
 
@@ -314,9 +306,9 @@ namespace DuskEngine
 				int dirLightIndex = 0;
 				int pointLightIndex = 0;
 
-				for (auto light : lights)
+				for (auto& light : lights)
 				{
-					auto [l, t, m] = m_Registry.get<Light, Transform, Meta>(light);
+					auto& [l, t, m] = m_Registry.get<Light, Transform, Meta>(light);
 
 					if (m.enabled) 
 					{						
@@ -367,7 +359,7 @@ namespace DuskEngine
 	void Scene::OnShutdownRuntime()
 	{
 		auto view = m_Registry.view<Script>();
-		for (auto entity : view)
+		for (auto& entity : view)
 		{
 			auto& script = view.get<Script>(entity);
 			m_ScriptingEngine->OnShutdown(m_AssetHandler->GetAsset<LuaScript>(script.luaScriptHandle));

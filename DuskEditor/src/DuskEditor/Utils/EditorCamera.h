@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Components/Transform.h"
-#include "Components/Camera.h"
+#include "Core/ECS/Components/Transform.h"
+#include "Core/ECS/Components/Camera.h"
 
 namespace DuskEngine
 {

@@ -1,8 +1,9 @@
 #include "SceneViewportPanel.h"
 
+#include "DuskEditor/Utils/EditorCamera.h"
+
 #include "Core/ECS/Components/Camera.h"
 #include "Core/ECS/Components/Transform.h"
-#include "Core/ECS/EditorCamera.h"
 #include "Core/Application/Time.h"
 #include "Core/Application/Input.h"
 #include "Core/Events/KeyEvent.h"

@@ -1,7 +1,6 @@
 #shader vertex
 #version 330 core
 
-uniform mat4 e_ViewProjection;
 uniform mat4 e_View;
 uniform mat4 e_Projection;
 
@@ -76,17 +75,14 @@ float computeDepth(vec3 pos) {
 float computeLinearDepth(vec3 pos) {
     vec4 clip_space_pos = fragProj * fragView * vec4(pos.xyz, 1.0);
     float clip_space_depth = (clip_space_pos.z / clip_space_pos.w) * 2.0 - 1.0;
-    float linearDepth = (2.0 * 100 *  0.01) / (100 + 0.01 - clip_space_depth * (100 - 0.01));
-    return linearDepth / 100;
+    float linearDepth = (2.0 * 100.0 *  0.01) / (100.0 + 0.01 - clip_space_depth * (100.0 - 0.01));
+    return linearDepth / 100.0;
 }
-// comment teste
-void main() {
-    float t = -nearPoint.y / (farPoint.y - nearPoint.y); // comment teste
-    
-    if(t < 0)
-        discard;
 
+void main() {
+    float t = -nearPoint.y / (farPoint.y - nearPoint.y);
     vec3 fragPos3D = nearPoint + t * (farPoint - nearPoint);
+
     gl_FragDepth = computeDepth(fragPos3D);
 
     float linearDepth = computeLinearDepth(fragPos3D);

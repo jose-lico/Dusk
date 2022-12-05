@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Application/Layer.h"
 
+#include "DuskEditor/Utils/EditorCamera.h"
 #include "Platform/OpenGL/Framebuffer.h"
 #include "Utils/Memory/Memory.h"
 
@@ -34,7 +35,7 @@ namespace DuskEngine
 		Framebuffer m_EditorSceneFB;
 		Framebuffer m_PlayingSceneFB;
 
-		EditorCamera* m_EditorCamera;
+		EditorCamera m_EditorCamera;
 
 		GameViewportPanel* m_GameViewportPanel;
 		SceneViewportPanel* m_SceneViewportPanel;
