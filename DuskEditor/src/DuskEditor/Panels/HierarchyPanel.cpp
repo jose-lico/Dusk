@@ -36,14 +36,80 @@ namespace DuskEngine
 		for (auto& entity : view)
 		{
 			auto& meta = m_Scene->m_Registry.get<Meta>(entity);
+			bool deselected = false;
 			if (ImGui::Selectable(meta.name.c_str(), m_SelectableStatus[entityIndex]))
 			{
-				if (!ImGui::GetIO().KeyCtrl)
+				if(ImGui::GetIO().KeyShift)
+				{
+					if(m_SelectedEntities.size() > 0 && m_SelectedEntities[0].m_EntityHandle != entity)
+					{
+						Entity farthestEntity = m_SelectedEntities[0];
+						int32_t farthestEntityDistance = abs((int32_t)entity - (int32_t)farthestEntity.m_EntityHandle);
+						bool isFarthestEntityUp = (int32_t)entity - (int32_t)farthestEntity.m_EntityHandle > 0 ? true : false; // not used for now
+
+						for (Entity& selectedEntity : m_SelectedEntities)
+						{
+							int32_t distance = abs((int32_t)entity - (int32_t)selectedEntity.m_EntityHandle);
+							if(distance > farthestEntityDistance)
+							{
+								farthestEntity = selectedEntity;
+								farthestEntityDistance = distance;
+							}
+						}
+
+						std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
+						m_SelectedEntities.resize(0);
+
+						int32_t index = 0;
+						for (auto& ent : view)
+						{
+							if(isFarthestEntityUp)
+							{
+								if (ent <= entity && ent >= farthestEntity.m_EntityHandle)
+								{
+									m_SelectableStatus[index] = true;
+									m_SelectedEntities.push_back(Entity(ent, m_Scene.get()));
+								}
+							}
+							else
+							{
+								if (ent >= entity && ent <= farthestEntity.m_EntityHandle)
+								{
+									m_SelectableStatus[index] = true;
+									m_SelectedEntities.push_back(Entity(ent, m_Scene.get()));
+								}
+							}
+							
+							index++;
+						}
+
+						TRACE(std::to_string(m_SelectedEntities.size()));
+					}
+				}
+				else if (!ImGui::GetIO().KeyCtrl)
 				{
 					std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
 					m_SelectedEntities.resize(0);
 				}
-				if (!m_SelectableStatus[entityIndex])
+				else if(ImGui::GetIO().KeyCtrl && m_SelectableStatus[entityIndex])
+				{
+					m_SelectableStatus[entityIndex] = false;
+					deselected = true;
+
+					int32_t index = 0;
+					for (Entity& selectedEntity : m_SelectedEntities)
+					{
+						if(selectedEntity.m_EntityHandle == entity)
+						{
+							m_SelectedEntities.erase(m_SelectedEntities.begin() + index);
+
+							break;
+						}
+						index++;
+					}
+				}
+
+				if (!m_SelectableStatus[entityIndex] && !deselected)
 				{
 					m_SelectableStatus[entityIndex] = true;
 					m_SelectedEntities.push_back(Entity(entity, m_Scene.get()));
