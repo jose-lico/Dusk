@@ -28,17 +28,26 @@ namespace DuskEngine
 		ImGui::Begin(ICON_FK_TH_LIST "  Scene Hierarchy");
 		CheckFocus();
 
+		bool deselected = false;
+		bool selectedThisFrame = false;
+		bool unselectRequested = false;
+
+		if (ImGui::IsMouseReleased(0) && ImGui::IsWindowHovered())
+			unselectRequested = true;
+
 		auto& registry = m_Scene->m_Registry;
-
 		auto view = registry.view<Meta>();
-
+		
 		int entityIndex = 0;
+		
 		for (auto& entity : view)
 		{
 			auto& meta = m_Scene->m_Registry.get<Meta>(entity);
-			bool deselected = false;
+
 			if (ImGui::Selectable(meta.name.c_str(), m_SelectableStatus[entityIndex]))
 			{
+				selectedThisFrame = true;
+
 				if(ImGui::GetIO().KeyShift)
 				{
 					if(m_SelectedEntities.size() > 0 && m_SelectedEntities[0].m_EntityHandle != entity)
@@ -82,8 +91,6 @@ namespace DuskEngine
 							
 							index++;
 						}
-
-						TRACE(std::to_string(m_SelectedEntities.size()));
 					}
 				}
 				else if (!ImGui::GetIO().KeyCtrl)
@@ -118,25 +125,17 @@ namespace DuskEngine
 
 			if (ImGui::BeginPopupContextItem())
 			{
-				if(m_SelectableStatus[entityIndex] == false && !ImGui::GetIO().KeyCtrl)
+				if (m_SelectableStatus[entityIndex] == false && !ImGui::GetIO().KeyCtrl)
 				{
 					std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
 					m_SelectedEntities.resize(0);
 				}
 
-				m_SelectableStatus[entityIndex] = true;
-				bool addToSelectedEntities = true;
-				for (Entity& selectedEntity : m_SelectedEntities)
+				if (!m_SelectableStatus[entityIndex])
 				{
-					if(selectedEntity.m_EntityHandle == entity)
-					{
-						addToSelectedEntities = false;
-						break;
-					}
-				}
-
-				if(addToSelectedEntities)
+					m_SelectableStatus[entityIndex] = true;
 					m_SelectedEntities.push_back(Entity(entity, m_Scene.get()));
+				}
 
 				if (ImGui::MenuItem(m_SelectedEntities.size() == 1 ? "Delete Entity" : "Delete Entities"))
 				{
@@ -155,8 +154,17 @@ namespace DuskEngine
 			entityIndex++;
 		}
 
+		if (unselectRequested && !selectedThisFrame)
+		{
+			std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
+			m_SelectedEntities.resize(0);
+		}
+
 		if (ImGui::BeginPopupContextWindow(0,1,false))
 		{
+			std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
+			m_SelectedEntities.resize(0);
+
 			if (ImGui::MenuItem("Create Empty Entity"))
 			{
 				m_Scene->CreateEntity("New Entity");
