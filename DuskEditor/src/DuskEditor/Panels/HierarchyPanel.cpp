@@ -3,12 +3,7 @@
 #include "InspectorPanel.h"
 #include "SceneViewportPanel.h"
 
-#include "Core/ECS/Components/Transform.h"
 #include "Core/ECS/Components/Meta.h"
-#include "Platform/OpenGL/Shader.h"
-#include "Core/Assets/AssetDatabase.h"
-
-#include "Utils/Rendering/PrimitiveMesh.h"
 
 #include "imgui/imgui.h"
 #include "IconsForkAwesome.h"
@@ -44,6 +39,7 @@ namespace DuskEngine
 		{
 			auto& meta = m_Scene->m_Registry.get<Meta>(entity);
 
+			ImGui::PushID(entityIndex);
 			if (ImGui::Selectable(meta.name.c_str(), m_SelectableStatus[entityIndex]))
 			{
 				selectedThisFrame = true;
@@ -122,6 +118,7 @@ namespace DuskEngine
 					m_SelectedEntities.push_back(Entity(entity, m_Scene.get()));
 				}
 			}
+			ImGui::PopID();
 
 			if (ImGui::BeginPopupContextItem())
 			{
@@ -167,29 +164,42 @@ namespace DuskEngine
 
 			if (ImGui::MenuItem("Create Empty Entity"))
 			{
-				m_Scene->CreateEntity("New Entity");
-				std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
-				m_SelectableStatus.resize(m_Scene->m_Registry.size());
-
-				// select currently created entity
+				Entity emptyEntity = m_Scene->CreateEntity("New Entity");
+				SelectNewEntity(emptyEntity);
 			}
 
-			//if (ImGui::MenuItem("Create Light"))
-			//{
-			//	auto light = m_Scene->CreateEntity("New Light");
-			//	std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
-			//	m_SelectableStatus.resize(m_Scene->m_Registry.size());
-			//	light.AddComponent<Light>();
+			if (ImGui::BeginMenu("Create Light"))
+			{
+				if (ImGui::MenuItem("Point Light"))
+				{
+					Entity lightEntity = m_Scene->CreateEntity("New Point Light");
+					lightEntity.AddComponent<Light>().type = LightType::Point;
 
-			//	auto& lightTransform = light.GetComponent<Transform>();
-			//	lightTransform.position = { -2.0f, 1.0f, 1.0f };
-			//	lightTransform.scale = { 0.1f, 0.1f, 0.1f };
-			//	auto mesh = PrimitiveMesh::Cube();
-			//	auto material = AssetManager::LoadMaterial(AssetManager::GetUUID("res/materials/lightMaterial.material"));
-			//	//light.AddComponent<MeshRenderer>(mesh, material);
+					// TODO: While gizmos dont exist, lights have by default a MeshRenderer component with a default cube
+					lightEntity.GetComponent<Transform>().scale = { 0.1f, 0.1f, 0.1f };
+					MeshRenderer& meshRenderer = lightEntity.AddComponent<MeshRenderer>();
+					meshRenderer.materialHandle = 0;
+					meshRenderer.meshHandle = 1;
 
-			//	// select currently created entity
-			//}
+					SelectNewEntity(lightEntity);
+				}
+
+				if (ImGui::MenuItem("Directional Light"))
+				{
+					Entity lightEntity = m_Scene->CreateEntity("New Directional Light");
+					lightEntity.AddComponent<Light>().type = LightType::Directional;
+
+					// TODO: While gizmos dont exist, lights have by default a MeshRenderer component with a default cube
+					lightEntity.GetComponent<Transform>().scale = { 0.1f, 0.1f, 0.1f };
+					MeshRenderer& meshRenderer = lightEntity.AddComponent<MeshRenderer>();
+					meshRenderer.materialHandle = 0;
+					meshRenderer.meshHandle = 1;
+
+					SelectNewEntity(lightEntity);
+				}
+
+				ImGui::EndMenu();
+			}
 
 			ImGui::EndPopup();
 		}
@@ -203,5 +213,14 @@ namespace DuskEngine
 
 		m_SelectedEntities.resize(0);
 		m_SelectableStatus.resize(m_Scene->m_Registry.size());
+	}
+
+	void HierarchyPanel::SelectNewEntity(Entity& newEntity)
+	{
+		std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
+		m_SelectableStatus.resize(m_Scene->m_Registry.size());
+
+		m_SelectableStatus[0] = true;
+		m_SelectedEntities.push_back(newEntity);
 	}
 }

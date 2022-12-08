@@ -45,7 +45,7 @@ namespace DuskEngine
 		delete(m_ScriptingEngine);
 	}
 
-	Entity Scene::CreateEntity(const std::string& name)
+	Entity Scene::CreateEntity(const std::string& name) // TODO: Check for unique name
 	{
 		Entity entity = { m_Registry.create(), this };
 		entity.AddComponent<Transform>();

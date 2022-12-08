@@ -22,6 +22,8 @@ namespace DuskEngine
 
 		void SetScene(Ref<Scene>& scene);
 	private:
+		void SelectNewEntity(Entity& newEntity);
+
 		Ref<Scene> m_Scene;
 
 		std::vector<bool> m_SelectableStatus;
