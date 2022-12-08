@@ -91,7 +91,7 @@ namespace DuskEngine
 		return nullptr;
 	}
 
-	void Scene::OnUpdateEditor(Transform& cameraTransform, Camera& camera)
+	void Scene::OnUpdateEditor(Transform& cameraTransform, Camera& camera, std::unordered_map<entt::entity, bool>& visible)
 	{
 		glm::quat quat = glm::quat(cameraTransform.rotation);
 		glm::vec3 front = quat * glm::vec3(0.0f, 0.0f, 1.0f);
@@ -186,7 +186,8 @@ namespace DuskEngine
 				OpenGLAPI::SetUniformInt(shader, "e_DirectionalLightsCount", dirLightIndex);
 				OpenGLAPI::SetUniformInt(shader, "e_PointLightsCount", pointLightIndex);
 
-				renderer.Submit(m_AssetHandler->GetAsset(mesh.meshHandle));
+				if(visible[entity])
+					renderer.Submit(m_AssetHandler->GetAsset(mesh.meshHandle));
 			}
 
 			// Grid on hold for now

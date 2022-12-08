@@ -1,6 +1,7 @@
 #include "EditorLayer.h"
 
 #include "Assets/AssetDatabaseEditor.h"
+#include "Utils/EditorMeta.h"
 
 #include "Core/Application/Application.h"
 #include "Core/Application/Window.h"
@@ -105,7 +106,7 @@ namespace DuskEngine
 			m_GameViewportPanel = (GameViewportPanel*)m_Panels.back();
 			m_Panels.push_back(new SceneViewportPanel(&m_EditorSceneFB, &m_EditorCamera));
 			m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
-			m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel));
+			m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel, m_ProjectPath));
 			m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
 			
 			auto play = [&]() {
@@ -141,8 +142,18 @@ namespace DuskEngine
 	{
 		if (!m_Playing)
 		{
+			auto& registry = m_EditingScene->m_Registry;
+			auto view = registry.view<EditorMeta>();
+			std::unordered_map<entt::entity, bool> visible;
+
+			for (entt::entity entity : view)
+			{
+				auto& editor = m_EditingScene->m_Registry.get<EditorMeta>(entity);
+				visible[entity] = editor.Visible;
+			}
+
 			OpenGLAPI::BindFramebuffer(m_EditorSceneFB);
-			m_EditingScene->OnUpdateEditor(m_EditorCamera.transform, m_EditorCamera.camera);
+			m_EditingScene->OnUpdateEditor(m_EditorCamera.transform, m_EditorCamera.camera, visible);
 			OpenGLAPI::UnbindFramebuffer();
 
 			{
@@ -154,8 +165,18 @@ namespace DuskEngine
 		}
 		else
 		{
+			auto& registry = m_PlayingScene->m_Registry;
+			auto view = registry.view<EditorMeta>();
+			std::unordered_map<entt::entity, bool> visible;
+
+			for (entt::entity entity : view)
+			{
+				auto& editor = m_PlayingScene->m_Registry.get<EditorMeta>(entity);
+				visible[entity] = editor.Visible;
+			}
+
 			OpenGLAPI::BindFramebuffer(m_EditorSceneFB);
-			m_PlayingScene->OnUpdateEditor(m_EditorCamera.transform, m_EditorCamera.camera);
+			m_PlayingScene->OnUpdateEditor(m_EditorCamera.transform, m_EditorCamera.camera, visible);
 			OpenGLAPI::UnbindFramebuffer();
 
 			{

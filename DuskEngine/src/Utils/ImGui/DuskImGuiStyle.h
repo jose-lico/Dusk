@@ -77,7 +77,7 @@ namespace DuskEngine
 		ImVec4 ButtonHovered			= ColorToImVec4(Grey2);
 		ImVec4 ButtonActive				= ColorToImVec4(Grey3);
 		ImVec4 Header					= ColorToImVec4(Dark);
-		ImVec4 HeaderHovered			= ColorToImVec4(Dark);
+		ImVec4 HeaderHovered			= ColorToImVec4(Grey3);
 		ImVec4 HeaderActive				= ColorToImVec4(Dark);
 		ImVec4 Separator				= ColorToImVec4(Dark);
 		ImVec4 SeparatorHovered			= ColorToImVec4(Dark);
@@ -115,7 +115,7 @@ namespace DuskEngine
 		float       DisabledAlpha;
 		ImVec2      WindowPadding;
 		float       WindowRounding;
-		float       WindowBorderSize;
+		float       WindowBorderSize			= 0.0f;
 		ImVec2      WindowMinSize;
 		ImVec2      WindowTitleAlign;
 		ImGuiDir    WindowMenuButtonPosition;
@@ -123,10 +123,10 @@ namespace DuskEngine
 		float       ChildBorderSize;
 		float       PopupRounding;
 		float       PopupBorderSize;
-		ImVec2      FramePadding;
+		ImVec2      FramePadding				= ImVec2(15.0f, 6.0f);
 		float       FrameRounding;
-		float       FrameBorderSize;
-		ImVec2      ItemSpacing;
+		float       FrameBorderSize				= 1.0f;
+		ImVec2      ItemSpacing					= ImVec2(8.0f, 9.0f);
 		ImVec2      ItemInnerSpacing;
 		ImVec2      CellPadding;
 		ImVec2      TouchExtraPadding;
@@ -140,7 +140,7 @@ namespace DuskEngine
 		float       TabRounding;
 		float       TabBorderSize;
 		float       TabMinWidthForCloseButton;
-		ImGuiDir    ColorButtonPosition;
+		ImGuiDir    ColorButtonPosition			= 0;
 		ImVec2      ButtonTextAlign;
 		ImVec2      SelectableTextAlign;
 		ImVec2      DisplayWindowPadding;

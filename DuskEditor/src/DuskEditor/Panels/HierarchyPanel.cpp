@@ -2,20 +2,62 @@
 
 #include "InspectorPanel.h"
 #include "SceneViewportPanel.h"
+#include "DuskEditor/Utils/EditorMeta.h"
 
 #include "Core/ECS/Components/Meta.h"
+#include "Utils/Serialization/Yaml.h"
 
 #include "imgui/imgui.h"
 #include "IconsForkAwesome.h"
 
+#include <filesystem>
+#include <fstream>
+
 namespace DuskEngine
 {
-	HierarchyPanel::HierarchyPanel(Ref<Scene>& scene, InspectorPanel& inspector, SceneViewportPanel& viewport)
-		:m_Scene(scene)
+	HierarchyPanel::HierarchyPanel(Ref<Scene>& scene, InspectorPanel& inspector, SceneViewportPanel& viewport, const std::string& projectPath)
+		:m_Scene(scene), m_ProjectPath(projectPath)
 	{
 		m_SelectableStatus.resize(m_Scene->m_Registry.size());
 		inspector.SelectedEntities(m_SelectedEntities);
 		viewport.SelectedEntities(m_SelectedEntities);
+
+		auto& registry = m_Scene->m_Registry;
+		auto view = registry.view<Meta>();
+		for (entt::entity entity : view)
+		{
+			Entity(entity, m_Scene.get()).AddComponent<EditorMeta>();
+		}
+
+		if (!std::filesystem::is_directory(m_ProjectPath + "/.editor") || !std::filesystem::exists(m_ProjectPath + "/.editor"))
+			std::filesystem::create_directory(m_ProjectPath + "/.editor");
+
+		if(std::filesystem::exists(m_ProjectPath + "/.editor/hierarchy.meta"))
+		{
+			// Load EditorMeta
+			YAML::Node hierarchy = YAML::LoadFile(m_ProjectPath + "/.editor/hierarchy.meta");
+
+			auto entities = hierarchy["Entities"];
+			for (auto entity : entities)
+			{
+				uuids::uuid handle = entity["Entity"].as<uuids::uuid>();
+				bool visible = entity["Visible"].as<bool>();
+				bool clickable = entity["Clickable"].as<bool>();
+				bool locked = entity["Locked"].as<bool>();
+
+				for (entt::entity ent : view)
+				{
+					auto& meta = m_Scene->m_Registry.get<Meta>(ent);
+					if(meta.entityHandle == handle)
+					{
+						auto& editor = m_Scene->m_Registry.get<EditorMeta>(ent);
+						editor.Visible = visible;
+						editor.Clickable = clickable;
+						editor.Locked = locked;
+					}
+				}
+			}
+		}
 	}
 
 	void HierarchyPanel::OnImGuiRender()
@@ -34,12 +76,19 @@ namespace DuskEngine
 		auto view = registry.view<Meta>();
 		
 		int entityIndex = 0;
-		
-		for (auto& entity : view)
+
+		for (entt::entity entity : view)
 		{
 			auto& meta = m_Scene->m_Registry.get<Meta>(entity);
 
-			ImGui::PushID(entityIndex);
+			bool changedStyle = false;
+			if(m_SelectableStatus[entityIndex])
+			{
+				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, { 0.12f, 0.12f, 0.12f, 1.0f });
+				changedStyle = true;
+			}
+
+			
 			if (ImGui::Selectable(meta.name.c_str(), m_SelectableStatus[entityIndex]))
 			{
 				selectedThisFrame = true;
@@ -118,7 +167,9 @@ namespace DuskEngine
 					m_SelectedEntities.push_back(Entity(entity, m_Scene.get()));
 				}
 			}
-			ImGui::PopID();
+			
+			if(changedStyle)
+				ImGui::PopStyleColor();
 
 			if (ImGui::BeginPopupContextItem())
 			{
@@ -148,9 +199,47 @@ namespace DuskEngine
 				ImGui::EndPopup();
 			}
 
+			if(ImGui::IsItemHovered())
+			{
+				auto& editor = m_Scene->m_Registry.get<EditorMeta>(entity);
+
+				ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 15.0f); 
+				ImGui::Text(editor.Visible ? ICON_FK_EYE : ICON_FK_EYE_SLASH);
+				if(ImGui::IsItemHovered() && ImGui::IsMouseReleased(0))
+				{
+					editor.Visible = !editor.Visible;
+
+					if (!std::filesystem::is_directory(m_ProjectPath + "/.editor") || !std::filesystem::exists(m_ProjectPath + "/.editor"))
+						std::filesystem::create_directory(m_ProjectPath + "/.editor");
+
+					if (!std::filesystem::exists(m_ProjectPath + "/.editor/hierarchy.meta"))
+						std::ofstream file(m_ProjectPath + "/.editor/hierarchy.meta");
+
+					YAML::Node hierarchy = YAML::LoadFile(m_ProjectPath + "/.editor/hierarchy.meta");
+					YAML::Emitter out;
+					out << YAML::BeginMap;
+					out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
+					for (entt::entity ent : view)
+					{
+						auto& ed = m_Scene->m_Registry.get<EditorMeta>(ent);
+						auto& m = m_Scene->m_Registry.get<Meta>(ent);
+						out << YAML::BeginMap;
+						out << YAML::Key << "Entity" << YAML::Value << m.entityHandle;
+						out << YAML::Key << "Visible" << YAML::Value << ed.Visible;
+						out << YAML::Key << "Clickable" << YAML::Value << ed.Clickable;
+						out << YAML::Key << "Locked" << YAML::Value << ed.Locked;
+						out << YAML::EndMap;
+					}
+					out << YAML::EndMap;
+					std::ofstream fout(m_ProjectPath + "/.editor/hierarchy.meta");
+					fout << out.c_str();
+				}
+			}
+
 			entityIndex++;
 		}
 
+		
 		if (unselectRequested && !selectedThisFrame)
 		{
 			std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
@@ -163,16 +252,13 @@ namespace DuskEngine
 			m_SelectedEntities.resize(0);
 
 			if (ImGui::MenuItem("Create Empty Entity"))
-			{
-				Entity emptyEntity = m_Scene->CreateEntity("New Entity");
-				SelectNewEntity(emptyEntity);
-			}
+				Entity emptyEntity = CreateNewEntity("New Entity");
 
 			if (ImGui::BeginMenu("Create Light"))
 			{
 				if (ImGui::MenuItem("Point Light"))
 				{
-					Entity lightEntity = m_Scene->CreateEntity("New Point Light");
+					Entity lightEntity = CreateNewEntity("New Point Light");
 					lightEntity.AddComponent<Light>().type = LightType::Point;
 
 					// TODO: While gizmos dont exist, lights have by default a MeshRenderer component with a default cube
@@ -180,13 +266,11 @@ namespace DuskEngine
 					MeshRenderer& meshRenderer = lightEntity.AddComponent<MeshRenderer>();
 					meshRenderer.materialHandle = 0;
 					meshRenderer.meshHandle = 1;
-
-					SelectNewEntity(lightEntity);
 				}
 
 				if (ImGui::MenuItem("Directional Light"))
 				{
-					Entity lightEntity = m_Scene->CreateEntity("New Directional Light");
+					Entity lightEntity = CreateNewEntity("New Directional Light");
 					lightEntity.AddComponent<Light>().type = LightType::Directional;
 
 					// TODO: While gizmos dont exist, lights have by default a MeshRenderer component with a default cube
@@ -194,8 +278,6 @@ namespace DuskEngine
 					MeshRenderer& meshRenderer = lightEntity.AddComponent<MeshRenderer>();
 					meshRenderer.materialHandle = 0;
 					meshRenderer.meshHandle = 1;
-
-					SelectNewEntity(lightEntity);
 				}
 
 				ImGui::EndMenu();
@@ -215,12 +297,17 @@ namespace DuskEngine
 		m_SelectableStatus.resize(m_Scene->m_Registry.size());
 	}
 
-	void HierarchyPanel::SelectNewEntity(Entity& newEntity)
+	Entity HierarchyPanel::CreateNewEntity(const std::string& name)
 	{
-		std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
+		Entity newEntity = m_Scene->CreateEntity(name);
+		newEntity.AddComponent<EditorMeta>();
+
 		m_SelectableStatus.resize(m_Scene->m_Registry.size());
+		std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
 
 		m_SelectableStatus[0] = true;
 		m_SelectedEntities.push_back(newEntity);
+
+		return newEntity;
 	}
 }

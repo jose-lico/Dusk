@@ -34,7 +34,7 @@ namespace DuskEngine
 		Entity* GetMainCamera();
 		Entity* FindEntity(const std::string& name);
 
-		void OnUpdateEditor(Transform& cameraTransform, Camera& camera);
+		void OnUpdateEditor(Transform& cameraTransform, Camera& camera, std::unordered_map<entt::entity, bool>& visible);
 
 		void OnAwakeRuntime();
 		void OnUpdateRuntime(bool running, bool paused = false);

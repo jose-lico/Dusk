@@ -44,7 +44,7 @@ namespace DuskEngine
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
 			// Skip the import folder
-			if (directoryEntry.path().filename() == ".import")
+			if (directoryEntry.path().filename() == ".import" || directoryEntry.path().filename() == ".editor")
 				continue;
 			if (directoryEntry.is_directory())
 			{
