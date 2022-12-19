@@ -106,7 +106,7 @@ namespace DuskEngine
 			m_GameViewportPanel = (GameViewportPanel*)m_Panels.back();
 			m_Panels.push_back(new SceneViewportPanel(&m_EditorSceneFB, &m_EditorCamera));
 			m_SceneViewportPanel = (SceneViewportPanel*)m_Panels.back();
-			m_Panels.push_back(new HierarchyPanel(m_EditingScene, inspector, *m_SceneViewportPanel, m_ProjectPath));
+			m_Panels.push_back(new HierarchyPanel(*m_EditingScene.get(), inspector, *m_SceneViewportPanel, m_ProjectPath));
 			m_HierarchyPanel = (HierarchyPanel*)m_Panels.back();
 			
 			auto play = [&]() {
@@ -116,7 +116,7 @@ namespace DuskEngine
 				m_PlayingScene->OnAwakeRuntime();
 				ImGui::SetWindowFocus(ICON_FK_GAMEPAD "  Game");
 				m_GameViewportPanel->SetCamera(m_PlayingScene->GetMainCamera());
-				m_HierarchyPanel->SetScene(m_PlayingScene); 
+				m_HierarchyPanel->SetScene(*m_PlayingScene.get()); 
 			};
 
 			auto stop = [&]() {
@@ -126,7 +126,7 @@ namespace DuskEngine
 				m_Paused = false;
 				ImGui::SetWindowFocus(ICON_FK_EYE "  Viewport");
 				m_GameViewportPanel->SetCamera(m_EditingScene->GetMainCamera());
-				m_HierarchyPanel->SetScene(m_EditingScene);
+				m_HierarchyPanel->SetScene(*m_EditingScene.get());
 			};
 
 			auto pause = [&]() {

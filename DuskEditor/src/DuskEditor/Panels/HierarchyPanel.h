@@ -1,7 +1,7 @@
 #pragma once
 #include "PanelBase.h"
 
-#include "Utils/Memory/Memory.h"
+#include "entt/entity/entity.hpp"
 
 #include <vector>
 #include <string>
@@ -16,20 +16,20 @@ namespace DuskEngine
 	class HierarchyPanel : public Panel
 	{
 	public:
-		HierarchyPanel(Ref<Scene>& scene, InspectorPanel& inspector, SceneViewportPanel& viewport, const std::string& projectPath);
+		HierarchyPanel(Scene& scene, InspectorPanel& inspector, SceneViewportPanel& viewport, const std::string& projectPath);
 		~HierarchyPanel() = default;
 
 		virtual void OnImGuiRender() override;
 
-		void SetScene(Ref<Scene>& scene);
+		void SetScene(Scene& scene);
 	private:
 		Entity CreateNewEntity(const std::string& name);
+		void SelectBlock(const entt::entity& entity);
 
-		Ref<Scene> m_Scene;
+		Scene* m_Scene;
 
 		std::vector<bool> m_SelectableStatus;
 		std::vector<Entity> m_SelectedEntities;
-
 		std::string m_ProjectPath;
 
 		friend class Scene;

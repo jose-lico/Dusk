@@ -15,6 +15,35 @@
 
 namespace DuskEngine
 {
+	inline YAML::Node YAMLLoadFile(const std::string& path)
+	{
+		try
+		{
+			YAML::Node hierarchy = YAML::LoadFile(path);
+			return hierarchy;
+		}
+		catch (...)
+		{
+			return YAML::Node();
+		}
+	}
+
+	template<typename T>
+	inline T YAMLDeserialize(YAML::Node node, const std::string& key, T defaultValue)
+	{
+		try
+		{
+			T value = node[key].as<T>();
+			return value;
+		}
+		catch (...)
+		{
+			ERR("Failed to deserialized node " + key);
+			T value = defaultValue;
+			return value;
+		}
+	}
+
 	inline
 	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& v)
 	{

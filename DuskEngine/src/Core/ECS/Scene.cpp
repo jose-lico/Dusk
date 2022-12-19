@@ -49,7 +49,15 @@ namespace DuskEngine
 	{
 		Entity entity = { m_Registry.create(), this };
 		entity.AddComponent<Transform>();
-		entity.AddComponent<Meta>(name);
+		entity.AddComponent<Meta>(name).entityHandle = uuids::uuid_system_generator{}();
+		return entity;
+	}
+
+	Entity Scene::CreateEntity(const std::string& name, const uuids::uuid& uuid)
+	{
+		Entity entity = { m_Registry.create(), this };
+		entity.AddComponent<Transform>();
+		entity.AddComponent<Meta>(name).entityHandle = uuid;
 		return entity;
 	}
 

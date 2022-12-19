@@ -20,6 +20,7 @@ namespace DuskEngine
 		~Scene();
 
 		Entity CreateEntity(const std::string& name);
+		Entity CreateEntity(const std::string& name, const uuids::uuid& uuid);
 		
 		void DestroyEntity(entt::entity handle);
 		void DestroyEntity(Entity entity);

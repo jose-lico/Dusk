@@ -15,45 +15,47 @@
 
 namespace DuskEngine
 {
-	HierarchyPanel::HierarchyPanel(Ref<Scene>& scene, InspectorPanel& inspector, SceneViewportPanel& viewport, const std::string& projectPath)
-		:m_Scene(scene), m_ProjectPath(projectPath)
+	HierarchyPanel::HierarchyPanel(Scene& scene, InspectorPanel& inspector, SceneViewportPanel& viewport, const std::string& projectPath)
+		:m_Scene(&scene), m_ProjectPath(projectPath)
 	{
 		m_SelectableStatus.resize(m_Scene->m_Registry.size());
+		
+		// let inspector and viewport know which entities are selected
 		inspector.SelectedEntities(m_SelectedEntities);
 		viewport.SelectedEntities(m_SelectedEntities);
 
 		auto& registry = m_Scene->m_Registry;
 		auto view = registry.view<Meta>();
+
+		// Add to each entity a meta component
 		for (entt::entity entity : view)
 		{
-			Entity(entity, m_Scene.get()).AddComponent<EditorMeta>();
+			Entity(entity, m_Scene).AddComponent<EditorMeta>();
 		}
 
-		if (!std::filesystem::is_directory(m_ProjectPath + "/.editor") || !std::filesystem::exists(m_ProjectPath + "/.editor"))
-			std::filesystem::create_directory(m_ProjectPath + "/.editor");
-
+		// Get editor meta information
 		if(std::filesystem::exists(m_ProjectPath + "/.editor/hierarchy.meta"))
 		{
-			// Load EditorMeta
-			YAML::Node hierarchy = YAML::LoadFile(m_ProjectPath + "/.editor/hierarchy.meta");
+			YAML::Node hierarchy = YAMLLoadFile(m_ProjectPath + "/.editor/hierarchy.meta");
 
-			auto entities = hierarchy["Entities"];
-			for (auto entity : entities)
+			YAML::Node entities = hierarchy["Entities"];
+			for (YAML::Node& entity : entities)
 			{
-				uuids::uuid handle = entity["Entity"].as<uuids::uuid>();
-				bool visible = entity["Visible"].as<bool>();
-				bool clickable = entity["Clickable"].as<bool>();
-				bool locked = entity["Locked"].as<bool>();
-
-				for (entt::entity ent : view)
+				if(entity["Entity"])
 				{
-					auto& meta = m_Scene->m_Registry.get<Meta>(ent);
-					if(meta.entityHandle == handle)
+					uuids::uuid handle = YAMLDeserialize<uuids::uuid>(entity, "Entity", uuids::uuid());
+					
+					for (entt::entity ent : view)
 					{
-						auto& editor = m_Scene->m_Registry.get<EditorMeta>(ent);
-						editor.Visible = visible;
-						editor.Clickable = clickable;
-						editor.Locked = locked;
+						Meta& meta = m_Scene->m_Registry.get<Meta>(ent);
+						if (meta.entityHandle == handle)
+						{
+							EditorMeta& editor = m_Scene->m_Registry.get<EditorMeta>(ent);
+							editor.Visible = YAMLDeserialize<bool>(entity, "Visible", true);
+							editor.Clickable = YAMLDeserialize<bool>(entity, "Clickable", true);
+							editor.Locked = YAMLDeserialize<bool>(entity, "Locked", false);
+							break;
+						}
 					}
 				}
 			}
@@ -69,80 +71,43 @@ namespace DuskEngine
 		bool selectedThisFrame = false;
 		bool unselectRequested = false;
 
+		// If mouse is left clikced, request an unselection (can be overwritten if clikced on an entity)
 		if (ImGui::IsMouseReleased(0) && ImGui::IsWindowHovered())
 			unselectRequested = true;
 
 		auto& registry = m_Scene->m_Registry;
 		auto view = registry.view<Meta>();
 		
-		int entityIndex = 0;
-
+		int32_t entityIndex = 0;
 		for (entt::entity entity : view)
 		{
 			auto& meta = m_Scene->m_Registry.get<Meta>(entity);
 
 			bool changedStyle = false;
+			// if an entity is selected, change its hovered color to be the same as when selected
 			if(m_SelectableStatus[entityIndex])
 			{
 				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, { 0.12f, 0.12f, 0.12f, 1.0f });
 				changedStyle = true;
 			}
 
-			
+			ImGui::PushID(entityIndex);
 			if (ImGui::Selectable(meta.name.c_str(), m_SelectableStatus[entityIndex]))
 			{
 				selectedThisFrame = true;
 
+				// if shift was held, select every entity between current and "furthest" one (direction doesnt matter, only "distance" in registry)
 				if(ImGui::GetIO().KeyShift)
 				{
-					if(m_SelectedEntities.size() > 0 && m_SelectedEntities[0].m_EntityHandle != entity)
-					{
-						Entity farthestEntity = m_SelectedEntities[0];
-						int32_t farthestEntityDistance = abs((int32_t)entity - (int32_t)farthestEntity.m_EntityHandle);
-						bool isFarthestEntityUp = (int32_t)entity - (int32_t)farthestEntity.m_EntityHandle > 0 ? true : false; // not used for now
-
-						for (Entity& selectedEntity : m_SelectedEntities)
-						{
-							int32_t distance = abs((int32_t)entity - (int32_t)selectedEntity.m_EntityHandle);
-							if(distance > farthestEntityDistance)
-							{
-								farthestEntity = selectedEntity;
-								farthestEntityDistance = distance;
-							}
-						}
-
-						std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
-						m_SelectedEntities.resize(0);
-
-						int32_t index = 0;
-						for (auto& ent : view)
-						{
-							if(isFarthestEntityUp)
-							{
-								if (ent <= entity && ent >= farthestEntity.m_EntityHandle)
-								{
-									m_SelectableStatus[index] = true;
-									m_SelectedEntities.push_back(Entity(ent, m_Scene.get()));
-								}
-							}
-							else
-							{
-								if (ent >= entity && ent <= farthestEntity.m_EntityHandle)
-								{
-									m_SelectableStatus[index] = true;
-									m_SelectedEntities.push_back(Entity(ent, m_Scene.get()));
-								}
-							}
-							
-							index++;
-						}
-					}
+					SelectBlock(entity);
 				}
+				// If shift and ctrl were not held, deselect all (DEFAULT behaviour)
 				else if (!ImGui::GetIO().KeyCtrl)
 				{
 					std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
 					m_SelectedEntities.resize(0);
 				}
+				// if ctrl and selecting a selected entity, deselect it
 				else if(ImGui::GetIO().KeyCtrl && m_SelectableStatus[entityIndex])
 				{
 					m_SelectableStatus[entityIndex] = false;
@@ -161,64 +126,78 @@ namespace DuskEngine
 					}
 				}
 
+				// if current entity is not selected and did not selected in this frame, select it (DEFAULT behaviour)
 				if (!m_SelectableStatus[entityIndex] && !deselected)
 				{
 					m_SelectableStatus[entityIndex] = true;
-					m_SelectedEntities.push_back(Entity(entity, m_Scene.get()));
+					m_SelectedEntities.push_back(Entity(entity, m_Scene));
 				}
 			}
-			
+			ImGui::PopID();
+
+			// if the syle was chnaged because this entity was selected, pop it
 			if(changedStyle)
 				ImGui::PopStyleColor();
 
+			// context menu to delete current entity/entities if multiple selected 
 			if (ImGui::BeginPopupContextItem())
 			{
-				if (m_SelectableStatus[entityIndex] == false && !ImGui::GetIO().KeyCtrl)
+				if (ImGui::GetIO().KeyShift)
+				{
+					SelectBlock(entity);
+				}
+				// if current entity not select and ctrl/shift not held, deselect all (DEFAULT behaviour)
+				else if (m_SelectableStatus[entityIndex] == false && !ImGui::GetIO().KeyCtrl)
 				{
 					std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
 					m_SelectedEntities.resize(0);
 				}
 
+				// if current entity not selected, select it
 				if (!m_SelectableStatus[entityIndex])
 				{
 					m_SelectableStatus[entityIndex] = true;
-					m_SelectedEntities.push_back(Entity(entity, m_Scene.get()));
+					m_SelectedEntities.push_back(Entity(entity, m_Scene));
 				}
 
+				// delete entity/entities
 				if (ImGui::MenuItem(m_SelectedEntities.size() == 1 ? "Delete Entity" : "Delete Entities"))
 				{
 					for (Entity& selectedEntity : m_SelectedEntities)
 					{
 						m_Scene->DestroyEntity(selectedEntity.m_EntityHandle);
+						TRACE("Deleted");
 					}
 
 					std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
 					m_SelectableStatus.resize(m_Scene->m_Registry.size());
 					m_SelectedEntities.resize(0);
+					ImGui::EndPopup();
+					break;
 				}
 				ImGui::EndPopup();
 			}
+
+			TRACE(std::to_string(m_SelectedEntities.size()));
 
 			if(ImGui::IsItemHovered())
 			{
 				auto& editor = m_Scene->m_Registry.get<EditorMeta>(entity);
 
+				// visible button
 				ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 15.0f); 
 				ImGui::Text(editor.Visible ? ICON_FK_EYE : ICON_FK_EYE_SLASH);
+
+				// alternative way to detected click, using text, since button would be covered by selectable
 				if(ImGui::IsItemHovered() && ImGui::IsMouseReleased(0))
 				{
 					editor.Visible = !editor.Visible;
 
-					if (!std::filesystem::is_directory(m_ProjectPath + "/.editor") || !std::filesystem::exists(m_ProjectPath + "/.editor"))
-						std::filesystem::create_directory(m_ProjectPath + "/.editor");
-
-					if (!std::filesystem::exists(m_ProjectPath + "/.editor/hierarchy.meta"))
-						std::ofstream file(m_ProjectPath + "/.editor/hierarchy.meta");
-
-					YAML::Node hierarchy = YAML::LoadFile(m_ProjectPath + "/.editor/hierarchy.meta");
+					// serialize editor metas to file (could probably append somehow)
 					YAML::Emitter out;
 					out << YAML::BeginMap;
 					out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
+					
 					for (entt::entity ent : view)
 					{
 						auto& ed = m_Scene->m_Registry.get<EditorMeta>(ent);
@@ -230,8 +209,12 @@ namespace DuskEngine
 						out << YAML::Key << "Locked" << YAML::Value << ed.Locked;
 						out << YAML::EndMap;
 					}
+					
 					out << YAML::EndMap;
+
+					std::filesystem::create_directory(m_ProjectPath + "/.editor");
 					std::ofstream fout(m_ProjectPath + "/.editor/hierarchy.meta");
+					
 					fout << out.c_str();
 				}
 			}
@@ -239,15 +222,17 @@ namespace DuskEngine
 			entityIndex++;
 		}
 
-		
+		// if an unselected was requested with left click on void space and no entity was selected
 		if (unselectRequested && !selectedThisFrame)
 		{
 			std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
 			m_SelectedEntities.resize(0);
 		}
 
+		// if right click on void
 		if (ImGui::BeginPopupContextWindow(0,1,false))
 		{
+			// reset selected entities
 			std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
 			m_SelectedEntities.resize(0);
 
@@ -289,9 +274,9 @@ namespace DuskEngine
 		ImGui::End();
 	}
 
-	void HierarchyPanel::SetScene(Ref<Scene>& scene)
+	void HierarchyPanel::SetScene(Scene& scene)
 	{
-		m_Scene = scene;
+		m_Scene = &scene;
 
 		m_SelectedEntities.resize(0);
 		m_SelectableStatus.resize(m_Scene->m_Registry.size());
@@ -309,5 +294,55 @@ namespace DuskEngine
 		m_SelectedEntities.push_back(newEntity);
 
 		return newEntity;
+	}
+
+	void HierarchyPanel::SelectBlock(const entt::entity& entity)
+	{
+		auto& registry = m_Scene->m_Registry;
+		auto view = registry.view<Meta>();
+
+		if (m_SelectedEntities.size() > 0)
+		{
+			Entity farthestEntity = m_SelectedEntities[0];
+			int32_t farthestEntityDistance = abs((int32_t)entity - (int32_t)farthestEntity.m_EntityHandle);
+
+			for (Entity& selectedEntity : m_SelectedEntities)
+			{
+				int32_t distance = abs((int32_t)entity - (int32_t)selectedEntity.m_EntityHandle);
+				if (distance > farthestEntityDistance)
+				{
+					farthestEntity = selectedEntity;
+					farthestEntityDistance = distance;
+				}
+			}
+
+			bool isFarthestEntityUp = (int32_t)entity - (int32_t)farthestEntity.m_EntityHandle > 0 ? true : false;
+
+			std::fill(m_SelectableStatus.begin(), m_SelectableStatus.end(), 0);
+			m_SelectedEntities.resize(0);
+
+			int32_t index = 0;
+			for (auto& ent : view)
+			{
+				if (isFarthestEntityUp)
+				{
+					if (ent <= entity && ent >= farthestEntity.m_EntityHandle)
+					{
+						m_SelectableStatus[index] = true;
+						m_SelectedEntities.push_back(Entity(ent, m_Scene));
+					}
+				}
+				else
+				{
+					if (ent >= entity && ent <= farthestEntity.m_EntityHandle)
+					{
+						m_SelectableStatus[index] = true;
+						m_SelectedEntities.push_back(Entity(ent, m_Scene));
+					}
+				}
+
+				index++;
+			}
+		}
 	}
 }

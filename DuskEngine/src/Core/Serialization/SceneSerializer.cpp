@@ -82,10 +82,9 @@ namespace DuskEngine
 				if (meta)
 					name = meta["name"].as<std::string>();
 
-				Entity deserializedEntity = scene->CreateEntity(name);
+				Entity deserializedEntity = scene->CreateEntity(name, entity["Entity"].as<uuids::uuid>());
 
 				deserializedEntity.GetComponent<Meta>().enabled = meta["enabled"].as<bool>();
-				deserializedEntity.GetComponent<Meta>().entityHandle = entity["Entity"].as<uuids::uuid>();
 
 				auto transform = entity["Transform"];
 				if (transform)
