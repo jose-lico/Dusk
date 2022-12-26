@@ -6,33 +6,33 @@
 #include "Core/Assets/Assets/Material.h"
 #include "Platform/OpenGL/OpenGLAPI.h"
 
-//#include "images/UnknownIcon.embedded"
-//#include "images/FolderIcon.embedded"
+#include "images/UnknownIcon.png.embedded"
+#include "images/FolderIcon.png.embedded"
 
 #include "IconsForkAwesome.h"
-
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
+#include "imgui/imgui.h"
 
 namespace DuskEngine
 {
-	const std::filesystem::path g_RootDirectory = "res";
 	std::filesystem::path* g_currentDir;
 
-	ContentBrowserPanel::ContentBrowserPanel()
+	ContentBrowserPanel::ContentBrowserPanel(const std::string& projectPath)
 	{
-		//m_FolderIcon = CreateTexture(g_FolderIcon);
-		//m_UnknownIcon = CreateTexture(g_UnknownIcon);
-
+		m_FolderIcon = CreateTexture(EMBEDDED_FOLDERICON);
+		m_UnknownIcon = CreateTexture(EMBEDDED_UNKNOWNICON);
+ 
+		m_RootDirectory = projectPath;
 		g_currentDir = &m_CurrentDirectory;
-		m_CurrentDirectory = g_RootDirectory;
-		//CreateDirectoryItems();
+		m_CurrentDirectory = m_RootDirectory;
+		CreateDirectoryItems();
 		//CreateDirectoryResources();
 	}
 
 	ContentBrowserPanel::~ContentBrowserPanel()
 	{
-		//OpenGLAPI::FreeTexture(m_FolderIcon);
-		//OpenGLAPI::FreeTexture(m_UnknownIcon);
+		OpenGLAPI::FreeTexture(m_FolderIcon);
+		OpenGLAPI::FreeTexture(m_UnknownIcon);
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()
@@ -40,15 +40,58 @@ namespace DuskEngine
 		ImGui::Begin(ICON_FK_FOLDER_OPEN "  Asset Browser");
 		CheckFocus();
 
-//		if (m_CurrentDirectory != std::filesystem::path(g_RootDirectory))
-//		{
-//			if (ImGui::Button("<-"))
-//			{
-//				m_CurrentDirectory = m_CurrentDirectory.parent_path();
-//				CreateDirectoryItems();
-//				CreateDirectoryResources();
-//			}
-//		}
+		if (m_CurrentDirectory != std::filesystem::path(m_RootDirectory))
+		{
+			if (ImGui::Button("<-"))
+			{
+				m_CurrentDirectory = m_CurrentDirectory.parent_path();
+				CreateDirectoryItems();
+				//CreateDirectoryResources();
+			}
+		}
+
+		ImGuiStyle& style = ImGui::GetStyle();
+
+		uint32_t buttonsCount = (uint32_t)m_DirEntries.size();
+		float windowVisibleX = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+		float buttonSize = 64.0f;
+		float buttonSpacing = 25.0f;
+		bool shouldBreak = false;
+
+		for (size_t i = 0; i < buttonsCount; i++)
+		{
+			auto& directoryEntry = m_DirEntries[i];
+
+			ImGui::BeginGroup();
+
+			ImGui::PushID(i);
+			if (directoryEntry.is_directory())
+			{
+				if (ImGui::ImageButton((ImTextureID)(uint64_t)m_FolderIcon.ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0))) 
+				{
+					m_CurrentDirectory /= directoryEntry.path().filename();
+					CreateDirectoryItems();
+					shouldBreak = true;
+				}
+			}
+			else
+			{
+				ImGui::ImageButton((ImTextureID)(uint64_t)m_UnknownIcon.ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0));
+			}
+			ImGui::PopID();
+
+			float lastButtonX = ImGui::GetItemRectMax().x;
+			float nextButtonX = lastButtonX + style.ItemSpacing.x + buttonSize + buttonSpacing * 2.0f;
+
+			ImGui::Text("%.12s", directoryEntry.path().filename().string().c_str());
+			ImGui::EndGroup();
+
+			if (i + 1 < buttonsCount && nextButtonX < windowVisibleX)
+				ImGui::SameLine(0.0f, buttonSpacing);
+
+			if (shouldBreak) break; // Only break here to avoid breaking ImGui state
+		}
+
 //
 //		int buttons_count = (int)m_DirEntries.size();
 //		ImGuiStyle& style = ImGui::GetStyle();
@@ -183,7 +226,7 @@ namespace DuskEngine
 	void ContentBrowserPanel::CreateDirectoryResources()
 	{
 		//AssetDatabase::CreateUUIDs(); // Will be reworked later...
-		m_Icons.resize(0);
+		//m_Icons.resize(0);
 
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{

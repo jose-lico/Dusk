@@ -1,10 +1,7 @@
 #pragma once
 #include "PanelBase.h"
 
-#include "Utils/Memory/Memory.h"
 #include "Platform/OpenGL/Texture.h"
-
-#include "imgui/imgui.h"
 
 #include <filesystem>
 #include <vector>
@@ -16,7 +13,7 @@ namespace DuskEngine
 	class ContentBrowserPanel : public Panel
 	{
 	public:
-		ContentBrowserPanel();
+		ContentBrowserPanel(const std::string& projectPath);
 		~ContentBrowserPanel();
 
 		virtual void OnImGuiRender() override;
@@ -24,9 +21,10 @@ namespace DuskEngine
 		void CreateDirectoryItems();
 		void CreateDirectoryResources();
 		std::filesystem::path m_CurrentDirectory;
+		std::filesystem::path m_RootDirectory;
 		
-		std::vector<Ref<Texture>> m_Icons;
 		std::vector<std::filesystem::directory_entry> m_DirEntries;
+
 		Texture m_FolderIcon, m_UnknownIcon;
 
 		unsigned int m_EditingName = -1;

@@ -178,8 +178,6 @@ namespace DuskEngine
 				ImGui::EndPopup();
 			}
 
-			TRACE(std::to_string(m_SelectedEntities.size()));
-
 			if(ImGui::IsItemHovered())
 			{
 				auto& editor = m_Scene->m_Registry.get<EditorMeta>(entity);

@@ -15,6 +15,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/string_cast.hpp"
 #include "IconsForkAwesome.h"
+#include "imgui/imgui.h"
 
 #include <cstdio>
 
@@ -101,7 +102,7 @@ namespace DuskEngine
 			m_Panels.push_back(new InspectorPanel(m_EditingScene->m_AssetHandler, m_EditorDB));
 			InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
 			m_Panels.push_back(new ConsolePanel());
-			m_Panels.push_back(new ContentBrowserPanel());
+			m_Panels.push_back(new ContentBrowserPanel(m_ProjectPath));
 			m_Panels.push_back(new GameViewportPanel(&m_PlayingSceneFB, *m_EditingScene->GetMainCamera(), &m_Playing));
 			m_GameViewportPanel = (GameViewportPanel*)m_Panels.back();
 			m_Panels.push_back(new SceneViewportPanel(&m_EditorSceneFB, &m_EditorCamera));

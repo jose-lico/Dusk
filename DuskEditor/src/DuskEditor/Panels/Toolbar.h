@@ -1,7 +1,6 @@
 #pragma once
 #include "PanelBase.h"
 
-#include "Utils/Memory/Memory.h"
 #include "Platform/OpenGL/Texture.h"
 
 #include <functional>
