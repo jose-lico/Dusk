@@ -88,6 +88,7 @@ namespace DuskEngine
 
 	Material AssetDatabase::LoadMaterial(const uuids::uuid& uuid, AssetHandler* handler)
 	{
+		auto path = m_PathsMap[uuid];
 		std::ifstream stream(m_PathsMap[uuid]);
 		std::stringstream strStream;
 

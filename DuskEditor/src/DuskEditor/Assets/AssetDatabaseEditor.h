@@ -34,9 +34,10 @@ namespace DuskEngine
 
 		void RegisterAssets();
 		void ImportAssets();
+		void CopyAsset(const std::filesystem::path& assetPath, const std::filesystem::path& currentDir);
 	private:
-		void RegisterAsset(const std::filesystem::directory_entry& directoryEntry);
-		void CreateMetaFile(const std::filesystem::directory_entry& directoryEntry);
+		void RegisterAsset(const std::filesystem::path& assetPath);
+		void CreateMetaFile(const std::filesystem::path& assetPath);
 		void AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid);
 
 		AssetDatabase* m_EngineDB;

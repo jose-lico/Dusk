@@ -77,28 +77,53 @@ namespace DuskEngine
 		{
 			ImportImage(std::get<0>(image), std::get<1>(image));
 		}
+		m_ImagesToImport.resize(0);
 	}
 
-	void AssetDatabaseEditor::RegisterAsset(const std::filesystem::directory_entry& directoryEntry)
+	void AssetDatabaseEditor::CopyAsset(const std::filesystem::path& assetPath, const std::filesystem::path& currentDir)
 	{
-		// If the file has been moved, removed or renamed, delete meta file.
-		if (!std::filesystem::exists(m_CurrentDirectory / directoryEntry.path().stem()))
+		std::filesystem::path targetPath = currentDir / assetPath.filename();
+
+		if (std::filesystem::is_directory(targetPath))
 		{
-			TRACE(directoryEntry.path().stem().string() + " has been moved, removed or renamed, deleting meta file.");
-			std::filesystem::remove(directoryEntry);
+			ERR("Only file dropping is supported");
 			return;
 		}
 
-		std::ifstream stream(directoryEntry.path());
+		// If the file exists, swap them
+		if (std::filesystem::exists(targetPath))
+		{
+			TRACE("Swapping asset " + assetPath.filename().string());
+			std::filesystem::remove(assetPath); // Compare md5s and so on
+			std::filesystem::copy(assetPath, currentDir);
+			// reimport
+		}
+		// else import
+		else
+		{
+			TRACE("Copying asset " + assetPath.filename().string());
+			std::filesystem::copy(assetPath, currentDir);
+			CreateMetaFile(targetPath);
+		}
+	}
+
+	void AssetDatabaseEditor::RegisterAsset(const std::filesystem::path& assetPath)
+	{
+		// If the file has been moved, removed or renamed, delete meta file.
+		if (!std::filesystem::exists(m_CurrentDirectory / assetPath.stem()))
+		{
+			TRACE(assetPath.stem().string() + " has been moved, removed or renamed, deleting meta file.");
+			std::filesystem::remove(assetPath);
+			return;
+		}
+
+		std::ifstream stream(assetPath);
 
 		YAML::Emitter out;
 		YAML::Node data = YAML::Load(stream);
 
-#ifdef DUSK_WINDOWS
-		std::string path = m_CurrentDirectory.string() + "\\" + directoryEntry.path().stem().string();
-#elif DUSK_LINUX
-		std::string path = m_CurrentDirectory.string() + "/" + directoryEntry.path().stem().string();
-#endif
+		std::filesystem::path path = m_CurrentDirectory / assetPath.stem();
+
 		uuids::uuid uuid = data["uuid"].as<uuids::uuid>();
 
 		m_EngineDB->m_PathsMap[uuid] = path;
@@ -107,9 +132,9 @@ namespace DuskEngine
 		AddToAssetDatabase(path, uuid);
 	}
 
-	void AssetDatabaseEditor::CreateMetaFile(const std::filesystem::directory_entry& directoryEntry)
+	void AssetDatabaseEditor::CreateMetaFile(const std::filesystem::path& assetPath)
 	{
-		LOG("Creating meta file for " + directoryEntry.path().filename().string());
+		LOG("Creating meta file for " + assetPath.filename().string());
 
 		uuids::uuid const id = uuids::uuid_system_generator{}();
 
@@ -117,15 +142,15 @@ namespace DuskEngine
 		out << YAML::BeginMap;
 		out << YAML::Key << "uuid" << YAML::Value << id;
 
-		std::string metaName = directoryEntry.path().string() + ".meta";
+		std::string metaName = assetPath.string() + ".meta";
 		std::ofstream fout(metaName.c_str());
 		fout << out.c_str();
 		fout.close();
 
-		m_EngineDB->m_UUIDsMap[directoryEntry.path()] = id;
-		m_EngineDB->m_PathsMap[id] = directoryEntry.path();
+		m_EngineDB->m_UUIDsMap[assetPath] = id;
+		m_EngineDB->m_PathsMap[id] = assetPath;
 
-		AddToAssetDatabase(directoryEntry.path(), id);
+		AddToAssetDatabase(assetPath, id);
 	}
 
 	void AssetDatabaseEditor::AddToAssetDatabase(const std::filesystem::path& path, const uuids::uuid& uuid)

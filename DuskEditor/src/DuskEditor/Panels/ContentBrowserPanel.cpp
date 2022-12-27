@@ -1,5 +1,7 @@
 #include "ContentBrowserPanel.h"
 
+#include "DuskEditor/Assets/AssetDatabaseEditor.h"
+
 #include "Core/Application/Core.h"
 #include "Core/Application/Application.h"
 #include "Core/Assets/AssetDatabase.h"
@@ -16,15 +18,21 @@
 
 namespace DuskEngine
 {
-	std::filesystem::path* g_currentDir;
+	std::filesystem::path* g_CurrentDir;
+	AssetDatabaseEditor* g_Database = nullptr;
+	ContentBrowserPanel* g_Panel = nullptr;
 
-	ContentBrowserPanel::ContentBrowserPanel(const std::string& projectPath)
+	ContentBrowserPanel::ContentBrowserPanel(const std::string& projectPath, AssetDatabaseEditor& database)
 	{
+		m_Database = &database;
+		g_Database = m_Database;
+		g_Panel = this;
+
 		m_FolderIcon = CreateTexture(EMBEDDED_FOLDERICON);
 		m_UnknownIcon = CreateTexture(EMBEDDED_UNKNOWNICON);
  
 		m_RootDirectory = projectPath;
-		g_currentDir = &m_CurrentDirectory;
+		g_CurrentDir = &m_CurrentDirectory;
 		m_CurrentDirectory = m_RootDirectory;
 
 		m_IconsInProject.reserve(50);
@@ -87,11 +95,13 @@ namespace DuskEngine
 			}
 			else if (directoryEntry.path().extension() == ".png" || directoryEntry.path().extension() == ".jpg")
 			{
-				ImGui::ImageButton((ImTextureID)(uint64_t)m_IconsInDirectory[textureIndex++].ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0));
+				if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconsInDirectory[textureIndex++].ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0)))
+					TRACE("Pressed unkown");
 			}
 			else
 			{
-				ImGui::ImageButton((ImTextureID)(uint64_t)m_UnknownIcon.ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0));
+				if (ImGui::ImageButton((ImTextureID)(uint64_t)m_UnknownIcon.ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0)))
+					TRACE("Pressed unknown");
 			}
 			ImGui::PopID();
 
@@ -234,7 +244,8 @@ namespace DuskEngine
 
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
-			m_DirEntries.push_back(directoryEntry);
+			if(directoryEntry.path().extension() != ".meta")
+				m_DirEntries.push_back(directoryEntry);
 		}
 	}
 
@@ -258,25 +269,16 @@ namespace DuskEngine
 	void DropCallback(GLFWwindow* window, int count, const char** paths)
 	{
 		TRACE("Drop callback");
-//		for (int i = 0; i < count; i++)
-//		{
-//			std::filesystem::path path = paths[i];
-//#ifdef DUSK_WINDOWS
-//			std::string targetPath =  (*g_currentDir).string() + "\\" + path.filename().string();
-//#elif DUSK_LINUX
-//			std::string targetPath = (*g_currentDir).string() + "/" + path.filename().string();
-//#endif
-//
-//			if(!std::filesystem::exists(targetPath))
-//			{
-//				std::filesystem::copy(paths[i], *g_currentDir);
-//				Application::Get().GetAssetDatabase().CreateResource(targetPath);
-//			}
-//			else
-//			{
-//				std::filesystem::remove(targetPath);
-//				std::filesystem::copy(paths[i], *g_currentDir);
-//			}			
-//		}
+
+		for (int i = 0; i < count; i++)
+		{
+			std::filesystem::path path = paths[i];
+
+			g_Database->CopyAsset(path, *g_CurrentDir);			
+		}
+
+		g_Database->ImportAssets();
+		g_Panel->CreateDirectoryItems();
+		g_Panel->CreateDirectoryResources();
 	}
 }

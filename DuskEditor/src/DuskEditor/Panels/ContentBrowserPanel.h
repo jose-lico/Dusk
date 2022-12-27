@@ -15,25 +15,28 @@ namespace uuids
 namespace DuskEngine
 {
 	struct Texture;
+	class AssetDatabaseEditor;
 
 	class ContentBrowserPanel : public Panel
 	{
 	public:
-		ContentBrowserPanel(const std::string& projectPath);
+		ContentBrowserPanel(const std::string& projectPath, AssetDatabaseEditor& database);
 		~ContentBrowserPanel();
 
 		virtual void OnImGuiRender() override;
-	private:
 		void CreateDirectoryItems();
 		void CreateDirectoryResources();
+	private:
+		Texture m_FolderIcon, m_UnknownIcon;
+		AssetDatabaseEditor* m_Database;
+
 		std::filesystem::path m_CurrentDirectory;
 		std::filesystem::path m_RootDirectory;
 		
 		std::vector<std::filesystem::directory_entry> m_DirEntries;
-
-		Texture m_FolderIcon, m_UnknownIcon;
 		std::vector<Texture> m_IconsInDirectory;
 		std::unordered_map<uuids::uuid ,Texture> m_IconsInProject;
+
 
 		unsigned int m_EditingName = -1;
 		std::filesystem::path m_EditingPath;
