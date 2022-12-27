@@ -5,6 +5,7 @@
 #include "Core/Assets/AssetDatabase.h"
 #include "Core/Assets/Assets/Material.h"
 #include "Platform/OpenGL/OpenGLAPI.h"
+#include "Utils/Profiling/Timer.h"
 
 #include "images/UnknownIcon.png.embedded"
 #include "images/FolderIcon.png.embedded"
@@ -25,8 +26,11 @@ namespace DuskEngine
 		m_RootDirectory = projectPath;
 		g_currentDir = &m_CurrentDirectory;
 		m_CurrentDirectory = m_RootDirectory;
+
+		//m_Icons.resize(50);
+
 		CreateDirectoryItems();
-		//CreateDirectoryResources();
+		CreateDirectoryResources();
 	}
 
 	ContentBrowserPanel::~ContentBrowserPanel()
@@ -46,13 +50,14 @@ namespace DuskEngine
 			{
 				m_CurrentDirectory = m_CurrentDirectory.parent_path();
 				CreateDirectoryItems();
-				//CreateDirectoryResources();
+				CreateDirectoryResources();
 			}
 		}
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
 		uint32_t buttonsCount = (uint32_t)m_DirEntries.size();
+		uint32_t textureIndex = 0;
 		float windowVisibleX = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 		float buttonSize = 64.0f;
 		float buttonSpacing = 25.0f;
@@ -71,8 +76,13 @@ namespace DuskEngine
 				{
 					m_CurrentDirectory /= directoryEntry.path().filename();
 					CreateDirectoryItems();
+					CreateDirectoryResources();
 					shouldBreak = true;
 				}
+			}
+			else if (directoryEntry.path().extension() == ".png" || directoryEntry.path().extension() == ".jpg")
+			{
+				ImGui::ImageButton((ImTextureID)(uint64_t)m_Icons[textureIndex++].ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0));
 			}
 			else
 			{
@@ -225,15 +235,13 @@ namespace DuskEngine
 
 	void ContentBrowserPanel::CreateDirectoryResources()
 	{
-		//AssetDatabase::CreateUUIDs(); // Will be reworked later...
-		//m_Icons.resize(0);
-
+		Timer timer("CreateDirectoryResources");
+		m_Icons.resize(0);
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
-			auto extension = directoryEntry.path().extension();
-			if(extension == ".png" || extension == ".jpg")
+			if(directoryEntry.path().extension() == ".png" || directoryEntry.path().extension() == ".jpg")
 			{
-				//m_Icons.push_back(MakeRef<Texture>(directoryEntry.path().string()));
+				m_Icons.push_back(CreateTexture(directoryEntry.path(), Application::Get().GetAssetDatabase().GetUUID(directoryEntry.path()), m_RootDirectory.string()));
 			}
 		}
 	}

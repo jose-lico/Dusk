@@ -26,6 +26,7 @@ namespace DuskEngine
 		std::vector<std::filesystem::directory_entry> m_DirEntries;
 
 		Texture m_FolderIcon, m_UnknownIcon;
+		std::vector<Texture> m_Icons;
 
 		unsigned int m_EditingName = -1;
 		std::filesystem::path m_EditingPath;
