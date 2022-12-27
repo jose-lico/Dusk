@@ -27,7 +27,7 @@ namespace DuskEngine
 		g_currentDir = &m_CurrentDirectory;
 		m_CurrentDirectory = m_RootDirectory;
 
-		//m_Icons.resize(50);
+		m_IconsInProject.reserve(50);
 
 		CreateDirectoryItems();
 		CreateDirectoryResources();
@@ -37,6 +37,11 @@ namespace DuskEngine
 	{
 		OpenGLAPI::FreeTexture(m_FolderIcon);
 		OpenGLAPI::FreeTexture(m_UnknownIcon);
+
+		for (std::pair<uuids::uuid, Texture> texture : m_IconsInProject)
+		{
+			OpenGLAPI::FreeTexture(texture.second);
+		}
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()
@@ -63,7 +68,7 @@ namespace DuskEngine
 		float buttonSpacing = 25.0f;
 		bool shouldBreak = false;
 
-		for (size_t i = 0; i < buttonsCount; i++)
+		for (uint32_t i = 0; i < buttonsCount; i++)
 		{
 			auto& directoryEntry = m_DirEntries[i];
 
@@ -82,7 +87,7 @@ namespace DuskEngine
 			}
 			else if (directoryEntry.path().extension() == ".png" || directoryEntry.path().extension() == ".jpg")
 			{
-				ImGui::ImageButton((ImTextureID)(uint64_t)m_Icons[textureIndex++].ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::ImageButton((ImTextureID)(uint64_t)m_IconsInDirectory[textureIndex++].ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0));
 			}
 			else
 			{
@@ -236,37 +241,42 @@ namespace DuskEngine
 	void ContentBrowserPanel::CreateDirectoryResources()
 	{
 		Timer timer("CreateDirectoryResources");
-		m_Icons.resize(0);
+		m_IconsInDirectory.resize(0);
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
 			if(directoryEntry.path().extension() == ".png" || directoryEntry.path().extension() == ".jpg")
 			{
-				m_Icons.push_back(CreateTexture(directoryEntry.path(), Application::Get().GetAssetDatabase().GetUUID(directoryEntry.path()), m_RootDirectory.string()));
+				auto& uuid = Application::Get().GetAssetDatabase().GetUUID(directoryEntry.path());
+				if (m_IconsInProject.find(uuid) == m_IconsInProject.end())
+					m_IconsInProject[uuid] = CreateTexture(directoryEntry.path(), uuid, m_RootDirectory.string());
+				
+				m_IconsInDirectory.push_back(m_IconsInProject[uuid]);
 			}
 		}
 	}
 
 	void DropCallback(GLFWwindow* window, int count, const char** paths)
 	{
-		for (int i = 0; i < count; i++)
-		{
-			std::filesystem::path path = paths[i];
-#ifdef DUSK_WINDOWS
-			std::string targetPath =  (*g_currentDir).string() + "\\" + path.filename().string();
-#elif DUSK_LINUX
-			std::string targetPath = (*g_currentDir).string() + "/" + path.filename().string();
-#endif
-
-			if(!std::filesystem::exists(targetPath))
-			{
-				std::filesystem::copy(paths[i], *g_currentDir);
-				Application::Get().GetAssetDatabase().CreateResource(targetPath);
-			}
-			else
-			{
-				std::filesystem::remove(targetPath);
-				std::filesystem::copy(paths[i], *g_currentDir);
-			}			
-		}
+		TRACE("Drop callback");
+//		for (int i = 0; i < count; i++)
+//		{
+//			std::filesystem::path path = paths[i];
+//#ifdef DUSK_WINDOWS
+//			std::string targetPath =  (*g_currentDir).string() + "\\" + path.filename().string();
+//#elif DUSK_LINUX
+//			std::string targetPath = (*g_currentDir).string() + "/" + path.filename().string();
+//#endif
+//
+//			if(!std::filesystem::exists(targetPath))
+//			{
+//				std::filesystem::copy(paths[i], *g_currentDir);
+//				Application::Get().GetAssetDatabase().CreateResource(targetPath);
+//			}
+//			else
+//			{
+//				std::filesystem::remove(targetPath);
+//				std::filesystem::copy(paths[i], *g_currentDir);
+//			}			
+//		}
 	}
 }
