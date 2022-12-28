@@ -270,6 +270,9 @@ namespace DuskEngine
 	{
 		TRACE("Drop callback");
 
+		if (!g_Panel)
+			return;
+
 		for (int i = 0; i < count; i++)
 		{
 			std::filesystem::path path = paths[i];

@@ -84,26 +84,27 @@ namespace DuskEngine
 	{
 		std::filesystem::path targetPath = currentDir / assetPath.filename();
 
-		if (std::filesystem::is_directory(targetPath))
-		{
-			ERR("Only file dropping is supported");
-			return;
-		}
-
-		// If the file exists, swap them
 		if (std::filesystem::exists(targetPath))
 		{
 			TRACE("Swapping asset " + assetPath.filename().string());
-			std::filesystem::remove(assetPath); // Compare md5s and so on
-			std::filesystem::copy(assetPath, currentDir);
-			// reimport
+			std::filesystem::remove_all(targetPath);
+			std::filesystem::copy(assetPath, targetPath, std::filesystem::copy_options::recursive);
 		}
-		// else import
 		else
 		{
 			TRACE("Copying asset " + assetPath.filename().string());
-			std::filesystem::copy(assetPath, currentDir);
+			std::filesystem::copy(assetPath, targetPath, std::filesystem::copy_options::recursive);
+		}
+
+		if (!std::filesystem::is_directory(targetPath))
+		{
+			std::filesystem::remove(targetPath.string() + ".meta"); // Create new meta file for both copy and swap. Perhaps not necessary for swap
 			CreateMetaFile(targetPath);
+		}
+		else
+		{
+			m_CurrentDirectory = targetPath;
+			RegisterAssets();
 		}
 	}
 
