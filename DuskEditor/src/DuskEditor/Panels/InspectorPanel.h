@@ -25,12 +25,6 @@ namespace DuskEngine
 		AssetDatabase* m_DB;
 		AssetDatabaseEditor* m_EditorDB;
 
-		static void MetaInspector(std::vector<Meta*>& metas);
-		static void TransformInspector(std::vector<Transform*>& transforms);
-		static void CameraInspector(std::vector<Camera*>& cameras);
-		static void LightInspector(std::vector<Light*>& lights);
-
-		void MaterialInspector(std::vector<MeshRenderer*>& materials);
 		void ScriptInspector(std::vector<Script*>& scripts);
 	};
 }

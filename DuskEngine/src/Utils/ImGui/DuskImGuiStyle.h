@@ -140,7 +140,7 @@ namespace DuskEngine
 		float       TabRounding;
 		float       TabBorderSize;
 		float       TabMinWidthForCloseButton;
-		ImGuiDir    ColorButtonPosition			= 0;
+		ImGuiDir    ColorButtonPosition			= 1;
 		ImVec2      ButtonTextAlign;
 		ImVec2      SelectableTextAlign;
 		ImVec2      DisplayWindowPadding;

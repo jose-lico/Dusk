@@ -158,6 +158,7 @@ namespace DuskEngine
 	{
 		Asset* resource = new Asset();
 		resource->Path = path;
+		resource->Name = path.filename().stem().string();
 		resource->UUID = uuid;
 
 		std::string extension = path.extension().string();
