@@ -17,14 +17,20 @@ namespace DuskEngine
 		~InspectorPanel() = default;
 
 		virtual void OnImGuiRender() override;
-		void SelectedEntities(std::vector<Entity>& entities) { m_SelectedEntities = &entities; }
+		inline void SelectedEntities(std::vector<Entity>& entities) { m_SelectedEntities = &entities; }
 	private:
+		void MetaInspector();
+		void TransformInspector();
+		void CameraInspector();
+		void LightInspector();
+		// DrawTransformInspector();
+
 		std::vector<Entity>* m_SelectedEntities = nullptr;
 
 		AssetHandler* m_AssetHandler;
 		AssetDatabase* m_DB;
 		AssetDatabaseEditor* m_EditorDB;
 
-		void ScriptInspector(std::vector<Script*>& scripts);
+		static void ScriptInspector(std::vector<Script*>& scripts);
 	};
 }

@@ -21,14 +21,8 @@
 
 namespace DuskEngine
 {
-	template<typename T, typename UIFunction>
-	static void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, UIFunction function);
-
-	void MetaInspector(std::vector<Meta*>& metas);
-	void TransformInspector(std::vector<Transform*>& transforms);
-	void CameraInspector(std::vector<Camera*>& cameras);
-	void LightInspector(std::vector<Light*>& lights);
-	void MaterialInspector(std::vector<MeshRenderer*>& meshes);
+	template<typename T>
+	bool DrawComponentNode(const char* name, std::vector<Entity>& selectedEntities, std::vector<T*>& components);
 
 	InspectorPanel::InspectorPanel(AssetHandler* assetHandler, AssetDatabaseEditor* db)
 		:m_AssetHandler(assetHandler), m_EditorDB(db)
@@ -108,10 +102,15 @@ namespace DuskEngine
 				}
 			}
 
-			DrawComponent<Meta>(ICON_FK_CUBE "  Meta", *m_SelectedEntities, MetaInspector);
-			DrawComponent<Transform>(ICON_FK_ARROWS_ALT "  Transform", *m_SelectedEntities, TransformInspector);
-			DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
-			DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
+			MetaInspector();
+			TransformInspector();
+			CameraInspector();
+			LightInspector();
+
+			//DrawComponent<Meta>(ICON_FK_CUBE "  Meta", *m_SelectedEntities, MetaInspector);
+			//DrawComponent<Transform>(ICON_FK_ARROWS_ALT "  Transform", *m_SelectedEntities, TransformInspector);
+			//DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
+			//DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
 			//DrawComponent<MeshRenderer, std::vector<MeshRenderer*>& ,InspectorPanel, &InspectorPanel::MaterialInspector>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, this);
 
 			/*std::string script = ICON_FK_PENCIL_SQUARE_O "  Lua Script - ";
@@ -122,209 +121,179 @@ namespace DuskEngine
 		ImGui::End();
 	}
 
-	template<typename T, typename UIFunction>
-	static void DrawComponent(const char* name, std::vector<Entity>& m_SelectedEntities, UIFunction function)
+	void InspectorPanel::MetaInspector()
 	{
-		std::vector<T*> components;
+		std::vector<Meta*> metas;
 
-		for (auto& entity : m_SelectedEntities)
+		if (DrawComponentNode<Meta>(ICON_FK_CUBE "  Meta", *m_SelectedEntities, metas))
 		{
-			if (!entity.HasComponent<T>())
-				return; // All selected entities need to have component, else skip component entirely
-
-			components.push_back(&entity.GetComponent<T>());
-		}
-
-		ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
-
-		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed |
-			ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
-
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name);
-		ImGui::PopStyleVar();
-
-		auto& style = ImGui::GetStyle();
-		float lineHeight = ImGui::GetFontSize() + style.FramePadding.y;
-
-		ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
-		if (ImGui::Button(ICON_FK_COG, ImVec2{ lineHeight, lineHeight }))
-		{
-			ImGui::OpenPopup("ComponentSettings");
-		}
-
-		if (ImGui::BeginPopup("ComponentSettings"))
-		{
-			if (ImGui::MenuItem("Remove component"))
+			if (metas.size() == 1)
 			{
-				for (auto ent : m_SelectedEntities)
-					ent.RemoveComponent<T>();
+				// TODO: Only change name on enter
+				char buffer[64];
+				sprintf(buffer, metas[0]->name.c_str());
+				if (ImGui::InputText("Name", buffer, IM_ARRAYSIZE(buffer)))
+				{
+					metas[0]->name = buffer;
+				}
 
-				ImGui::EndPopup();
-				if (open) ImGui::TreePop();
-				return;
+				ImGui::Checkbox("Enabled", &metas[0]->enabled);
 			}
+			else
+			{
+				ImGui::Text("Name change not available on multiple entites");
 
-			ImGui::EndPopup();
-		}
-
-		if (open)
-		{
-			function(components);
+				// TODO: If all enabled states are the same, show enabled/disabled. Else, show checkbox with a line like in unity
+				// Checking the box in that state turns all either disabled or enabled
+				bool enabled = metas[0]->enabled;
+				if (ImGui::Checkbox("Enabled", &enabled))
+					for (auto& m : metas)
+						m->enabled = enabled;
+			}
 			ImGui::TreePop();
 		}
 	}
 
-	void MetaInspector(std::vector<Meta*>& metas)
+	void InspectorPanel::TransformInspector()
 	{
-		if (metas.size() == 1)
+		std::vector<Transform*> transforms;
+		
+		if (DrawComponentNode<Transform>(ICON_FK_ARROWS_ALT "  Transform", *m_SelectedEntities, transforms))
 		{
-			// TODO: Only change name on enter
-			char buffer[64];
-			sprintf(buffer, metas[0]->name.c_str());
-			if (ImGui::InputText("Name", buffer, IM_ARRAYSIZE(buffer)))
+			if (transforms.size() == 1)
 			{
-				metas[0]->name = buffer;
+				// TODO: better transform component, rotation as quaternion
+				ImGui::DragFloat3("Position", &(transforms[0]->position[0]), .01f);
+
+				glm::vec3 rotation = glm::degrees(transforms[0]->rotation);
+				if (ImGui::DragFloat3("Rotation", &rotation[0], 0.1f))
+					transforms[0]->rotation = glm::radians(rotation);
+
+				ImGui::DragFloat3("Scale", &(transforms[0]->scale[0]), .01f);
 			}
+			else
+			{
+				// TODO: Common numbers are displayed normally with their value, others either as 0.0f or something else
+				glm::vec3 translation(0.0f);
+				ImGui::DragFloat3("Position", &translation[0], .01f);
 
-			ImGui::Checkbox("Enabled", &metas[0]->enabled);
-		}
-		else
-		{
-			ImGui::Text("Name change not available on multiple entites");
+				glm::vec3 rotation(0.0f);
+				ImGui::DragFloat3("Rotation", &rotation[0], .01f);
 
-			// TODO: If all enabled states are the same, show enabled/disabled. Else, show checkbox with a line like in unity
-			// Checking the box in that state turns all either disabled or enabled
-			bool enabled = metas[0]->enabled;
-			if (ImGui::Checkbox("Enabled", &enabled))
-				for (auto& m : metas)
-					m->enabled = enabled;
+				glm::vec3 scale(0.0f);
+				ImGui::DragFloat3("Scale", &scale[0], .01f);
+
+				for (auto& t : transforms)
+				{
+					t->position += translation;
+					t->rotation += rotation;
+					t->scale += scale;
+				}
+			}
+			ImGui::TreePop();
 		}
 	}
 
-	void TransformInspector(std::vector<Transform*>& transforms)
+	void InspectorPanel::CameraInspector()
 	{
-		if (transforms.size() == 1)
+		std::vector<Camera*> cameras;
+
+		if (DrawComponentNode<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, cameras))
 		{
-			// TODO: better transform component, rotation as quaternion
-			ImGui::DragFloat3("Position", &(transforms[0]->position[0]), .01f);
-
-			glm::vec3 rotation = glm::degrees(transforms[0]->rotation);
-			if (ImGui::DragFloat3("Rotation", &rotation[0], 0.1f))
-				transforms[0]->rotation = glm::radians(rotation);
-
-			ImGui::DragFloat3("Scale", &(transforms[0]->scale[0]), .01f);
-		}
-		else
-		{
-			// TODO: Common numbers are displayed normally with their value, others either as 0.0f or something else
-			glm::vec3 translation(0.0f);
-			ImGui::DragFloat3("Position", &translation[0], .01f);
-
-			glm::vec3 rotation(0.0f);
-			ImGui::DragFloat3("Rotation", &rotation[0], .01f);
-
-			glm::vec3 scale(0.0f);
-			ImGui::DragFloat3("Scale", &scale[0], .01f);
-
-			for (auto& t : transforms)
+			if (cameras.size() == 1)
 			{
-				t->position += translation;
-				t->rotation += rotation;
-				t->scale += scale;
+				// TODO: Add projection type and other properties
+				ImGui::Checkbox("Primary Camera", &(cameras[0]->main));
 			}
-		}
-	}
-
-	void CameraInspector(std::vector<Camera*>& cameras)
-	{
-		if (cameras.size() == 1)
-		{
-			// TODO: Add projection type and other properties
-			ImGui::Checkbox("Primary Camera", &(cameras[0]->main));
-		}
-		else
-		{
-			// TODO: Multiple camera edit
-			ImGui::Text("Camera inspection not available on multiple entites");
+			else
+			{
+				// TODO: Multiple camera edit
+				ImGui::Text("Camera inspection not available on multiple entites");
+			}
+			ImGui::TreePop();
 		}
 	}
 	
-	void LightInspector(std::vector<Light*>& lights)
-	{
+	void InspectorPanel::LightInspector()
+	{	
 		const char* types[] = { "Directional", "Point" };
 		const char* comboLabel = types[0];
 		static int itemCurrentIdx = 0;
 
-		if (lights.size() == 1)
+		std::vector<Light*> lights;
+		if (DrawComponentNode<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, lights))
 		{
-			switch (lights[0]->type)
+			if (lights.size() == 1)
 			{
-			case LightType::Point:
-				comboLabel = "Point";
-				itemCurrentIdx = 1;
-				break;
-			case LightType::Directional:
-				comboLabel = "Directional";
-				itemCurrentIdx = 0;
-				break;
-			}
-
-			if (ImGui::BeginCombo("Type", comboLabel))
-			{
-				for (uint32_t i = 0; i < IM_ARRAYSIZE(types); i++)
+				switch (lights[0]->type)
 				{
-					const bool isSelected = (itemCurrentIdx == i);
-					if (ImGui::Selectable(types[i], isSelected))
-					{
-						itemCurrentIdx = i;
-						if (i == 0)
-							lights[0]->type = LightType::Directional;
-						else if (i == 1)
-							lights[0]->type = LightType::Point;
-					}
-
-					if (isSelected)
-						ImGui::SetItemDefaultFocus();
+				case LightType::Point:
+					comboLabel = "Point";
+					itemCurrentIdx = 1;
+					break;
+				case LightType::Directional:
+					comboLabel = "Directional";
+					itemCurrentIdx = 0;
+					break;
 				}
-				ImGui::EndCombo();
-			}
 
-			ImGui::ColorEdit3("Light Color", &(lights[0]->color[0]));
-		}
-		else
-		{
-			// TODO: fix default selected type, text shows directional (index 0) actuall index can be smth else
-			if (ImGui::BeginCombo("Type", comboLabel))
-			{
-				for (uint32_t i = 0; i < IM_ARRAYSIZE(types); i++)
+				if (ImGui::BeginCombo("Type", comboLabel))
 				{
-					const bool is_selected = (itemCurrentIdx == i);
-					if (ImGui::Selectable(types[i], is_selected))
+					for (uint32_t i = 0; i < IM_ARRAYSIZE(types); i++)
 					{
-						itemCurrentIdx = i;
+						const bool isSelected = (itemCurrentIdx == i);
+						if (ImGui::Selectable(types[i], isSelected))
+						{
+							itemCurrentIdx = i;
+							if (i == 0)
+								lights[0]->type = LightType::Directional;
+							else if (i == 1)
+								lights[0]->type = LightType::Point;
+						}
 
-						LightType type;
-
-						if (i == 0)
-							type = LightType::Directional;
-						else if (i == 1)
-							type = LightType::Point;
-
-						for (auto& l : lights)
-							l->type = type;
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
 					}
-
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();
+					ImGui::EndCombo();
 				}
-				ImGui::EndCombo();
-			}
 
-			glm::vec3 color = lights[0]->color;
-			if (ImGui::ColorEdit3("Light Color", &color[0])) 
-				for (auto& l : lights)
-					l->color = color;
+				ImGui::ColorEdit3("Light Color", &(lights[0]->color[0]));
+			}
+			else
+			{
+				// TODO: fix default selected type, text shows directional (index 0) actuall index can be smth else
+				if (ImGui::BeginCombo("Type", comboLabel))
+				{
+					for (uint32_t i = 0; i < IM_ARRAYSIZE(types); i++)
+					{
+						const bool is_selected = (itemCurrentIdx == i);
+						if (ImGui::Selectable(types[i], is_selected))
+						{
+							itemCurrentIdx = i;
+
+							LightType type;
+
+							if (i == 0)
+								type = LightType::Directional;
+							else if (i == 1)
+								type = LightType::Point;
+
+							for (auto& l : lights)
+								l->type = type;
+						}
+
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();
+					}
+					ImGui::EndCombo();
+				}
+
+				glm::vec3 color = lights[0]->color;
+				if (ImGui::ColorEdit3("Light Color", &color[0]))
+					for (auto& l : lights)
+						l->color = color;
+			}
+			ImGui::TreePop();
 		}
 	}
 
@@ -531,6 +500,7 @@ namespace DuskEngine
 
 	void InspectorPanel::ScriptInspector(std::vector<Script*>& scripts)
 	{
+		//m_AssetHandler->
 		if (scripts.size() == 1)
 		{	
 			//ImGui::Text(m_AssetHandler->LuaScriptPool()->GetName().c_str();
@@ -550,5 +520,52 @@ namespace DuskEngine
 			//	// Remove component, but cant be done with current setup. inspector needs rework anyway so w/e
 			//}
 		}
+	}
+
+	template<typename T>
+	bool DrawComponentNode(const char* name, std::vector<Entity>& selectedEntities, std::vector<T*>& components)
+	{
+		for (auto& entity : selectedEntities)
+		{
+			if (!entity.HasComponent<T>())
+				return false; // All selected entities need to have component, else skip component entirely
+
+			components.push_back(&entity.GetComponent<T>());
+		}
+
+		ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+
+		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed |
+			ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name);
+		ImGui::PopStyleVar();
+
+		auto& style = ImGui::GetStyle();
+		float lineHeight = ImGui::GetFontSize() + style.FramePadding.y;
+
+		ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
+		if (ImGui::Button(ICON_FK_COG, ImVec2{ lineHeight, lineHeight }))
+		{
+			ImGui::OpenPopup("ComponentSettings");
+		}
+
+		if (ImGui::BeginPopup("ComponentSettings"))
+		{
+			if (ImGui::MenuItem("Remove component"))
+			{
+				for (auto& ent : selectedEntities)
+					ent.RemoveComponent<T>();
+
+				ImGui::EndPopup();
+				if (open) ImGui::TreePop();
+				return false;
+			}
+
+			ImGui::EndPopup();
+		}
+
+		return open;
 	}
 }
