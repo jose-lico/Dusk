@@ -30,6 +30,19 @@ namespace DuskEngine
 	{
 	}
 
+	Material::Material(Material& material)
+	{
+		UUID = material.UUID;
+		Path = material.Path;
+		Name = material.Name;
+		m_ShaderHandle = material.m_ShaderHandle;
+		m_OwningHandler = material.m_OwningHandler;
+		m_Type = material.m_Type;
+
+		m_Uniforms = std::move(material.m_Uniforms);
+		m_UniformsMap = std::move(material.m_UniformsMap);
+	}
+
 	Material::~Material()
 	{
 		std::string message = "Destroyed Material " + Name;
@@ -66,9 +79,7 @@ namespace DuskEngine
 			switch (uniform.Type)
 			{
 			case UniformType::Vec3:
-				
 				uniform.Data.vec3 = glm::vec3(1.0f);
-				
 				break;
 			case UniformType::Texture:
 				uniform.Data.dataHandle = 0;
@@ -112,7 +123,7 @@ namespace DuskEngine
 			m_UniformsMap[name]->Data.dataHandle = m_OwningHandler->AddToAssetPool<Texture>(texture.UUID);
 		else
 		{
-			std::string message = "Texture '" + name + "' doesnt exist";
+			std::string message = "Texture uniform'" + name + "' doesnt exist";
 			WARN(message.c_str());
 		}
 	}
@@ -156,7 +167,7 @@ namespace DuskEngine
 	{
 		auto& shader = m_OwningHandler->GetAsset<Shader>(m_ShaderHandle);
 
-		for (auto uniform : shader.UniformSpecs)
+		for (auto& uniform : shader.UniformSpecs)
 		{
 			Uniform u;
 			u.Name = uniform.Name;
@@ -165,12 +176,12 @@ namespace DuskEngine
 			m_Uniforms.push_back(u);
 		}
 
+		UniformsDefaultValue();
+
 		for (auto& uniform : m_Uniforms)
 		{
 			m_UniformsMap[uniform.Name] = &uniform;
 		}
-
-		UniformsDefaultValue();
 	}
 
 	void Material::CreateDefaultMaterial(const std::filesystem::path& path)

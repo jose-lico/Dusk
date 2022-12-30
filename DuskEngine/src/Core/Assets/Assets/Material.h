@@ -43,6 +43,7 @@ namespace DuskEngine
 	public:
 		Material(Handle<Shader> shaderHandle, AssetHandler* owningHandler, const std::filesystem::path& path, const uuids::uuid& uuid);
 		Material(AssetHandler* owningHandler);
+		Material(Material& material);
 		~Material();
 
 		void UploadUniforms(AssetHandler& assetHandler);

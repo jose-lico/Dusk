@@ -270,7 +270,7 @@ namespace DuskEngine
 			}
 			else
 			{
-				// TODO: fix default selected type, text shows directional (index 0) actuall index can be smth else
+				// TODO: fix default selected type, text shows directional (index 0) actual index can be smth else
 				if (ImGui::BeginCombo("Type", comboLabel))
 				{
 					for (uint32_t i = 0; i < IM_ARRAYSIZE(types); i++)
@@ -468,47 +468,46 @@ namespace DuskEngine
 					ImGui::EndCombo();
 				}
 
-				//// actually this logic is now kinda sus but might be relevant again in the future
-				//
+				// TODO: Material uniform propagation in-editor vs in-game (and most other component inspected aspects)
+
 				////// if in editing mode ->					propagate
 				////// if accessing from asset browser ->		propagate
 				////// if playing and accessing from scene ->	do not propagate
 
-				//auto& material = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle);
+				auto& material = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle);
 
-				//for (auto& uniform : m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).m_Uniforms)
-				//{
-				//	if (uniform.Type == UniformType::Vec3)
-				//	{
-				//		if (ImGui::ColorEdit3(uniform.Name.c_str(), &uniform.Data.vec3[0]))
-				//			material.SerializeText(material.Path.string());
-				//	}
+				for (auto& uniform : m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).m_Uniforms)
+				{
+					if (uniform.Type == UniformType::Vec3)
+					{
+						if (ImGui::ColorEdit3(uniform.Name.c_str(), &uniform.Data.vec3[0]))
+							material.SerializeText(material.Path.string());
+					}
 
-				//	if (uniform.Type == UniformType::Texture)
-				//	{
-				//		// this is broken but whatever, will be replaced in the future
-				//		ImGui::Text(uniform.Name.c_str());
-				//		if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->GetAsset<Texture>(uniform.Data.dataHandle).ResourceID,
-				//			ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
-				//		{
-				//			TRACE("To be implemented");
-				//		}
+					if (uniform.Type == UniformType::Texture)
+					{
+						ImGui::Text(uniform.Name.c_str());
+						if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->GetAsset<Texture>(uniform.Data.dataHandle).ResourceID,
+							ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
+						{
+							// TODO
+							TRACE("To be implemented");
+						}
 
-				//		if (ImGui::BeginDragDropTarget())
-				//		{
-				//			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
-				//			{
-				//				const wchar_t* data = (const wchar_t*)payload->Data;
-				//				std::wstring ws(data);
+						if (ImGui::BeginDragDropTarget())
+						{
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
+							{
+								std::string data = *(std::string*)payload->Data;
 
-				//				auto& texture = m_AssetHandler->GetAsset<Texture>(m_AssetHandler->AddToAssetPool<Texture>(m_DB->GetUUID(ws)));
-				//				material.SetTexture(uniform.Name, texture);
-				//				material.SerializeText(material.Path.string());
-				//			}
-				//			ImGui::EndDragDropTarget();
-				//		}
-				//	}
-				//}
+								auto& texture = m_AssetHandler->GetAsset<Texture>(m_AssetHandler->AddToAssetPool<Texture>(m_DB->GetUUID(data)));
+								material.SetTexture(uniform.Name, texture);
+								material.SerializeText(material.Path.string());
+							}
+							ImGui::EndDragDropTarget();
+						}
+					}
+				}
 			}
 			else
 			{

@@ -96,7 +96,13 @@ namespace DuskEngine
 			else if (directoryEntry.path().extension() == ".png" || directoryEntry.path().extension() == ".jpg")
 			{
 				if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconsInDirectory[textureIndex++].ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0)))
-					TRACE("Pressed unkown");
+					TRACE("Pressed image");
+
+				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+				{
+					ImGui::SetDragDropPayload("TEXTURE", &directoryEntry.path().string(), sizeof(std::string), ImGuiCond_Once);
+					ImGui::EndDragDropSource();
+				}
 			}
 			else
 			{
