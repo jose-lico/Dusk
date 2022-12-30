@@ -194,6 +194,7 @@ namespace DuskEngine
 		Material material(owningHandler);
 		material.m_ShaderHandle = 0;
 		material.CreateUniforms();
+		material.Name = "Default Phong";
 		return material;
 	}
 }

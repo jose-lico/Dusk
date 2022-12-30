@@ -23,9 +23,13 @@ namespace DuskEngine
 		void TransformInspector();
 		void CameraInspector();
 		void LightInspector();
-		// DrawTransformInspector();
+		void MeshRendererInspector();
+		void ScriptInspector();
 
 		std::vector<Entity>* m_SelectedEntities = nullptr;
+
+		std::vector<std::string> m_ModelList;
+		std::vector<std::string> m_MaterialList;
 
 		AssetHandler* m_AssetHandler;
 		AssetDatabase* m_DB;

@@ -25,9 +25,21 @@ namespace DuskEngine
 	bool DrawComponentNode(const char* name, std::vector<Entity>& selectedEntities, std::vector<T*>& components);
 
 	InspectorPanel::InspectorPanel(AssetHandler* assetHandler, AssetDatabaseEditor* db)
-		:m_AssetHandler(assetHandler), m_EditorDB(db)
+		:m_AssetHandler(assetHandler), m_EditorDB(db), m_ModelList{ "Primitive: Quad", "Primitive: Cube" }, m_MaterialList{ assetHandler->GetAsset<Material>(0).Name }
 	{
 		m_DB = &Application::Get().GetAssetDatabase();
+
+		// TODO: Refresh once a new model is added/deleted
+		for (uint32_t i = 0; i < (uint32_t)m_EditorDB->m_ModelDatabase.size(); i++)
+		{
+			m_ModelList.push_back(m_EditorDB->m_ModelDatabase[i]->Name);
+		}
+
+		// TODO: Refresh once a new material is added/deleted
+		for (uint32_t i = 0; i < (uint32_t)m_EditorDB->m_MaterialDatabase.size(); i++)
+		{
+			m_MaterialList.push_back(m_EditorDB->m_MaterialDatabase[i]->Name);
+		}
 	}
 
 	void InspectorPanel::OnImGuiRender()
@@ -106,12 +118,8 @@ namespace DuskEngine
 			TransformInspector();
 			CameraInspector();
 			LightInspector();
-
-			//DrawComponent<Meta>(ICON_FK_CUBE "  Meta", *m_SelectedEntities, MetaInspector);
-			//DrawComponent<Transform>(ICON_FK_ARROWS_ALT "  Transform", *m_SelectedEntities, TransformInspector);
-			//DrawComponent<Camera>(ICON_FK_VIDEO_CAMERA "  Camera", *m_SelectedEntities, CameraInspector);
-			//DrawComponent<Light>(ICON_FK_LIGHTBULB_O "  Light", *m_SelectedEntities, LightInspector);
-			//DrawComponent<MeshRenderer, std::vector<MeshRenderer*>& ,InspectorPanel, &InspectorPanel::MaterialInspector>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, this);
+			MeshRendererInspector();
+			ScriptInspector();
 
 			/*std::string script = ICON_FK_PENCIL_SQUARE_O "  Lua Script - ";
 			script.append(m_AssetHandler->LuaScriptPool((*m_SelectedEntities)[0].GetComponent<Meta>().entityHandle)->GetName());*/
@@ -297,24 +305,15 @@ namespace DuskEngine
 		}
 	}
 
-	void MaterialInspector(std::vector<MeshRenderer*>& meshes)
+	void InspectorPanel::MeshRendererInspector()
 	{
-		if (meshes.size() == 1)
+		std::vector<MeshRenderer*> meshes;
+		if (DrawComponentNode<MeshRenderer>(ICON_FK_PAINT_BRUSH "  Mesh Renderer", *m_SelectedEntities, meshes))
 		{
-			// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
-			/*std::vector<std::string> modelList {"Primitive: Quad", "Primitive: Cube"};
-			int modelIndex = 0;
-			uuids::uuid modelID = m_AssetHandler->GetAsset(meshes[0]->meshHandle).UUID;
-
-			for (unsigned int i = 0; i < m_EditorDB->m_ModelDatabase.size(); i++)
+			if (meshes.size() == 1)
 			{
-				modelList.push_back(m_EditorDB->m_ModelDatabase[i]->Name);
-				if (m_EditorDB->m_ModelDatabase[i]->UUID == modelID)
-					modelIndex = i + 2;
-			}
-
-			if(!modelIndex)
-			{
+				static int modelIndex = 0;
+				
 				switch (m_AssetHandler->GetAsset(meshes[0]->meshHandle).GetType())
 				{
 				case MeshType::Quad:
@@ -324,202 +323,210 @@ namespace DuskEngine
 					modelIndex = 1;
 					break;
 				default:
+					uuids::uuid modelUUID = m_AssetHandler->GetAsset(meshes[0]->meshHandle).UUID;
+
+					for (unsigned int i = 0; i < m_EditorDB->m_ModelDatabase.size(); i++)
+					{
+						if (m_EditorDB->m_ModelDatabase[i]->UUID == modelUUID)
+							modelIndex = i + 2;
+					}
 					break;
 				}
-			}*/
 
-			//const char* model_label = modelList[modelIndex].c_str();
-			//if (ImGui::BeginCombo("Mesh", model_label))
-			//{
-			//	for (int n = 0; n < modelList.size(); n++)
-			//	{
-			//		const bool is_selected = (modelIndex == n);
-			//		if (ImGui::Selectable(modelList[n].c_str(), is_selected))
-			//		{
-			//			if (n != modelIndex)
-			//			{
-			//				modelIndex = n;
-			//				if(modelIndex <= 1)
-			//				{
-			//					switch (modelIndex)
-			//					{
-			//					case 0:
-			//						meshes[0]->meshHandle = 0;
-			//						break;
-			//					case 1:
-			//						meshes[0]->meshHandle = 1;
-			//						break;
-			//					default:
-			//						break;
-			//					}
-			//				}
-			//				else
-			//				{	
-			//					meshes[0]->meshHandle = 
-			//						m_AssetHandler->AddToAssetPool<Mesh>(m_DB->GetUUID(m_EditorDB->m_ModelDatabase[modelIndex - 2]->Path));
-			//				}
-			//			}
-			//		}
+				const char* modelLabel = m_ModelList[modelIndex].c_str();
 
-			//		if (is_selected)
-			//			ImGui::SetItemDefaultFocus();
-			//	}
-			//	ImGui::EndCombo();
-			//}
+				if (ImGui::BeginCombo("Mesh", modelLabel))
+				{
+					for (int i = 0; i < m_ModelList.size(); i++)
+					{
+						const bool isSelected = (modelIndex == i);
+						ImGui::PushID(i);
+						if (ImGui::Selectable(m_ModelList[i].c_str(), isSelected))
+						{	
+							modelIndex = i;
+							
+							switch (modelIndex)
+							{
+							case 0:
+								meshes[0]->meshHandle = 0;
+								break;
+							case 1:
+								meshes[0]->meshHandle = 1;
+								break;
+							default:
+								meshes[0]->meshHandle =
+									m_AssetHandler->AddToAssetPool<Mesh>(m_DB->GetUUID(m_EditorDB->m_ModelDatabase[modelIndex - 2]->Path));
+								break;
+							}							
+						}
+						ImGui::PopID();
 
-			//// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
-			//std::vector<std::string> materialList; // Later add default materials
-			//int materialIndex = 0;
-			//uuids::uuid materialID = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).UUID;
-			//	;
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+					ImGui::EndCombo();
+				}
 
-			//for (unsigned int i = 0; i < m_EditorDB->m_MaterialDatabase.size(); i++)
-			//{
-			//	materialList.push_back(m_EditorDB->m_MaterialDatabase[i]->Name);
-			//	if (m_EditorDB->m_MaterialDatabase[i]->UUID == materialID)
-			//		materialIndex = i;
-			//}
+				static int materialIndex = 0;
 
-			//
-			//const char* material_label = materialList[materialIndex].c_str();
-			//if (ImGui::BeginCombo("Material", material_label))
-			//{
-			//	for (int n = 0; n < materialList.size(); n++)
-			//	{
-			//		const bool is_selected = (materialIndex == n);
-			//		if (ImGui::Selectable(materialList[n].c_str(), is_selected))
-			//		{
-			//			if (n != materialIndex)
-			//			{
-			//				materialIndex = n;
-			//				auto id = m_DB->GetUUID(m_EditorDB->m_MaterialDatabase[materialIndex]->Path);
-			//				meshes[0]->materialHandle = m_AssetHandler->AddToAssetPool<Material>(id);
-			//			}
-			//		}
+				uuids::uuid materialID = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).UUID;
 
-			//		if (is_selected)
-			//			ImGui::SetItemDefaultFocus();
-			//	}
-			//	ImGui::EndCombo();
-			//}
+				for (unsigned int i = 0; i < m_EditorDB->m_MaterialDatabase.size(); i++)
+				{
+					if (m_EditorDB->m_MaterialDatabase[i]->UUID == materialID)
+						materialIndex = i + 1;
+				}
 
-			//ImGui::Separator();
-			//ImGui::Separator();
-			//ImGui::Separator();
+				const char* materialLabel = m_MaterialList[materialIndex].c_str();
 
-			//ImGui::Text(m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Name.c_str());
+				if (ImGui::BeginCombo("Material", materialLabel))
+				{
+					for (int i = 0; i < m_MaterialList.size(); i++)
+					{
+						const bool isSelected = (materialIndex == i);
+						if (ImGui::Selectable(m_MaterialList[i].c_str(), isSelected))
+						{
+							materialIndex = i;
 
-			//// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
-			//std::vector<std::string> shaderList;
-			//int shaderIndex = 0;
-			//// bad
-			//uuids::uuid shaderID = m_AssetHandler->GetAsset<Shader>(
-			//	m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetShaderHandle()).UUID;
+							switch (materialIndex)
+							{
+							case 0:
+								meshes[0]->materialHandle = 0;
+								break;
+							default:
+								auto id = m_DB->GetUUID(m_EditorDB->m_MaterialDatabase[materialIndex - 1]->Path);
+								meshes[0]->materialHandle = m_AssetHandler->AddToAssetPool<Material>(id);
+								break;
+							}
+						}
 
-			//for (unsigned int i = 0; i < m_EditorDB->m_ShaderDatabase.size(); i++)
-			//{
-			//	shaderList.push_back(m_EditorDB->m_ShaderDatabase[i]->Name);
-			//	if (m_EditorDB->m_ShaderDatabase[i]->UUID == shaderID)
-			//		shaderIndex = i;
-			//}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+					ImGui::EndCombo();
+				}
 
-			//const char* shader_label = shaderList[shaderIndex].c_str();
-			//if (ImGui::BeginCombo("Shader", shader_label))
-			//{
-			//	for (int n = 0; n < shaderList.size(); n++)
-			//	{
-			//		const bool is_selected = (shaderIndex == n);
-			//		if (ImGui::Selectable(shaderList[n].c_str(), is_selected))
-			//		{
-			//			if (n != shaderIndex)
-			//			{
-			//				shaderIndex = n;
-			//				
-			//				auto id = m_DB->GetUUID(m_EditorDB->m_ShaderDatabase[shaderIndex]->Path);
-			//				auto shaderHandle = m_AssetHandler->AddToAssetPool<Shader>(id);
-			//				m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SetShader(shaderHandle);
-			//				
-			//				m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SerializeText(
-			//					m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Path.string());
-			//			}
-			//		}
+				//ImGui::Separator();
+				//ImGui::Separator();
+				//ImGui::Separator();
 
-			//		if (is_selected)
-			//			ImGui::SetItemDefaultFocus();
-			//	}
-			//	ImGui::EndCombo();
-			//}
+				//ImGui::Text(m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Name.c_str());
 
-			//// actually this logic is now kinda sus but might be relevant again in the future
-			//
-			////// if in editing mode ->					propagate
-			////// if accessing from asset browser ->		propagate
-			////// if playing and accessing from scene ->	do not propagate
+				//// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
+				//std::vector<std::string> shaderList;
+				//int shaderIndex = 0;
+				//// bad
+				//uuids::uuid shaderID = m_AssetHandler->GetAsset<Shader>(
+				//	m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetShaderHandle()).UUID;
 
-			//auto& material = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle);
+				//for (unsigned int i = 0; i < m_EditorDB->m_ShaderDatabase.size(); i++)
+				//{
+				//	shaderList.push_back(m_EditorDB->m_ShaderDatabase[i]->Name);
+				//	if (m_EditorDB->m_ShaderDatabase[i]->UUID == shaderID)
+				//		shaderIndex = i;
+				//}
 
-			//for (auto& uniform : m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).m_Uniforms)
-			//{
-			//	if (uniform.Type == UniformType::Vec3)
-			//	{
-			//		if (ImGui::ColorEdit3(uniform.Name.c_str(), &uniform.Data.vec3[0]))
-			//			material.SerializeText(material.Path.string());
-			//	}
+				//const char* shader_label = shaderList[shaderIndex].c_str();
+				//if (ImGui::BeginCombo("Shader", shader_label))
+				//{
+				//	for (int n = 0; n < shaderList.size(); n++)
+				//	{
+				//		const bool is_selected = (shaderIndex == n);
+				//		if (ImGui::Selectable(shaderList[n].c_str(), is_selected))
+				//		{
+				//			if (n != shaderIndex)
+				//			{
+				//				shaderIndex = n;
+				//				
+				//				auto id = m_DB->GetUUID(m_EditorDB->m_ShaderDatabase[shaderIndex]->Path);
+				//				auto shaderHandle = m_AssetHandler->AddToAssetPool<Shader>(id);
+				//				m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SetShader(shaderHandle);
+				//				
+				//				m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SerializeText(
+				//					m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Path.string());
+				//			}
+				//		}
 
-			//	if (uniform.Type == UniformType::Texture)
-			//	{
-			//		// this is broken but whatever, will be replaced in the future
-			//		ImGui::Text(uniform.Name.c_str());
-			//		if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->GetAsset<Texture>(uniform.Data.dataHandle).ResourceID,
-			//			ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
-			//		{
-			//			TRACE("To be implemented");
-			//		}
+				//		if (is_selected)
+				//			ImGui::SetItemDefaultFocus();
+				//	}
+				//	ImGui::EndCombo();
+				//}
 
-			//		if (ImGui::BeginDragDropTarget())
-			//		{
-			//			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
-			//			{
-			//				const wchar_t* data = (const wchar_t*)payload->Data;
-			//				std::wstring ws(data);
+				//// actually this logic is now kinda sus but might be relevant again in the future
+				//
+				////// if in editing mode ->					propagate
+				////// if accessing from asset browser ->		propagate
+				////// if playing and accessing from scene ->	do not propagate
 
-			//				auto& texture = m_AssetHandler->GetAsset<Texture>(m_AssetHandler->AddToAssetPool<Texture>(m_DB->GetUUID(ws)));
-			//				material.SetTexture(uniform.Name, texture);
-			//				material.SerializeText(material.Path.string());
-			//			}
-			//			ImGui::EndDragDropTarget();
-			//		}
-			//	}
-			//}
-		}
-		else
-		{
-			// TODO only same material instance can be edited.
+				//auto& material = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle);
+
+				//for (auto& uniform : m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).m_Uniforms)
+				//{
+				//	if (uniform.Type == UniformType::Vec3)
+				//	{
+				//		if (ImGui::ColorEdit3(uniform.Name.c_str(), &uniform.Data.vec3[0]))
+				//			material.SerializeText(material.Path.string());
+				//	}
+
+				//	if (uniform.Type == UniformType::Texture)
+				//	{
+				//		// this is broken but whatever, will be replaced in the future
+				//		ImGui::Text(uniform.Name.c_str());
+				//		if (ImGui::ImageButton((ImTextureID)(size_t)m_AssetHandler->GetAsset<Texture>(uniform.Data.dataHandle).ResourceID,
+				//			ImVec2{40, 40}, ImVec2{0, 1}, ImVec2{1, 0}))
+				//		{
+				//			TRACE("To be implemented");
+				//		}
+
+				//		if (ImGui::BeginDragDropTarget())
+				//		{
+				//			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
+				//			{
+				//				const wchar_t* data = (const wchar_t*)payload->Data;
+				//				std::wstring ws(data);
+
+				//				auto& texture = m_AssetHandler->GetAsset<Texture>(m_AssetHandler->AddToAssetPool<Texture>(m_DB->GetUUID(ws)));
+				//				material.SetTexture(uniform.Name, texture);
+				//				material.SerializeText(material.Path.string());
+				//			}
+				//			ImGui::EndDragDropTarget();
+				//		}
+				//	}
+				//}
+			}
+			else
+			{
+				// TODO only same material instance can be edited.
+				ImGui::Text("Mesh change not available on multiple entites");
+
+			}
+			ImGui::TreePop();
 		}
 	}
 
-	void InspectorPanel::ScriptInspector(std::vector<Script*>& scripts)
+	void InspectorPanel::ScriptInspector()
 	{
 		//m_AssetHandler->
-		if (scripts.size() == 1)
-		{	
-			//ImGui::Text(m_AssetHandler->LuaScriptPool()->GetName().c_str();
-			
-			//for (unsigned int i = 0; i < scripts[0]->scripts.size(); i++)
-			//{
-			//	ImGui::Text(scripts[0]->scripts[i]->GetName().c_str());
-			//	ImGui::SameLine();
-			//	if (ImGui::Button(("Remove script " + std::to_string(i)).c_str()))
-			//	{
-			//		scripts[0]->scripts.erase(scripts[0]->scripts.begin() + i--);
-			//	}
-			//}
+		//if (scripts.size() == 1)
+		//{	
+		//	//ImGui::Text(m_AssetHandler->LuaScriptPool()->GetName().c_str();
+		//	
+		//	//for (unsigned int i = 0; i < scripts[0]->scripts.size(); i++)
+		//	//{
+		//	//	ImGui::Text(scripts[0]->scripts[i]->GetName().c_str());
+		//	//	ImGui::SameLine();
+		//	//	if (ImGui::Button(("Remove script " + std::to_string(i)).c_str()))
+		//	//	{
+		//	//		scripts[0]->scripts.erase(scripts[0]->scripts.begin() + i--);
+		//	//	}
+		//	//}
 
-			//if(scripts[0]->scripts.size() == 0)
-			//{
-			//	// Remove component, but cant be done with current setup. inspector needs rework anyway so w/e
-			//}
-		}
+		//	//if(scripts[0]->scripts.size() == 0)
+		//	//{
+		//	//	// Remove component, but cant be done with current setup. inspector needs rework anyway so w/e
+		//	//}
+		//}
 	}
 
 	template<typename T>
