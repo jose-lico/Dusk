@@ -25,9 +25,10 @@ namespace DuskEngine
 		return shader;
 	}
 
-	Shader CreateShader(const char* vertSource, const char* fragSource)
+	Shader CreateShader(const char* vertSource, const char* fragSource, const char* name)
 	{
 		Shader shader;
+		shader.Name = name;
 		CreateProgram(shader, vertSource, fragSource);
 
 		return shader;

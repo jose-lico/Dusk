@@ -68,8 +68,8 @@ Entities:
         fileID: 1
         uuid: 00000000-0000-0000-0000-000000000000
       material:
-        fileID: 1
-        uuid: 18d19a86-e2e3-41e4-b980-b5594c4df096
+        fileID: 0
+        uuid: 00000000-0000-0000-0000-000000000000
     Light:
       type: Point
       color: [0.999989986, 1, 0.999993086]
@@ -104,8 +104,8 @@ Entities:
         fileID: 2
         uuid: 24b41d57-d4b0-41a5-a473-803306755fe4
       material:
-        fileID: 0
-        uuid: 00000000-0000-0000-0000-000000000000
+        fileID: 1
+        uuid: 2fbf0300-2732-492a-8672-032e010d8e72
     Script:
       script: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f
   - Entity: 03e88ebf-2f4c-480d-bbae-0c4aa10e719f

@@ -32,5 +32,5 @@ namespace DuskEngine
 	};
 
 	Shader CreateShader(const std::filesystem::path& path, const uuids::uuid& uuid);
-	Shader CreateShader(const char* vertSource, const char* fragSource);
+	Shader CreateShader(const char* vertSource, const char* fragSource, const char* name);
 }

@@ -25,21 +25,22 @@ namespace DuskEngine
 	bool DrawComponentNode(const char* name, std::vector<Entity>& selectedEntities, std::vector<T*>& components);
 
 	InspectorPanel::InspectorPanel(AssetHandler* assetHandler, AssetDatabaseEditor* db)
-		:m_AssetHandler(assetHandler), m_EditorDB(db), m_ModelList{ "Primitive: Quad", "Primitive: Cube" }, m_MaterialList{ assetHandler->GetAsset<Material>(0).Name }
+		:m_AssetHandler(assetHandler), m_EditorDB(db), m_ModelList{ new std::string("Primitive: Quad"), new std::string("Primitive: Cube") }, 
+		m_MaterialList{ &assetHandler->GetAsset<Material>(0).Name }, m_ShaderList{ &assetHandler->GetAsset<Shader>(0).Name }
 	{
 		m_DB = &Application::Get().GetAssetDatabase();
 
 		// TODO: Refresh once a new model is added/deleted
 		for (uint32_t i = 0; i < (uint32_t)m_EditorDB->m_ModelDatabase.size(); i++)
-		{
-			m_ModelList.push_back(m_EditorDB->m_ModelDatabase[i]->Name);
-		}
+			m_ModelList.push_back(&m_EditorDB->m_ModelDatabase[i]->Name);
 
 		// TODO: Refresh once a new material is added/deleted
 		for (uint32_t i = 0; i < (uint32_t)m_EditorDB->m_MaterialDatabase.size(); i++)
-		{
-			m_MaterialList.push_back(m_EditorDB->m_MaterialDatabase[i]->Name);
-		}
+			m_MaterialList.push_back(&m_EditorDB->m_MaterialDatabase[i]->Name);
+
+		// TODO: Refresh once a new shader is added/deleted
+		for (uint32_t i = 0; i < (uint32_t)m_EditorDB->m_ShaderDatabase.size(); i++)
+			m_ShaderList.push_back(&m_EditorDB->m_ShaderDatabase[i]->Name);
 	}
 
 	void InspectorPanel::OnImGuiRender()
@@ -333,7 +334,7 @@ namespace DuskEngine
 					break;
 				}
 
-				const char* modelLabel = m_ModelList[modelIndex].c_str();
+				const char* modelLabel = m_ModelList[modelIndex]->c_str();
 
 				if (ImGui::BeginCombo("Mesh", modelLabel))
 				{
@@ -341,7 +342,7 @@ namespace DuskEngine
 					{
 						const bool isSelected = (modelIndex == i);
 						ImGui::PushID(i);
-						if (ImGui::Selectable(m_ModelList[i].c_str(), isSelected))
+						if (ImGui::Selectable(m_ModelList[i]->c_str(), isSelected))
 						{	
 							modelIndex = i;
 							
@@ -367,7 +368,7 @@ namespace DuskEngine
 					ImGui::EndCombo();
 				}
 
-				static int materialIndex = 0;
+				int materialIndex = 0;
 
 				uuids::uuid materialID = m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).UUID;
 
@@ -376,15 +377,15 @@ namespace DuskEngine
 					if (m_EditorDB->m_MaterialDatabase[i]->UUID == materialID)
 						materialIndex = i + 1;
 				}
-
-				const char* materialLabel = m_MaterialList[materialIndex].c_str();
+				
+				const char* materialLabel = m_MaterialList[materialIndex]->c_str();
 
 				if (ImGui::BeginCombo("Material", materialLabel))
 				{
 					for (int i = 0; i < m_MaterialList.size(); i++)
 					{
 						const bool isSelected = (materialIndex == i);
-						if (ImGui::Selectable(m_MaterialList[i].c_str(), isSelected))
+						if (ImGui::Selectable(m_MaterialList[i]->c_str(), isSelected))
 						{
 							materialIndex = i;
 
@@ -406,52 +407,66 @@ namespace DuskEngine
 					ImGui::EndCombo();
 				}
 
-				//ImGui::Separator();
-				//ImGui::Separator();
-				//ImGui::Separator();
+				ImGui::Separator();
+				ImGui::Separator();
+				ImGui::Separator();
 
-				//ImGui::Text(m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Name.c_str());
+				if(materialIndex == 0)
+				{
+					ImGui::Text("Can not edit default material");
+					ImGui::TreePop();
+					return;
+				}
+				else
+					ImGui::Text("Editing material asset associated with component");
 
-				//// This could and should probably be done once at startup, and refreshed once a new shader is added/deleted
-				//std::vector<std::string> shaderList;
-				//int shaderIndex = 0;
-				//// bad
-				//uuids::uuid shaderID = m_AssetHandler->GetAsset<Shader>(
-				//	m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetShaderHandle()).UUID;
+				ImGui::Text(m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Name.c_str());
+				
+				static int shaderIndex = 0;
 
-				//for (unsigned int i = 0; i < m_EditorDB->m_ShaderDatabase.size(); i++)
-				//{
-				//	shaderList.push_back(m_EditorDB->m_ShaderDatabase[i]->Name);
-				//	if (m_EditorDB->m_ShaderDatabase[i]->UUID == shaderID)
-				//		shaderIndex = i;
-				//}
+				uuids::uuid shaderID = m_AssetHandler->GetAsset<Shader>(
+					m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).GetShaderHandle()).UUID;
 
-				//const char* shader_label = shaderList[shaderIndex].c_str();
-				//if (ImGui::BeginCombo("Shader", shader_label))
-				//{
-				//	for (int n = 0; n < shaderList.size(); n++)
-				//	{
-				//		const bool is_selected = (shaderIndex == n);
-				//		if (ImGui::Selectable(shaderList[n].c_str(), is_selected))
-				//		{
-				//			if (n != shaderIndex)
-				//			{
-				//				shaderIndex = n;
-				//				
-				//				auto id = m_DB->GetUUID(m_EditorDB->m_ShaderDatabase[shaderIndex]->Path);
-				//				auto shaderHandle = m_AssetHandler->AddToAssetPool<Shader>(id);
-				//				m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SetShader(shaderHandle);
-				//				
-				//				m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SerializeText(
-				//					m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Path.string());
-				//			}
-				//		}
+				for (unsigned int i = 0; i < m_EditorDB->m_ShaderDatabase.size(); i++)
+				{
+					if (m_EditorDB->m_ShaderDatabase[i]->UUID == shaderID)
+						shaderIndex = i + 1;
+				}
 
-				//		if (is_selected)
-				//			ImGui::SetItemDefaultFocus();
-				//	}
-				//	ImGui::EndCombo();
-				//}
+				const char* shaderLabel = m_ShaderList[shaderIndex]->c_str();
+				if (ImGui::BeginCombo("Shader", shaderLabel))
+				{
+					for (int i = 0; i < m_ShaderList.size(); i++)
+					{
+						const bool isSelected = (shaderIndex == i);
+						if (ImGui::Selectable(m_ShaderList[i]->c_str(), isSelected))
+						{
+							shaderIndex = i;
+							
+							switch (shaderIndex)
+							{
+							case 0:
+								m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SetShader(0);
+
+								m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SerializeText(
+									m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Path.string());
+								break;
+							default:
+								auto id = m_DB->GetUUID(m_EditorDB->m_ShaderDatabase[shaderIndex - 1]->Path);
+								auto shaderHandle = m_AssetHandler->AddToAssetPool<Shader>(id);
+								m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SetShader(shaderHandle);
+
+								m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).SerializeText(
+									m_AssetHandler->GetAsset<Material>(meshes[0]->materialHandle).Path.string());
+								break;
+							}
+						}
+
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+					ImGui::EndCombo();
+				}
 
 				//// actually this logic is now kinda sus but might be relevant again in the future
 				//
@@ -498,7 +513,7 @@ namespace DuskEngine
 			else
 			{
 				// TODO only same material instance can be edited.
-				ImGui::Text("Mesh change not available on multiple entites");
+				ImGui::Text("Mesh Renderer inspection not available on multiple entites");
 
 			}
 			ImGui::TreePop();

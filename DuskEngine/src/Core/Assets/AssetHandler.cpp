@@ -43,7 +43,7 @@ namespace DuskEngine
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Quad());
 		m_MeshPool.m_Pool.push_back(PrimitiveMesh::Cube());
 		
-		m_ShaderPool.m_Pool.push_back(CreateShader((const char*)EMBEDDED_PHONGVERT, (const char*)EMBEDDED_PHONGFRAG));
+		m_ShaderPool.m_Pool.push_back(CreateShader((const char*)EMBEDDED_PHONGVERT, (const char*)EMBEDDED_PHONGFRAG, "Default Phong Shader"));
 
 		m_MaterialPool.m_Pool.push_back(Material::CreateDefaultMaterial(this));
 

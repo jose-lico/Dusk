@@ -29,7 +29,7 @@ namespace DuskEngine
 	{
 		LOG("Creating new scene " + m_Name);
 
-		m_GridShader = CreateShader((const char*)EMBEDDED_GRIDVERT, (const char*)EMBEDDED_GRIDFRAG);
+		m_GridShader = CreateShader((const char*)EMBEDDED_GRIDVERT, (const char*)EMBEDDED_GRIDFRAG, "Grid Shader");
 
 		m_ScriptingEngine = new ScriptingEngine();
 		m_AssetHandler = new AssetHandler(m_Name + "SceneHandler", m_ProjectPath);

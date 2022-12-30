@@ -28,8 +28,9 @@ namespace DuskEngine
 
 		std::vector<Entity>* m_SelectedEntities = nullptr;
 
-		std::vector<std::string> m_ModelList;
-		std::vector<std::string> m_MaterialList;
+		std::vector<std::string*> m_ModelList;
+		std::vector<std::string*> m_MaterialList;
+		std::vector<std::string*> m_ShaderList;
 
 		AssetHandler* m_AssetHandler;
 		AssetDatabase* m_DB;
