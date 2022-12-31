@@ -97,15 +97,16 @@ namespace DuskEngine
 
 					if (ImGui::BeginMenu("Scripts"))
 					{
-
 						for (auto& scriptAsset : m_EditorDB->m_ScriptsDatabase)
 						{
 							// If entity has a script component, remove it and 
 							if(ImGui::MenuItem(scriptAsset->Name.c_str()))
 							{
-								//auto& script = (*m_SelectedEntities)[0].AddComponent<Script>();
-								//script.luaScriptHandle = scriptAsset->GetUUID();
-								//m_AssetHandler->AddToLuaScriptPool((*m_SelectedEntities)[0].GetComponent<Meta>().entityHandle, script.luaScriptHandle);
+								if (!(*m_SelectedEntities)[0].HasComponent<Script>())
+								{
+									auto& script = (*m_SelectedEntities)[0].AddComponent<Script>();
+									script.luaScriptHandle = m_AssetHandler->AddToLuaScriptPool((*m_SelectedEntities)[0].GetComponent<Meta>().entityHandle, scriptAsset->UUID);
+								}
 							}
 						}
 						ImGui::EndMenu();
@@ -121,11 +122,6 @@ namespace DuskEngine
 			LightInspector();
 			MeshRendererInspector();
 			ScriptInspector();
-
-			/*std::string script = ICON_FK_PENCIL_SQUARE_O "  Lua Script - ";
-			script.append(m_AssetHandler->LuaScriptPool((*m_SelectedEntities)[0].GetComponent<Meta>().entityHandle)->GetName());*/
-			/*DrawComponent<Script, std::vector<Script*>&, InspectorPanel, &InspectorPanel::ScriptInspector>
-				(ICON_FK_PENCIL_SQUARE_O "  Lua Script", *m_SelectedEntities, this);*/
 		}
 		ImGui::End();
 	}
@@ -521,26 +517,19 @@ namespace DuskEngine
 
 	void InspectorPanel::ScriptInspector()
 	{
-		//m_AssetHandler->
-		//if (scripts.size() == 1)
-		//{	
-		//	//ImGui::Text(m_AssetHandler->LuaScriptPool()->GetName().c_str();
-		//	
-		//	//for (unsigned int i = 0; i < scripts[0]->scripts.size(); i++)
-		//	//{
-		//	//	ImGui::Text(scripts[0]->scripts[i]->GetName().c_str());
-		//	//	ImGui::SameLine();
-		//	//	if (ImGui::Button(("Remove script " + std::to_string(i)).c_str()))
-		//	//	{
-		//	//		scripts[0]->scripts.erase(scripts[0]->scripts.begin() + i--);
-		//	//	}
-		//	//}
-
-		//	//if(scripts[0]->scripts.size() == 0)
-		//	//{
-		//	//	// Remove component, but cant be done with current setup. inspector needs rework anyway so w/e
-		//	//}
-		//}
+		std::vector<Script*> scripts;
+		if (DrawComponentNode<Script>(ICON_FK_PENCIL_SQUARE_O "  Script", *m_SelectedEntities, scripts))
+		{
+			if (scripts.size() == 1)
+			{
+				ImGui::Text(m_AssetHandler->GetAsset<LuaScript>(scripts[0]->luaScriptHandle).Name.c_str());
+			}
+			else
+			{
+				ImGui::Text("Script inspection not available on multiple entites");
+			}
+			ImGui::TreePop();
+		}
 	}
 
 	template<typename T>

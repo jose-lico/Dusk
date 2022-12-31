@@ -35,7 +35,7 @@ Entities:
       name: Lit Cube
       enabled: true
     Transform:
-      position: [-2, 0, 0]
+      position: [2.3189714, 0, -0.654556036]
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
     MeshRenderer:
@@ -45,6 +45,8 @@ Entities:
       material:
         fileID: 1
         uuid: 1e636a00-4ce1-49c2-bdaa-6d93d22c6686
+    Script:
+      script: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f
   - Entity: 2541c9db-4a07-4507-9136-5d0bd8dc7452
     Meta:
       name: Main Camera
@@ -68,11 +70,11 @@ Entities:
         fileID: 1
         uuid: 00000000-0000-0000-0000-000000000000
       material:
-        fileID: 0
-        uuid: 00000000-0000-0000-0000-000000000000
+        fileID: 1
+        uuid: e5389bcf-ca32-47ae-9cc0-a296c257a3fc
     Light:
       type: Point
-      color: [0.999989986, 1, 0.999993086]
+      color: [1, 0, 0]
   - Entity: b03f5af1-64b0-4d6a-85f5-b897686787db
     Meta:
       name: Point Light 2
