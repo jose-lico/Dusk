@@ -1,6 +1,7 @@
 #include "ContentBrowserPanel.h"
 
 #include "DuskEditor/Assets/AssetDatabaseEditor.h"
+#include "DuskEditor/Panels/InspectorPanel.h"
 
 #include "Core/Application/Core.h"
 #include "Core/Application/Application.h"
@@ -22,8 +23,9 @@ namespace DuskEngine
 	AssetDatabaseEditor* g_Database = nullptr;
 	ContentBrowserPanel* g_Panel = nullptr;
 
-	ContentBrowserPanel::ContentBrowserPanel(const std::string& projectPath, AssetDatabaseEditor& database)
+	ContentBrowserPanel::ContentBrowserPanel(const std::string& projectPath, AssetDatabaseEditor& database, InspectorPanel& inspector)
 	{
+		m_InspectorPanel = &inspector;
 		m_Database = &database;
 		g_Database = m_Database;
 		g_Panel = this;
@@ -96,7 +98,10 @@ namespace DuskEngine
 			else if (directoryEntry.path().extension() == ".png" || directoryEntry.path().extension() == ".jpg")
 			{
 				if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconsInDirectory[textureIndex++].ResourceID, ImVec2(buttonSize, buttonSize), ImVec2(0, 1), ImVec2(1, 0)))
-					TRACE("Pressed image");
+				{
+					m_InspectorPanel->SetInspectionType(InspectionType::Image);
+					m_InspectorPanel->SetCurrentImage(m_IconsInDirectory[textureIndex - 1]);
+				}
 
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 				{

@@ -8,7 +8,6 @@
 #include "Platform/OpenGL/Shader.h"
 #include "Core/Assets/Assets/Mesh.h"
 #include "Core/Assets/Assets/Material.h"
-#include "Platform/OpenGL/Texture.h"
 #include "Core/Scripting/LuaScript.h"
 #include "Core/ECS/Entity.h"
 
@@ -48,82 +47,113 @@ namespace DuskEngine
 		ImGui::Begin(ICON_FK_INFO "  Inspector");
 		CheckFocus();
 
-		if(m_SelectedEntities->size() > 0)
+		switch (m_CurrentInspection)
 		{
-			if (m_SelectedEntities->size() > 1)
+		case InspectionType::Entity:
+			if (m_SelectedEntities->size() > 0)
 			{
-				ImGui::Text("Inspecting multiple entities.");
-				ImGui::Text("Only shared components can be edited.");
-				ImGui::Separator();
-			}
-			else
-			{
-				if (ImGui::Button("Add Component"))
-					ImGui::OpenPopup("AddComponent");
-
-				if (ImGui::BeginPopup("AddComponent")) // Only add components that do not exist
+				if (m_SelectedEntities->size() > 1)
 				{
-					if (ImGui::MenuItem("Camera"))
-					{
-						if (!(*m_SelectedEntities)[0].HasComponent<Camera>())
-						{
-							auto& camera = (*m_SelectedEntities)[0].AddComponent<Camera>();
-							camera.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
-						}
-						ImGui::CloseCurrentPopup();
-					}
+					ImGui::Text("Inspecting multiple entities.");
+					ImGui::Text("Only shared components can be edited.");
+					ImGui::Separator();
+				}
+				else
+				{
+					if (ImGui::Button("Add Component"))
+						ImGui::OpenPopup("AddComponent");
 
-					if (ImGui::MenuItem("Light"))
+					if (ImGui::BeginPopup("AddComponent")) // Only add components that do not exist
 					{
-						if (!(*m_SelectedEntities)[0].HasComponent<Light>())
+						if (ImGui::MenuItem("Camera"))
 						{
-							auto& light = (*m_SelectedEntities)[0].AddComponent<Light>();
-							light.type = LightType::Point;
-						}
-						ImGui::CloseCurrentPopup();
-					}
-
-					if(ImGui::MenuItem("Mesh Renderer"))
-					{
-						if(!(*m_SelectedEntities)[0].HasComponent<MeshRenderer>())
-						{
-							auto& mesh = (*m_SelectedEntities)[0].AddComponent<MeshRenderer>();
-							mesh.meshHandle = 1;
-							mesh.materialHandle = 0;
-						}
-
-						ImGui::CloseCurrentPopup();
-					}
-
-					if (ImGui::BeginMenu("Scripts"))
-					{
-						for (auto& scriptAsset : m_EditorDB->m_ScriptsDatabase)
-						{
-							// If entity has a script component, remove it and 
-							if(ImGui::MenuItem(scriptAsset->Name.c_str()))
+							if (!(*m_SelectedEntities)[0].HasComponent<Camera>())
 							{
-								if (!(*m_SelectedEntities)[0].HasComponent<Script>())
+								auto& camera = (*m_SelectedEntities)[0].AddComponent<Camera>();
+								camera.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
+							}
+							ImGui::CloseCurrentPopup();
+						}
+
+						if (ImGui::MenuItem("Light"))
+						{
+							if (!(*m_SelectedEntities)[0].HasComponent<Light>())
+							{
+								auto& light = (*m_SelectedEntities)[0].AddComponent<Light>();
+								light.type = LightType::Point;
+							}
+							ImGui::CloseCurrentPopup();
+						}
+
+						if (ImGui::MenuItem("Mesh Renderer"))
+						{
+							if (!(*m_SelectedEntities)[0].HasComponent<MeshRenderer>())
+							{
+								auto& mesh = (*m_SelectedEntities)[0].AddComponent<MeshRenderer>();
+								mesh.meshHandle = 1;
+								mesh.materialHandle = 0;
+							}
+
+							ImGui::CloseCurrentPopup();
+						}
+
+						if (ImGui::BeginMenu("Scripts"))
+						{
+							for (auto& scriptAsset : m_EditorDB->m_ScriptsDatabase)
+							{
+								// If entity has a script component, remove it and 
+								if (ImGui::MenuItem(scriptAsset->Name.c_str()))
 								{
-									auto& script = (*m_SelectedEntities)[0].AddComponent<Script>();
-									script.luaScriptHandle = m_AssetHandler->AddToLuaScriptPool((*m_SelectedEntities)[0].GetComponent<Meta>().entityHandle, scriptAsset->UUID);
+									if (!(*m_SelectedEntities)[0].HasComponent<Script>())
+									{
+										auto& script = (*m_SelectedEntities)[0].AddComponent<Script>();
+										script.luaScriptHandle = m_AssetHandler->AddToLuaScriptPool((*m_SelectedEntities)[0].GetComponent<Meta>().entityHandle, scriptAsset->UUID);
+									}
 								}
 							}
+							ImGui::EndMenu();
 						}
-						ImGui::EndMenu();
+
+						ImGui::EndPopup();
 					}
-
-					ImGui::EndPopup();
 				}
-			}
 
-			MetaInspector();
-			TransformInspector();
-			CameraInspector();
-			LightInspector();
-			MeshRendererInspector();
-			ScriptInspector();
+				MetaInspector();
+				TransformInspector();
+				CameraInspector();
+				LightInspector();
+				MeshRendererInspector();
+				ScriptInspector();
+			}
+			break;
+		case InspectionType::Image:
+			ImGui::Text(m_CurrentImage.Name.c_str());
+			ImGui::ImageButton((ImTextureID)(uint64_t)m_CurrentImage.ResourceID, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
+			break;
+		default:
+			break;
 		}
+
 		ImGui::End();
+	}
+
+	void InspectorPanel::SetInspectionType(const InspectionType& type)
+	{
+		m_CurrentInspection = type;
+
+		switch (m_CurrentInspection)
+		{
+		case DuskEngine::InspectionType::Entity:
+			break;
+		case DuskEngine::InspectionType::Image:
+			m_SelectedEntities->resize(0);
+			std::fill(m_SelectableStatus->begin(), m_SelectableStatus->end(), 0);
+			break;
+		case DuskEngine::InspectionType::None:
+			break;
+		default:
+			break;
+		}
 	}
 
 	void InspectorPanel::MetaInspector()

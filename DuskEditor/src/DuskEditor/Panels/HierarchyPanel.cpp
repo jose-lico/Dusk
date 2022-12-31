@@ -19,9 +19,11 @@ namespace DuskEngine
 		:m_Scene(&scene), m_ProjectPath(projectPath)
 	{
 		m_SelectableStatus.resize(m_Scene->m_Registry.size());
-		
+		m_Inspector = &inspector;
+
 		// let inspector and viewport know which entities are selected
-		inspector.SelectedEntities(m_SelectedEntities);
+		m_Inspector->SetSelectedEntities(m_SelectedEntities);
+		m_Inspector->SetSelectableStatus(m_SelectableStatus);
 		viewport.SelectedEntities(m_SelectedEntities);
 
 		auto& registry = m_Scene->m_Registry;
@@ -94,6 +96,7 @@ namespace DuskEngine
 			ImGui::PushID(entityIndex);
 			if (ImGui::Selectable(meta.name.c_str(), m_SelectableStatus[entityIndex]))
 			{
+				m_Inspector->SetInspectionType(InspectionType::Entity);
 				selectedThisFrame = true;
 
 				// if shift was held, select every entity between current and "furthest" one (direction doesnt matter, only "distance" in registry)

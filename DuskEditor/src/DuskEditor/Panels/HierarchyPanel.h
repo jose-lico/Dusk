@@ -27,6 +27,7 @@ namespace DuskEngine
 		void SelectBlock(const entt::entity& entity);
 
 		Scene* m_Scene;
+		InspectorPanel* m_Inspector;
 
 		std::vector<bool> m_SelectableStatus;
 		std::vector<Entity> m_SelectedEntities;

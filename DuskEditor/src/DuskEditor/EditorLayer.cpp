@@ -102,7 +102,7 @@ namespace DuskEngine
 			m_Panels.push_back(new InspectorPanel(m_EditingScene->m_AssetHandler, m_EditorDB));
 			InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
 			m_Panels.push_back(new ConsolePanel());
-			m_Panels.push_back(new ContentBrowserPanel(m_ProjectPath, *m_EditorDB));
+			m_Panels.push_back(new ContentBrowserPanel(m_ProjectPath, *m_EditorDB, inspector));
 			m_Panels.push_back(new GameViewportPanel(&m_PlayingSceneFB, *m_EditingScene->GetMainCamera(), &m_Playing));
 			m_GameViewportPanel = (GameViewportPanel*)m_Panels.back();
 			m_Panels.push_back(new SceneViewportPanel(&m_EditorSceneFB, &m_EditorCamera));
