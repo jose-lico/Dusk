@@ -26,42 +26,7 @@ namespace DuskEngine
 		m_Inspector->SetSelectableStatus(m_SelectableStatus);
 		viewport.SelectedEntities(m_SelectedEntities);
 
-		auto& registry = m_Scene->m_Registry;
-		auto view = registry.view<Meta>();
-
-		// Add to each entity a meta component
-		for (entt::entity entity : view)
-		{
-			Entity(entity, m_Scene).AddComponent<EditorMeta>();
-		}
-
-		// Get editor meta information
-		if(std::filesystem::exists(m_ProjectPath + "/.editor/hierarchy.meta"))
-		{
-			YAML::Node hierarchy = YAMLLoadFile(m_ProjectPath + "/.editor/hierarchy.meta");
-
-			YAML::Node entities = hierarchy["Entities"];
-			for (YAML::Node& entity : entities)
-			{
-				if(entity["Entity"])
-				{
-					uuids::uuid handle = YAMLDeserialize<uuids::uuid>(entity, "Entity", uuids::uuid());
-					
-					for (entt::entity ent : view)
-					{
-						Meta& meta = m_Scene->m_Registry.get<Meta>(ent);
-						if (meta.entityHandle == handle)
-						{
-							EditorMeta& editor = m_Scene->m_Registry.get<EditorMeta>(ent);
-							editor.Visible = YAMLDeserialize<bool>(entity, "Visible", true);
-							editor.Clickable = YAMLDeserialize<bool>(entity, "Clickable", true);
-							editor.Locked = YAMLDeserialize<bool>(entity, "Locked", false);
-							break;
-						}
-					}
-				}
-			}
-		}
+		PrepareScene();
 	}
 
 	void HierarchyPanel::OnImGuiRender()
@@ -281,6 +246,8 @@ namespace DuskEngine
 
 		m_SelectedEntities.resize(0);
 		m_SelectableStatus.resize(m_Scene->m_Registry.size());
+
+		PrepareScene();
 	}
 
 	Entity HierarchyPanel::CreateNewEntity(const std::string& name)
@@ -343,6 +310,46 @@ namespace DuskEngine
 				}
 
 				index++;
+			}
+		}
+	}
+
+	void HierarchyPanel::PrepareScene()
+	{
+		auto& registry = m_Scene->m_Registry;
+		auto view = registry.view<Meta>();
+
+		// Add to each entity a meta component
+		for (entt::entity entity : view)
+		{
+			Entity(entity, m_Scene).AddComponent<EditorMeta>();
+		}
+
+		// Get editor meta information
+		if (std::filesystem::exists(m_ProjectPath + "/.editor/hierarchy.meta"))
+		{
+			YAML::Node hierarchy = YAMLLoadFile(m_ProjectPath + "/.editor/hierarchy.meta");
+
+			YAML::Node entities = hierarchy["Entities"];
+			for (YAML::Node& entity : entities)
+			{
+				if (entity["Entity"])
+				{
+					uuids::uuid handle = YAMLDeserialize<uuids::uuid>(entity, "Entity", uuids::uuid());
+
+					for (entt::entity ent : view)
+					{
+						Meta& meta = m_Scene->m_Registry.get<Meta>(ent);
+						if (meta.entityHandle == handle)
+						{
+							EditorMeta& editor = m_Scene->m_Registry.get<EditorMeta>(ent);
+							editor.Visible = YAMLDeserialize<bool>(entity, "Visible", true);
+							editor.Clickable = YAMLDeserialize<bool>(entity, "Clickable", true);
+							editor.Locked = YAMLDeserialize<bool>(entity, "Locked", false);
+							break;
+						}
+					}
+				}
 			}
 		}
 	}

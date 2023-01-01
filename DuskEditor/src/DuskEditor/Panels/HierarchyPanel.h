@@ -25,6 +25,7 @@ namespace DuskEngine
 	private:
 		Entity CreateNewEntity(const std::string& name);
 		void SelectBlock(const entt::entity& entity);
+		void PrepareScene();
 
 		Scene* m_Scene;
 		InspectorPanel* m_Inspector;
