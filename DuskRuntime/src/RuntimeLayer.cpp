@@ -1,9 +1,18 @@
 #include "RuntimeLayer.h"
 
+// temp
+#include "DuskEditor/Assets/AssetDatabaseEditor.h"
+
+#include "Core/Application/Application.h"
+#include "Core/Application/Window.h"
 #include "Core/Application/Input.h"
 #include "Core/Application/Time.h"
 #include "Core/Serialization/SceneSerializer.h"
 #include "Core/ECS/Components/Camera.h"
+#include "Core/ECS/Entity.h"
+#include "Core/Assets/AssetDatabase.h"
+#include "Platform/OpenGL/OpenGLAPI.h"
+#include "Utils/Profiling/Timer.h"
 
 #include "GLFW/glfw3.h"
 #include "glm/gtc/type_ptr.hpp"
@@ -12,13 +21,39 @@ namespace DuskEngine
 {
 	RuntimeLayer::RuntimeLayer()
 	{
-		m_Scene = MakeRef<Scene>("Runtime Scene");
+		auto& app = Application::Get();
 
-		SceneSerializer::DeserializeText(m_Scene, "res/scenes/scene.yaml");
+		WindowData data;
+		const ApplicationSpecs& specs = app.GetSpecs();
+		data.Title = specs.Name + " | " + specs.Platform + " | " + specs.Target + " | Runtime";
+		Window& window = app.CreateWindow(data);
+		OpenGLAPI::CreateContext(window.GetNativeHandle());
+		app.SetImGuiGLContext();
+		window.CenterWindow();
+
+		// Very temp as runtime will have its own project loading stuff with vfs
+		{
+			//Timer databaseTimer("Loading project assets");
+			auto& db = Application::Get().GetAssetDatabase();
+
+			auto runtimeDB = new AssetDatabaseEditor(&db, "C:/dev/Dusk/DuskEditor/res");
+
+			{
+				Timer registerAssets("Register Assets");
+				runtimeDB->RegisterAssets();
+			}
+
+			runtimeDB->ImportAssets();
+
+			db.LoadProject();
+		}
+
+		// hardcoded project path, should be current dir
+		m_Scene = MakeRef<Scene>("Runtime Scene", "C:/dev/Dusk/DuskEditor/res");
+
+		SceneSerializer::DeserializeText(m_Scene, "C:/dev/Dusk/DuskEditor/res/scenes/scene.yaml");
 
 		m_Scene->OnAwakeRuntime();
-
-		//m_Camera = *m_Scene->GetMainCamera();
 	}
 
 	RuntimeLayer::~RuntimeLayer()
@@ -29,8 +64,6 @@ namespace DuskEngine
 	void RuntimeLayer::OnUpdate()
 	{
 		m_Scene->OnUpdateRuntime(true);
-
-		//RuntimeLayer::Camera();
 	}
 
 	void RuntimeLayer::OnEvent(Event& event)
@@ -47,71 +80,6 @@ namespace DuskEngine
 
 		return true;
 	}
-
-	/*void RuntimeLayer::Camera()
-	{
-		if (!m_IsLeftMousePressed && Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
-		{
-			m_IsLeftMousePressed = true;
-			m_HasFirstMousePosition = false;
-
-			Input::SetCursorActive(Cursor::CURSOR_DISABLED);
-		}
-		else if (!Input::IsMouseButtonPressed(Mouse::MOUSE_BUTTON_2))
-		{
-			Input::SetCursorActive(Cursor::CURSOR_NORMAL);
-			m_IsLeftMousePressed = false;
-		}
-
-		if (m_IsLeftMousePressed)
-		{
-			auto& transform = m_Camera.GetComponent<Transform>();
-
-			float moveSpeed = 3.0f;
-			float rotSpeed = 0.5f;
-
-			glm::vec3 moveInput(0.0f);
-			glm::vec3 rotInput(0.0f);
-
-			if (Input::IsKeyPressed(Key::W))
-				moveInput += transform.front;
-			else if (Input::IsKeyPressed(Key::S))
-				moveInput -= transform.front;
-
-			if (Input::IsKeyPressed(Key::D))
-				moveInput += transform.right;
-			else if (Input::IsKeyPressed(Key::A))
-				moveInput -= transform.right;
-
-			if (Input::IsKeyPressed(Key::E))
-				moveInput += transform.up;
-			else if (Input::IsKeyPressed(Key::Q))
-				moveInput -= transform.up;
-
-			if (glm::length(moveInput) > 0)
-				moveInput = glm::normalize(moveInput);
-
-			transform.position += moveInput * moveSpeed * Time::GetDeltaTime();
-
-			if (!m_HasFirstMousePosition)
-			{
-				m_LastMousePosition.x = Input::GetMouseX();
-				m_LastMousePosition.y = Input::GetMouseY();
-				m_HasFirstMousePosition = true;
-			}
-
-			rotInput.y = Input::GetMouseX() - m_LastMousePosition.x;
-			rotInput.x = m_LastMousePosition.y - Input::GetMouseY();
-
-			m_LastMousePosition.x = Input::GetMouseX();
-			m_LastMousePosition.y = Input::GetMouseY();
-
-			rotInput.x *= rotSpeed * Time::GetDeltaTime();
-			rotInput.y *= rotSpeed * Time::GetDeltaTime();
-
-			transform.rotation += rotInput;
-		}
-	}*/
 	
 	void DropCallback(GLFWwindow* window, int count, const char** paths)
 	{

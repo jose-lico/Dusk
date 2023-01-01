@@ -8,8 +8,8 @@ namespace DuskEngine
 	class DuskRuntime : public Application
 	{
 	public:
-		DuskRuntime(const ApplicationSpecs& specs)
-			: Application(specs)
+		DuskRuntime(const ApplicationSpecs& specs, const CliOptions& options)
+			: Application(specs, options)
 		{
 			PushLayer(new RuntimeLayer());
 		}
@@ -24,6 +24,9 @@ namespace DuskEngine
 		ApplicationSpecs spec;
 		spec.Name = "Dusk Runtime";
 
-		return new DuskRuntime(spec);
+		CliOptions options;
+		options.ExeName = argv[0];
+
+		return new DuskRuntime(spec, options);
 	}
 }

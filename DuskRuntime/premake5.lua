@@ -9,6 +9,11 @@ project "DuskRuntime"
 	{
 		"src/**.h",
 		"src/**.cpp",
+
+		-- temp
+		"%{wks.location}/DuskEditor/src/DuskEditor/Assets/AssetDatabaseEditor.cpp",
+		"%{wks.location}/DuskEditor/src/DuskEditor/Importers/ImageImporter.cpp",
+		"%{wks.location}/DuskEditor/src/DuskEditor/Utils/stb_image.cpp",
 	}
 
 	links
@@ -29,22 +34,35 @@ project "DuskRuntime"
 	includedirs
 	{
 		"%{wks.location}/DuskEngine/src",
+		"%{wks.location}/DuskEditor/src",
 		dependenciesDir .. "/glfw/include",
 		dependenciesDir .. "/glew/include",
 		dependenciesDir .. "/glm/include",
+		dependenciesDir .. "/stb/include",
 		dependenciesDir .. "/spdlog/include",
 		dependenciesDir .. "/imgui/include",
 		dependenciesDir .. "/entt/src",
+		dependenciesDir .. "/nativefiledialog/src/include",
 		dependenciesDir .. "/assimp-premake/include",
 		dependenciesDir .. "/yaml-cpp/include",
 		dependenciesDir .. "/stduuid/include",
 		dependenciesDir .. "/stduuid/gsl",
-		dependenciesDir .. "/IconFontCppHeaders"
+		dependenciesDir .. "/IconFontCppHeaders",
+		dependenciesDir .. "/ImGuizmo/include",
+		dependenciesDir .. "/rttr/include",
+		dependenciesDir .. "/lua/include/lua",
+		dependenciesDir .. "/sol2/include"
 	}
 
 	defines
 	{
-		"DUSK_EXE"
+		-- Lib includes
+		"YAML_CPP_STATIC_DEFINE",
+		"UUID_SYSTEM_GENERATOR",
+		"NOMINMAX",
+
+		"DUSK_EXE",
+		"DUSK_IMGUI"
 	}
 
 	filter "system:windows"
@@ -68,14 +86,26 @@ project "DuskRuntime"
 		}
 
 	filter "configurations:Debug"
+		kind "ConsoleApp"
 		runtime "Debug"
 		symbols "On"
 		defines "DUSK_DEBUG"
-	
-	filter "configurations:Release"
-		runtime "Release"
-		optimize "On"
 
-	filter "configurations:MinSizeRelease"
+	filter "configurations:ReleaseWithInfo"
+		kind "ConsoleApp"
 		runtime "Release"
 		optimize "On"
+		defines "DUSK_DEBUG"
+	
+	filter "configurations:ReleaseNoImGui"
+		kind "ConsoleApp"
+		runtime "Release"
+		optimize "On"
+		defines "DUSK_RELEASE"
+		undefines "DUSK_IMGUI"
+
+	filter "configurations:Release"
+		kind "WindowedApp"
+		runtime "Release"
+		optimize "On"
+		defines "DUSK_RELEASE"
