@@ -38,7 +38,7 @@ namespace DuskEngine
 		textureData.Path = path;
 		textureData.Name = path.filename().string();
 
-		std::string importFilePath = projectPath + "/.import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
+		std::filesystem::path importFilePath = (std::filesystem::path)projectPath / (std::filesystem::path)(".import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import");
 
 		if (std::filesystem::exists(importFilePath))
 		{

@@ -28,8 +28,10 @@ namespace DuskEngine
 		data.Title = specs.Name + " | " + specs.Platform + " | " + specs.Target + " | Runtime";
 		Window& window = app.CreateWindow(data);
 		OpenGLAPI::CreateContext(window.GetNativeHandle());
+#if DUSK_IMGUI
 		app.SetImGuiGLContext();
-		window.CenterWindow();
+#endif		
+		window.Maximize();
 
 		// Very temp as runtime will have its own project loading stuff with vfs
 		{
@@ -49,7 +51,7 @@ namespace DuskEngine
 		}
 
 		// hardcoded project path, should be current dir
-		m_Scene = MakeRef<Scene>("Runtime Scene", "C:/dev/Dusk/DuskEditor/res");
+		m_Scene = MakeRef<Scene>("Runtime Scene", "");
 
 		SceneSerializer::DeserializeText(m_Scene, "C:/dev/Dusk/DuskEditor/res/scenes/scene.yaml");
 

@@ -3,7 +3,8 @@ project "DuskRuntime"
 	language "C++"
 
 	targetdir ("%{wks.location}/bin/" .. outputDir .. "/%{prj.name}")
-	objdir ("%{wks.location}/bin-int/" .. outputDir .. "/%{prj.name}")
+	objdir  ("%{wks.location}/bin-int/" .. outputDir .. "/%{prj.name}")
+	targetname ("%{prj.name}-%{cfg.system}-%{cfg.buildcfg}-%{cfg.architecture}")
 
 	files
 	{
@@ -71,6 +72,7 @@ project "DuskRuntime"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
 		links "opengl32"
+		debugdir ("%{wks.location}/bin/%{cfg.targetdir}")
 		
 	filter "system:linux"
 		cppdialect "gnu++17"

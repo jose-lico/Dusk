@@ -45,8 +45,6 @@ Entities:
       material:
         fileID: 1
         uuid: 1e636a00-4ce1-49c2-bdaa-6d93d22c6686
-    Script:
-      script: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f
   - Entity: 2541c9db-4a07-4507-9136-5d0bd8dc7452
     Meta:
       name: Main Camera
@@ -57,6 +55,8 @@ Entities:
       scale: [1, 1, 1]
     Camera:
       main: true
+    Script:
+      script: 6be4bbf8-0c6c-4ad3-b783-6c2118104d9f
   - Entity: fa3e4a8d-1559-4632-93bb-72202f32bae7
     Meta:
       name: Point Light

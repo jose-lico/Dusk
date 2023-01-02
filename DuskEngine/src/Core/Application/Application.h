@@ -63,12 +63,13 @@ namespace DuskEngine
 		void PopOverlay(Layer* overlay);
 		void OnEvent(Event& e);
 
+		Window& CreateWindow(WindowData& data);
+
 #ifdef DUSK_IMGUI
 		void SetImGuiGLContext() const;
 		void DestroyImGuiGLContext() const;
 #endif
-		Window& CreateWindow(WindowData& data);
-
+		
 		inline OS& GetOS() const { return *m_OS; }
 		inline Window& GetWindow() const { return *m_Window; }
 		inline Renderer& GetRenderer() const { return *m_Renderer; }

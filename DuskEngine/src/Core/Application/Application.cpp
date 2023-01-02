@@ -150,6 +150,15 @@ namespace DuskEngine
 		}
 	}
 
+	Window& Application::CreateWindow(WindowData& data)
+	{
+		m_Window = new Window(data);
+		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+
+		return *m_Window;
+	}
+
+#ifdef DUSK_IMGUI
 	void Application::SetImGuiGLContext() const
 	{
 		m_ImGuiLayer->SetGLContext(m_Window);
@@ -159,12 +168,5 @@ namespace DuskEngine
 	{
 		m_ImGuiLayer->DestroyGLContext();
 	}
-
-	Window& Application::CreateWindow(WindowData& data)
-	{
-		m_Window = new Window(data);
-		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
-
-		return *m_Window;
-	}
+#endif
 }
