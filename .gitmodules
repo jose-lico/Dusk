@@ -46,3 +46,6 @@
 [submodule "Dependencies/sol2"]
 	path = Dependencies/sol2
 	url = https://github.com/ThePhD/sol2
+[submodule "Dependencies/zstd"]
+	path = Dependencies/zstd
+	url = https://github.com/jose-lico/zstd

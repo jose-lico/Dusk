@@ -5,7 +5,8 @@ project "DuskRuntime"
 	targetdir ("%{wks.location}/bin/" .. outputDir .. "/%{prj.name}")
 	objdir  ("%{wks.location}/bin-int/" .. outputDir .. "/%{prj.name}")
 	targetname ("%{prj.name}-%{cfg.system}-%{cfg.buildcfg}-%{cfg.architecture}")
-
+	libdirs (dependenciesDir .. "/zstd/build/VS2010/bin/x64_Release")
+	
 	files
 	{
 		"src/**.h",
@@ -17,6 +18,7 @@ project "DuskRuntime"
 		"%{wks.location}/DuskEditor/src/DuskEditor/Utils/stb_image.cpp",
 	}
 
+
 	links
 	{
 		"DuskEngine",
@@ -27,7 +29,8 @@ project "DuskRuntime"
 		"yaml-cpp",
 		"ImGuizmo",
 		"rttr",
-		"lua"
+		"lua",
+		"libzstd_static"
 	}
 
 	debugdir "%{wks.location}/DuskEditor"
@@ -52,7 +55,8 @@ project "DuskRuntime"
 		dependenciesDir .. "/ImGuizmo/include",
 		dependenciesDir .. "/rttr/include",
 		dependenciesDir .. "/lua/include/lua",
-		dependenciesDir .. "/sol2/include"
+		dependenciesDir .. "/sol2/include",
+		dependenciesDir .. "/zstd/lib"
 	}
 
 	defines

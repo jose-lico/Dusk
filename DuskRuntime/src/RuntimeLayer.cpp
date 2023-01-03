@@ -17,6 +17,10 @@
 #include "GLFW/glfw3.h"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "zstd.h"
+
+#include <fstream>
+
 namespace DuskEngine
 {
 	RuntimeLayer::RuntimeLayer()
@@ -58,6 +62,34 @@ namespace DuskEngine
 		SceneSerializer::DeserializeText(m_Scene, "scenes/scene.yaml");
 
 		m_Scene->OnAwakeRuntime();
+
+
+		// temp compress image
+
+		// get duck image, 4k so raw uncompressed is 64 mb
+
+		std::ifstream duck(".import/images/duck.png-2bed8e21-0471-4527-8171-5a968a7b80de.import");
+		std::stringstream buffer;
+		buffer << duck.rdbuf();
+		
+		void* p_dst = malloc(buffer.str().size());
+
+		TRACE(std::to_string(buffer.str().size()));
+
+		int src_size = buffer.str().size(); // image size
+
+		ZSTD_CCtx* cctx = ZSTD_createCCtx();
+		ZSTD_CCtx_setParameter(cctx, ZSTD_c_compressionLevel, 3);
+
+		ZSTD_compressBound(src_size); 
+
+		int dst_size = ZSTD_compressBound(src_size);
+		TRACE(std::to_string(dst_size));
+
+		int ret = ZSTD_compressCCtx(cctx, p_dst, dst_size, &buffer.str()[0], src_size, 3); //
+		TRACE(std::to_string(ret));
+		ZSTD_freeCCtx(cctx);
+		free(p_dst);
 	}
 
 	RuntimeLayer::~RuntimeLayer()
