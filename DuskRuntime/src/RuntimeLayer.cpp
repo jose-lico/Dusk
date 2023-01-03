@@ -21,6 +21,8 @@ namespace DuskEngine
 {
 	RuntimeLayer::RuntimeLayer()
 	{
+		m_Logger = new Logger(LOGGER);
+
 		auto& app = Application::Get();
 
 		WindowData data;
@@ -38,7 +40,7 @@ namespace DuskEngine
 			//Timer databaseTimer("Loading project assets");
 			auto& db = Application::Get().GetAssetDatabase();
 
-			auto runtimeDB = new AssetDatabaseEditor(&db, "C:/dev/Dusk/DuskEditor/res");
+			auto runtimeDB = new AssetDatabaseEditor(&db, std::filesystem::current_path().string());
 
 			{
 				Timer registerAssets("Register Assets");
@@ -53,7 +55,7 @@ namespace DuskEngine
 		// hardcoded project path, should be current dir
 		m_Scene = MakeRef<Scene>("Runtime Scene", "");
 
-		SceneSerializer::DeserializeText(m_Scene, "C:/dev/Dusk/DuskEditor/res/scenes/scene.yaml");
+		SceneSerializer::DeserializeText(m_Scene, "scenes/scene.yaml");
 
 		m_Scene->OnAwakeRuntime();
 	}

@@ -7,7 +7,7 @@
 
 namespace DuskEngine
 {
-	//class Scene;
+	class Logger;
 
 	class RuntimeLayer : public Layer
 	{
@@ -19,5 +19,7 @@ namespace DuskEngine
 	private:
 		bool CameraProj(WindowResizeEvent& event);
 		Ref<Scene> m_Scene;
+
+		Logger* m_Logger;
 	};
 }
