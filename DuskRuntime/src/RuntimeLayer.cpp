@@ -18,6 +18,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "zstd.h"
+#include "imgui/imgui.h"
 
 #include <fstream>
 
@@ -72,34 +73,67 @@ namespace DuskEngine
 		std::stringstream buffer;
 		buffer << duck.rdbuf();
 		
-		void* p_dst = malloc(buffer.str().size());
-
-		TRACE(std::to_string(buffer.str().size()));
+		// COMPRESSION
 
 		int src_size = buffer.str().size(); // image size
+
+		TRACE("Raw image size: " + std::to_string(src_size));
 
 		ZSTD_CCtx* cctx = ZSTD_createCCtx();
 		ZSTD_CCtx_setParameter(cctx, ZSTD_c_compressionLevel, 3);
 
 		ZSTD_compressBound(src_size); 
 
-		int dst_size = ZSTD_compressBound(src_size);
-		TRACE(std::to_string(dst_size));
+		int compressedImgMaxSize = ZSTD_compressBound(src_size);
+		TRACE("Max compressed size: " + std::to_string(compressedImgMaxSize));
+		void* compressedImg = malloc(compressedImgMaxSize);
 
-		int ret = ZSTD_compressCCtx(cctx, p_dst, dst_size, &buffer.str()[0], src_size, 3); //
-		TRACE(std::to_string(ret));
+		int compressedSize = ZSTD_compressCCtx(cctx, compressedImg, compressedImgMaxSize, &buffer.str()[0], src_size, 3); //
+		TRACE("Compressed size: " + std::to_string(compressedSize));
 		ZSTD_freeCCtx(cctx);
-		free(p_dst);
+
+		// DECOMPRESSION
+
+		ZSTD_DCtx* dctx = ZSTD_createDCtx();
+		
+		void* decompressedImg = malloc(src_size);
+
+		int ret2 = ZSTD_decompressDCtx(dctx, decompressedImg, src_size, compressedImg, compressedSize);
+		TRACE("ret2?: " + std::to_string(ret2));
+		ZSTD_freeDCtx(dctx);
+		
+		m_MyUncompressedTexture = CreateTexture((const unsigned char*)decompressedImg);
+
+		//TextureData headerData;
+		//memcpy(&headerData, uncompressedImg, sizeof(TextureData));
+
+		//TRACE("Image Width: " + std::to_string(headerData.Width));
+		//TRACE("Image Height: " + std::to_string(headerData.Height));
+		//TRACE("Image Channels: " + std::to_string(headerData.Channels));
+		//TRACE("Image Size: " + std::to_string(headerData.DataSize));
+
+		free(compressedImg);
+		free(decompressedImg);
 	}
 
 	RuntimeLayer::~RuntimeLayer()
 	{
+		OpenGLAPI::FreeTexture(m_MyUncompressedTexture);
 		m_Scene->OnShutdownRuntime();
 	}
 
 	void RuntimeLayer::OnUpdate()
 	{
 		m_Scene->OnUpdateRuntime(true);
+	}
+
+	void RuntimeLayer::OnImGuiRender()
+	{
+		ImGui::Begin("Uncompressed Image");
+
+		ImGui::Image((ImTextureID)m_MyUncompressedTexture.ResourceID, { 300, 300 }, { 0, 1 }, { 1, 0 });
+
+		ImGui::End();
 	}
 
 	void RuntimeLayer::OnEvent(Event& event)
