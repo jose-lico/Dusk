@@ -24,6 +24,7 @@ end
 	include "Dependencies/ImGuizmo"
 	include "Dependencies/rttr"
 	include "Dependencies/lua"
+	include "Dependencies/zstd"
 if _ACTION ~= "gmake2" then
 	group "Engine"
 end

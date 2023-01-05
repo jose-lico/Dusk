@@ -5,7 +5,6 @@ project "DuskRuntime"
 	targetdir ("%{wks.location}/bin/" .. outputDir .. "/%{prj.name}")
 	objdir  ("%{wks.location}/bin-int/" .. outputDir .. "/%{prj.name}")
 	targetname ("%{prj.name}-%{cfg.system}-%{cfg.buildcfg}-%{cfg.architecture}")
-	libdirs (dependenciesDir .. "/zstd/build/VS2010/bin/x64_Release")
 	
 	files
 	{
@@ -30,7 +29,7 @@ project "DuskRuntime"
 		"ImGuizmo",
 		"rttr",
 		"lua",
-		"libzstd_static"
+		"zstd"
 	}
 
 	debugdir "%{wks.location}/DuskEditor"
