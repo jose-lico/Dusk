@@ -2,5 +2,5 @@ Material: quadMaterial.material
 Shader: 273a0e85-9157-41a8-a769-8eb00ebc93ee
 Uniforms:
   Diffuse: f760fd63-71d6-4d90-a5e1-388008f021ea
-  DiffuseColor: [1, 0, 0]
+  DiffuseColor: [1, 1, 1]
   Specular: 57744d50-1f83-4a6b-8938-2632099bee63

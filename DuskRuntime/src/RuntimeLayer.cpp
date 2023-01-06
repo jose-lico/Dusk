@@ -64,7 +64,6 @@ namespace DuskEngine
 
 		m_Scene->OnAwakeRuntime();
 
-
 		// temp compress image
 
 		// get duck image, 4k so raw uncompressed is 64 mb
@@ -81,8 +80,6 @@ namespace DuskEngine
 
 		ZSTD_CCtx* cctx = ZSTD_createCCtx();
 		ZSTD_CCtx_setParameter(cctx, ZSTD_c_compressionLevel, 3);
-
-		ZSTD_compressBound(src_size); 
 
 		int compressedImgMaxSize = ZSTD_compressBound(src_size);
 		TRACE("Max compressed size: " + std::to_string(compressedImgMaxSize));

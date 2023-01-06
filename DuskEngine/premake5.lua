@@ -32,7 +32,8 @@ project "DuskEngine"
 		dependenciesDir .. "/ImGuizmo/include",
 		dependenciesDir .. "/rttr/include",
 		dependenciesDir .. "/lua/include/lua",
-		dependenciesDir .. "/sol2/include"
+		dependenciesDir .. "/sol2/include",
+		dependenciesDir .. "/zstd/lib"
 	}
 
 	defines

@@ -25,7 +25,8 @@ project "DuskEditor"
 		"yaml-cpp",
 		"ImGuizmo",
 		"rttr",
-		"lua"
+		"lua", 
+		"zstd"
 	}
 
 	debugdir "%{wks.location}/DuskEditor"
