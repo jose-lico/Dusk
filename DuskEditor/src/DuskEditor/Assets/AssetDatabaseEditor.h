@@ -42,7 +42,7 @@ namespace DuskEngine
 
 		AssetDatabase* m_EngineDB;
 
-		std::filesystem::path m_RootDirectory = "res";
+		std::filesystem::path m_RootDirectory;
 		std::filesystem::path m_CurrentDirectory;
 		std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash2> m_UUIDsMap;
 

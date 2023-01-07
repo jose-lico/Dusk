@@ -33,6 +33,7 @@ namespace DuskEngine
 		DestroyImGuiGLContext();
 		delete m_Window;
 
+		m_ProjectPath = ProjectPath;
 		m_Layer = new EditorLayer(ProjectPath);
 		PushLayer(m_Layer);
 	}

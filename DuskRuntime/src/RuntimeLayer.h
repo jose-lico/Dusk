@@ -23,6 +23,5 @@ namespace DuskEngine
 		Ref<Scene> m_Scene;
 
 		Logger* m_Logger;
-		Texture m_MyUncompressedTexture;
 	};
 }

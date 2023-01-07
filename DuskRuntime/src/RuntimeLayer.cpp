@@ -17,9 +17,6 @@
 #include "GLFW/glfw3.h"
 #include "glm/gtc/type_ptr.hpp"
 
-#include "zstd.h"
-#include "imgui/imgui.h"
-
 #include <fstream>
 
 namespace DuskEngine
@@ -37,7 +34,7 @@ namespace DuskEngine
 		OpenGLAPI::CreateContext(window.GetNativeHandle());
 #if DUSK_IMGUI
 		app.SetImGuiGLContext();
-#endif		
+#endif	
 		window.Maximize();
 
 		// Very temp as runtime will have its own project loading stuff with vfs
@@ -52,9 +49,7 @@ namespace DuskEngine
 				runtimeDB->RegisterAssets();
 			}
 
-			runtimeDB->ImportAssets();
-
-			db.LoadProject();
+			delete(runtimeDB);
 		}
 
 		// hardcoded project path, should be current dir
@@ -63,59 +58,10 @@ namespace DuskEngine
 		SceneSerializer::DeserializeText(m_Scene, "scenes/scene.yaml");
 
 		m_Scene->OnAwakeRuntime();
-
-		// temp compress image
-
-		// get duck image, 4k so raw uncompressed is 64 mb
-
-		std::ifstream duck(".import/images/duck.png-2bed8e21-0471-4527-8171-5a968a7b80de.import");
-		std::stringstream buffer;
-		buffer << duck.rdbuf();
-		
-		// COMPRESSION
-
-		int src_size = buffer.str().size(); // image size
-
-		TRACE("Raw image size: " + std::to_string(src_size));
-
-		ZSTD_CCtx* cctx = ZSTD_createCCtx();
-		ZSTD_CCtx_setParameter(cctx, ZSTD_c_compressionLevel, 3);
-
-		int compressedImgMaxSize = ZSTD_compressBound(src_size);
-		TRACE("Max compressed size: " + std::to_string(compressedImgMaxSize));
-		void* compressedImg = malloc(compressedImgMaxSize);
-
-		int compressedSize = ZSTD_compressCCtx(cctx, compressedImg, compressedImgMaxSize, &buffer.str()[0], src_size, 3); //
-		TRACE("Compressed size: " + std::to_string(compressedSize));
-		ZSTD_freeCCtx(cctx);
-
-		// DECOMPRESSION
-
-		ZSTD_DCtx* dctx = ZSTD_createDCtx();
-		
-		void* decompressedImg = malloc(src_size);
-
-		int ret2 = ZSTD_decompressDCtx(dctx, decompressedImg, src_size, compressedImg, compressedSize);
-		TRACE("ret2?: " + std::to_string(ret2));
-		ZSTD_freeDCtx(dctx);
-		
-		m_MyUncompressedTexture = CreateTexture((const unsigned char*)decompressedImg);
-
-		//TextureData headerData;
-		//memcpy(&headerData, uncompressedImg, sizeof(TextureData));
-
-		//TRACE("Image Width: " + std::to_string(headerData.Width));
-		//TRACE("Image Height: " + std::to_string(headerData.Height));
-		//TRACE("Image Channels: " + std::to_string(headerData.Channels));
-		//TRACE("Image Size: " + std::to_string(headerData.DataSize));
-
-		free(compressedImg);
-		free(decompressedImg);
 	}
 
 	RuntimeLayer::~RuntimeLayer()
 	{
-		OpenGLAPI::FreeTexture(m_MyUncompressedTexture);
 		m_Scene->OnShutdownRuntime();
 	}
 
@@ -126,11 +72,6 @@ namespace DuskEngine
 
 	void RuntimeLayer::OnImGuiRender()
 	{
-		ImGui::Begin("Uncompressed Image");
-
-		ImGui::Image((ImTextureID)m_MyUncompressedTexture.ResourceID, { 300, 300 }, { 0, 1 }, { 1, 0 });
-
-		ImGui::End();
 	}
 
 	void RuntimeLayer::OnEvent(Event& event)

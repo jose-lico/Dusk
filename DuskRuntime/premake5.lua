@@ -69,12 +69,18 @@ project "DuskRuntime"
 		"DUSK_IMGUI"
 	}
 
+	postbuildcommands 
+	{
+		"{COPY} %{wks.location}/DuskEditor/res %{cfg.targetdir}"
+	}
+
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "on"
 		systemversion "latest"
 		defines "DUSK_WINDOWS"
 		links "opengl32"
+		entrypoint "mainCRTStartup"
 		debugdir ("%{wks.location}/bin/%{cfg.targetdir}")
 		
 	filter "system:linux"

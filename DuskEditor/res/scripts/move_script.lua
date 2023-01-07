@@ -23,11 +23,11 @@ function OnUpdate()
     local input = Vector2.new(0,0)
     local front = transform.front
     
-    if (Input.IsKeyPressed(KeyCode.D)) then input.x = -1
-    elseif (Input.IsKeyPressed(KeyCode.A)) then input.x = 1 end
+    if (Input.IsKeyPressed(KeyCode.D)) then input.x = 1
+    elseif (Input.IsKeyPressed(KeyCode.A)) then input.x = -1 end
 
-    if (Input.IsKeyPressed(KeyCode.W)) then input.y = 1
-    elseif (Input.IsKeyPressed(KeyCode.S)) then input.y = -1 end
+    if (Input.IsKeyPressed(KeyCode.W)) then input.y = -1
+    elseif (Input.IsKeyPressed(KeyCode.S)) then input.y = 1 end
 
     local movement = Vector3.new(input.x, 0, input.y)
     

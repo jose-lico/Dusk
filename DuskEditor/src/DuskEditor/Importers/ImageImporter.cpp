@@ -1,6 +1,7 @@
 #include "ImageImporter.h"
 
 #include "Core/Application/Core.h"
+#include "Core/Application/Application.h"
 #include "Utils/Compression/Compression.h"
 
 #include "stb/stb_image.h"
@@ -21,7 +22,6 @@ namespace DuskEngine
 
         if (data)
         {
-
             ImageData headerData;
             headerData.Width = width;
             headerData.Height = height;
@@ -35,10 +35,13 @@ namespace DuskEngine
             headerData.DataSize = compressedSize;
 
             size_t dataSize = headerData.DataSize + sizeof(ImageData);
-            uint8_t* importedFileData = (uint8_t*)malloc(dataSize);
+            void* importedFileData = malloc(dataSize);
 
-            memcpy(importedFileData, &headerData, sizeof(ImageData));
-            memcpy(importedFileData + sizeof(ImageData), compressedData, headerData.DataSize);
+            memcpy(importedFileData, &headerData, sizeof(headerData));
+            memcpy((char*)importedFileData + sizeof(headerData), compressedData, headerData.DataSize);
+
+            std::filesystem::create_directory(Application::Get().GetProjectPath() / ".import");
+            std::filesystem::create_directory(Application::Get().GetProjectPath() / ".import/images");
 
             std::ofstream importFile(importFilePath, std::ios::app | std::ios::binary);
             importFile.write((char*)importedFileData, dataSize);

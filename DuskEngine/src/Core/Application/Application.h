@@ -13,6 +13,7 @@
 #endif
 
 #include <string>
+#include <filesystem>
 
 #undef CreateWindow
 
@@ -78,6 +79,9 @@ namespace DuskEngine
 		inline const CliOptions& GetCliOptions() const { return m_Options; }
 		inline const ApplicationSpecs& GetSpecs() const { return m_Specs; }
 		inline const std::string& GetStartupTime() const { return m_StartupTime; }
+		inline const std::filesystem::path& GetProjectPath() const { return m_ProjectPath; }
+	protected:
+		std::filesystem::path m_ProjectPath;
 	private:
 		static Application* s_Instance;
 
