@@ -9,6 +9,9 @@
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
 
+#define CGLTF_IMPLEMENTATION
+#include "cgltf.h"
+
 namespace DuskEngine
 {
 	/*Model::Model(const std::string& path)
@@ -30,18 +33,39 @@ namespace DuskEngine
 		Path = path;
 		Name = path.filename().string();
 
-		Assimp::Importer import;
-		const aiScene* scene = import.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_FlipWindingOrder);
-		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		if(path.extension().string() == ".glb")
 		{
-			std::string message = "ERROR::ASSIMP::";
-			message.append(import.GetErrorString());
-			WARN(message.c_str());
-			return;
-		}
+			cgltf_options options{ cgltf_file_type_glb };
+			cgltf_data* data = NULL;
+			cgltf_result result = cgltf_parse_file(&options, path.string().c_str(), &data);
+			if (result == cgltf_result_success)
+			{
+				TRACE("Meshes count: " + std::to_string(data->meshes_count));
+				TRACE("Materials count: " + std::to_string(data->materials_count));
+				TRACE("Buffers count: " + std::to_string(data->buffers_count));
+				TRACE("Images count: " + std::to_string(data->images_count));
+				TRACE("Textures count: " + std::to_string(data->textures_count));
 
-		LOG("Loading Model " + Name);
-		ProcessNode(scene->mRootNode, scene);
+				//result = cgltf_load_buffers(&options, data, fileName);
+
+				cgltf_free(data);
+			}
+		}
+		else
+		{
+			Assimp::Importer import;
+			const aiScene* scene = import.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_FlipWindingOrder);
+			if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+			{
+				std::string message = "ERROR::ASSIMP::";
+				message.append(import.GetErrorString());
+				WARN(message.c_str());
+				return;
+			}
+
+			LOG("Loading Model " + Name);
+			ProcessNode(scene->mRootNode, scene);
+		}
 	}
 
 	Model::~Model()

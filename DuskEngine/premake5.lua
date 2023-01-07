@@ -33,7 +33,8 @@ project "DuskEngine"
 		dependenciesDir .. "/rttr/include",
 		dependenciesDir .. "/lua/include/lua",
 		dependenciesDir .. "/sol2/include",
-		dependenciesDir .. "/zstd/lib"
+		dependenciesDir .. "/zstd/lib",
+		dependenciesDir .. "/cgltf"
 	}
 
 	defines

@@ -19,3 +19,4 @@ Some of these libraries will be swapped out in the future for a custom solution,
 - [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo) - Immediate mode 3D gizmo for scene editing and other controls based on Dear Imgui
 - [rttr](https://github.com/rttrorg/rttr) - C++ Reflection Library
 - [zstd](https://github.com/jose-lico/zstd) - Zstandard - Fast real-time compression algorithm
+- [cgltf](https://github.com/jkuhlmann/cgltf) - Single-file glTF 2.0 loader and writer written in C99

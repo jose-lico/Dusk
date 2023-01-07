@@ -55,7 +55,7 @@ def generate_embedded(path, file_type, extension, data=None, md5=None):
         image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
         # optimally would just write to a variable but fuck it
         image_embedded = open(path + ".embedded", "wb")
-        image_embedded.write(struct.pack("@IIQQ", image.width, image.height, len(image.getbands()), len(image.tobytes())))
+        image_embedded.write(struct.pack("@IIQQQ", image.width, image.height, len(image.getbands()), len(image.tobytes()), 0))
         image_embedded.write(image.tobytes())
         image_embedded.close()
         data = open(path + ".embedded", "rb").read()

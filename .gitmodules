@@ -49,3 +49,6 @@
 [submodule "Dependencies/zstd"]
 	path = Dependencies/zstd
 	url = https://github.com/jose-lico/zstd
+[submodule "Dependencies/cgltf"]
+	path = Dependencies/cgltf
+	url = https://github.com/jkuhlmann/cgltf
