@@ -133,13 +133,13 @@ Entities:
       name: Model
       enabled: true
     Transform:
-      position: [0.169760525, -0.500001907, -3.65270042]
-      rotation: [0, 0, 0]
-      scale: [1, 1, 1]
+      position: [0.169760525, -0.346881926, -3.61352015]
+      rotation: [-4.75602198, 0, 0]
+      scale: [0.00999999978, 0.00999999978, 0.00999999978]
     MeshRenderer:
       mesh:
         fileID: 2
-        uuid: 4b6ff6a4-8c23-45c8-b7ab-42b3522f9035
+        uuid: 0e4309c9-2e89-45a0-9a71-0422fdb88e42
       material:
         fileID: 0
         uuid: 00000000-0000-0000-0000-000000000000

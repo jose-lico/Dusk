@@ -46,7 +46,79 @@ namespace DuskEngine
 				TRACE("Images count: " + std::to_string(data->images_count));
 				TRACE("Textures count: " + std::to_string(data->textures_count));
 
-				//result = cgltf_load_buffers(&options, data, fileName);
+				result = cgltf_load_buffers(&options, data, path.string().c_str());
+
+				for (unsigned int i = 0, meshIndex = 0; i < data->meshes_count; i++)
+				{
+					for (unsigned int p = 0; p < data->meshes[i].primitives_count; p++)
+					{
+						std::vector<float> positions;
+						std::vector<glm::vec3> normals;
+						std::vector<glm::vec2> textureCoords;
+						for (unsigned int j = 0; j < data->meshes[i].primitives[p].attributes_count; j++)
+						{
+							if (data->meshes[i].primitives[p].attributes[j].type == cgltf_attribute_type_position)      // POSITION
+							{
+								TRACE("Position Data");
+								cgltf_accessor* attribute = data->meshes[i].primitives[p].attributes[j].data;
+								TRACE("Vertex Count: " + std::to_string(attribute->count));
+								positions.resize(attribute->count * 3);
+								TRACE("Positions size:" + std::to_string(positions.size()));
+								//memcpy(&positions[0], attribute->buffer_view->buffer->data, attribute->count);
+
+								int n = 0;
+								float* buffer = (float*)attribute->buffer_view->buffer->data + attribute->buffer_view->offset / sizeof(float) + attribute->offset / sizeof(float);
+								for (unsigned int k = 0; k < attribute->count; k++)
+								{
+									for (int l = 0; l < 3; l++) \
+									{
+										positions[3 * k + l] = buffer[n + l];
+									}
+
+									n += (int)(attribute->stride / sizeof(float));
+								}
+							}
+							else if (data->meshes[i].primitives[p].attributes[j].type == cgltf_attribute_type_normal)   // NORMAL
+							{
+								TRACE("Normal Data");
+								cgltf_accessor* attribute = data->meshes[i].primitives[p].attributes[j].data;
+								TRACE("Normals Count: " + std::to_string(attribute->count));
+								normals.resize(attribute->count);
+								memcpy(&normals[0], attribute->buffer_view->buffer->data, attribute->count);
+							}
+							else if (data->meshes[i].primitives[p].attributes[j].type == cgltf_attribute_type_texcoord) // TEXCOORD_0
+							{
+								TRACE("Text Coords Data");
+								cgltf_accessor* attribute = data->meshes[i].primitives[p].attributes[j].data;
+								TRACE("Text Coords Count: " + std::to_string(attribute->count));
+								textureCoords.resize(attribute->count);
+								memcpy(&textureCoords[0], attribute->buffer_view->buffer->data, attribute->count);
+							}
+						}
+
+						std::vector<Vertex> vertices;
+						//vertices.resize(normals.size());
+						for (size_t x = 0; x < normals.size(); x++)
+						{
+							Vertex vertex;
+							vertex.Position.x = positions[x * 3];
+							vertex.Position.y = positions[x * 3 + 1];
+							vertex.Position.z = positions[x * 3 + 2];
+							vertex.Normal = normals[x];
+							vertex.TexCoords = textureCoords[x];
+							vertices.push_back(vertex);
+						}
+
+						TRACE("Positions size:" + std::to_string(positions.size()));
+
+						std::vector<unsigned int> indices;
+						cgltf_accessor* attribute = data->meshes[i].primitives[p].indices;
+						indices.resize(attribute->count);
+						memcpy(&indices[0], attribute->buffer_view->buffer->data, attribute->count);
+
+						m_Meshes.push_back(MakeUnique<Mesh>(vertices, &indices[0], (unsigned int)indices.size()));
+					}
+				}
 
 				cgltf_free(data);
 			}
