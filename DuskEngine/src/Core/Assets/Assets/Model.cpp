@@ -111,10 +111,23 @@ namespace DuskEngine
 
 						TRACE("Positions size:" + std::to_string(positions.size()));
 
-						std::vector<unsigned int> indices;
+						std::vector<unsigned short> indices;
 						cgltf_accessor* attribute = data->meshes[i].primitives[p].indices;
 						indices.resize(attribute->count);
-						memcpy(&indices[0], attribute->buffer_view->buffer->data, attribute->count);
+
+						int n = 0;
+						unsigned short* buffer = (unsigned short*)attribute->buffer_view->buffer->data + attribute->buffer_view->offset / sizeof(unsigned short) + attribute->offset / sizeof(unsigned short);
+						for (unsigned int k = 0; k < attribute->count; k++)
+						{
+							for (int l = 0; l < 1; l++) \
+							{
+								indices[1 * k + l] = buffer[n + l];
+							}
+
+							n += (int)(attribute->stride / sizeof(unsigned short));
+						}
+
+						//memcpy(&indices[0], attribute->buffer_view->buffer->data, attribute->count);
 
 						m_Meshes.push_back(MakeUnique<Mesh>(vertices, &indices[0], (unsigned int)indices.size()));
 					}

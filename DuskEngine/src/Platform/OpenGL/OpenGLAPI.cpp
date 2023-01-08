@@ -259,7 +259,7 @@ namespace DuskEngine :: OpenGLAPI
 
 	void DrawIndexed(const VertexArray& vertexArray)
 	{
-		glDrawElements(GL_TRIANGLES, vertexArray.IB.Count, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, vertexArray.IB.Count, vertexArray.IB.UnitSize == 4 ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT, nullptr);
 	}
 
 	void DrawArrays(unsigned int start, unsigned int count)

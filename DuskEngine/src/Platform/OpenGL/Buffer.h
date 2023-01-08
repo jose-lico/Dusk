@@ -54,6 +54,7 @@ namespace DuskEngine
 	struct IndexBuffer : OpenGLBuffer
 	{
 		uint32_t Count;
+		size_t UnitSize;
 	};
 
 	struct VertexBufferElement

@@ -25,6 +25,7 @@ namespace DuskEngine
 	public:
 		Mesh(float* vertices, unsigned int size, unsigned int* indices, unsigned int count, MeshType type);
 		Mesh(std::vector<Vertex>& vertices, unsigned int* indices, unsigned int count);
+		Mesh(std::vector<Vertex>& vertices, unsigned short* indices, unsigned int count);
 		~Mesh() = default;
 
 		inline MeshType GetType() { return m_Type; }
