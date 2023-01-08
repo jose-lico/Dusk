@@ -105,7 +105,7 @@ namespace DuskEngine
 
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 				{
-					ImGui::SetDragDropPayload("TEXTURE", &directoryEntry.path().string(), sizeof(std::string), ImGuiCond_Once);
+					ImGui::SetDragDropPayload("TEXTURE", directoryEntry.path().string().data(), strlen(directoryEntry.path().string().data()), ImGuiCond_Once);
 					ImGui::EndDragDropSource();
 				}
 			}

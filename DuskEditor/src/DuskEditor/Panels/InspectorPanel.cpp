@@ -524,7 +524,7 @@ namespace DuskEngine
 						{
 							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE"))
 							{
-								std::string data = *(std::string*)payload->Data;
+								std::string data = (char*)payload->Data;
 
 								auto& texture = m_AssetHandler->GetAsset<Texture>(m_AssetHandler->AddToAssetPool<Texture>(m_DB->GetUUID(data)));
 								material.SetTexture(uniform.Name, texture);
