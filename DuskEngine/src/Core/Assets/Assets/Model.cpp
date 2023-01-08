@@ -107,7 +107,6 @@ namespace DuskEngine
 						indices.resize(attribute->count);
 
 						LOAD_ATTRIBUTE(attribute, 1, unsigned short, indices.data())
-						std::reverse(indices.begin(), indices.end());
 						m_Meshes.push_back(MakeUnique<Mesh>(vertices, &indices[0], (unsigned int)indices.size()));
 					}
 				}
@@ -118,7 +117,7 @@ namespace DuskEngine
 		else
 		{
 			Assimp::Importer import;
-			const aiScene* scene = import.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_FlipWindingOrder);
+			const aiScene* scene = import.ReadFile(path.string(), aiProcess_Triangulate);
 			if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 			{
 				std::string message = "ERROR::ASSIMP::";
@@ -167,7 +166,7 @@ namespace DuskEngine
 			if (mesh->mTextureCoords[0])
 			{
 				vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;
-				vertex.TexCoords.y = 1 - mesh->mTextureCoords[0][i].y;
+				vertex.TexCoords.y = mesh->mTextureCoords[0][i].y;
 			}
 
 			// normals

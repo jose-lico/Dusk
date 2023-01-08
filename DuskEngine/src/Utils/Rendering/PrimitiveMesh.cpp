@@ -20,8 +20,8 @@ namespace DuskEngine
 
 		unsigned int indices[] =
 		{
-			0, 1, 3,   // first triangle
-			1, 2, 3    // second triangle
+			3, 1, 0,   // first triangle
+			3, 2, 1    // second triangle
 		};
 
 		LOG("Loading Quad");
@@ -73,23 +73,23 @@ namespace DuskEngine
 		unsigned int indices[] =
 		{
 			//FRONT
-			0, 1, 3,
-			1, 2, 3,
+			3, 1, 0,
+			3, 2, 1,
 			//RIGHT
-			4, 5, 7,
-			5, 6, 7,
+			7, 5, 4,
+			7, 6, 5,
 			//TOP
-			8, 9, 11,
-			9, 10, 11,
+			11, 9, 8,
+			11, 10, 9,
 			//LEFT
-			12,13,15,
-			13,14,15,
+			15,13,12,
+			15,14,13,
 			//BOTTOM
-			16,19,17,
-			19,18,17,
+			17,19,16,
+			17,18,19,
 			//BACK
-			20,23,21,
-			23,22,21
+			21,23,20,
+			21,22,23
 		};
 
 		LOG("Loading Cube");

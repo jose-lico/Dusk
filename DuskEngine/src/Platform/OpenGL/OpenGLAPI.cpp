@@ -47,7 +47,7 @@ namespace DuskEngine :: OpenGLAPI
 		glEnable(GL_MULTISAMPLE);
 		glEnable(GL_CULL_FACE);
 
-		glFrontFace(GL_CW);
+		glFrontFace(GL_CCW);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
