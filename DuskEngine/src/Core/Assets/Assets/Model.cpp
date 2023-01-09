@@ -24,7 +24,7 @@ namespace DuskEngine
     {\
 		for (int l = 0; l < elementCount; l++) \
 		{\
-			destination[elementCount * k + l] = buffer[n + l];\
+			((type*)destination)[elementCount * k + l] = buffer[n + l];\
 		}\
 		n += (int)(attribute->stride/sizeof(type));\
 		}\
@@ -51,41 +51,81 @@ namespace DuskEngine
 
 				result = cgltf_load_buffers(&options, data, path.string().c_str());
 
-				for (unsigned int i = 0, meshIndex = 0; i < data->meshes_count; i++)
+				//for (unsigned int i = 0; i < data->meshes_count; i++)
+				for (unsigned int i = 0; i < 1; i++) // What is the difference between mesh and primitive in cgltf?
 				{
 					for (unsigned int p = 0; p < data->meshes[i].primitives_count; p++)
 					{
 						std::vector<float> positions;
 						std::vector<float> normals;
 						std::vector<float> textureCoords;
+
 						for (unsigned int j = 0; j < data->meshes[i].primitives[p].attributes_count; j++)
 						{
 							if (data->meshes[i].primitives[p].attributes[j].type == cgltf_attribute_type_position)      // POSITION
 							{
 								cgltf_accessor* attribute = data->meshes[i].primitives[p].attributes[j].data;
-								positions.resize(attribute->count * 3);
-								LOAD_ATTRIBUTE(attribute, 3, float, positions.data())
+
+								if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec3))
+								{
+									positions.resize(attribute->count * 3);
+									LOAD_ATTRIBUTE(attribute, 3, float, positions.data())
+								}
+								else
+									ERR("Vertex Position data format not supported");
 							}
 							else if (data->meshes[i].primitives[p].attributes[j].type == cgltf_attribute_type_normal)   // NORMAL
 							{
 								cgltf_accessor* attribute = data->meshes[i].primitives[p].attributes[j].data;
-								normals.resize(attribute->count * 3);
-								LOAD_ATTRIBUTE(attribute, 3, float, normals.data())
+
+								if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec3))
+								{
+									normals.resize(attribute->count * 3);
+									LOAD_ATTRIBUTE(attribute, 3, float, normals.data())
+								}
+								else
+									ERR("Normal data format not supported");
 							}
 							else if (data->meshes[i].primitives[p].attributes[j].type == cgltf_attribute_type_texcoord) // TEXCOORD_0
 							{
 								cgltf_accessor* attribute = data->meshes[i].primitives[p].attributes[j].data;
-								textureCoords.resize(attribute->count * 2);
-								LOAD_ATTRIBUTE(attribute, 2, float, textureCoords.data())
+
+								if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec2))
+								{
+									textureCoords.resize(attribute->count * 2);
+									LOAD_ATTRIBUTE(attribute, 2, float, textureCoords.data())
+								}
+								else
+									ERR("Texture Coords data format not supported");
 							}
 						}
 
+						cgltf_accessor* attribute = data->meshes[i].primitives[p].indices;
+						
+						void* indices;
+						size_t indicesTypeSize;
+						size_t indicesSize;
+
+						if (attribute->component_type == cgltf_component_type_r_16u)
+						{
+							indicesTypeSize = sizeof(unsigned short);
+							indicesSize = attribute->count * indicesTypeSize;
+							indices = malloc(indicesSize);
+							LOAD_ATTRIBUTE(attribute, 1, unsigned short, indices)
+						}
+						else if(attribute->component_type == cgltf_component_type_r_32u)
+						{
+							indicesTypeSize = sizeof(unsigned int);
+							indicesSize = attribute->count * indicesTypeSize;
+							indices = malloc(indicesSize);
+							LOAD_ATTRIBUTE(attribute, 1, unsigned int, indices)
+						}
+						else
+							ERR("Indices data format not supported");
+
 						std::vector<Vertex> vertices;
-						//vertices.resize(normals.size());
 
-						TRACE("Positions size:" + std::to_string(positions.size()/3));
-
-						for (size_t x = 0; x < positions.size()/3; x++)
+						for (size_t x = 0; x < positions.size() / 3; x++)
 						{
 							Vertex vertex;
 							vertex.Position.x = positions[x * 3];
@@ -98,16 +138,11 @@ namespace DuskEngine
 
 							vertex.TexCoords.x = textureCoords[x * 2];
 							vertex.TexCoords.y = 1 - textureCoords[x * 2 + 1];
-							
+
 							vertices.push_back(vertex);
 						}
 
-						std::vector<unsigned short> indices;
-						cgltf_accessor* attribute = data->meshes[i].primitives[p].indices;
-						indices.resize(attribute->count);
-
-						LOAD_ATTRIBUTE(attribute, 1, unsigned short, indices.data())
-						m_Meshes.push_back(MakeUnique<Mesh>(vertices, &indices[0], (unsigned int)indices.size()));
+						m_Meshes.push_back(MakeUnique<Mesh>(vertices, indices, indicesSize, indicesTypeSize));
 					}
 				}
 
