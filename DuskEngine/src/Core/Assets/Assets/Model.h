@@ -6,10 +6,6 @@
 #include <string>
 #include <vector>
 
-struct aiNode;
-struct aiScene;
-struct aiMesh;
-
 namespace DuskEngine
 {
 	class Mesh;
@@ -24,7 +20,5 @@ namespace DuskEngine
 		UniqueRef<Mesh>& GetFirstMesh() { return m_Meshes[0]; } // TODO -> temporary fix while Model/Mesh api isnt better
 	private:
 		std::vector<UniqueRef<Mesh>> m_Meshes;
-		void ProcessNode(aiNode* node, const aiScene* scene);
-		UniqueRef<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	};
 }

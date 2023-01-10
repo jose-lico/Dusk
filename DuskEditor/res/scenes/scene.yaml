@@ -6,7 +6,7 @@ Entities:
       enabled: true
     Transform:
       position: [0.169760525, -0.346881926, -3.61352015]
-      rotation: [-4.75602198, 0, 0]
+      rotation: [1.57079637, 0, 0]
       scale: [0.00999999978, 0.00999999978, 0.00999999978]
     MeshRenderer:
       mesh:
@@ -50,7 +50,7 @@ Entities:
       name: Main Camera
       enabled: true
     Transform:
-      position: [-0.0557154715, 1.53560555, 4.8222661]
+      position: [-0.0557156205, 4.44044352, 6.77124071]
       rotation: [0.52359879, -3.14159274, 0]
       scale: [1, 1, 1]
     Camera:
@@ -99,12 +99,12 @@ Entities:
       enabled: true
     Transform:
       position: [-0.0466195941, -0.5, 3.38522911]
-      rotation: [0, -3.14159274, 0]
-      scale: [1, 1, 1]
+      rotation: [1.57079637, 3.14159274, 0]
+      scale: [0.0250000004, 0.0250000004, 0.0250000004]
     MeshRenderer:
       mesh:
         fileID: 2
-        uuid: 24b41d57-d4b0-41a5-a473-803306755fe4
+        uuid: 0e4309c9-2e89-45a0-9a71-0422fdb88e42
       material:
         fileID: 1
         uuid: 2fbf0300-2732-492a-8672-032e010d8e72

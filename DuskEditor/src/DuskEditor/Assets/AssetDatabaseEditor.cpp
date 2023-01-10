@@ -181,7 +181,7 @@ namespace DuskEngine
 			wasAssigned = true;
 			m_ShaderDatabase.push_back(resource);
 		}
-		else if (extension == ".fbx" || extension == ".obj" || extension == ".glb")
+		else if (extension == ".glb")
 		{
 			wasAssigned = true;
 			m_ModelDatabase.push_back(resource);

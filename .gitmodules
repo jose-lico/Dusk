@@ -34,9 +34,6 @@
 [submodule "Dependencies/stb"]
 	path = Dependencies/stb
 	url = https://github.com/qolisipo/stb
-[submodule "Dependencies/assimp-premake"]
-	path = Dependencies/assimp-premake
-	url = https://github.com/qolisipo/assimp-premake
 [submodule "Dependencies/rttr"]
 	path = Dependencies/rttr
 	url = https://github.com/qolisipo/rttr
