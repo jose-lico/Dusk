@@ -49,14 +49,15 @@ project "DuskEditor"
 		dependenciesDir .. "/ImGuizmo/include",
 		dependenciesDir .. "/rttr/include",
 		dependenciesDir .. "/lua/include/lua",
-		dependenciesDir .. "/sol2/include"
+		dependenciesDir .. "/sol2/include",
+		dependenciesDir .. "/cgltf"
 	}
 
 	defines
 	{
-		-- Lib includes
 		"YAML_CPP_STATIC_DEFINE",
 		"UUID_SYSTEM_GENERATOR",
+		"_CRT_SECURE_NO_WARNINGS",
 		"NOMINMAX",
 
 		-- Dusk includes

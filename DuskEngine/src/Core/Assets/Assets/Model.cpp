@@ -4,7 +4,6 @@
 #include "Mesh.h"
 
 #include "glm/glm.hpp"
-#define CGLTF_IMPLEMENTATION
 #include "cgltf.h"
 
 namespace DuskEngine

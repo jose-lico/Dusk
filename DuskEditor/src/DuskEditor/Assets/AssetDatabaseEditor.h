@@ -47,6 +47,7 @@ namespace DuskEngine
 		std::unordered_map <std::filesystem::path, uuids::uuid, opt_path_hash2> m_UUIDsMap;
 
 		std::vector<std::tuple<std::filesystem::path, std::filesystem::path>> m_ImagesToImport;
+		std::vector<std::tuple<std::filesystem::path, std::filesystem::path>> m_ModelsToImport;
 
 		// Asset Lists
 		std::vector<Asset*> m_ShaderDatabase;

@@ -38,7 +38,6 @@ project "DuskEngine"
 
 	defines
 	{
-		-- Lib includes
 		"GLFW_INCLUDE_NONE",
 		"GLEW_STATIC",
 		"_CRT_SECURE_NO_WARNINGS",

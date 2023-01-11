@@ -1,6 +1,7 @@
 #include "AssetDatabaseEditor.h"
 
 #include "DuskEditor/Importers/ImageImporter.h"
+#include "DuskEditor/Importers/ModelImporter.h"
 
 #include "Core/Application/Core.h"
 #include "Core/Assets/AssetDatabase.h"
@@ -77,10 +78,13 @@ namespace DuskEngine
 	{
 		Timer importAssets("ImportAssets");
 		for(auto& image : m_ImagesToImport)
-		{
 			ImportImage(std::get<0>(image), std::get<1>(image));
-		}
+
+		for (auto& model : m_ModelsToImport)
+			ImportModel(std::get<0>(model), std::get<1>(model));
+		
 		m_ImagesToImport.resize(0);
+		m_ModelsToImport.resize(0);
 	}
 
 	void AssetDatabaseEditor::CopyAsset(const std::filesystem::path& assetPath, const std::filesystem::path& currentDir)
@@ -172,9 +176,7 @@ namespace DuskEngine
 		{
 			std::filesystem::path importFilePath = m_RootDirectory.string() + "/.import/images/" + path.filename().string() + "-" + uuids::to_string(uuid) + ".import";
 			if (!std::filesystem::exists(importFilePath))
-			{
 				m_ImagesToImport.push_back({path, importFilePath});
-			}
 		}
 		else if (extension == ".glsl")
 		{
@@ -183,6 +185,10 @@ namespace DuskEngine
 		}
 		else if (extension == ".glb")
 		{
+			std::filesystem::path importFilePath = m_RootDirectory / ".import/models" / (path.filename().string() + "-" + uuids::to_string(uuid) + ".import");
+			if (!std::filesystem::exists(importFilePath))
+				m_ModelsToImport.push_back({ path, importFilePath });
+
 			wasAssigned = true;
 			m_ModelDatabase.push_back(resource);
 		}
