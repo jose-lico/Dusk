@@ -3,6 +3,7 @@
 #include "Core/Application/Core.h"
 #include "Core/Application/Application.h"
 #include "Core/Assets/Assets/Mesh.h"
+#include "Utils/Compression/Compression.h"
 
 #define CGLTF_IMPLEMENTATION
 #include "cgltf.h"
@@ -136,17 +137,30 @@ namespace DuskEngine
 					modelData.IndicesSize = indicesSize;
 					modelData.IndicesTypeSize = indicesTypeSize;
 
-					size_t dataSize = sizeof(ModelData) + modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize + modelData.IndicesSize;
-					void* importedFileData = malloc(dataSize);
+					size_t modelDataSize = modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize + modelData.IndicesSize;
 
+					void* compressedData = malloc(modelDataSize);
+					void* dataToCompress = malloc(modelDataSize);
+
+					memcpy((char*)dataToCompress, positions.data(), modelData.PositionSize);
+					memcpy((char*)dataToCompress + modelData.PositionSize, normals.data(), modelData.NormalsSize);
+					memcpy((char*)dataToCompress + modelData.PositionSize + modelData.NormalsSize, textureCoords.data(), modelData.TextCoordsSize);
+					memcpy((char*)dataToCompress + modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize, indices, modelData.IndicesSize);
+
+					modelData.CompressedSize = Compress(compressedData, dataToCompress, modelDataSize);
+
+					size_t dataSize = sizeof(ModelData) + modelData.CompressedSize;
+
+					void* importedFileData = malloc(dataSize);
 					memcpy(importedFileData, &modelData, sizeof(ModelData));
-					memcpy((char*)importedFileData + sizeof(ModelData), positions.data(), modelData.PositionSize);
-					memcpy((char*)importedFileData + sizeof(ModelData) + modelData.PositionSize, normals.data(), modelData.NormalsSize);
-					memcpy((char*)importedFileData + sizeof(ModelData) + modelData.PositionSize + modelData.NormalsSize, textureCoords.data(), modelData.TextCoordsSize);
-					memcpy((char*)importedFileData + sizeof(ModelData) + modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize, indices, modelData.IndicesSize);
+					memcpy((char*)importedFileData + sizeof(ModelData), compressedData, modelData.CompressedSize);
 
 					std::ofstream importFile(importFilePath, std::ios::app | std::ios::binary);
 					importFile.write((char*)importedFileData, dataSize);
+
+					free(importedFileData);
+					free(dataToCompress);
+					free(compressedData);
 				}
 			}
 		}
