@@ -8,6 +8,16 @@
 
 namespace DuskEngine
 {
+	struct ModelDataInternal
+	{
+		size_t PositionSize;
+		size_t NormalsSize;
+		size_t TextCoordsSize;
+		size_t IndicesSize;
+		size_t IndicesTypeSize;
+		size_t CompressedSize;
+	};
+
 	class Mesh;
 	
 	class Model : public Asset

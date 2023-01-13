@@ -12,6 +12,8 @@
 
 namespace DuskEngine
 {
+	// Implementation based on raylib https://github.com/raysan5/raylib/blob/master/src/rmodels.c
+
 #define LOAD_ATTRIBUTE(attribute, elementCount, type, destination) \
 { \
 	int n = 0; \
@@ -107,25 +109,6 @@ namespace DuskEngine
 					}
 					else
 						ERR("Indices data format not supported");
-
-					std::vector<Vertex> vertices;
-
-					for (size_t x = 0; x < positions.size() / 3; x++)
-					{
-						Vertex vertex;
-						vertex.Position.x = positions[x * 3];
-						vertex.Position.y = positions[x * 3 + 1];
-						vertex.Position.z = positions[x * 3 + 2];
-
-						vertex.Normal.x = normals[x * 3];
-						vertex.Normal.y = normals[x * 3 + 1];
-						vertex.Normal.z = normals[x * 3 + 2];
-
-						vertex.TexCoords.x = textureCoords[x * 2];
-						vertex.TexCoords.y = 1 - textureCoords[x * 2 + 1];
-
-						vertices.push_back(vertex);
-					}
 
 					std::filesystem::create_directory(Application::Get().GetProjectPath() / ".import");
 					std::filesystem::create_directory(Application::Get().GetProjectPath() / ".import/models");

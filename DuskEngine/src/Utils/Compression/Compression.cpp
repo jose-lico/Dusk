@@ -25,5 +25,5 @@ size_t Decompress(void* destination, size_t destinationMaxSize, void* source, si
 
     ZSTD_freeDCtx(dctx);
 
-    return 0;
+    return decompressedSize;
 }
