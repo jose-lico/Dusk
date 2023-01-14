@@ -26,46 +26,31 @@ namespace DuskEngine
 			ModelDataInternal modelData;
 			memcpy(&modelData, &buffer.str()[0], sizeof(ModelDataInternal));
 
-			size_t maxSize = modelData.IndicesSize + modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize;
+			size_t maxSize = modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize + modelData.IndicesSize;
 
-			void* data = malloc(maxSize);
+			float* data = (float*)malloc(maxSize);
 			Decompress(data, maxSize, &buffer.str()[0] + sizeof(ModelDataInternal), modelData.CompressedSize);
 
-			std::vector<float> positions(modelData.PositionSize);
-			std::vector<float> normals(modelData.NormalsSize);
-			std::vector<float> textureCoords(modelData.TextCoordsSize);
+			size_t verticesSize = modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize;
+			std::vector<Vertex> vertices (verticesSize/sizeof(Vertex));
 
-			memcpy(positions.data(), data, modelData.PositionSize);
-			memcpy(normals.data(), (char*)data + modelData.PositionSize, modelData.NormalsSize);
-			memcpy(textureCoords.data(), (char*)data + modelData.PositionSize + modelData.NormalsSize, modelData.TextCoordsSize);
-
-			std::vector<Vertex> vertices;
-
-			for (size_t x = 0; x < positions.size() / 3; x++)
+			for (size_t i = 0; i < verticesSize/sizeof(Vertex); i++)
 			{
-				Vertex vertex;
-				vertex.Position.x = positions[x * 3];
-				vertex.Position.y = positions[x * 3 + 1];
-				vertex.Position.z = positions[x * 3 + 2];
-
-				vertex.Normal.x = normals[x * 3];
-				vertex.Normal.y = normals[x * 3 + 1];
-				vertex.Normal.z = normals[x * 3 + 2];
-
-				vertex.TexCoords.x = textureCoords[x * 2];
-				vertex.TexCoords.y = 1 - textureCoords[x * 2 + 1];
-
-				vertices.push_back(vertex);
+				vertices[i].Position.x = data[i];
+				vertices[i].Position.y = data[i + 1 * 3];
+				vertices[i].Position.z = data[i + 2 * 3];
 			}
 
 			void* indices;
 
 			indices = malloc(modelData.IndicesSize);
-			memcpy(indices, (char*)data + modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize, modelData.IndicesSize);
+			memcpy(indices, (char*)data + modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize , modelData.IndicesSize);
 	
 			m_Meshes.push_back(MakeUnique<Mesh>(vertices, indices, modelData.IndicesSize, modelData.IndicesTypeSize));
 
 			free(data);
+			free(indices);
+
 			importFile.close();
 		}
 	}

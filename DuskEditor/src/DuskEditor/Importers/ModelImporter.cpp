@@ -5,7 +5,6 @@
 #include "Core/Assets/Assets/Mesh.h"
 #include "Utils/Compression/Compression.h"
 
-#define CGLTF_IMPLEMENTATION
 #include "cgltf.h"
 
 #include <fstream>
@@ -38,14 +37,24 @@ namespace DuskEngine
 		{
 			result = cgltf_load_buffers(&options, data, modelPath.string().c_str());
 
-			//for (unsigned int i = 0; i < data->meshes_count; i++)
-			for (unsigned int i = 0; i < 1; i++) // What is the difference between mesh and primitive in cgltf?
+			// What is the difference between mesh and primitive in cgltf?
+
+			WARN("Importing model " + modelPath.filename().string() + " , only first mesh will be imported and used");
+
+			for (unsigned int i = 0; i < data->meshes_count; i++)
+			//for (unsigned int i = 0; i < 1; i++) 
 			{
 				for (unsigned int p = 0; p < data->meshes[i].primitives_count; p++)
+				//for (unsigned int p = 0; p < 1; p++)
 				{
-					std::vector<float> positions;
-					std::vector<float> normals;
-					std::vector<float> textureCoords;
+					float* positions = nullptr;
+					size_t positionsSize = 0;
+					
+					float* normals= nullptr;
+					size_t normalsSize = 0;
+
+					float* textureCoords = nullptr;
+					size_t textCoordsSize = 0;
 
 					for (unsigned int j = 0; j < data->meshes[i].primitives[p].attributes_count; j++)
 					{
@@ -55,8 +64,9 @@ namespace DuskEngine
 
 							if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec3))
 							{
-								positions.resize(attribute->count * 3);
-								LOAD_ATTRIBUTE(attribute, 3, float, positions.data())
+								positionsSize = attribute->count * sizeof(float) * 3;
+								positions = (float*)malloc(positionsSize);
+								LOAD_ATTRIBUTE(attribute, 3, float, positions)
 							}
 							else
 								ERR("Vertex Position data format not supported");
@@ -67,8 +77,9 @@ namespace DuskEngine
 
 							if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec3))
 							{
-								normals.resize(attribute->count * 3);
-								LOAD_ATTRIBUTE(attribute, 3, float, normals.data())
+								normalsSize = attribute->count * sizeof(float) * 3;
+								normals = (float*)malloc(normalsSize);
+								LOAD_ATTRIBUTE(attribute, 3, float, normals)
 							}
 							else
 								ERR("Normal data format not supported");
@@ -79,8 +90,9 @@ namespace DuskEngine
 
 							if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec2))
 							{
-								textureCoords.resize(attribute->count * 2);
-								LOAD_ATTRIBUTE(attribute, 2, float, textureCoords.data())
+								textCoordsSize = attribute->count * sizeof(float) * 2;
+								textureCoords = (float*)malloc(textCoordsSize);
+								LOAD_ATTRIBUTE(attribute, 2, float, textureCoords)
 							}
 							else
 								ERR("Texture Coords data format not supported");
@@ -89,9 +101,9 @@ namespace DuskEngine
 
 					cgltf_accessor* attribute = data->meshes[i].primitives[p].indices;
 
-					void* indices;
-					size_t indicesTypeSize;
-					size_t indicesSize;
+					void* indices = nullptr;
+					size_t indicesTypeSize = 0;
+					size_t indicesSize = 0;
 
 					if (attribute->component_type == cgltf_component_type_r_16u)
 					{
@@ -114,35 +126,33 @@ namespace DuskEngine
 					std::filesystem::create_directory(Application::Get().GetProjectPath() / ".import/models");
 
 					ModelData modelData;
-					modelData.PositionSize = positions.size() * sizeof(float) * 3;
-					modelData.NormalsSize = normals.size() * sizeof(float) * 3;
-					modelData.TextCoordsSize = positions.size() * sizeof(float) * 2;
+					modelData.PositionSize = positionsSize;
+					modelData.NormalsSize = normalsSize;
+					modelData.TextCoordsSize = textCoordsSize;
 					modelData.IndicesSize = indicesSize;
 					modelData.IndicesTypeSize = indicesTypeSize;
 
-					size_t modelDataSize = modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize + modelData.IndicesSize;
+					size_t modelDataSize = modelData.PositionSize + modelData.TextCoordsSize + modelData.NormalsSize + modelData.IndicesSize;
+
+					void* rawData = malloc(modelDataSize);
+					
+					memcpy((char*)rawData, positions, modelData.PositionSize);
+					memcpy((char*)rawData + modelData.PositionSize, textureCoords, modelData.TextCoordsSize);
+					memcpy((char*)rawData + modelData.PositionSize + modelData.TextCoordsSize, normals, modelData.NormalsSize);
+					memcpy((char*)rawData + modelData.PositionSize + modelData.TextCoordsSize + modelData.NormalsSize, indices, modelData.IndicesSize);
 
 					void* compressedData = malloc(modelDataSize);
-					void* dataToCompress = malloc(modelDataSize);
-
-					memcpy((char*)dataToCompress, positions.data(), modelData.PositionSize);
-					memcpy((char*)dataToCompress + modelData.PositionSize, normals.data(), modelData.NormalsSize);
-					memcpy((char*)dataToCompress + modelData.PositionSize + modelData.NormalsSize, textureCoords.data(), modelData.TextCoordsSize);
-					memcpy((char*)dataToCompress + modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize, indices, modelData.IndicesSize);
-
-					modelData.CompressedSize = Compress(compressedData, dataToCompress, modelDataSize);
-
-					size_t dataSize = sizeof(ModelData) + modelData.CompressedSize;
-
-					void* importedFileData = malloc(dataSize);
-					memcpy(importedFileData, &modelData, sizeof(ModelData));
-					memcpy((char*)importedFileData + sizeof(ModelData), compressedData, modelData.CompressedSize);
+					modelData.CompressedSize = Compress(compressedData, rawData, modelDataSize);
 
 					std::ofstream importFile(importFilePath, std::ios::app | std::ios::binary);
-					importFile.write((char*)importedFileData, dataSize);
+					importFile.write((char*)&modelData, sizeof(ModelData));
+					importFile.write((char*)compressedData, modelData.CompressedSize);
 
-					free(importedFileData);
-					free(dataToCompress);
+					free(positions);
+					free(normals);
+					free(textureCoords);
+
+					free(rawData);
 					free(compressedData);
 				}
 			}
