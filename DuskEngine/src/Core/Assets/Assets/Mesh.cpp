@@ -121,7 +121,7 @@ namespace DuskEngine
 		VertexBuffer vb;
 		vb.BufferType = BufferType::ARRAY_BUFFER;
 		vb.UsageType = UsageType::STATIC_DRAW;
-		vb.Size = vertices.size();
+		vb.Size = vertices.size() * sizeof(Vertex);
 		vb.Layout = vbl;
 
 		OpenGLAPI::SetBufferData(vb, &vertices[0]);

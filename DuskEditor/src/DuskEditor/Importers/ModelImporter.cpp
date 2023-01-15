@@ -41,20 +41,17 @@ namespace DuskEngine
 
 			WARN("Importing model " + modelPath.filename().string() + " , only first mesh will be imported and used");
 
-			for (unsigned int i = 0; i < data->meshes_count; i++)
-			//for (unsigned int i = 0; i < 1; i++) 
+			//for (unsigned int i = 0; i < data->meshes_count; i++)
+			for (unsigned int i = 0; i < 1; i++) 
 			{
-				for (unsigned int p = 0; p < data->meshes[i].primitives_count; p++)
-				//for (unsigned int p = 0; p < 1; p++)
+				//for (unsigned int p = 0; p < data->meshes[i].primitives_count; p++)
+				for (unsigned int p = 0; p < 1; p++)
 				{
-					float* positions = nullptr;
-					size_t positionsSize = 0;
-					
-					float* normals= nullptr;
-					size_t normalsSize = 0;
+					ModelData modelData;
 
+					float* positions = nullptr;
 					float* textureCoords = nullptr;
-					size_t textCoordsSize = 0;
+					float* normals= nullptr;
 
 					for (unsigned int j = 0; j < data->meshes[i].primitives[p].attributes_count; j++)
 					{
@@ -64,25 +61,12 @@ namespace DuskEngine
 
 							if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec3))
 							{
-								positionsSize = attribute->count * sizeof(float) * 3;
-								positions = (float*)malloc(positionsSize);
+								modelData.PositionSize = attribute->count * sizeof(float) * 3;
+								positions = (float*)malloc(modelData.PositionSize);
 								LOAD_ATTRIBUTE(attribute, 3, float, positions)
 							}
 							else
 								ERR("Vertex Position data format not supported");
-						}
-						else if (data->meshes[i].primitives[p].attributes[j].type == cgltf_attribute_type_normal)   // NORMAL
-						{
-							cgltf_accessor* attribute = data->meshes[i].primitives[p].attributes[j].data;
-
-							if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec3))
-							{
-								normalsSize = attribute->count * sizeof(float) * 3;
-								normals = (float*)malloc(normalsSize);
-								LOAD_ATTRIBUTE(attribute, 3, float, normals)
-							}
-							else
-								ERR("Normal data format not supported");
 						}
 						else if (data->meshes[i].primitives[p].attributes[j].type == cgltf_attribute_type_texcoord) // TEXCOORD_0
 						{
@@ -90,33 +74,44 @@ namespace DuskEngine
 
 							if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec2))
 							{
-								textCoordsSize = attribute->count * sizeof(float) * 2;
-								textureCoords = (float*)malloc(textCoordsSize);
+								modelData.TextCoordsSize = attribute->count * sizeof(float) * 2;
+								textureCoords = (float*)malloc(modelData.TextCoordsSize);
 								LOAD_ATTRIBUTE(attribute, 2, float, textureCoords)
 							}
 							else
 								ERR("Texture Coords data format not supported");
+						}
+						else if (data->meshes[i].primitives[p].attributes[j].type == cgltf_attribute_type_normal)   // NORMAL
+						{
+							cgltf_accessor* attribute = data->meshes[i].primitives[p].attributes[j].data;
+
+							if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec3))
+							{
+								modelData.NormalsSize = attribute->count * sizeof(float) * 3;
+								normals = (float*)malloc(modelData.NormalsSize);
+								LOAD_ATTRIBUTE(attribute, 3, float, normals)
+							}
+							else
+								ERR("Normal data format not supported");
 						}
 					}
 
 					cgltf_accessor* attribute = data->meshes[i].primitives[p].indices;
 
 					void* indices = nullptr;
-					size_t indicesTypeSize = 0;
-					size_t indicesSize = 0;
 
 					if (attribute->component_type == cgltf_component_type_r_16u)
 					{
-						indicesTypeSize = sizeof(unsigned short);
-						indicesSize = attribute->count * indicesTypeSize;
-						indices = malloc(indicesSize);
+						modelData.IndicesTypeSize = sizeof(unsigned short);
+						modelData.IndicesSize = attribute->count * modelData.IndicesTypeSize;
+						indices = malloc(modelData.IndicesSize);
 						LOAD_ATTRIBUTE(attribute, 1, unsigned short, indices)
 					}
 					else if (attribute->component_type == cgltf_component_type_r_32u)
 					{
-						indicesTypeSize = sizeof(unsigned int);
-						indicesSize = attribute->count * indicesTypeSize;
-						indices = malloc(indicesSize);
+						modelData.IndicesTypeSize = sizeof(unsigned int);
+						modelData.IndicesSize = attribute->count * modelData.IndicesTypeSize;
+						indices = malloc(modelData.IndicesSize);
 						LOAD_ATTRIBUTE(attribute, 1, unsigned int, indices)
 					}
 					else
@@ -125,20 +120,24 @@ namespace DuskEngine
 					std::filesystem::create_directory(Application::Get().GetProjectPath() / ".import");
 					std::filesystem::create_directory(Application::Get().GetProjectPath() / ".import/models");
 
-					ModelData modelData;
-					modelData.PositionSize = positionsSize;
-					modelData.NormalsSize = normalsSize;
-					modelData.TextCoordsSize = textCoordsSize;
-					modelData.IndicesSize = indicesSize;
-					modelData.IndicesTypeSize = indicesTypeSize;
-
 					size_t modelDataSize = modelData.PositionSize + modelData.TextCoordsSize + modelData.NormalsSize + modelData.IndicesSize;
 
 					void* rawData = malloc(modelDataSize);
 					
-					memcpy((char*)rawData, positions, modelData.PositionSize);
-					memcpy((char*)rawData + modelData.PositionSize, textureCoords, modelData.TextCoordsSize);
-					memcpy((char*)rawData + modelData.PositionSize + modelData.TextCoordsSize, normals, modelData.NormalsSize);
+					for(int k = 0; k < 11861; k++)
+					{
+						((float*)rawData)[k * 8]		= positions[k * 3];
+						((float*)rawData)[k * 8 + 1]	= positions[k * 3 + 1];
+						((float*)rawData)[k * 8 + 2]	= positions[k * 3 + 2];
+
+						((float*)rawData)[k * 8 + 3] = textureCoords[k * 2];
+						((float*)rawData)[k * 8 + 4] = 1 - textureCoords[k * 2 + 1];
+						
+						((float*)rawData)[k * 8 + 5] = normals[k * 3];
+						((float*)rawData)[k * 8 + 6] = normals[k * 3 + 1];
+						((float*)rawData)[k * 8 + 7] = normals[k * 3 + 2];
+					}
+
 					memcpy((char*)rawData + modelData.PositionSize + modelData.TextCoordsSize + modelData.NormalsSize, indices, modelData.IndicesSize);
 
 					void* compressedData = malloc(modelDataSize);

@@ -28,17 +28,15 @@ namespace DuskEngine
 
 			size_t maxSize = modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize + modelData.IndicesSize;
 
-			float* data = (float*)malloc(maxSize);
+			Vertex* data = (Vertex*)malloc(maxSize);
 			Decompress(data, maxSize, &buffer.str()[0] + sizeof(ModelDataInternal), modelData.CompressedSize);
 
 			size_t verticesSize = modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize;
-			std::vector<Vertex> vertices (verticesSize/sizeof(Vertex));
+			std::vector<Vertex> vertices (11861);
 
-			for (size_t i = 0; i < verticesSize/sizeof(Vertex); i++)
+			for (size_t i = 0; i < vertices.size(); i++)
 			{
-				vertices[i].Position.x = data[i];
-				vertices[i].Position.y = data[i + 1 * 3];
-				vertices[i].Position.z = data[i + 2 * 3];
+				vertices[i] = data[i];
 			}
 
 			void* indices;
