@@ -107,7 +107,7 @@ namespace DuskEngine
 		m_VA.IB = ib;
 	}
 
-	Mesh::Mesh(std::vector<Vertex>& vertices, void* indices, size_t indicesSize, size_t indexTypeSize)
+	Mesh::Mesh(Vertex* vertices, uint32_t verticesSize, void* indices, size_t indicesSize, size_t indexTypeSize)
 		:m_Type(MeshType::Model)
 	{
 		OpenGLAPI::GenVertexArrays(m_VA);
@@ -121,7 +121,7 @@ namespace DuskEngine
 		VertexBuffer vb;
 		vb.BufferType = BufferType::ARRAY_BUFFER;
 		vb.UsageType = UsageType::STATIC_DRAW;
-		vb.Size = vertices.size() * sizeof(Vertex);
+		vb.Size = verticesSize;
 		vb.Layout = vbl;
 
 		OpenGLAPI::SetBufferData(vb, &vertices[0]);

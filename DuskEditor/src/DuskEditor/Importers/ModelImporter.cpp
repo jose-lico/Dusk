@@ -2,7 +2,7 @@
 
 #include "Core/Application/Core.h"
 #include "Core/Application/Application.h"
-#include "Core/Assets/Assets/Mesh.h"
+#include "Core/Assets/Assets/Model.h"
 #include "Utils/Compression/Compression.h"
 
 #include "cgltf.h"
@@ -11,7 +11,7 @@
 
 namespace DuskEngine
 {
-	// Implementation based on raylib https://github.com/raysan5/raylib/blob/master/src/rmodels.c
+// Implementation based on raylib https://github.com/raysan5/raylib/blob/master/src/rmodels.c
 
 #define LOAD_ATTRIBUTE(attribute, elementCount, type, destination) \
 { \
@@ -61,8 +61,10 @@ namespace DuskEngine
 
 							if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec3))
 							{
-								modelData.PositionSize = attribute->count * sizeof(float) * 3;
-								positions = (float*)malloc(modelData.PositionSize);
+								modelData.VertCount = attribute->count;
+								
+								positions = (float*)malloc(attribute->count * sizeof(float) * 3);
+
 								LOAD_ATTRIBUTE(attribute, 3, float, positions)
 							}
 							else
@@ -74,8 +76,8 @@ namespace DuskEngine
 
 							if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec2))
 							{
-								modelData.TextCoordsSize = attribute->count * sizeof(float) * 2;
-								textureCoords = (float*)malloc(modelData.TextCoordsSize);
+								textureCoords = (float*)malloc(attribute->count * sizeof(float) * 2);
+
 								LOAD_ATTRIBUTE(attribute, 2, float, textureCoords)
 							}
 							else
@@ -87,8 +89,8 @@ namespace DuskEngine
 
 							if ((attribute->component_type == cgltf_component_type_r_32f) && (attribute->type == cgltf_type_vec3))
 							{
-								modelData.NormalsSize = attribute->count * sizeof(float) * 3;
-								normals = (float*)malloc(modelData.NormalsSize);
+								normals = (float*)malloc(attribute->count * sizeof(float) * 3);
+
 								LOAD_ATTRIBUTE(attribute, 3, float, normals)
 							}
 							else
@@ -120,33 +122,38 @@ namespace DuskEngine
 					std::filesystem::create_directory(Application::Get().GetProjectPath() / ".import");
 					std::filesystem::create_directory(Application::Get().GetProjectPath() / ".import/models");
 
-					size_t modelDataSize = modelData.PositionSize + modelData.TextCoordsSize + modelData.NormalsSize + modelData.IndicesSize;
-
-					void* rawData = malloc(modelDataSize);
+					// Pack raw data to be compressed
+					uint32_t vertSize = modelData.VertCount * sizeof(Vertex);
+					void* rawData = malloc(vertSize + modelData.IndicesSize);
 					
-					for(int k = 0; k < 11861; k++)
+					// Pack vertices as engine expects them (3 Pos, 2 Tex, 3 Norm)
+					for(uint32_t k = 0; k < modelData.VertCount; k++)
 					{
 						((float*)rawData)[k * 8]		= positions[k * 3];
 						((float*)rawData)[k * 8 + 1]	= positions[k * 3 + 1];
 						((float*)rawData)[k * 8 + 2]	= positions[k * 3 + 2];
 
-						((float*)rawData)[k * 8 + 3] = textureCoords[k * 2];
-						((float*)rawData)[k * 8 + 4] = 1 - textureCoords[k * 2 + 1];
+						((float*)rawData)[k * 8 + 3]	= textureCoords[k * 2];
+						((float*)rawData)[k * 8 + 4]	= 1 - textureCoords[k * 2 + 1];
 						
-						((float*)rawData)[k * 8 + 5] = normals[k * 3];
-						((float*)rawData)[k * 8 + 6] = normals[k * 3 + 1];
-						((float*)rawData)[k * 8 + 7] = normals[k * 3 + 2];
+						((float*)rawData)[k * 8 + 5]	= normals[k * 3];
+						((float*)rawData)[k * 8 + 6]	= normals[k * 3 + 1];
+						((float*)rawData)[k * 8 + 7]	= normals[k * 3 + 2];
 					}
 
-					memcpy((char*)rawData + modelData.PositionSize + modelData.TextCoordsSize + modelData.NormalsSize, indices, modelData.IndicesSize);
+					// Pack indices right after verts
+					memcpy((char*)rawData + vertSize, indices, modelData.IndicesSize);
 
-					void* compressedData = malloc(modelDataSize);
-					modelData.CompressedSize = Compress(compressedData, rawData, modelDataSize);
+					// Compress model data
+					void* compressedData = malloc(vertSize + modelData.IndicesSize);
+					modelData.CompressedSize = (uint32_t)Compress(compressedData, rawData, vertSize + modelData.IndicesSize);
 
+					// Write to file
 					std::ofstream importFile(importFilePath, std::ios::app | std::ios::binary);
 					importFile.write((char*)&modelData, sizeof(ModelData));
 					importFile.write((char*)compressedData, modelData.CompressedSize);
 
+					// Free
 					free(positions);
 					free(normals);
 					free(textureCoords);

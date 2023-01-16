@@ -2,20 +2,18 @@
 #include "Core/Assets/Asset.h"
 
 #include "Utils/Memory/Memory.h"
+#include "Mesh.h"
 
-#include <string>
 #include <vector>
 
 namespace DuskEngine
 {
-	struct ModelDataInternal
+	struct ModelData
 	{
-		size_t PositionSize;
-		size_t NormalsSize;
-		size_t TextCoordsSize;
-		size_t IndicesSize;
-		size_t IndicesTypeSize;
-		size_t CompressedSize;
+		uint32_t VertCount = 0;
+		uint32_t IndicesSize = 0;
+		uint32_t IndicesTypeSize = 0;
+		uint32_t CompressedSize = 0;
 	};
 
 	class Mesh;
@@ -23,7 +21,6 @@ namespace DuskEngine
 	class Model : public Asset
 	{
 	public:
-		//Model(const std::string& path); not used anymore, keeping just in case
 		Model(const std::filesystem::path& path, const uuids::uuid& uuid);
 		~Model();
 

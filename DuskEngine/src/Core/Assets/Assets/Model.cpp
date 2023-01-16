@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Model.h"
 
-#include "Mesh.h"
 #include "Core/Application/Application.h"
 #include "Utils/Compression/Compression.h"
 
@@ -23,28 +22,22 @@ namespace DuskEngine
 			std::stringstream buffer;
 			buffer << importFile.rdbuf();
 
-			ModelDataInternal modelData;
-			memcpy(&modelData, &buffer.str()[0], sizeof(ModelDataInternal));
+			ModelData modelData;
+			memcpy(&modelData, &buffer.str()[0], sizeof(ModelData));
 
-			size_t maxSize = modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize + modelData.IndicesSize;
+			uint32_t vertSize = modelData.VertCount * sizeof(Vertex);
+			uint32_t maxSize = vertSize + modelData.IndicesSize;
 
-			Vertex* data = (Vertex*)malloc(maxSize);
-			Decompress(data, maxSize, &buffer.str()[0] + sizeof(ModelDataInternal), modelData.CompressedSize);
+			void* data = malloc(maxSize);
+			Decompress(data, maxSize, &buffer.str()[0] + sizeof(ModelData), modelData.CompressedSize);
 
-			size_t verticesSize = modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize;
-			std::vector<Vertex> vertices (11861);
+			Vertex* vertices = (Vertex*)malloc(vertSize);
+			memcpy(vertices, (char*)data, vertSize);
 
-			for (size_t i = 0; i < vertices.size(); i++)
-			{
-				vertices[i] = data[i];
-			}
-
-			void* indices;
-
-			indices = malloc(modelData.IndicesSize);
-			memcpy(indices, (char*)data + modelData.PositionSize + modelData.NormalsSize + modelData.TextCoordsSize , modelData.IndicesSize);
+			void* indices = malloc(modelData.IndicesSize);
+			memcpy(indices, (char*)data + vertSize, modelData.IndicesSize);
 	
-			m_Meshes.push_back(MakeUnique<Mesh>(vertices, indices, modelData.IndicesSize, modelData.IndicesTypeSize));
+			m_Meshes.push_back(MakeUnique<Mesh>(vertices, vertSize, indices, modelData.IndicesSize, modelData.IndicesTypeSize));
 
 			free(data);
 			free(indices);
