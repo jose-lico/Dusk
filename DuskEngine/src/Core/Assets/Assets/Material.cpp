@@ -82,7 +82,7 @@ namespace DuskEngine
 				uniform.Data.vec3 = glm::vec3(1.0f);
 				break;
 			case UniformType::Texture:
-				uniform.Data.dataHandle = 0;
+				uniform.Data.dataHandle = 1;
 				break;
 			}
 		}

@@ -31,7 +31,7 @@ namespace DuskEngine
 		{
 			printf("Dusk Engine WIP - https://github.com/jose-lico/Dusk\n");
 			printf("Personal game engine to explore and learn\n");
-			printf("(c) 2021-2022 Jose Lico\n\n");
+			printf("(c) 2021-2023 Jose Lico\n\n");
 		}
 
 		if (m_Options.Help)
