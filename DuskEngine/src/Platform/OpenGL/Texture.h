@@ -20,6 +20,8 @@ namespace DuskEngine
 
 	enum class TextureFormat : uint16_t
 	{
+		SRGB = 0x8C40,
+		SRGBA = 0x8C42,
 		RGB = 0x1907,
 		RGBA = 0x1908
 	};

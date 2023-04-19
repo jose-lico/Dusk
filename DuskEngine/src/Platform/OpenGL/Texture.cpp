@@ -59,9 +59,9 @@ namespace DuskEngine
 			texture.Mipmaps = true;
 
 			if (headerData.Channels == 4)
-				texture.Format = TextureFormat::RGBA;
+				texture.Format = TextureFormat::SRGBA;
 			else if (headerData.Channels == 3)
-				texture.Format = TextureFormat::RGB;
+				texture.Format = TextureFormat::SRGB;
 
 			void* data = malloc(headerData.DataMaxSize);
 			Decompress(data, headerData.DataMaxSize, &buffer.str()[0] + sizeof(TextureData), headerData.DataSize);

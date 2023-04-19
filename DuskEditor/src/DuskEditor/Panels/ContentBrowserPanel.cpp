@@ -119,7 +119,7 @@ namespace DuskEngine
 			float lastButtonX = ImGui::GetItemRectMax().x;
 			float nextButtonX = lastButtonX + style.ItemSpacing.x + buttonSize + buttonSpacing * 2.0f;
 
-			ImGui::Text("%.12s", directoryEntry.path().filename().string().c_str());
+			//ImGui::Text("%.12s", directoryEntry.path().filename().string().c_str());
 			ImGui::EndGroup();
 
 			if (i + 1 < buttonsCount && nextButtonX < windowVisibleX)

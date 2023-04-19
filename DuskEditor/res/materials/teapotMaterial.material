@@ -1,6 +1,6 @@
 Material: teapotMaterial.material
-Shader: 273a0e85-9157-41a8-a769-8eb00ebc93ee
+Shader: 143010de-7fcf-4e49-a1fb-9059cb5b35f8
 Uniforms:
-  Diffuse: e5caee19-5467-49a8-aec4-1ffd82f5c1c2
+  Diffuse: 29a51981-c9f6-4ada-a1ff-e1f45daad037
   DiffuseColor: [1, 1, 1]
-  Specular: 57744d50-1f83-4a6b-8938-2632099bee63
+  Specular: 29a51981-c9f6-4ada-a1ff-e1f45daad037
