@@ -132,7 +132,7 @@ namespace DuskEngine :: OpenGLAPI
 		glTexParameteri((GLenum)texture.Type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		glTexImage2D((GLenum)texture.Type, 0, (GLenum)texture.Format, texture.Width, texture.Height, 0,
-			(GLenum)TextureFormat::RGB, GL_UNSIGNED_BYTE, data + (offset ? sizeof(TextureData) : 0));
+			(GLenum)texture.Format, GL_UNSIGNED_BYTE, data + (offset ? sizeof(TextureData) : 0));
 
 		if(texture.Mipmaps)
 			glGenerateMipmap((GLenum)texture.Type);
