@@ -34,6 +34,10 @@ namespace DuskEngine
 		ImGui::Begin(ICON_FK_TH_LIST "  Scene Hierarchy");
 		CheckFocus();
 
+		ImGui::Text("%s", m_Scene->m_Name);
+
+		ImGui::Separator();
+
 		bool deselected = false;
 		bool selectedThisFrame = false;
 		bool unselectRequested = false;

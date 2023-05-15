@@ -95,7 +95,7 @@ namespace DuskEngine
 
 		m_EditingScene = MakeRef<Scene>("Editing Scene", m_ProjectPath);
 
-		SceneSerializer::DeserializeText(m_EditingScene, m_ProjectPath + "/scenes/scene.yaml");
+		SceneSerializer::DeserializeText(m_EditingScene, m_ProjectPath + "/scenes/Playground.yaml");
 		{
 			Timer panels("Creating Panels");
 

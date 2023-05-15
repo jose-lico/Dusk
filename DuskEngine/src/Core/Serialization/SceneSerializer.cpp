@@ -69,7 +69,7 @@ namespace DuskEngine
 
 		YAML::Node data = YAML::Load(strStream.str());
 
-		std::string sceneName = data["Scene"].as<std::string>();
+		scene->m_Name = std::filesystem::path(path).stem().string();
 
 		auto entities = data["Entities"];
 
