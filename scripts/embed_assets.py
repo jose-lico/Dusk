@@ -13,13 +13,8 @@ def remove_comment_from_shader(shader_line):
         return shader_line
     return shader_line[:comment] 
 
-def generate_embedded(path, file_type, extension, data=None, md5=None):
-    
-    # open data if it did not exist
-    if(data is None):
-        data = open(path, "rb").read() if file_type == "binary" else open(path, "r").read()
-
-    # create md5 file
+def generate_embedded(path, file_type, extension, data, md5=None):
+    # create md5 file if it does not exist
     if(md5 is None):
         md5 = hashlib.md5(data).hexdigest() if file_type == "binary" else hashlib.md5(bytes(data, encoding='utf-8')).hexdigest()
 
@@ -27,7 +22,11 @@ def generate_embedded(path, file_type, extension, data=None, md5=None):
     md5_file.write(md5)
     md5_file.close() 
     
+    array_name = os.path.splitext(os.path.basename(path))[0]
+
     # embed asset according to extension
+
+    # if shader (only text format being embedded)
     if(extension == ".glsl"):
         shader_source = ["", ""]
         shader_type = None
@@ -42,87 +41,79 @@ def generate_embedded(path, file_type, extension, data=None, md5=None):
                 shader_source[shader_type] += '"' + remove_comment_from_shader(line.rstrip()) + ('"\n' if(not shader_source[shader_type] == "") else '""\\n"') 
 
         for i in range(len(shader_source)):
-            c_array_name = "EMBEDDED_" + filename_tup[0].upper().replace("-", "_") + ("VERT" if (i == 0) else "FRAG") 
+            c_array_name = "EMBEDDED_" + array_name.upper().replace("-", "_") + ("VERT" if (i == 0) else "FRAG") 
             c_array = "static const unsigned char {0}[] = {{{1}}};".format(c_array_name, shader_source[i])
             c_array_file = open(path + (".vert.embedded" if (i == 0) else ".frag.embedded"), "w")
             c_array_file.write(c_array)
             c_array_file.close()
+    else: #if binary
+        if(extension == ".png" or extension == ".jpg" or extension == ".jpeg"): #if image, decode image and add engine expected header
+            image = Image.open(io.BytesIO(data))
+            image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+            buffer = io.BytesIO()
+            buffer.write(struct.pack("@IIQQQ", image.width, image.height, len(image.getbands()), len(image.tobytes()), 0))
+            buffer.write(image.tobytes())
+            buffer.seek(0)
+            data = buffer.read()
 
-        return
+        # write binary to file
+        c_array_name = "EMBEDDED_" + array_name.upper().replace("-", "_") # replace illegal chars
+        c_array = "static const unsigned char {0}[] = {{{1}}};".format(c_array_name, ", ".join(bytes_to_c_arr(data)))
+        c_array_file = open(path + ".embedded", "w")
+        c_array_file.write(c_array)
+        c_array_file.close()
 
-    if(extension == ".png" or extension == ".jpg" or extension == ".jpeg"):
-        image = Image.open(io.BytesIO(data))
-        image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
-        # optimally would just write to a variable but fuck it
-        image_embedded = open(path + ".embedded", "wb")
-        image_embedded.write(struct.pack("@IIQQQ", image.width, image.height, len(image.getbands()), len(image.tobytes()), 0))
-        image_embedded.write(image.tobytes())
-        image_embedded.close()
-        data = open(path + ".embedded", "rb").read()
-        os.remove(path + ".embedded")
+def main():
+    cwd = os.getcwd()
+    embedded_dir = cwd + "\embedded"
+    
+    # iterate files inside embbedded folder
+    for root, subdirs, files in os.walk(embedded_dir):
+        for filename in files:
+            _ = subdirs
 
-    c_array_name = "EMBEDDED_" + filename_tup[0].upper().replace("-", "_") # replace illegal chars
-    c_array = "static const unsigned char {0}[] = {{{1}}};".format(c_array_name, ", ".join(bytes_to_c_arr(data)))
-    c_array_file = open(path + ".embedded", "w")
-    c_array_file.write(c_array)
-    c_array_file.close()
+            filepath = os.path.join(root, filename)
+            filepath_tup = os.path.splitext(filepath)
 
-embedded_extensions = [".ttf", ".png", "jpg", ".jpeg", ".glsl", ".ini"] # only embed files with these extensions
+            # if the the file does not have one of the specified extensions, continue
+            extension = filepath_tup[1]
+            not_found = True
 
-cwd = os.getcwd()
-embedded_dir = cwd + "\embedded"
+            embedded_extensions = [".ttf", ".png", ".jpg", ".jpeg", ".glsl", ".ini"]
 
-# iterate files inside embbedded folder
-for root, subdirs, files in os.walk(embedded_dir):
-    for filename in files:
-        filename_tup =  os.path.splitext(filename)
-        filepath = os.path.join(root, filename)
-        filepath_tup = os.path.splitext(filepath)
+            for ext in embedded_extensions:
+                if extension == ext:
+                    not_found = False
+                    break
+            
+            if not_found:
+                continue
+            
+            # get file type
+            file_type = None
 
-        extension = None
+            try:
+                with open(filepath, "r") as f:
+                    data = f.read(512)
+                    file_type = "text"
+            except UnicodeDecodeError: 
+                file_type = "binary"
 
-        # if the the file does not have one of the specified extensions, continue
-        for ext in embedded_extensions:
-            if(filepath_tup[1] == ext):
-                extension = ext
-                break
-        
-        if not (extension):
-            continue
-        
-        file_type = None
+            data = open(filepath, "rb").read() if file_type == "binary" else open(filepath, "r").read()
 
-        # get file type
-        try:
-            with open(filepath, "r") as f:
-                data = f.read(512)
-                file_type = "text"
-        except UnicodeDecodeError: 
-            file_type = "binary"
-
-        if(os.path.exists(filepath + ".md5")): # if the asset has an md5
-            if(os.path.exists(filepath + ".embedded") and not extension == ".glsl"): #if the asset has an embedded version. in the case of shaders there are 2 embedded file so check for that
-                old_md5 = open(filepath + ".md5", "r").read()
-                data = open(filepath, "rb").read() if file_type == "binary" else open(filepath, "r").read()
-                new_md5 = hashlib.md5(data).hexdigest()
-                if not (old_md5 == new_md5): # if the md5 of the embedded version original file does not match the new, regenerate
-                    print(filename + " has been updated. Regenerating md5 and embedded asset.")
-                    generate_embedded(filepath, file_type, extension, data, new_md5)
-            elif(extension == ".glsl"): # if the asset is a shadr, check that both vert and frag files are present
-                if(os.path.exists(filepath + ".vert.embedded") and os.path.exists(filepath + ".frag.embedded")):
+            if os.path.exists(filepath + ".md5"): # if the asset has an md5
+                if os.path.exists(filepath + ".embedded") or (os.path.exists(filepath + ".vert.embedded") and os.path.exists(filepath + ".frag.embedded")): #if the asset has an embedded version
                     old_md5 = open(filepath + ".md5", "r").read()
-                    data = open(filepath, "r").read()
-                    new_md5 = hashlib.md5(bytes(data, encoding='utf-8')).hexdigest()
-                    if not (old_md5 == new_md5): # if the md5 of the embedded version original file does not match the new, regenerate
-                        print(filename + " has been updated. Regenerating md5 and embedded assets.")
+                    new_md5 = hashlib.md5(data if file_type == "binary" else bytes(data, encoding='utf-8')).hexdigest()
+                    if not (old_md5 == new_md5): # if the md5 of the embedded version does not match the file, regenerate, else, everything is gucci
+                        print(filename + " has been updated. Regenerating md5 and embedded asset.")
                         generate_embedded(filepath, file_type, extension, data, new_md5)
-                else:
-                    print("Can not find embedded assets for " + filename + ". Regenerating md5 and embedded assets.")
-                    generate_embedded(filepath, file_type, extension)
+                else: # if the embedded file is not present (Probably deleted manually)
+                    print("Can not find embedded asset for " + filename + ". Regenerating md5 and embedded asset.")
+                    generate_embedded(filepath, file_type, extension, data)
+            else: # if the asset does not have an md5, create md5 and create embedded
+                print("Generating md5 and embedded asset for " + filename)
+                generate_embedded(filepath, file_type, extension, data)
 
-            else: # if the embedded file is not present (Probably delete manually)
-                print("Can not find embedded asset for " + filename + ". Regenerating md5 and embedded asset.")
-                generate_embedded(filepath, file_type, extension)
-        else: # if the asset does not have an md5, create md5 and import
-            print("Generating md5 and embedded asset for " + filename)
-            generate_embedded(filepath, file_type, extension)
+if __name__ == "__main__":
+    main()
