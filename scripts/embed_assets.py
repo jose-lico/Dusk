@@ -65,7 +65,7 @@ def generate_embedded(path, file_type, extension, data, md5=None):
 
 def main():
     cwd = os.getcwd()
-    embedded_dir = cwd + "\embedded"
+    embedded_dir = os.path.join(cwd, "embedded")
     
     # iterate files inside embbedded folder
     for root, subdirs, files in os.walk(embedded_dir):
