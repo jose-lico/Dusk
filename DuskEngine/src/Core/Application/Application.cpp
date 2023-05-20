@@ -25,6 +25,14 @@ namespace DuskEngine
 	{
 		s_Instance = this;
 
+		time_t now = time(0);
+		struct tm tstruct;
+		char buffer[80];
+		tstruct = *localtime(&now);
+		strftime(buffer, sizeof(buffer), "%Y-%m-%d_%Hh%Mm%Ss", &tstruct);
+
+		m_StartupTime = buffer;
+
 		m_OS = OS::Create();
 
 		if (m_OS->IsConsoleAttached())
@@ -38,7 +46,7 @@ namespace DuskEngine
 		{
 			printf("Usage: %s [options]\n\n", m_Options.ExeName.c_str());
 			printf("Options:\n\n");
-			printf("-h, --help                              Print this message and quit the application\n");
+			printf("-h, --help                              Prints this message and quits the application\n");
 			printf("-v, --verbose                           Prints more useful information to the console\n");
 			printf("-l, --log                               Dumps all logs to a file. Example log file name: log_%s.csv\n", m_StartupTime.c_str());
 			printf("-p, --path <path>                       Opens the editor directly with the project from the provided path\n");
@@ -49,14 +57,6 @@ namespace DuskEngine
 		m_Options.Verbose = true;
 		m_Options.DumpLogs = true;
 #endif
-
-		time_t now = time(0);
-		struct tm tstruct;
-		char buffer[80];
-		tstruct = *localtime(&now);
-		strftime(buffer, sizeof(buffer), "%Y-%m-%d_%Hh%Mm%Ss", &tstruct);
-
-		m_StartupTime = buffer;
 
 		m_Logger = new Logger(LOGGER);
 

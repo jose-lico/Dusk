@@ -50,32 +50,18 @@ namespace DuskEngine
 
 		for (int i = 1; i < argc; i++)
 		{
-			if (strcmp(argv[i], "-h") == 0) {
+			if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
 				options.Help = true;
 			}
-			else if (strcmp(argv[i], "--help") == 0) {
-				options.Help = true;
-			}
-			else if (strcmp(argv[i], "-v") == 0) {
+			else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
 				options.Verbose = true;
 			}
-			else if (strcmp(argv[i], "--verbose") == 0) {
-				options.Verbose = true;
-			}
-			else if (strcmp(argv[i], "-l") == 0) {
+			else if (strcmp(argv[i], "-l") == 0 || strcmp(argv[i], "--logs") == 0) {
 				options.DumpLogs = true;
 			}
-			else if (strcmp(argv[i], "--logs") == 0) {
-				options.DumpLogs = true;
-			}
-			else if (strcmp(argv[i], "-p") == 0) {
+			else if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--path") == 0) {
 				options.Path = true;
 				if(argc < i + 1)
-					options.PathName = argv[i + 1];
-			}
-			else if (strcmp(argv[i], "--path") == 0) {
-				options.Path = true;
-				if (argc < i + 1)
 					options.PathName = argv[i + 1];
 			}
 		}

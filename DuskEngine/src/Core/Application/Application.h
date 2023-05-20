@@ -41,11 +41,11 @@ namespace DuskEngine
 	struct CliOptions
 	{
 		std::string ExeName;
+		std::string PathName;
 		bool Help = false;
 		bool Verbose = false;
 		bool DumpLogs = false;
 		bool Path = false;
-		std::string PathName;
 	};
 
 	class Application
