@@ -24,7 +24,7 @@ const unsigned int MAX_LIGHTS = 8;
 
 namespace DuskEngine
 {
-	Scene::Scene(const std::string& name, const std::string& projectPath)
+	Scene::Scene(const std::string& name, const std::filesystem::path& projectPath)
 		:m_Name(name), m_ProjectPath(projectPath)
 	{
 		LOG("Creating new scene " + m_Name);

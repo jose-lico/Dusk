@@ -10,12 +10,11 @@
 #include "imgui/imgui.h"
 #include "IconsForkAwesome.h"
 
-#include <filesystem>
 #include <fstream>
 
 namespace DuskEngine
 {
-	HierarchyPanel::HierarchyPanel(Scene& scene, InspectorPanel& inspector, SceneViewportPanel& viewport, const std::string& projectPath)
+	HierarchyPanel::HierarchyPanel(Scene& scene, InspectorPanel& inspector, SceneViewportPanel& viewport, const std::filesystem::path& projectPath)
 		:m_Scene(&scene), m_ProjectPath(projectPath)
 	{
 		m_SelectableStatus.resize(m_Scene->m_Registry.size());
@@ -182,8 +181,8 @@ namespace DuskEngine
 					
 					out << YAML::EndMap;
 
-					std::filesystem::create_directory(m_ProjectPath + "/.editor");
-					std::ofstream fout(m_ProjectPath + "/.editor/hierarchy.meta");
+					std::filesystem::create_directory(m_ProjectPath / "/.editor");
+					std::ofstream fout(m_ProjectPath / "/.editor/hierarchy.meta");
 					
 					fout << out.c_str();
 				}
@@ -330,9 +329,9 @@ namespace DuskEngine
 		}
 
 		// Get editor meta information
-		if (std::filesystem::exists(m_ProjectPath + "/.editor/hierarchy.meta"))
+		if (std::filesystem::exists(m_ProjectPath / "/.editor/hierarchy.meta"))
 		{
-			YAML::Node hierarchy = YAMLLoadFile(m_ProjectPath + "/.editor/hierarchy.meta");
+			YAML::Node hierarchy = YAMLLoadFile(m_ProjectPath / "/.editor/hierarchy.meta");
 
 			YAML::Node entities = hierarchy["Entities"];
 			for (YAML::Node& entity : entities)

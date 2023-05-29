@@ -23,7 +23,7 @@ namespace DuskEngine
 	AssetDatabaseEditor* g_Database = nullptr;
 	ContentBrowserPanel* g_Panel = nullptr;
 
-	ContentBrowserPanel::ContentBrowserPanel(const std::string& projectPath, AssetDatabaseEditor& database, InspectorPanel& inspector)
+	ContentBrowserPanel::ContentBrowserPanel(const std::filesystem::path& projectPath, AssetDatabaseEditor& database, InspectorPanel& inspector)
 	{
 		m_InspectorPanel = &inspector;
 		m_Database = &database;

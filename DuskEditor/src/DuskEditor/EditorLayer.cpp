@@ -21,7 +21,7 @@
 
 namespace DuskEngine
 {
-	EditorLayer::EditorLayer(const std::string& path)
+	EditorLayer::EditorLayer(const std::filesystem::path& path)
 		:m_ProjectPath(path)
 	{
 		m_Logger = new Logger(LOGGER);
@@ -95,7 +95,7 @@ namespace DuskEngine
 
 		m_EditingScene = MakeRef<Scene>("Editing Scene", m_ProjectPath);
 
-		SceneSerializer::DeserializeText(m_EditingScene, m_ProjectPath + "/scenes/Playground.yaml");
+		SceneSerializer::DeserializeText(m_EditingScene, m_ProjectPath / "scenes" / "Playground.yaml");
 		{
 			Timer panels("Creating Panels");
 
@@ -113,7 +113,7 @@ namespace DuskEngine
 			auto play = [&]() {
 				m_Playing = true;
 				m_PlayingScene = MakeRef<Scene>("Playing Scene", m_ProjectPath);
-				SceneSerializer::DeserializeText(m_PlayingScene, m_ProjectPath + "/scenes/scene.yaml");
+				SceneSerializer::DeserializeText(m_PlayingScene, m_ProjectPath / "scenes" / "Playground.yaml");
 				m_PlayingScene->OnAwakeRuntime();
 				ImGui::SetWindowFocus(ICON_FK_GAMEPAD "  Game");
 				m_GameViewportPanel->SetCamera(m_PlayingScene->GetMainCamera());
@@ -212,7 +212,7 @@ namespace DuskEngine
 		////ImGui::Text("Nope?");
 
 		if (ImGui::Button("Save Scene"))
-			SceneSerializer::SerializeText(m_EditingScene, "res/scenes/scene.yaml");
+			SceneSerializer::SerializeText(m_EditingScene, m_ProjectPath / "scenes/Playground.yaml");
 
 		///*ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.2, 0.2, 0.2, 1.0f });
 		//ImGui::BeginChild("Window inside a window", {0,0}, false);

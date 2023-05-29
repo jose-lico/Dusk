@@ -122,7 +122,7 @@ namespace DuskEngine
 		return CreateShader(m_PathsMap[uuid], uuid);
 	}
 
-	Texture AssetDatabase::LoadTexture(const uuids::uuid& uuid, const std::string& projectPath)
+	Texture AssetDatabase::LoadTexture(const uuids::uuid& uuid, const std::filesystem::path& projectPath)
 	{
 		return CreateTexture(m_PathsMap[uuid], uuid, projectPath);
 	}

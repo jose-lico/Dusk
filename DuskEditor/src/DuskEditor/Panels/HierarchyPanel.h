@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <string>
+#include <filesystem>
 
 namespace DuskEngine
 {
@@ -16,7 +17,7 @@ namespace DuskEngine
 	class HierarchyPanel : public Panel
 	{
 	public:
-		HierarchyPanel(Scene& scene, InspectorPanel& inspector, SceneViewportPanel& viewport, const std::string& projectPath);
+		HierarchyPanel(Scene& scene, InspectorPanel& inspector, SceneViewportPanel& viewport, const std::filesystem::path& projectPath);
 		~HierarchyPanel() = default;
 
 		virtual void OnImGuiRender() override;
@@ -32,7 +33,7 @@ namespace DuskEngine
 
 		std::vector<bool> m_SelectableStatus;
 		std::vector<Entity> m_SelectedEntities;
-		std::string m_ProjectPath;
+		std::filesystem::path m_ProjectPath;
 
 		friend class Scene;
 		friend class Entity;

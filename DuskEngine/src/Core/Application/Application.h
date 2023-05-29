@@ -41,7 +41,7 @@ namespace DuskEngine
 	struct CliOptions
 	{
 		std::string ExeName;
-		std::string PathName;
+		std::filesystem::path PathName;
 		bool Help = false;
 		bool Verbose = false;
 		bool DumpLogs = false;

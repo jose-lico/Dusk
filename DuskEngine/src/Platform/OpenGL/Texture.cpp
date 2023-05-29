@@ -32,7 +32,7 @@ namespace DuskEngine
 		return textureData;
 	}
 
-	Texture CreateTexture(const std::filesystem::path& path, const uuids::uuid& uuid, const std::string& projectPath)
+	Texture CreateTexture(const std::filesystem::path& path, const uuids::uuid& uuid, const std::filesystem::path& projectPath)
 	{
 		Texture texture;
 		texture.UUID = uuid;

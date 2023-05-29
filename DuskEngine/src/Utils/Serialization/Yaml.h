@@ -15,11 +15,11 @@
 
 namespace DuskEngine
 {
-	inline YAML::Node YAMLLoadFile(const std::string& path)
+	inline YAML::Node YAMLLoadFile(const std::filesystem::path& path)
 	{
 		try
 		{
-			YAML::Node hierarchy = YAML::LoadFile(path);
+			YAML::Node hierarchy = YAML::LoadFile(path.string());
 			return hierarchy;
 		}
 		catch (...)

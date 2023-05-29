@@ -16,7 +16,7 @@ namespace DuskEngine
 	class Scene
 	{
 	public:
-		Scene(const std::string& name, const std::string& projectPath);
+		Scene(const std::string& name, const std::filesystem::path& projectPath);
 		~Scene();
 
 		Entity CreateEntity(const std::string& name);
@@ -42,7 +42,7 @@ namespace DuskEngine
 		void OnShutdownRuntime();
 	private:
 		std::string m_Name;
-		std::string m_ProjectPath;
+		std::filesystem::path m_ProjectPath;
 		entt::registry m_Registry;
 
 		bool playing = true;

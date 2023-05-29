@@ -21,7 +21,7 @@ namespace DuskEngine
 	class ContentBrowserPanel : public Panel
 	{
 	public:
-		ContentBrowserPanel(const std::string& projectPath, AssetDatabaseEditor& database, InspectorPanel& inspector);
+		ContentBrowserPanel(const std::filesystem::path& projectPath, AssetDatabaseEditor& database, InspectorPanel& inspector);
 		~ContentBrowserPanel();
 
 		virtual void OnImGuiRender() override;

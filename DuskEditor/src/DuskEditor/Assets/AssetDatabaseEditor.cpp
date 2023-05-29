@@ -18,7 +18,7 @@
 
 namespace DuskEngine
 {
-	AssetDatabaseEditor::AssetDatabaseEditor(AssetDatabase* database, const std::string& path)
+	AssetDatabaseEditor::AssetDatabaseEditor(AssetDatabase* database, const std::filesystem::path& path)
 		:m_EngineDB(database)
 	{
 		m_RootDirectory = path;

@@ -19,7 +19,7 @@ namespace DuskEngine
 	class EditorLayer : public Layer
 	{
 	public:
-		EditorLayer(const std::string& path);
+		EditorLayer(const std::filesystem::path& path);
 		~EditorLayer();
 		void OnAttach() override;
 		void OnUpdate() override;
@@ -49,6 +49,6 @@ namespace DuskEngine
 
 		bool m_Playing = false;
 		bool m_Paused = false;
-		std::string m_ProjectPath;
+		std::filesystem::path m_ProjectPath;
 	};
 }

@@ -19,7 +19,7 @@ namespace DuskEngine
 
 	AssetHandler* SceneSerializer::m_AssetHandler = nullptr;
 
-    void SceneSerializer::SerializeText(const Ref<Scene>& scene, const std::string& path)
+    void SceneSerializer::SerializeText(const Ref<Scene>& scene, const std::filesystem::path& path)
     {
 		//Timer timer("Serialize Text");
 
@@ -58,8 +58,9 @@ namespace DuskEngine
     {
     }
 
-    bool SceneSerializer::DeserializeText(const Ref<Scene>& scene, const std::string& path)
+    bool SceneSerializer::DeserializeText(const Ref<Scene>& scene, const std::filesystem::path& path)
     {
+		LOG(path.string());
 		Timer timer("Deserialize Text");
 
 		std::ifstream stream(path);
