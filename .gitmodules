@@ -49,3 +49,6 @@
 [submodule "Dependencies/cgltf"]
 	path = Dependencies/cgltf
 	url = https://github.com/jkuhlmann/cgltf
+[submodule "Dependencies/argparse"]
+	path = Dependencies/argparse
+	url = https://github.com/p-ranav/argparse
