@@ -16,7 +16,7 @@ namespace DuskEngine
 	Window::Window(const WindowData& data)
 		:m_Data(data)
 	{
-		Timer windowTimer("Window creation");
+		ScopeTimer windowTimer("Window creation");
 		glfwInit();
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);

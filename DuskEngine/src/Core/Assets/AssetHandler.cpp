@@ -26,7 +26,7 @@ namespace DuskEngine
 	AssetHandler::AssetHandler(const std::string& name, const std::filesystem::path& projectPath)
 		:m_Name(name), m_ProjectPath(projectPath)
 	{
-		Timer assetHandlerTimer("Asset Handler " + name);
+		ScopeTimer assetHandlerTimer("Asset Handler " + name);
 		m_AssetHandlers.push_back(this);
 
 		m_ShaderPool.m_AssetHandler = this;

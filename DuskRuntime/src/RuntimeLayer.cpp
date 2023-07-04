@@ -45,7 +45,7 @@ namespace DuskEngine
 			auto runtimeDB = new AssetDatabaseEditor(&db, std::filesystem::current_path().string());
 
 			{
-				Timer registerAssets("Register Assets");
+				ScopeTimer registerAssets("Register Assets");
 				runtimeDB->RegisterAssets();
 			}
 

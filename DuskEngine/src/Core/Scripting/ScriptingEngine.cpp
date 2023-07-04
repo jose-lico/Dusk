@@ -23,7 +23,7 @@ namespace DuskEngine
 
     void ScriptingEngine::RegisterFunctions()
     {
-        Timer timer("Register Functions");
+        ScopeTimer timer("Register Functions");
 
         RegisterInput();
         RegisterTime();

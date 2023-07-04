@@ -61,7 +61,7 @@ namespace DuskEngine
     bool SceneSerializer::DeserializeText(const Ref<Scene>& scene, const std::filesystem::path& path)
     {
 		LOG(path.string());
-		Timer timer("Deserialize Text");
+		ScopeTimer timer("Deserialize Text");
 
 		std::ifstream stream(path);
 		std::stringstream strStream;

@@ -262,7 +262,7 @@ namespace DuskEngine
 
 	void ContentBrowserPanel::CreateDirectoryResources()
 	{
-		Timer timer("CreateDirectoryResources");
+		ScopeTimer timer("CreateDirectoryResources");
 		m_IconsInDirectory.resize(0);
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{

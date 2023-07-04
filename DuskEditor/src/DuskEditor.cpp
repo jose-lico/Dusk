@@ -40,7 +40,7 @@ namespace DuskEngine
 
 	Application* CreateApplication(int argc, char** argv)
 	{
-		Timer startup("Startup");
+		ScopeTimer startup("Startup");
 
 		ApplicationSpecs spec;
 		spec.Name = "Dusk Editor";

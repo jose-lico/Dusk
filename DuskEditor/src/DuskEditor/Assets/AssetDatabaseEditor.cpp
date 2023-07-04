@@ -76,7 +76,7 @@ namespace DuskEngine
 
 	void AssetDatabaseEditor::ImportAssets()
 	{
-		Timer importAssets("ImportAssets");
+		ScopeTimer importAssets("ImportAssets");
 		for(auto& image : m_ImagesToImport)
 			ImportImage(std::get<0>(image), std::get<1>(image));
 

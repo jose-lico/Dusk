@@ -58,13 +58,13 @@ namespace DuskEngine
 	void EditorLayer::OnAttach()
 	{
 		{
-			Timer databaseTimer("Loading project assets");
+			ScopeTimer databaseTimer("Loading project assets");
 			auto& db = Application::Get().GetAssetDatabase();
 
 			m_EditorDB = new AssetDatabaseEditor(&db, m_ProjectPath);
 
 			{
-				Timer registerAssets("Register Assets");
+				ScopeTimer registerAssets("Register Assets");
 				m_EditorDB->RegisterAssets();
 			}
 
@@ -80,7 +80,7 @@ namespace DuskEngine
 		m_EditorCamera.camera.projectionMatrix = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.01f, 100.0f);
 
 		{
-			Timer panels("FB");
+			ScopeTimer panels("FB");
 
 			Framebuffer specs;
 			specs.Width = 720;
@@ -97,7 +97,7 @@ namespace DuskEngine
 
 		SceneSerializer::DeserializeText(m_EditingScene, m_ProjectPath / "scenes" / "Playground.yaml");
 		{
-			Timer panels("Creating Panels");
+			ScopeTimer panels("Creating Panels");
 
 			m_Panels.push_back(new InspectorPanel(m_EditingScene->m_AssetHandler, m_EditorDB));
 			InspectorPanel& inspector = *(InspectorPanel*)m_Panels.back();
@@ -158,7 +158,7 @@ namespace DuskEngine
 			OpenGLAPI::UnbindFramebuffer();
 
 			{
-				Timer timer("Update editor mode", true);
+				//ScopeTimer timer("Update editor mode", true);
 				OpenGLAPI::BindFramebuffer(m_PlayingSceneFB);
 				m_EditingScene->OnUpdateRuntime(false);
 				OpenGLAPI::UnbindFramebuffer();
@@ -181,7 +181,7 @@ namespace DuskEngine
 			OpenGLAPI::UnbindFramebuffer();
 
 			{
-				Timer timer("Update runtime mode", true);
+				//ScopeTimer timer("Update runtime mode", true);
 				OpenGLAPI::BindFramebuffer(m_PlayingSceneFB);
 				m_PlayingScene->OnUpdateRuntime(true, m_Paused);
 				OpenGLAPI::UnbindFramebuffer();
