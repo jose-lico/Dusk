@@ -15,6 +15,6 @@ namespace DuskEngine
 	{
 		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - m_Start);
 
-		TRACE(m_Name + " took: " + std::to_string(duration.count() / 1000000.0f) + " ms");
+		TRACE("{} took: {} ms", m_Name, duration.count()/1000000.0f);
 	}
 }

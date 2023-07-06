@@ -59,28 +59,15 @@ namespace DuskEngine
 			m_Logger->set_level(spdlog::level::debug);
 			m_Logger->flush_on(spdlog::level::debug);
 		}
-
-		if(m_Loggers.size() == 1 && logToFile)
-		{
-			m_Logger->debug("Time,Origin,Level,Message");
-			fileSink->flush();
-			fileSink->set_pattern("%^%T.%e,%n,%l,%v%$");
-		}
-		else if(logToFile)
-			fileSink->set_pattern("%^%T.%e,%n,%l,%v%$");
 		
 		m_Logger->sinks().push_back(consoleSink);
 		
-		std::string message = "Created Logger ";
-		message.append(m_Name); 
-		TRACE(message);
+		TRACE("Created Logger {}", m_Name)
 	}
 
 	Logger::~Logger()
 	{
-		std::string message = "Destroyed Logger ";
-		message.append(m_Name);
-		TRACE(message);
+		TRACE("Destroyed Logger {}", m_Name)
 	}
 
 	Logger* Logger::Get(const char* name)
@@ -90,45 +77,5 @@ namespace DuskEngine
 
 		// should probably assert
 		return nullptr;
-	}
-
-	void Logger::Log(const char* message, LogLevel level, const char* file, unsigned int line)
-	{
-		// construct struct with message and save for later, editor stuff
-		// In editor mode, this message is always constructed to be displayed in the editor
-		// At runtime, dont bother
-
-		bool consoleAttached = Application::Get().GetOS().IsConsoleAttached();
-		bool logToFile = Application::Get().GetCliOptions().DumpLogs;
-
-		// If the console is not attached and logs are not written to a file, dont call spdlog
-		if (!consoleAttached && !logToFile)
-			return;
-
-		switch (level)
-		{
-		case LogLevel::TRACE:
-			m_Logger->trace(message);
-			break;
-		case LogLevel::LOG:
-			m_Logger->debug(message);
-			break;
-		case LogLevel::WARN:
-			m_Logger->warn(message);
-			break;
-		case LogLevel::ERR:
-			m_Logger->error(message);
-			break;
-		case LogLevel::FATAL:
-			m_Logger->critical(message);
-			break;
-		default:
-			break;
-		}
-	}
-
-	void Logger::Log(const std::string& message, LogLevel level, const char* file, unsigned int line)
-	{
-		Log(message.c_str(), level, file, line);
 	}
 }

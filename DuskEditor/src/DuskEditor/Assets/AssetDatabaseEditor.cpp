@@ -93,13 +93,13 @@ namespace DuskEngine
 
 		if (std::filesystem::exists(targetPath))
 		{
-			TRACE("Swapping asset " + assetPath.filename().string());
+			TRACE("Swapping asset {}", assetPath.filename().string().c_str());
 			std::filesystem::remove_all(targetPath);
 			std::filesystem::copy(assetPath, targetPath, std::filesystem::copy_options::recursive);
 		}
 		else
 		{
-			TRACE("Copying asset " + assetPath.filename().string());
+			TRACE("Copying asset {}", assetPath.filename().string().c_str());
 			std::filesystem::copy(assetPath, targetPath, std::filesystem::copy_options::recursive);
 		}
 
@@ -120,7 +120,7 @@ namespace DuskEngine
 		// If the file has been moved, removed or renamed, delete meta file.
 		if (!std::filesystem::exists(m_CurrentDirectory / assetPath.stem()))
 		{
-			TRACE(assetPath.stem().string() + " has been moved, removed or renamed, deleting meta file.");
+			TRACE("{} has been moved, removed or renamed, deleting meta file", assetPath.stem().string().c_str());
 			std::filesystem::remove(assetPath);
 			return;
 		}
@@ -142,7 +142,7 @@ namespace DuskEngine
 
 	void AssetDatabaseEditor::CreateMetaFile(const std::filesystem::path& assetPath)
 	{
-		LOG("Creating meta file for " + assetPath.filename().string());
+		LOG("Creating meta file for {}", assetPath.filename().string().c_str());
 
 		uuids::uuid const id = uuids::uuid_system_generator{}();
 

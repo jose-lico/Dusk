@@ -50,11 +50,11 @@ namespace DuskEngine
             free(importedFileData);
             free(compressedData);
 
-            TRACE("Imported image " + imagePath.string());
+            TRACE("Imported image {}", imagePath.string().c_str());
         }
         else
         {
-            ERR("Error importing image " + imagePath.string());
+            ERR("Error importing image {}", imagePath.string().c_str());
 
             return;
         }

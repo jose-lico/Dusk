@@ -20,7 +20,7 @@ namespace DuskEngine
 
 		CreateProgram(shader, source.VertexSource, source.FragmentSource);
 
-		LOG("Created Shader " + shader.Name);
+		LOG("Created Shader {}", shader.Name);
 
 		return shader;
 	}

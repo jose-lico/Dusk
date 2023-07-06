@@ -73,12 +73,12 @@ namespace DuskEngine
 		}
 		else
 		{
-			ERR("Error loading texture " + texture.Name);
+			ERR("Error loading texture {}", texture.Name);
 			// return pink square or something
 			return texture;
 		}
 
-		LOG("Created Texture " + texture.Name);
+		LOG("Created Texture {}", texture.Name);
 
 		return texture;
 	}

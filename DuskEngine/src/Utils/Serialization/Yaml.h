@@ -38,7 +38,7 @@ namespace DuskEngine
 		}
 		catch (...)
 		{
-			ERR("Failed to deserialized node " + key);
+			ERR("Failed to deserialized node {}", key);
 			T value = defaultValue;
 			return value;
 		}

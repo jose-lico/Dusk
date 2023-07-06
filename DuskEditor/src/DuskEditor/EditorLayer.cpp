@@ -19,6 +19,8 @@
 
 #include <cstdio>
 
+#undef CreateWindow
+
 namespace DuskEngine
 {
 	EditorLayer::EditorLayer(const std::filesystem::path& path)

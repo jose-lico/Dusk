@@ -39,7 +39,7 @@ namespace DuskEngine
 
 			// What is the difference between mesh and primitive in cgltf?
 
-			WARN("Importing model " + modelPath.filename().string() + " , only first mesh will be imported and used");
+			WARN("Importing model {} , only first mesh will be imported and used", modelPath.filename().string());
 
 			//for (unsigned int i = 0; i < data->meshes_count; i++)
 			for (unsigned int i = 0; i < 1; i++) 

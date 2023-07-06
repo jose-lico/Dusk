@@ -13,6 +13,8 @@
 #include <fstream>
 #include <filesystem>
 
+#undef CreateWindow
+
 namespace DuskEngine
 {
 	LauncherLayer::LauncherLayer(DuskEditor* editor)

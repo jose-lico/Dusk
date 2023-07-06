@@ -27,7 +27,7 @@ namespace DuskEngine
 	Scene::Scene(const std::string& name, const std::filesystem::path& projectPath)
 		:m_Name(name), m_ProjectPath(projectPath)
 	{
-		LOG("Creating new scene " + m_Name);
+		TRACE("Creating new scene {}", m_Name)
 
 		m_GridShader = CreateShader((const char*)EMBEDDED_GRIDVERT, (const char*)EMBEDDED_GRIDFRAG, "Grid Shader");
 
@@ -37,7 +37,7 @@ namespace DuskEngine
 
 	Scene::~Scene()
 	{
-		LOG("Destroying scene " + m_Name);
+		TRACE("Destroying scene {}", m_Name)
 
 		OpenGLAPI::DeleteProgram(m_GridShader);
 

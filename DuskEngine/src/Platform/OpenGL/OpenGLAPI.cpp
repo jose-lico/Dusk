@@ -365,10 +365,7 @@ namespace DuskEngine :: OpenGLAPI
 		case GL_DEBUG_SEVERITY_NOTIFICATION: severityMessage = "Severity: notification"; break;
 		}
 
-		std::string errorMessage = "Error code: " + std::to_string(id) + ": " + message + "\n"
-			+ sourceMessage + "\n" + typeMessage + "\n" + severityMessage;
-
-		ERR(errorMessage);
+		ERR("Error code: {}:{}\n{}\n{}\n{}", id, message, sourceMessage, typeMessage, severityMessage);
 	}
 #endif
 }
