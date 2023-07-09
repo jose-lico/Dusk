@@ -6,9 +6,7 @@
 
 #include "stb/stb_image.h"
 
-#include <string>
 #include <fstream>
-#include <cstring>
 
 namespace DuskEngine
 {
