@@ -32,7 +32,7 @@ namespace DuskEngine
 		app.SetImGuiGLContext();
 		window.CenterWindow();
 
-		char* appdata = app.GetOS().GetAppDataFolder();
+		const char* appdata = app.GetOS().GetAppDataFolder();
 		std::string duskDataFolder = appdata;
 		duskDataFolder.append("\\Dusk");
 

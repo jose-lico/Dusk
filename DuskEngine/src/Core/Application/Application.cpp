@@ -10,6 +10,7 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Assets/AssetDatabase.h"
 #include "Platform/OpenGL/OpenGLAPI.h"
+
 #ifdef DUSK_IMGUI
 #include "Utils/ImGui/ImGuiLayer.h"
 #endif

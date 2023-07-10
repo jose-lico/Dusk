@@ -1,14 +1,6 @@
 #include "pch.h"
 #include "OS_Windows.h"
 
-#include "Core/Application/Application.h"
-#include "Core/Application/Window.h"
-
-#include "Windows.h"
-
-#include <io.h>
-#include <iostream>
-
 namespace DuskEngine
 {
 #ifdef DUSK_RELEASE
@@ -31,19 +23,6 @@ namespace DuskEngine
 #elif DUSK_DEBUG
 		m_AttachedConsole = true;
 #endif
-	}
-
-	OS_Windows::~OS_Windows()
-	{
-	}
-
-	char* OS_Windows::GetAppDataFolder() const
-	{
-		char* pValue;
-		size_t len;
-		// Handle error
-		errno_t err = _dupenv_s(&pValue, &len, "APPDATA");
-		return pValue;
 	}
 
 #ifdef DUSK_RELEASE

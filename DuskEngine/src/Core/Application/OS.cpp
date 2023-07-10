@@ -14,11 +14,9 @@ namespace DuskEngine
 	OS* OS::Create()
 	{
 #ifdef DUSK_WINDOWS
-		m_OS = new OS_Windows();
-		return m_OS;
+		return new OS_Windows();
 #elif DUSK_LINUX
-		m_OS = new OS_Linux();
-		return m_OS;
+		return new OS_Linux();
 #endif
 	}
 }

@@ -31,7 +31,7 @@ namespace DuskEngine
 
 		ImGuiIO& io = ImGui::GetIO();
 
-		char* appdata = Application::Get().GetOS().GetAppDataFolder();
+		const char* appdata = Application::Get().GetOS().GetAppDataFolder();
 		m_SettingsPath = appdata;
 		m_SettingsPath.append("\\Dusk\\editorSettings.ini");
 

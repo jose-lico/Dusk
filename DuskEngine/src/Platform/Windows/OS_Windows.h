@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Core/Application/OS.h"
 
 namespace DuskEngine
@@ -8,8 +7,7 @@ namespace DuskEngine
 	{
 	public:
 		OS_Windows();
-		~OS_Windows();
 
-		virtual char* GetAppDataFolder() const override;
+		virtual const char* GetAppDataFolder() const override { return std::getenv("APPDATA"); }
 	};
 }

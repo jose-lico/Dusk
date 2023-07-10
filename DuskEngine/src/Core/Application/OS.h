@@ -8,8 +8,10 @@ namespace DuskEngine
 		virtual ~OS() = default;
 
 		static OS* Create();
-		inline static bool IsConsoleAttached() { return m_OS->m_AttachedConsole; }
-		virtual char* GetAppDataFolder() const = 0;
+
+		inline bool IsConsoleAttached() { return m_AttachedConsole; }
+		
+		virtual const char* GetAppDataFolder() const = 0;
 	protected:
 		bool m_AttachedConsole = false;
 	private:

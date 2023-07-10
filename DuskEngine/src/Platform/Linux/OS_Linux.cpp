@@ -7,8 +7,4 @@ namespace DuskEngine
 	{
 		m_AttachedConsole = true;
 	}
-
-	OS_Linux::~OS_Linux()
-	{
-	}
 }
