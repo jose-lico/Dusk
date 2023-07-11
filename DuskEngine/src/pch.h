@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Core/Application/Core.h"
-
 #include <memory>
 #include <functional>
 #include <fstream>

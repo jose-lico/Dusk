@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Window.h"
 
+#include "Core.h"
 #include "Core/Events/Events.h"
 #include "Utils/Profiling/Timer.h"
 

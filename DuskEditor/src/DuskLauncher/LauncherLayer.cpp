@@ -3,11 +3,13 @@
 #include "DuskEditor.h"
 
 #include "Core/Application/Core.h"
+#include "Core/Application/Core.h"
 #include "Core/Application/Window.h"
 #include "Platform/OpenGL/OpenGLAPI.h"
 #include "Core/Application/OS.h"
 
 #include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include "yaml-cpp/yaml.h"
 
 #include <fstream>
@@ -90,11 +92,15 @@ namespace DuskEngine
 	{
 		m_Dockspace.BeginDockspace();
 
+		ImGuiWindowClass window_class;
+		window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
+		ImGui::SetNextWindowClass(&window_class);
+
 		ImGui::Begin("Launcher");
 		
-		static char name[128] = "";
+		static char name[32] = "";
 		ImGui::InputTextWithHint("##Project Name", "Project Name", name, IM_ARRAYSIZE(name));
-		static char path[128] = "";
+		static char path[256] = "";
 		ImGui::InputTextWithHint("##Project Path", "Project Path", path, IM_ARRAYSIZE(path));
 
 		if(ImGui::Button("Import Project") && path[0] != 0 && name[0] != 0)
@@ -118,7 +124,6 @@ namespace DuskEngine
 			out << YAML::Key << "Project" << YAML::Value << name;
 			out << YAML::Key << "Path" << YAML::Value << path;
 			out << YAML::EndMap;
-			
 
 			std::ofstream fout(m_ProjectListPath);
 			fout << out.c_str();

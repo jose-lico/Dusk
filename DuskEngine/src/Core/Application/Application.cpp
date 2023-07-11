@@ -3,6 +3,7 @@
 
 #include "OS.h"
 #include "Time.h"
+#include "Core.h"
 #include "Layer.h"
 #include "Window.h"
 #include "LayerStack.h"
@@ -151,7 +152,7 @@ namespace DuskEngine
 		}
 	}
 
-	Window& Application::CreateWindow(WindowData& data)
+	Window& Application::CreateWindow(const WindowData& data)
 	{
 		m_Window = new Window(data);
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));

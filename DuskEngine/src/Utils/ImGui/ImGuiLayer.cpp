@@ -2,10 +2,11 @@
 #include "ImGuiLayer.h"
 
 #include "DuskImGuiStyle.h"
-#include "Core/Events/Events.h"
+#include "Core/Application/OS.h"
+#include "Core/Application/Core.h"
 #include "Core/Application/Window.h"
 #include "Core/Application/Application.h"
-#include "Core/Application/OS.h"
+#include "Core/Events/Events.h"
 #include "Utils/Profiling/Timer.h"
 
 #include "IconsForkAwesome.h"

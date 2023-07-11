@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "Logger.h"
 
-#include "Application.h"
 #include "OS.h"
+#include "Core.h"
+#include "Application.h"
 
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"

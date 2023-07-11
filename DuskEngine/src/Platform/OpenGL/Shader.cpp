@@ -3,6 +3,8 @@
 
 #include "OpenGLAPI.h"
 
+#include "Core/Application/Core.h"
+
 namespace DuskEngine
 {
 	ShaderProgramSource ParseShader(Shader& shader);

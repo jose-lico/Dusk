@@ -30,7 +30,7 @@ namespace DuskEngine
 	void SceneViewportPanel::OnImGuiRender()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
-		ImGui::Begin(ICON_FK_EYE "  Viewport", nullptr);
+		ImGui::Begin(ICON_FK_EYE "  Viewport");
 		CheckFocus();
 	
 		/*ImGui::Indent();
