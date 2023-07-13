@@ -1,6 +1,8 @@
 #pragma once
 #include "Core/Application/Layer.h"
 
+#include <string>
+
 namespace DuskEngine
 {
 	class Window;

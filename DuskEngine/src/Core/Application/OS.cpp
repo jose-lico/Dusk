@@ -9,8 +9,6 @@
 
 namespace DuskEngine
 {
-	OS* OS::m_OS = nullptr;
-
 	OS* OS::Create()
 	{
 #ifdef DUSK_WINDOWS

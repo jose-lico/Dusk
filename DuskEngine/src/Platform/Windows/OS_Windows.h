@@ -8,6 +8,6 @@ namespace DuskEngine
 	public:
 		OS_Windows();
 
-		virtual const char* GetAppDataFolder() const override { return std::getenv("APPDATA"); }
+		virtual std::filesystem::path GetCacheDir() const override;
 	};
 }

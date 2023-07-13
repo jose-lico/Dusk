@@ -3,10 +3,8 @@
 #include "DuskEditor.h"
 
 #include "Core/Application/Core.h"
-#include "Core/Application/Core.h"
 #include "Core/Application/Window.h"
 #include "Platform/OpenGL/OpenGLAPI.h"
-#include "Core/Application/OS.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -34,21 +32,19 @@ namespace DuskEngine
 		app.SetImGuiGLContext();
 		window.CenterWindow();
 
-		const char* appdata = app.GetOS().GetAppDataFolder();
-		std::string duskDataFolder = appdata;
-		duskDataFolder.append("\\Dusk");
+		auto& cache = app.GetOS().GetCacheDir();
 
-		if(!std::filesystem::exists(duskDataFolder))
+		if(!std::filesystem::exists(cache))
 		{
-			std::filesystem::create_directory(duskDataFolder);
-			TRACE("Created folder in AppData");
+			std::filesystem::create_directory(cache);
+			TRACE("Created cache directory");
 		}
 
-		m_ProjectListPath = duskDataFolder + "\\projectList.yaml";
+		m_ProjectListPath = cache / "projectList.yaml";
 
 		if (std::filesystem::exists(m_ProjectListPath))
 		{
-			YAML::Node projectsData = YAML::LoadFile(m_ProjectListPath);
+			YAML::Node projectsData = YAML::LoadFile(m_ProjectListPath.string());
 			YAML::Node projects = projectsData["Projects"];
 
 			if (projects)

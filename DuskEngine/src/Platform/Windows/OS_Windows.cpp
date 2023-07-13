@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "OS_Windows.h"
 
+#include <filesystem>
+
 namespace DuskEngine
 {
 #ifdef DUSK_RELEASE
@@ -23,6 +25,12 @@ namespace DuskEngine
 #elif DUSK_DEBUG
 		m_AttachedConsole = true;
 #endif
+	}
+
+	std::filesystem::path OS_Windows::GetCacheDir() const
+	{
+		std::filesystem::path cacheDir(std::getenv("APPDATA"));
+		return cacheDir/"Dusk";
 	}
 
 #ifdef DUSK_RELEASE

@@ -32,9 +32,9 @@ namespace DuskEngine
 
 		ImGuiIO& io = ImGui::GetIO();
 
-		const char* appdata = Application::Get().GetOS().GetAppDataFolder();
-		m_SettingsPath = appdata;
-		m_SettingsPath.append("\\Dusk\\editorSettings.ini");
+		auto cacheDir = Application::Get().GetOS().GetCacheDir();
+
+		m_SettingsPath = (cacheDir / "editorSettings.ini").string();
 
 		if(!std::filesystem::exists(m_SettingsPath))
 			ImGui::LoadIniSettingsFromMemory((const char*)EMBEDDED_EDITORSETTINGS);
@@ -146,7 +146,9 @@ namespace DuskEngine
 	bool ImGuiLayer::ActivateDemoWindow(KeyPressedEvent& e)
 	{
 		if (e.GetKeyCode() == Key::TAB)
+		{
 			m_ShowDemoWindow = !m_ShowDemoWindow;
+		}
 
 		return true;
 	}

@@ -11,10 +11,8 @@ namespace DuskEngine
 
 		inline bool IsConsoleAttached() { return m_AttachedConsole; }
 		
-		virtual const char* GetAppDataFolder() const = 0;
+		virtual std::filesystem::path GetCacheDir() const = 0;
 	protected:
 		bool m_AttachedConsole = false;
-	private:
-		static OS* m_OS;
 	};
 }
